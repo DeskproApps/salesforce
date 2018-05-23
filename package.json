@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "dpat server .",
     "package": "dpat clean . && dpat compile . && dpat bundle-installer . && dpat verify ./dist && dpat package .",
+    "package-dev": "dpat package .",
     "test": "dpat test ."
   },
   "repository": {
@@ -37,19 +38,68 @@
         "url": "html/index.html"
       }
     ],
-    "storage": [],
-    "settings": [],
+    "storage": [
+      {
+        "name": "oauth:salesforce",
+        "isBackendOnly": true,
+        "permRead": "EVERYBODY",
+        "permWrite": "OWNER"
+      },
+      {
+        "name": "user_settings",
+        "isBackendOnly": false,
+        "permRead": "OWNER",
+        "permWrite": "OWNER"
+      },
+      {
+        "name": "consumerKey",
+        "isBackendOnly": false,
+        "permRead": "OWNER",
+        "permWrite": "OWNER"
+      },
+      {
+        "name": "consumerSecret",
+        "isBackendOnly": false,
+        "permRead": "OWNER",
+        "permWrite": "OWNER"
+      }
+    ],
+    "settings": [
+      {
+        "name": "consumerKey",
+        "defaultValue": "",
+        "title": "The client id",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "name": "consumerSecret",
+        "defaultValue": "",
+        "title": "The client secret",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "name": "callbackUrl",
+        "defaultValue": "",
+        "title": "The connected app callback URL",
+        "required": true,
+        "type": "text"
+      }
+    ],
     "customFields": [],
     "deskproApiTags": [],
-    "externalApis": []
+    "externalApis": [
+      "/^https?://([^.]+\\.)*salesforce.com/?.*$/"
+    ]
   },
   "devDependencies": {
+    "@deskpro/apps-dpat": "^0.10.5",
     "@deskpro/apps-installer": "github:deskpro/apps-installer#v0.4.5",
-    "@deskpro/apps-sdk-react": "^0.2.13",
     "@deskpro/apps-sdk-core": "^1.0.1",
+    "@deskpro/apps-sdk-react": "^0.2.13",
     "@deskpro/react-components": "^1.3.24",
     "@deskpro/redux-components": "^1.0.3",
-    "@deskpro/apps-dpat": "^0.10.1",
     "prop-types": "^15.6.0",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
