@@ -5,8 +5,8 @@ import { sdkConnect } from '@deskpro/apps-sdk-react';
 
 import {
   fetchAccessToken,
-  storeAccessToken
-} from '../services';
+  storeAuthTokens
+} from '../salesforce/security';
 
 
 /**
@@ -40,8 +40,10 @@ class PageAuthenticate extends React.Component {
     const { oauth, storage, route, ui, dpapp } = this.props;
 
     fetchAccessToken(dpapp)
-      .then(resp => storeAccessToken(resp, dpapp))
-      .then(route.to('home'))
+      .then(resp => {
+          return storeAuthTokens(resp, dpapp)
+      })
+      .then(() => route.to('home'))
       .catch(ui.error)
     ;
 

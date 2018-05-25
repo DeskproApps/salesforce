@@ -5,7 +5,7 @@ import { Loader } from '@deskpro/react-components';
 
 import {
   readUserInfo
-} from '../services';
+} from '../salesforce/services';
 
 
 class PageHome extends React.Component
@@ -30,14 +30,11 @@ class PageHome extends React.Component
     const { dpapp, ui } = this.props;
 
     readUserInfo(dpapp)
-      .then(resp => {
-        this.setState({
-            user: resp.body
-        })
+      .then(user => {
+        this.setState({ user })
       })
       .catch(ui.error);
   }
-
 
   render() {
 

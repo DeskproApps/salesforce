@@ -7,8 +7,9 @@ import PageAuthenticate from './UI/PageAuthenticate'
 import PageError from './UI/PageError'
 
 import {
-  tryAndSetAuthToken
-} from './services';
+  readUserInfo
+} from './salesforce/services';
+import {SalesforceAuthenticationError} from "./salesforce/security";
 
 
 /**
@@ -31,25 +32,15 @@ export default class App extends React.Component {
     const { oauth, settings, context, ui, route, dpapp } = this.props;
     const { storage } = this.props.dpapp;
 
-    storage.getAppStorage([
-      'user_settings'
-    ]).then(data => {
-      const { user_settings: settings } = data;
-
-      if (tryAndSetAuthToken(settings, 'user_settings')) {
-        return route.to('home');
-      }
-
-      return route.to('authenticate');
-
-    }).catch(error => {
-      route.to('error', {
-        error: {
-          type: 'Authentication Error',
-          message: 'An error occurred trying to authenticate the app. Please check your settings and try again.'
+    readUserInfo(dpapp)
+      .then(() => route.to('home'))
+      .catch(err => {
+        if (err instanceof SalesforceAuthenticationError) {
+          return route.to('authenticate');
         }
+        route.to('error', { error: err });
       });
-    });
+
   }
 
   render() {
