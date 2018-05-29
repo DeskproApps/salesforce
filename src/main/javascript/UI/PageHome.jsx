@@ -3,10 +3,8 @@ import PropTypes from 'prop-types';
 import { sdkConnect } from '@deskpro/apps-sdk-react';
 import { Loader } from '@deskpro/react-components';
 
-import {
-  readUserInfo
-} from '../services';
-
+import { readUserInfo } from '../salesforce/api';
+import { fetch } from '../salesforce/http';
 
 class PageHome extends React.Component
 {
@@ -29,15 +27,12 @@ class PageHome extends React.Component
   componentDidMount() {
     const { dpapp, ui } = this.props;
 
-    readUserInfo(dpapp)
-      .then(resp => {
-        this.setState({
-            user: resp.body
-        })
+    fetch(dpapp, readUserInfo)
+      .then(user => {
+        this.setState({ user })
       })
       .catch(ui.error);
   }
-
 
   render() {
 

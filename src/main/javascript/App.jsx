@@ -6,10 +6,9 @@ import PageHome from './UI/PageHome'
 import PageAuthenticate from './UI/PageAuthenticate'
 import PageError from './UI/PageError'
 
-import {
-  tryAndSetAuthToken
-} from './services';
-
+import { readUserInfo } from './salesforce/api';
+import { fetch } from './salesforce/http';
+import {SalesforceAuthenticationError} from "./salesforce/security";
 
 /**
  * Renders a Deskpro app.
@@ -31,25 +30,15 @@ export default class App extends React.Component {
     const { oauth, settings, context, ui, route, dpapp } = this.props;
     const { storage } = this.props.dpapp;
 
-    storage.getAppStorage([
-      'user_settings'
-    ]).then(data => {
-      const { user_settings: settings } = data;
-
-      if (tryAndSetAuthToken(settings, 'user_settings')) {
-        return route.to('home');
-      }
-
-      return route.to('authenticate');
-
-    }).catch(error => {
-      route.to('error', {
-        error: {
-          type: 'Authentication Error',
-          message: 'An error occurred trying to authenticate the app. Please check your settings and try again.'
+    fetch(dpapp, readUserInfo)
+      .then(() => route.to('home'))
+      .catch(err => {
+        if (err instanceof SalesforceAuthenticationError) {
+          return route.to('authenticate');
         }
+        route.to('error', { error: err });
       });
-    });
+
   }
 
   render() {

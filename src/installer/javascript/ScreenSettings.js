@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {establishConnection, oauthConnectionFactory, oauthProviderName} from '@app/main/javascript/salesforce/security';
 
-export class ScreenSettings extends React.Component {
+export class ScreenSettings extends React.Component
+{
   static propTypes = {
     finishInstall: PropTypes.func.isRequired,
     settings:      PropTypes.array.isRequired,
@@ -21,7 +23,7 @@ export class ScreenSettings extends React.Component {
   componentDidMount() {
     const { oauth } = this.props.dpapp;
 
-    oauth.settings('salesforce')
+    oauth.settings(oauthProviderName)
       .then(oauthSettings => {
         this.setState({
           oauthSettings,
@@ -39,33 +41,16 @@ export class ScreenSettings extends React.Component {
   }
 
   onSettings(settings) {
-    const { oauth } = this.props.dpapp;
-    const { finishInstall } = this.props;
-    const providerName = 'salesforce';
+    const { finishInstall, dpapp } = this.props;
 
-    // retrieve the oauth proxy settings for github
-    oauth.settings(providerName)
-      .then(oauthSettings => {
-        const connectionProps = {
-          providerName,
-          urlRedirect:    oauthSettings.urlRedirect,
-          clientId:       settings.consumerKey,
-          clientSecret:   settings.consumerSecret,
-          urlAuthorize:   'https://login.salesforce.com/services/oauth2/authorize',
-          urlAccessToken: 'https://login.salesforce.com/services/oauth2/token',
-          scopes:         ['api', 'refresh_token']
-        };
+    const connectionProps = oauthConnectionFactory({
+      ...settings,
+      urlRedirect:    this.state.oauthSettings.urlRedirect
+    });
 
-        return oauth.register(providerName, connectionProps).then(() => connectionProps);
-      })
-      .then(connectionProps => {
-        return oauth.access(providerName, { query: { scope: 'api refresh_token' } })
-          .then(() => { return connectionProps; })
-          .catch(() => Promise.reject('oauth2 error'));
-      })
+    establishConnection(dpapp, connectionProps)
       .then(() => {
-        return finishInstall(settings)
-          .then(({ onStatus }) => onStatus());
+        return finishInstall(settings).then(({ onStatus }) => onStatus());
       })
       .catch(error => {
         return new Error(error);

@@ -3,10 +3,7 @@ import PropTypes from 'prop-types';
 import { Container, Heading, Button } from '@deskpro/react-components';
 import { sdkConnect } from '@deskpro/apps-sdk-react';
 
-import {
-  fetchAccessToken,
-  storeAccessToken
-} from '../services';
+import { fetchAccessToken, storeAuthTokens } from '../salesforce/security';
 
 
 /**
@@ -37,11 +34,13 @@ class PageAuthenticate extends React.Component {
   };
 
   handleClick = () => {
-    const { oauth, storage, route, ui, dpapp } = this.props;
+    const { route, ui, dpapp } = this.props;
 
     fetchAccessToken(dpapp)
-      .then(resp => storeAccessToken(resp, dpapp))
-      .then(route.to('home'))
+      .then(resp => {
+          return storeAuthTokens(resp, dpapp)
+      })
+      .then(() => route.to('home'))
       .catch(ui.error)
     ;
 

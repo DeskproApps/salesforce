@@ -8,6 +8,7 @@ install:
   - npm install --no-optional --no-save --no-update-dependencies
   - if [ ! -z "$UPLOAD_ARTIFACT" ]; then curl -sL https://raw.githubusercontent.com/travis-ci/artifacts/master/install | bash; fi
 script:
+  - npm run test
   - npm run package
 after_success:
   - if [ ! -z "$UPLOAD_ARTIFACT" ] ; then artifacts upload --target-paths /${TRAVIS_REPO_SLUG}/${TRAVIS_BUILD_NUMBER}/NODE-${TRAVIS_NODE_VERSION} dist/app.zip ; fi
