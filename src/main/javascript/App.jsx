@@ -2,9 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Routes, Route } from '@deskpro/apps-sdk-react';
 import { Loader } from '@deskpro/react-components';
-import PageHome from './UI/PageHome'
-import PageAuthenticate from './UI/PageAuthenticate'
-import PageError from './UI/PageError'
+import { PageHome, PageAuthenticate, PageError } from './ui'
 
 import { readUserInfo } from './salesforce/api';
 import { fetch } from './salesforce/http';

@@ -1,9 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {establishConnection, oauthConnectionFactory, oauthProviderName} from '@app/main/javascript/salesforce/security';
+import {establishConnection, oauthConnectionFactory, oauthProviderName} from '../salesforce/security';
 
-export class ScreenSettings extends React.Component
+export default class TabConnectionSettings extends React.Component
 {
+
+  /**
+   * Context values the child wants passed down from the parent
+   */
+  static contextTypes = {
+    finishInstall: PropTypes.func.isRequired,
+    settings:      PropTypes.array.isRequired,
+    values:        PropTypes.array.isRequired,
+    settingsForm:  PropTypes.func.isRequired,
+    dpapp:         PropTypes.object.isRequired
+  };
+
+
   static propTypes = {
     finishInstall: PropTypes.func.isRequired,
     settings:      PropTypes.array.isRequired,
@@ -40,7 +53,7 @@ export class ScreenSettings extends React.Component
       });
   }
 
-  onSettings(settings) {
+  onSettings = (settings) => {
     const { finishInstall, dpapp } = this.props;
 
     const connectionProps = oauthConnectionFactory({
@@ -55,7 +68,7 @@ export class ScreenSettings extends React.Component
       .catch(error => {
         return new Error(error);
       });
-  }
+  };
 
   render() {
 
@@ -79,7 +92,7 @@ export class ScreenSettings extends React.Component
             settings={newSettings}
             values={newValues}
             ref={ref => { formRef = ref; }}
-            onSubmit={this.onSettings.bind(this)}
+            onSubmit={this.onSettings}
           />
           <button className={'btn-action'} onClick={() => formRef.submit()}>
             Update Settings
