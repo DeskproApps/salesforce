@@ -1,8 +1,8 @@
 import {SFObject, SFObjectField} from "../salesforce/models";
-import {ContextProperty} from "./ContextProperty";
-import {ContextDetails} from "./ContextDetails";
+import {ContextProperty} from "../deskpro/ContextProperty";
+import {ContextDetails} from "../deskpro/ContextDetails";
 
-export class ContextMapping
+export default class ContextMapping
 {
   /**
    * @param {String | Object} js
@@ -34,15 +34,17 @@ export class ContextMapping
     this.props = { field, object, context, property, ...props };
   }
 
+  toJSON = () => {
+    return JSON.parse(JSON.stringify(this.props));
+  };
+
   /**
    * Returns a deep clone of this object
    *
    * @method
    * @return {Object}
    */
-  toJS = () => {
-    return JSON.parse(JSON.stringify(this.props));
-  };
+  toJS = () => this.toJSON();
 
   /**
    * @param {ContextMapping} other

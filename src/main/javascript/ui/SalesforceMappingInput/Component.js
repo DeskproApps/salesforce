@@ -7,7 +7,8 @@ import { fetch } from '../../salesforce/http';
 import { getDescribeGlobal, getSObjectDescribe } from '../../salesforce/api';
 import { SFObjectField, SFObject, SObjectDescription } from '../../salesforce/models';
 
-import {ContextDetails, ContextProperty, ContextMapping} from '../../deskpro';
+import {ContextDetails, ContextProperty} from '../../deskpro';
+import {ContextMapping} from '../../mapping';
 
 import { DefaultUI } from './DefaultUI';
 
@@ -30,34 +31,39 @@ export class Component extends React.Component
 {
   static propTypes = {
     dpapp: PropTypes.object.isRequired,
-    ui: PropTypes.func
+    ui: PropTypes.func,
+    addMapping: PropTypes.func
   };
 
-  constructor(props)
+  state = {
+    object: null,
+    fields: [],
+
+    objects: null,
+    objectDescriptions: {},
+
+    context: null,
+    contextProperties: [],
+    contexts: [
+      new ContextDetails({ name: "ticket", label: "Ticket" }),
+      new ContextDetails({ name: "person", label: "Person" }),
+      new ContextDetails({ name: "organization", label: "Organization" })
+    ],
+    mappings: []
+  };
+
+  addMapping = () =>
   {
-    super(props);
-    this.state = {
-      object: null,
-      fields: [],
-
-      objects: null,
-      objectDescriptions: {},
-
-      context: null,
-      contextProperties: [],
-      contexts: [
-        new ContextDetails({ name: "ticket", label: "Ticket" }),
-        new ContextDetails({ name: "person", label: "Person" }),
-        new ContextDetails({ name: "organization", label: "Organization" })
-      ],
-      mappings: []
-    };
-  }
+    const {object, fields, mappings} = this.state;
+    if (object && fields.length && mappings.length) {
+      this.props.addMapping(object, fields, mappings);
+    }
+  };
 
   /**
    * @param {ContextMapping} mapping
    */
-  addMapping = (mapping) =>
+  addContextMapping = (mapping) =>
   {
     const { /** @type {Array<ContextMapping>} */ mappings } = this.state;
     const isNew = (mappings.filter(existing => mapping.equals(existing)).length === 0);
@@ -128,7 +134,6 @@ export class Component extends React.Component
         this.setState({ fields: fields.concat(item) });
         return;
       }
-
       return;
     }
 
@@ -136,7 +141,6 @@ export class Component extends React.Component
       const fields = this.state.fields.filter(field => field.name !== item.name);
       if (fields.length !== this.state.fields.length) {
         this.setState({ fields });
-        return;
       }
     }
 
@@ -194,11 +198,11 @@ export class Component extends React.Component
       onContextSelected = {this.showContextProperties}
 
       mappings = {mappings}
-      onMappingAdd = {this.addMapping}
+      onMappingAdd = {this.addContextMapping}
       onMappingRemove = {this.removeMapping}
 
       changeViewableStatus = {this.changeViewableStatus}
-
+      onChange = { this.addMapping }
     />);
   }
 

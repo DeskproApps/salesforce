@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { Scrollbar, SelectableList, QueryableList, ListElement, Container } from '@deskpro/react-components';
-import { ContextDetails, ContextMapping } from '../deskpro';
+import { ContextDetails } from '../deskpro';
+import { ContextMapping } from '../mapping';
 
 /**
  * @param {ContextMapping} item
@@ -32,7 +33,7 @@ function isSameContext(mapping, context)
   return mapping.context.name === context.name;
 }
 
-export default class MappingList extends React.PureComponent
+export default class ContextMappingList extends React.PureComponent
 {
   static propTypes = {
     context : PropTypes.instanceOf(ContextDetails),

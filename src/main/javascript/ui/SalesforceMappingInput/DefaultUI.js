@@ -1,14 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Container, Heading, Button } from '@deskpro/react-components';
 
 
 import {DeskproContextDropdown, SalesforceObjectDropdown, SalesforceFieldList} from '../Lists'
-import { default as InputMapping } from '../MappingInput'
+import { default as ContextMappingInput } from '../ContextMappingInput'
 import { SFObjectField, SFObject } from '../../salesforce/models';
 import {ContextMapping, ContextProperty, ContextDetails} from '../../deskpro';
 
 import { TabsContext } from '../TabsContext';
-import { default as MappingList } from '../MappingList';
+import { default as ContextMappingList } from '../ContextMappingList';
+import { ViewableStatusToggle } from '../ViewableStatusToggle'
 
 
 export class DefaultUI extends React.PureComponent
@@ -32,7 +34,9 @@ export class DefaultUI extends React.PureComponent
     mappings   : PropTypes.arrayOf(PropTypes.instanceOf(ContextMapping)).isRequired,
 
     onMappingAdd : PropTypes.func.isRequired,
-    onMappingRemove : PropTypes.func.isRequired
+    onMappingRemove : PropTypes.func.isRequired,
+
+    onChange: PropTypes.func.isRequired
   };
 
 
@@ -74,14 +78,12 @@ export class DefaultUI extends React.PureComponent
 
         <h2>Select the object's fields to display</h2>
 
-        <div style={containerStyleFields}>
-          <div style={styleFieldList} className="dp-column">
-            <SalesforceFieldList items={this.props.objectFields} onSelect={this.setViewableState} />
-          </div>
-          <div style={styleFieldList} className="dp-column">
-            <SalesforceFieldList items={this.props.objectFieldsDisplayable} onSelect={this.unsetViewableState}/>
-          </div>
-        </div>
+        <ViewableStatusToggle
+          changeViewableStatus={this.props.changeViewableStatus}
+          objectFields={this.props.objectFields}
+          objectFieldsDisplayable={this.props.objectFieldsDisplayable}
+          object={this.props.object}
+        />
 
         <h2>Select a Deskpro Context for mapping</h2>
 
@@ -90,7 +92,7 @@ export class DefaultUI extends React.PureComponent
         <div style={containerStyleFields}>
 
           <div style={styleFieldList}>
-            <InputMapping
+            <ContextMappingInput
               object={this.props.object}
               objectFields={this.props.objectFields}
               context={this.props.context}
@@ -101,14 +103,14 @@ export class DefaultUI extends React.PureComponent
 
           <div style={styleFieldList} className="dp-column">
             <TabsContext items={this.props.contexts} active={this.props.context} onChange={this.props.onContextSelected}/>
-            <MappingList items={this.props.mappings} context={this.props.context} onRemove={this.props.onMappingRemove} />
+            <ContextMappingList items={this.props.mappings} context={this.props.context} onRemove={this.props.onMappingRemove} />
           </div>
 
         </div>
 
-
+        <Button onClick={this.props.onChange}>Add Object</Button>
       </div>
     )
-  }z
+  }
 
 }

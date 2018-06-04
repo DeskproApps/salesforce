@@ -20,15 +20,17 @@ export class ContextProperty
     this.props = {name, label, ...props };
   }
 
+  toJSON = () => {
+    return JSON.parse(JSON.stringify(this.props));
+  };
+
   /**
    * Returns a deep clone of this object
    *
    * @method
    * @return {Object}
    */
-  toJS = () => {
-    return JSON.parse(JSON.stringify(this.props));
-  };
+  toJS = () => this.toJSON();
 
   /**
    * @type {string}

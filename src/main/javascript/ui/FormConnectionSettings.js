@@ -2,21 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {establishConnection, oauthConnectionFactory, oauthProviderName} from '../salesforce/security';
 
-export default class TabConnectionSettings extends React.Component
+export default class FormConnectionSettings extends React.Component
 {
-
-  /**
-   * Context values the child wants passed down from the parent
-   */
-  static contextTypes = {
-    finishInstall: PropTypes.func.isRequired,
-    settings:      PropTypes.array.isRequired,
-    values:        PropTypes.array.isRequired,
-    settingsForm:  PropTypes.func.isRequired,
-    dpapp:         PropTypes.object.isRequired
-  };
-
-
   static propTypes = {
     finishInstall: PropTypes.func.isRequired,
     settings:      PropTypes.array.isRequired,
@@ -25,13 +12,10 @@ export default class TabConnectionSettings extends React.Component
     dpapp:         PropTypes.object.isRequired
   };
 
-  constructor() {
-    super();
-    this.state = {
-      oauthSettings: null,
-      error:         null
-    };
-  }
+  state = {
+    oauthSettings: null,
+    error:         null
+  };
 
   componentDidMount() {
     const { oauth } = this.props.dpapp;

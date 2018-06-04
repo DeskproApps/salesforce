@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {DefaultUI} from "./DefaultUI";
 import {SFObject, SFObjectField} from "../../salesforce/models";
-import {ContextDetails, ContextMapping, ContextProperty} from "../../deskpro";
+import {ContextDetails, ContextProperty} from "../../deskpro";
+import {ContextMapping} from "../../mapping";
 
 /**
  * @param {Object} props

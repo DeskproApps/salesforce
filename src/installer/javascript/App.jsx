@@ -1,6 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { UI } from './UI';
+import { Provider } from 'react-redux'
+
+import { default as Admin } from '@app/main/javascript/Admin'
+import { FormConnectionSettings } from '@app/main/javascript/ui'
+import { default as configureStore } from '@app/main/javascript/store'
+
+
+let store = null;
+
+function createStore(dpApp) {
+  if (store) {
+    return store;
+  }
+
+  store = configureStore(dpApp);
+  return store;
+}
+
 
 class App extends React.Component
 {
@@ -12,16 +29,25 @@ class App extends React.Component
     dpapp:         PropTypes.object.isRequired
   };
 
-  constructor() {
-    super();
-    this.state = {
-      oauthSettings: null,
-      error:         null
-    };
-  }
+  state = {
+    oauthSettings: null,
+    error:         null
+  };
+
+  renderSettingsForm = () =>
+  {
+    return (<FormConnectionSettings {...this.props} />);
+  };
+
   render()
   {
-    return (<UI {...this.props}/>)
+    const store = createStore(this.props.dpapp);
+
+    return (
+      <Provider store={store}>
+        <Admin dpapp={this.props.dpapp} renderSettingsForm={this.renderSettingsForm}/>
+      </Provider>
+    );
   }
 }
 

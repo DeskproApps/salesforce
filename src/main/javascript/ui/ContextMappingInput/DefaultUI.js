@@ -47,7 +47,7 @@ export class DefaultUI extends React.PureComponent
           <PropertyDropdown items={this.props.contextProperties} value={this.props.property} onChange={this.props.onChangeProperty} />
         </div>
 
-        <Button onClick={this.props.onCreate}>Create mapping</Button>
+        <Button onClick={this.props.onCreate}>Create field mapping</Button>
 
       </div>
     );

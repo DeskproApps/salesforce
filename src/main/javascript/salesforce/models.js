@@ -18,15 +18,17 @@ export class ChildRelationship
     this.props = { ...props };
   }
 
+  toJSON = () => {
+    return JSON.parse(JSON.stringify(this.props));
+  };
+
   /**
    * Returns a deep clone of this object
    *
    * @method
    * @return {Object}
    */
-  toJS = () => {
-    return JSON.parse(JSON.stringify(this.props));
-  };
+  toJS = () => this.toJSON();
 
   /**
    * @type {string}
@@ -61,15 +63,17 @@ export class SFObject
     this.props = { name, label, ...props };
   }
 
+  toJSON = () => {
+    return JSON.parse(JSON.stringify(this.props));
+  };
+
   /**
    * Returns a deep clone of this object
    *
    * @method
    * @return {Object}
    */
-  toJS = () => {
-    return JSON.parse(JSON.stringify(this.props));
-  };
+  toJS = () => this.toJSON();
 
   /**
    * @type {string}
@@ -101,15 +105,17 @@ export class SFObjectField
     this.props = {...props};
   }
 
+  toJSON = () => {
+    return JSON.parse(JSON.stringify(this.props));
+  };
+
   /**
    * Returns a deep clone of this object
    *
    * @method
    * @return {Object}
    */
-  toJS = () => {
-    return JSON.parse(JSON.stringify(this.props));
-  };
+  toJS = () => this.toJSON();
 
   /**
    * @type {string}
@@ -154,15 +160,17 @@ export class DescribeGlobal
     this.props = {...props};
   }
 
+  toJSON = () => {
+    return JSON.parse(JSON.stringify(this.props));
+  };
+
   /**
    * Returns a deep clone of this object
    *
    * @method
    * @return {Object}
    */
-  toJS = () => {
-    return JSON.parse(JSON.stringify(this.props));
-  };
+  toJS = () => this.toJSON();
 
   /**
    * @public
@@ -201,15 +209,17 @@ export class SObjectDescription
     this.props = {...props};
   }
 
+  toJSON = () => {
+    return JSON.parse(JSON.stringify(this.props));
+  };
+
   /**
    * Returns a deep clone of this object
    *
    * @method
    * @return {Object}
    */
-  toJS = () => {
-    return JSON.parse(JSON.stringify(this.props));
-  };
+  toJS = () => this.toJSON();
 
   /**
    * @public
