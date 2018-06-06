@@ -1,17 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { ContextMapping } from "../../mapping";
 
-import { Scrollbar, SelectableList, QueryableList, ListElement, Container } from '@deskpro/react-components';
-
-import { fetch } from '../../salesforce/http';
-import { getDescribeGlobal, getSObjectDescribe } from '../../salesforce/api';
-import { SFObjectField, SFObject, SObjectDescription } from '../../salesforce/models';
-
-import {ContextDetails, ContextProperty} from '../../deskpro';
-import {ContextMapping} from '../../mapping';
-
-import { DefaultUI } from './DefaultUI';
-
+import { SFObject, SFObjectField } from "../../salesforce/models";
+import { ContextDetails, ContextPropertyList } from "../../deskpro";
+import { DefaultUI } from "./DefaultUI";
 
 /**
  * @param {Object} props
@@ -27,96 +20,144 @@ function chooseUI(props)
   return DefaultUI;
 }
 
+/**
+ * @param {ContextMapping} left
+ * @param {ContextMapping} right
+ */
+const equalMappings = (left, right) => left.equals(right);
+
+/**
+ * @param {SFObjectField} left
+ * @param {SFObjectField} right
+ */
+const equalFields = (left, right) => left.name === right.name;
+
+function indexOf(item, list, equals)
+{
+  let index = -1;
+  for (const listItem of list) {
+    if (equals(item, listItem)) {
+      return index + 1
+    }
+  }
+
+  return index;
+}
+
+/**
+ * @param {Array} left
+ * @param {Array} right
+ * @param {Function} equals
+ * @return {Array}
+ */
+function diff(left, right, equals)
+{
+  const diff = [];
+
+  for (const leftItem of left) {
+    for (const rightItem of right) {
+      if (!equals(leftItem, rightItem)) {
+        diff.push(leftItem);
+        break;
+      }
+    }
+  }
+
+  return diff;
+}
+
+/**
+ *
+ * @param {*} item
+ * @param {Array<*>} list
+ * @param {Function} itemEqualityCheck
+ * @return {Array<*>|null}
+ */
+function addListItem (item, list, itemEqualityCheck)
+{
+  const wasAdded = indexOf(item, list, itemEqualityCheck) !== -1;
+  if (wasAdded) {
+    return null;
+  }
+
+  return list.concat([item])
+}
+
+/**
+ *
+ * @param {*} item
+ * @param {Array<*>} list
+ * @param {Function} itemEqualityCheck
+ * @return {Array<*>|null}
+ */
+function removeListItem (item, list, itemEqualityCheck)
+{
+  const wasAdded = indexOf(item, list, itemEqualityCheck) !== -1;
+  if (wasAdded) {
+    return diff(list, [item], itemEqualityCheck)
+  }
+  return null;
+}
+
+
 export class Component extends React.Component
 {
   static propTypes = {
-    dpapp: PropTypes.object.isRequired,
-    ui: PropTypes.func,
-    addMapping: PropTypes.func
+
+    ui                : PropTypes.func,
+
+    object            : PropTypes.arrayOf(SFObject),
+    fields            : PropTypes.arrayOf(SFObjectField),
+    fieldsViewable    : PropTypes.arrayOf(SFObjectField),
+    mappings          : PropTypes.arrayOf(ContextMapping),
+
+    loadContexts          : PropTypes.func,
+    loadContextProperties : PropTypes.func,
+
+    onChange              : PropTypes.func
   };
 
   state = {
-    object: null,
-    fields: [],
-
-    objects: null,
-    objectDescriptions: {},
 
     context: null,
-    contextProperties: [],
-    contexts: [
-      new ContextDetails({ name: "ticket", label: "Ticket" }),
-      new ContextDetails({ name: "person", label: "Person" }),
-      new ContextDetails({ name: "organization", label: "Organization" })
-    ],
-    mappings: []
+
+    contexts: [],
+
+    contextProperties: []
+
   };
 
-  addMapping = () =>
+  componentDidMount()
   {
-    const {object, fields, mappings} = this.state;
-    if (object && fields.length && mappings.length) {
-      this.props.addMapping(object, fields, mappings);
-    }
-  };
+    const {loadContexts, loadContextProperties} = this.props;
 
-  /**
-   * @param {ContextMapping} mapping
-   */
-  addContextMapping = (mapping) =>
-  {
-    const { /** @type {Array<ContextMapping>} */ mappings } = this.state;
-    const isNew = (mappings.filter(existing => mapping.equals(existing)).length === 0);
+    loadContexts().then(contexts => {
 
-    if (isNew) {
-      this.setState({ mappings: mappings.concat([mapping]) });
-    }
-  };
+      if (contexts.length === 0) {
+        return Promise.resolve({})
+      }
 
-  /**
-   * @param {ContextMapping} mapping
-   */
-  removeMapping = (mapping) => {
-    const mappings = this.state.mappings.filter(existing => ! mapping.equals(existing));
-    if (mappings.length !== this.state.mappings.length) {
-      this.setState({ mappings });
-    }
-  };
+      return loadContextProperties(contexts[0])
+        .then(contextProperties => ({ context: contexts[0], contexts, contextProperties }))
+        .then(state => {
+          this.setState(state);
+          return state;
+        })
+
+    })
+  }
 
   /**
    * @param {ContextDetails}  context
    */
   showContextProperties = (context) =>
   {
-    this.setState({
-      context,
-      contextProperties: [new ContextProperty({ name: "email", label: "Email" })]
-    })
-  };
-
-  /**
-   * @param {SFObject} object
-   * @return {Promise<Array<SFObjectField>, Error>} object
-   */
-  showObjectFields = (object) =>
-  {
-    if (!object) {
-      throw new Error('showObjectFields object is null')
-    }
-
-    if (this.state.objectDescriptions[object.name]) {
-      this.setState({ object });
-      const info = this.state.objectDescriptions[object.name];
-      return Promise.resolve(info.fields);
-    }
-
-    return fetch(this.props.dpapp, (client) => getSObjectDescribe(client, object))
-      .then(info => {
-        this.state.objectDescriptions[object.name] = info;
-        this.setState({ object });
-        return info.fields
+    this.props.loadContextProperties(context)
+      .then(contextProperties => ({ context, contextProperties }))
+      .then(state => {
+        this.setState(state);
+        return state;
       })
-    ;
   };
 
   /**
@@ -125,85 +166,81 @@ export class Component extends React.Component
    */
   changeViewableStatus = (item, status) =>
   {
-    console.log('changeViewableStatus', item, status);
+    console.log('changing viewable stateus', item, status)
 
     if (status === 'viewable') {
-      const { fields } = this.state;
-      const isViewable = fields.filter(field => field.name === item.name).length === 0;
-      if (isViewable) {
-        this.setState({ fields: fields.concat(item) });
-        return;
-      }
-      return;
+      this.addFieldViewable(item);
     }
 
     if (status === 'not-viewable') {
-      const fields = this.state.fields.filter(field => field.name !== item.name);
-      if (fields.length !== this.state.fields.length) {
-        this.setState({ fields });
-      }
+      this.removeFieldViewable(item);
     }
-
-
   };
 
   /**
-   * @returns {Promise<Array<SFObject>, Error>}
+   * @param {SFObjectField} item
    */
-  loadObjects = () =>
+  addFieldViewable = (item) =>
   {
-    const { dpapp } = this.props;
-
-    if (this.state.objects) {
-      return Promise.resolve(this.state.objects);
+    const fieldsViewable = addListItem(item, this.props.fieldsViewable, equalFields);
+    if (fieldsViewable) {
+      this.props.onChange({ object: this.props.object, fields: fieldsViewable, mappings: this.props.mappings });
     }
+  };
 
-    /**
-     * @param {DescribeGlobal} resp
-     * @return {Array<SFObject>}
-     */
-    const sobjects = (resp) => resp.sobjects;
+  /**
+   * @param {SFObjectField} item
+   */
+  removeFieldViewable = (item) =>
+  {
+    const fieldsViewable = removeListItem(item, this.props.fieldsViewable, equalFields);
+    if (fieldsViewable) {
+      this.props.onChange({ object: this.props.object, fields: fieldsViewable, mappings: this.props.mappings });
+    }
+  };
 
-    return fetch(dpapp, getDescribeGlobal).then(sobjects)
-      .then(objects => {
-        this.setState({ objects });
-        return objects
-      })
-    ;
+
+  /**
+   * @param {ContextMapping} item
+   */
+  addContextMapping = (item) =>
+  {
+    const mappings = addListItem(item, this.props.mappings, equalMappings);
+    if (mappings) {
+      this.props.onChange({ object: this.props.object, fields: this.props.fieldsViewable, mappings });
+    }
+  };
+
+  /**
+   * @param {ContextMapping} item
+   */
+  removeContextMapping = (item) =>
+  {
+    const mappings = removeListItem(item, this.props.mappings, equalMappings);
+    if (mappings) {
+      this.props.onChange({ object: this.props.object, fields: this.props.fieldsViewable, mappings });
+    }
   };
 
   render()
   {
-    const { object, fields, objectDescriptions, context, contextProperties, contexts, mappings } = this.state;
-    /**
-     * @param {SFObject} resp
-     * @param {Object} cache
-     * @return {SObjectDescription|null}
-     */
-    function objectDescription(resp, cache) { return cache[resp.name]; }
-    const objectFields = object ? objectDescription(object, objectDescriptions).fields : [];
+    console.log('these are my props SalesforceMappingInput ', this.props);
 
     const UI = chooseUI(this.props);
     return (<UI
-      object={object}
-      objectFields={objectFields}
-      objectFieldsDisplayable={fields}
+      object                  = {this.props.object}
+      fields                  = {this.props.fields}
+      fieldsViewable          = {this.props.fieldsViewable}
+      changeViewableStatus    = {this.changeViewableStatus}
 
-      loadObjects={this.loadObjects}
-      onObjectSelected={this.showObjectFields}
+      context           = { this.state.context }
+      contextProperties = { this.state.contextProperties}
+      contexts          = { this.state.contexts}
+      onContextChanged  = {this.showContextProperties}
 
-      context = {context}
-      contextProperties = {contextProperties}
-      contexts = {contexts}
-      onContextSelected = {this.showContextProperties}
-
-      mappings = {mappings}
-      onMappingAdd = {this.addContextMapping}
-      onMappingRemove = {this.removeMapping}
-
-      changeViewableStatus = {this.changeViewableStatus}
-      onChange = { this.addMapping }
+      mappings        = { this.props.mappings }
+      onMappingAdd    = {this.addContextMapping}
+      onMappingRemove = {this.removeContextMapping}
     />);
   }
-
 }

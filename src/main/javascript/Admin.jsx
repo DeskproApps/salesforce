@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { MemoryRouter, Route } from 'react-router'
 
-import { SalesforceMappingInput, TabNavigation, RouteDefinition } from './ui'
+import { SalesforceMappingList, SalesforceMappingAdd, TabNavigation, RouteDefinition } from './ui'
 
 const nav = [
   new RouteDefinition({ path: 'connection', label: 'Connection Settings' }),
@@ -14,6 +14,7 @@ class Admin extends React.Component
 {
   static propTypes = {
     renderSettingsForm: PropTypes.func.isRequired,
+
     dpapp:         PropTypes.object.isRequired
   };
 
@@ -52,7 +53,7 @@ class Admin extends React.Component
     return (
       <div>
         <TabNavigation items={nav} match={match} location={location} history={history} />
-        <SalesforceMappingInput {...this.props}/>
+        <SalesforceMappingAdd />
       </div>
     );
   };
@@ -62,7 +63,7 @@ class Admin extends React.Component
     return (
       <div>
         <TabNavigation items={nav} match={match} location={location} history={history} />
-        <SalesforceMappingInput {...this.props}/>
+        <SalesforceMappingList />
       </div>
     );
   };

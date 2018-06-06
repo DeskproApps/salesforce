@@ -1,13 +1,13 @@
-export class ContextProperty
+export class MappableProperty
 {
   /**
    * @param {String | Object} js
-   * @returns {ContextProperty}
+   * @returns {MappableProperty}
    */
   static instance(js)
   {
     const data = typeof js === 'string' ? JSON.parse(js) : JSON.parse(JSON.stringify(js));
-    return new ContextProperty(data)
+    return new MappableProperty(data)
   }
 
   /**

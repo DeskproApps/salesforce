@@ -1,8 +1,26 @@
+import {SFObject, SFObjectField} from "../salesforce/models";
+
 export default class ObjectView
 {
   /**
+   * @param {String | Object} js
+   * @returns {ObjectView}
+   */
+  static instance(js)
+  {
+    const data = typeof js === 'string' ? JSON.parse(js) : JSON.parse(JSON.stringify(js));
+    const { fields, object, ...rest } = data;
+
+    return new ObjectView({
+      object: SFObject.instance(object),
+      fields: fields.map(SFObjectField.instance),
+      ...rest
+    });
+  }
+
+  /**
    * @param {SFObject} object
-   * @param {Array<SFObjectField>} label
+   * @param {Array<SFObjectField>} fields
    * @param {...*} [props]
    */
   constructor({object, fields, ...props })

@@ -9,7 +9,7 @@ export class TabsContext extends React.PureComponent
   static propTypes = {
     onChange: PropTypes.func,
     active: PropTypes.instanceOf(ContextDetails),
-    items: PropTypes.arrayOf(PropTypes.instanceOf(ContextDetails))
+    items: PropTypes.arrayOf(ContextDetails)
   };
 
   /**

@@ -22,9 +22,11 @@ export default class SalesforceFieldList extends React.PureComponent
 
   fireOnChange = (event) =>
   {
+    console.log('fire on change')
     if (this.props.onSelect) {
       const item = this.props.items.filter(field => matchDom(field, event.currentTarget)).pop();
       if (item) {
+        console.log('fire on change', item)
         this.props.onSelect(item);
       }
     }

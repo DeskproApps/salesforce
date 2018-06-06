@@ -36,9 +36,9 @@ function isSameContext(mapping, context)
 export default class ContextMappingList extends React.PureComponent
 {
   static propTypes = {
-    context : PropTypes.instanceOf(ContextDetails),
-    items: PropTypes.arrayOf(PropTypes.instanceOf(ContextMapping)).isRequired,
-    onRemove: PropTypes.func
+    context   : PropTypes.instanceOf(ContextDetails).isRequired,
+    items     : PropTypes.arrayOf(ContextMapping).isRequired,
+    onRemove  : PropTypes.func
   };
 
   fireOnRemove = (event) =>

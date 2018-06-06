@@ -1,6 +1,5 @@
 import {SFObject, SFObjectField} from "../salesforce/models";
-import {ContextProperty} from "../deskpro/ContextProperty";
-import {ContextDetails} from "../deskpro/ContextDetails";
+import {MappableProperty, ContextDetails} from "../deskpro";
 
 export default class ContextMapping
 {
@@ -17,7 +16,7 @@ export default class ContextMapping
       field : SFObjectField.instance(field),
       object: SFObject.instance(object),
       context: ContextDetails.instance(context),
-      property: ContextProperty.instance(property),
+      property: MappableProperty.instance(property),
       ...props
     });
   }
@@ -26,7 +25,7 @@ export default class ContextMapping
    * @param {SFObjectField} field
    * @param {SFObject} object
    * @param {ContextDetails} context
-   * @param {ContextProperty} property
+   * @param {MappableProperty} property
    * @param {...*} [props]
    */
   constructor({ field, object, context, property, ...props })
@@ -79,7 +78,7 @@ export default class ContextMapping
   get context() { return this.props.context; }
 
   /**
-   * @type {ContextProperty}
+   * @type {MappableProperty}
    */
   get property() { return this.props.property; }
 }

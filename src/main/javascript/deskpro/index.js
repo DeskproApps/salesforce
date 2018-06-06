@@ -1,2 +1,4 @@
 export { ContextDetails }   from './ContextDetails'
-export { ContextProperty }  from './ContextProperty'
+export { ContextPropertyList }  from './ContextPropertyList'
+export { MappableProperty }  from './MappableProperty'
+export { Contexts }  from './Contexts'

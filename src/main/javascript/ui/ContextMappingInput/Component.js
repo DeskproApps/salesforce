@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {DefaultUI} from "./DefaultUI";
 import {SFObject, SFObjectField} from "../../salesforce/models";
-import {ContextDetails, ContextProperty} from "../../deskpro";
+import {ContextDetails, MappableProperty} from "../../deskpro";
 import {ContextMapping} from "../../mapping";
 
 /**
@@ -19,22 +19,18 @@ export class Component extends React.Component
 {
   static propTypes = {
     object            : PropTypes.instanceOf(SFObject),
-    objectFields      : PropTypes.arrayOf(SFObjectField),
+    fields            : PropTypes.arrayOf(SFObjectField),
 
     context           : PropTypes.instanceOf(ContextDetails),
-    contextProperties : PropTypes.arrayOf(PropTypes.instanceOf(ContextProperty)),
+    contextProperties : PropTypes.arrayOf(MappableProperty),
 
     onChange          : PropTypes.func
   };
 
-  constructor(props)
-  {
-    super(props);
-    this.state = {
-      field: null,
-      property: null
-    };
-  }
+  state = {
+    field: null,
+    property: null
+  };
 
   componentDidUpdate(prevProps)
   {
@@ -61,7 +57,7 @@ export class Component extends React.Component
   };
 
   /**
-   * @param {ContextProperty} property
+   * @param {MappableProperty} property
    */
   useProperty = (property) =>
   {
@@ -70,7 +66,7 @@ export class Component extends React.Component
 
   createMapping = () =>
   {
-    const { /** @type {SFObjectField} */ field, /** @type {ContextProperty} */ property } = this.state;
+    const { /** @type {SFObjectField} */ field, /** @type {MappableProperty} */ property } = this.state;
     if (field && property) {
       if (this.props.onChange) {
         const { /** @type {SFObject} */ object, /** @type {ContextDetails} */ context } = this.props;
@@ -86,15 +82,15 @@ export class Component extends React.Component
 
     const UI = chooseUI(this.props);
     return (<UI
-      field             ={this.state.field}
-      objectFields      ={this.props.objectFields}
-      onChangeField     ={this.useField}
+      field             = {this.state.field}
+      fields            = {this.props.fields}
+      onChangeField     = {this.useField}
 
-      property          ={this.state.property}
-      contextProperties ={this.props.contextProperties}
-      onChangeProperty  ={this.useProperty}
+      property          = {this.state.property}
+      properties        = {this.props.contextProperties}
+      onChangeProperty  = {this.useProperty}
 
-      onCreate          ={this.createMapping}
+      onCreate          = {this.createMapping}
     />);
   }
 }

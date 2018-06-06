@@ -2,13 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Select from 'react-select';
 
-import { ContextProperty } from '../../deskpro';
+import { MappableProperty } from '../../deskpro';
 import {SFObjectField} from "../../salesforce/models";
 
 
 /**
- * @param {ContextProperty} field
- * @return {{value: string, label: string, object: ContextProperty}}
+ * @param {MappableProperty} field
+ * @return {{value: string, label: string, object: MappableProperty}}
  */
 function toOption(field)
 {
@@ -18,13 +18,13 @@ function toOption(field)
 export default class PropertyDropdown extends React.PureComponent
 {
   static propTypes = {
-    items: PropTypes.arrayOf(PropTypes.instanceOf(ContextProperty)).isRequired,
-    value: PropTypes.instanceOf(ContextProperty),
+    items: PropTypes.arrayOf(MappableProperty).isRequired,
+    value: PropTypes.instanceOf(MappableProperty),
     onChange: PropTypes.func
   };
 
   /**
-   * @param {{object: ContextProperty}} option
+   * @param {{object: MappableProperty}} option
    */
   fireOnChange = (option) =>
   {

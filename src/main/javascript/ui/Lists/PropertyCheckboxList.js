@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { Scrollbar, SelectableList, QueryableList, ListElement, Container } from '@deskpro/react-components';
-import { ContextProperty } from '../../deskpro';
+import { MappableProperty } from '../../deskpro';
 import {SFObjectField} from "../../salesforce/models";
 
 
@@ -18,8 +18,8 @@ function matchDom(field, dom)
 export default class PropertyCheckboxList extends React.PureComponent
 {
   static propTypes = {
-    items: PropTypes.arrayOf(PropTypes.instanceOf(ContextProperty)).isRequired,
-    value: PropTypes.instanceOf(ContextProperty),
+    items: PropTypes.arrayOf(PropTypes.instanceOf(MappableProperty)).isRequired,
+    value: PropTypes.instanceOf(MappableProperty),
     onChange: PropTypes.func
   };
 
@@ -45,7 +45,7 @@ export default class PropertyCheckboxList extends React.PureComponent
   }
 
   /**
-   * @param {ContextProperty} item
+   * @param {MappableProperty} item
    */
   renderField = (item) =>
   {

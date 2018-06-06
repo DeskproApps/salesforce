@@ -21,6 +21,8 @@ export default class TabNavigation extends React.PureComponent
 
   render()
   {
+    const { location } = this.props;
+
     return (
       <Tabs active={location.pathname} onChange={ this.onTabChange }>
         {this.props.items.map(this.renderTabLink)}

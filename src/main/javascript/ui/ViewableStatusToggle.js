@@ -7,23 +7,27 @@ import {SFObjectField, SFObject} from "../salesforce/models";
 export class ViewableStatusToggle extends React.PureComponent
 {
   static propTypes = {
-    object            : PropTypes.instanceOf(SFObject),
-    objectFields      : PropTypes.arrayOf(SFObjectField),
-    objectFieldsDisplayable : PropTypes.arrayOf(SFObjectField),
-    changeViewableStatus: PropTypes.func.isRequired
+    object                : PropTypes.instanceOf(SFObject),
+    fields                : PropTypes.arrayOf(SFObjectField),
+    fieldsViewable        : PropTypes.arrayOf(SFObjectField),
+    changeViewableStatus  : PropTypes.func.isRequired
   };
 
   setViewableState = (item) =>
   {
+    console.log('setViewable state', item)
     this.props.changeViewableStatus(item, "viewable");
   };
 
   unsetViewableState = (item) =>
   {
+    console.log('unsetViewableState state', item)
     this.props.changeViewableStatus(item, "not-viewable");
   };
 
   render() {
+
+    console.log('ViewableStatusToggle render ', this.props);
 
     const containerStyleFields = {
       display: "flex",
@@ -38,10 +42,10 @@ export class ViewableStatusToggle extends React.PureComponent
     return (
       <div style={containerStyleFields}>
         <div style={styleFieldList} className="dp-column">
-          <SalesforceFieldList items={this.props.objectFields} onSelect={this.setViewableState} />
+          <SalesforceFieldList items={this.props.fields} onSelect={this.setViewableState} />
         </div>
         <div style={styleFieldList} className="dp-column">
-          <SalesforceFieldList items={this.props.objectFieldsDisplayable} onSelect={this.unsetViewableState}/>
+          <SalesforceFieldList items={this.props.fieldsViewable} onSelect={this.unsetViewableState}/>
         </div>
       </div>
     );

@@ -3,17 +3,17 @@ import PropTypes from 'prop-types';
 
 import { Container, Heading, Button } from '@deskpro/react-components';
 import {SFObjectField} from "../../salesforce/models";
-import {ContextProperty} from "../../deskpro";
+import {MappableProperty} from "../../deskpro";
 import { FieldDropDown, PropertyDropdown } from '../Lists'
 
 export class DefaultUI extends React.PureComponent
 {
   static propTypes = {
-    field            : PropTypes.instanceOf(SFObjectField),
-    objectFields      : PropTypes.arrayOf(SFObjectField),
+    field               : PropTypes.instanceOf(SFObjectField),
+    fields              : PropTypes.arrayOf(SFObjectField),
 
-    property           : PropTypes.instanceOf(ContextProperty),
-    contextProperties : PropTypes.arrayOf(PropTypes.instanceOf(ContextProperty)),
+    property            : PropTypes.instanceOf(MappableProperty),
+    properties         : PropTypes.arrayOf(MappableProperty),
 
     onChangeField     : PropTypes.func,
     onChangeProperty  : PropTypes.func,
@@ -40,11 +40,11 @@ export class DefaultUI extends React.PureComponent
       <div style={containerStyleFields}>
 
         <div style={styleFieldList} className="dp-column">
-          <FieldDropDown items={this.props.objectFields} value={this.props.field} onChange={this.props.onChangeField} />
+          <FieldDropDown items={this.props.fields} value={this.props.field} onChange={this.props.onChangeField} />
         </div>
 
         <div style={styleFieldList} className="dp-column">
-          <PropertyDropdown items={this.props.contextProperties} value={this.props.property} onChange={this.props.onChangeProperty} />
+          <PropertyDropdown items={this.props.properties} value={this.props.property} onChange={this.props.onChangeProperty} />
         </div>
 
         <Button onClick={this.props.onCreate}>Create field mapping</Button>
