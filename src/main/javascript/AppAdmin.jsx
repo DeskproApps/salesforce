@@ -10,11 +10,10 @@ const nav = [
   new RouteDefinition({ path: 'viewObjects', label: 'View Salesforce Objects' }),
 ];
 
-class Admin extends React.Component
+class AppAdmin extends React.Component
 {
   static propTypes = {
     renderSettingsForm: PropTypes.func.isRequired,
-
     dpapp:         PropTypes.object.isRequired
   };
 
@@ -69,4 +68,4 @@ class Admin extends React.Component
   };
 }
 
-export default Admin;
+export default AppAdmin;

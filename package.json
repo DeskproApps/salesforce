@@ -58,7 +58,7 @@
         "permWrite": "EVERYBODY"
       },
       {
-        "name": "settings",
+        "name": "mappings",
         "isBackendOnly": false,
         "permRead": "EVERYBODY",
         "permWrite": "OWNER"

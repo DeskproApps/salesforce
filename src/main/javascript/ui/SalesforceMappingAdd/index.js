@@ -1,8 +1,6 @@
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { addMappings  } from "../../mapping/dux";
-import { loadObjects, loadFields  } from "../../salesforce/dux";
-import { loadContexts, loadContextProperties } from "../../deskpro/dux";
+import { persistMappings, addMappings, loadObjects, loadFields, loadContexts, loadContextProperties } from "../../app/actions";
 
 import {ContextDetails, ContextPropertyList} from "../../deskpro";
 import { Component } from './Component'
@@ -13,7 +11,7 @@ function mapDispatchToProps(dispatch, ownProps)
     return null;
   }
 
-  const props = { addMappings, loadObjects, loadFields, loadContexts, loadContextProperties };
+  const props = { persistMappings, addMappings, loadObjects, loadFields, loadContexts, loadContextProperties };
   return bindActionCreators(props, dispatch)
 }
 

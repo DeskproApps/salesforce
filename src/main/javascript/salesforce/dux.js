@@ -77,11 +77,11 @@ export function loadFields(object)
    */
   function thunk (dispatch, getState, dpapp) {
 
-    const { salesforce } = getState();
-    const fields = salesforce.fields[object.name];
+    const { fields } = getState().salesforce;
+    const objectFields = fields[object.name];
 
-    if (fields) {
-      return Promise.resolve([].concat(fields));
+    if (objectFields) {
+      return Promise.resolve([].concat(objectFields));
     }
 
     return fetch(dpapp, (client) => getSObjectDescribe(client, object)).then(toFields)

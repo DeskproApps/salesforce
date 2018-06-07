@@ -36,6 +36,8 @@ export class Component extends React.Component
 
     removeMappings: PropTypes.func.isRequired,
 
+    persistMappings : PropTypes.func.isRequired,
+
     loadFields : PropTypes.func.isRequired
 
   };
@@ -64,19 +66,16 @@ export class Component extends React.Component
 
   onRemove = (object) =>
   {
-    this.props.removeMappings(object);
+    this.props.removeMappings(object).then(() => this.props.persistMappings());
   };
 
   onEdit = (object) =>
   {
-    console.log('on edit ', object, this.props)
-
     /** @type {ObjectView} **/
     const objectView = this.props.objectViews.filter(view => hasView(object, view)).pop();
     const objectViewableFields = objectView ? objectView.fields : [];
     const objectMappings = this.props.contextMappings.filter(mapping => hasMapping(object, mapping));
 
-    console.log('on edit done', object, this.props)
     this.props.loadFields(object).then(fields => {
       this.setState({object, objectFields: fields, objectViewableFields,  objectMappings})
     });
@@ -92,7 +91,9 @@ export class Component extends React.Component
     const { object, objectViewableFields: fields, objectMappings: mappings} = this.state;
 
     if (object && fields && fields.length && mappings && mappings.length) {
-      this.props.replaceMappings(object, new ObjectView({object, fields}), mappings);
+      this.props.replaceMappings(object, new ObjectView({object, fields}), mappings)
+        .then(() => this.props.persistMappings())
+      ;
     }
   };
 

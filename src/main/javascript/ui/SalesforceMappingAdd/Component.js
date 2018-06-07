@@ -6,7 +6,6 @@ import { SFObjectField, SFObject } from '../../salesforce/models';
 import {ContextMapping, ObjectView} from '../../mapping';
 
 import { DefaultUI } from './DefaultUI';
-import {addMappings} from "../../mapping/dux";
 
 /**
  * @param {Object} props
@@ -26,17 +25,19 @@ export class Component extends React.Component
 {
   static propTypes = {
 
-    ui                : PropTypes.func,
+    ui           : PropTypes.func,
 
-    loadContexts          : PropTypes.func.isRequired,
+    loadContexts : PropTypes.func.isRequired,
 
     loadContextProperties : PropTypes.func.isRequired,
 
-    loadObjects       : PropTypes.func.isRequired,
+    loadObjects     : PropTypes.func.isRequired,
 
-    loadFields        : PropTypes.func.isRequired,
+    loadFields      : PropTypes.func.isRequired,
 
-    addMappings        : PropTypes.func.isRequired
+    addMappings     : PropTypes.func.isRequired,
+
+    persistMappings : PropTypes.func.isRequired
   };
 
   state = {
@@ -65,7 +66,9 @@ export class Component extends React.Component
     const {object, fields, mappings} = this.state;
 
     if (object && fields && fields.length && mappings && mappings.length) {
-      this.props.addMappings(object, new ObjectView({object, fields}), mappings);
+      this.props.addMappings(object, new ObjectView({object, fields}), mappings)
+        .then(() => this.props.persistMappings())
+      ;
     }
   };
 

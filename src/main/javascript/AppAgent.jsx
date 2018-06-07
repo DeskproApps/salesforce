@@ -11,7 +11,7 @@ import {SalesforceAuthenticationError} from "./salesforce/security";
 /**
  * Renders a Deskpro app.
  */
-export default class App extends React.Component {
+export default class AppAgent extends React.Component {
 
   static propTypes = {
     /**
@@ -25,7 +25,7 @@ export default class App extends React.Component {
    */
   componentDidMount() {
 
-    const { oauth, settings, context, ui, route, dpapp } = this.props;
+    const { oauth, mappings, context, ui, route, dpapp } = this.props;
     const { storage } = this.props.dpapp;
 
     fetch(dpapp, readUserInfo)

@@ -5,9 +5,15 @@ import { Component } from './Component'
 import { ObjectView, ContextMapping } from "../../mapping";
 
 import {ContextDetails, ContextPropertyList} from "../../deskpro";
-import {loadFields } from "../../salesforce/dux";
-import { removeMappings, replaceMappings } from "../../mapping/dux";
-import { loadContexts, loadContextProperties } from "../../deskpro/dux";
+import {
+  loadFields,
+  removeMappings,
+  replaceMappings,
+  loadContexts,
+  loadContextProperties,
+  persistMappings
+} from "../../app/actions";
+
 /**
  * @param {Function} dispatch
  * @param {{replaceMappings: *}} ownProps
@@ -19,7 +25,7 @@ function mapDispatchToProps(dispatch, ownProps)
     return null;
   }
 
-  const props = { loadFields, removeMappings, replaceMappings, loadContexts, loadContextProperties }
+  const props = { loadFields, persistMappings, removeMappings, replaceMappings, loadContexts, loadContextProperties }
   return bindActionCreators(props, dispatch);
 
 }

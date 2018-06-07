@@ -2,21 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Provider } from 'react-redux'
 
-import { default as Admin } from '@app/main/javascript/Admin'
+import { default as AppAdmin } from '@app/main/javascript/AppAdmin'
 import { FormConnectionSettings } from '@app/main/javascript/ui'
-import { default as configureStore } from '@app/main/javascript/store'
-
-
-let store = null;
-
-function createStore(dpApp) {
-  if (store) {
-    return store;
-  }
-
-  store = configureStore(dpApp);
-  return store;
-}
+import { default as configureStore } from '@app/main/javascript/app/store'
 
 
 class App extends React.Component
@@ -30,9 +18,15 @@ class App extends React.Component
   };
 
   state = {
-    oauthSettings: null,
-    error:         null
+    oauthSettings : null,
+    error         : null,
+    store         : null
   };
+
+  componentDidMount()
+  {
+    configureStore(this.props.dpapp).then(store => this.setState({ store }));
+  }
 
   renderSettingsForm = () =>
   {
@@ -41,13 +35,16 @@ class App extends React.Component
 
   render()
   {
-    const store = createStore(this.props.dpapp);
+    if (this.state.store) {
+      return (
+        <Provider store={this.state.store}>
+          <AppAdmin dpapp={this.props.dpapp} renderSettingsForm={this.renderSettingsForm}/>
+        </Provider>
+      );
+    }
 
-    return (
-      <Provider store={store}>
-        <Admin dpapp={this.props.dpapp} renderSettingsForm={this.renderSettingsForm}/>
-      </Provider>
-    );
+    return (<div/>)
+
   }
 }
 
