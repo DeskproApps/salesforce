@@ -22,6 +22,7 @@ function createStore (dpapp)
       },
 
       salesforce: {
+        userInfo: null,
         objectsLoaded: false,
         objects: [],
         fields: {}
@@ -58,7 +59,6 @@ function createStore (dpapp)
     }
   );
 }
-
 
 /**
  * @param {AppClient} dpapp

@@ -1,6 +1,4 @@
-import {SFObject, SFObjectField} from "../salesforce/apiObjects";
-
-
+import {SFObjectField} from "../salesforce/apiObjects";
 
 export class FieldValue
 {

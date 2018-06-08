@@ -2,14 +2,20 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Routes, Route } from '@deskpro/apps-sdk-react';
 import { Loader } from '@deskpro/react-components';
-import { PageHome, PageAuthenticate, PageError } from '../ui'
+
+import { default as PageHome } from './PageHome'
+import { default as PageAuthenticate } from './PageAuthenticate'
+import { default as PageError } from './PageError'
+
 import {SalesforceAuthenticationError} from "../salesforce/security";
-import { default as connector} from './connector'
+import { default as connector} from '../app/connectors'
+import { readUserInfo, loadMappings  } from '../app/actions'
 
 /**
  * Renders a Deskpro app.
  */
-class AgentApp extends React.Component {
+class AgentApp extends React.Component
+{
 
   static propTypes = {
     /**
@@ -17,8 +23,14 @@ class AgentApp extends React.Component {
      */
     dpapp: PropTypes.object,
 
+    /**
+     * Reads the salesforce user's info
+     */
     readUserInfo: PropTypes.func.isRequired,
 
+    /**
+     * Loads the current salesforce mappings
+     */
     loadMappings: PropTypes.func.isRequired
   };
 
@@ -62,5 +74,5 @@ class AgentApp extends React.Component {
   }
 }
 
-const AgentAppConnected = connector(AgentApp);
+const AgentAppConnected = connector(AgentApp, { readUserInfo, loadMappings  });
 export { AgentApp, AgentAppConnected }

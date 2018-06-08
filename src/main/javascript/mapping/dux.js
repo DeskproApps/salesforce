@@ -76,8 +76,6 @@ export function loadMappings()
  */
 export function removeMappings(object)
 {
-  console.log("removeMappings dux ", object);
-
   /**
    * @param {Function} dispatch
    * @param {Function} getState
@@ -151,8 +149,6 @@ export function replaceMappings(object, newObjectView, newContextMappings)
  */
 export function addMappings(object, newObjectView, newContextMappings)
 {
-  console.log('add Mapping called ', newObjectView, newContextMappings);
-
   /**
    * @param {Function} dispatch
    * @param {Function} getState
@@ -180,8 +176,6 @@ export function addMappings(object, newObjectView, newContextMappings)
  */
 export function persistMappings()
 {
-  console.log('persist mappings ');
-
   /**
    * @param {Function} dispatch
    * @param {Function} getState

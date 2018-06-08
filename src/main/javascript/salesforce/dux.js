@@ -1,15 +1,20 @@
-const LOAD_FIELDS = 'LOAD_FIELDS';
-const LOAD_OBJECTS = 'LOAD_OBJECT';
-
 import { fetch } from './http';
 import { getDescribeGlobal, getSObjectDescribe, getReadUserInfo } from './api';
 import { SFObjectField, SFObject } from './apiObjects';
 import { SObjectDescription } from './responseObjects';
 
+const LOAD_FIELDS = 'LOAD_FIELDS';
+const LOAD_OBJECTS = 'LOAD_OBJECT';
+const LOAD_USER = 'LOAD_USER';
+
 export default function reducer(state = {}, action={})
 {
   switch (action.type)
   {
+    case LOAD_USER:
+      const { user } = action;
+      return { ...state, user };
+
     case LOAD_OBJECTS:
       const { objects } = action;
       return { ...state, objects, objectsLoaded: true };
@@ -107,7 +112,19 @@ export function readUserInfo()
    * @param {AppClient} dpapp
    */
   function thunk (dispatch, getState, dpapp) {
-    return fetch(dpapp, getReadUserInfo)
+
+    const { user } = getState().salesforce;
+    if (user) {
+      return Promise.resolve(user)
+    }
+
+    return fetch(dpapp, getReadUserInfo).then(userInfo => {
+      dispatch({type: LOAD_USER, userInfo});
+      return userInfo
+    }).catch (err => {
+      dispatch({type: LOAD_USER, userInfo: null});
+      return Promise.reject(err)
+    })
   }
 
   return thunk;

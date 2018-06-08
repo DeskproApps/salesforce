@@ -17,4 +17,3 @@ export function runApp(appClient)
     );
   });
 }
-//https://deskpro-dev/agent/?appstore.applicationId=9&appstore.environment=development&appstore.instanceId=10&appstore.storageadapter=fetch#app.tickets,inbox:agent,t.o:37,vis:7

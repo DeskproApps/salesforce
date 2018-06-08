@@ -1,15 +1,16 @@
 import {DescribeGlobal, SObjectDescription, Query} from './responseObjects'
+import {UserInfo} from './apiObjects'
 
 /**
  * @param {function(string, object): Promise<Object, Error>} client
- * @return {Promise<Object, Error>}
+ * @return {Promise<UserInfo, Error>}
  */
 function getReadUserInfo(client)
 {
   const req = { method: 'GET' };
   const url = 'https://login.salesforce.com/services/oauth2/userinfo';
 
-  return client(url, req).then(resp => resp.body);
+  return client(url, req).then(resp => UserInfo.instance(resp.body));
 }
 
 /**

@@ -1,15 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Container, Heading, Button } from '@deskpro/react-components';
-import { sdkConnect } from '@deskpro/apps-sdk-react';
 
-import { fetchAccessToken, storeAuthTokens } from '../salesforce/security';
-
+import { authenticate } from '../app/actions'
+import { default as connector} from '../app/connectors'
 
 /**
  * Renders the authentication page.
  */
-class PageAuthenticate extends React.Component {
+class PageAuthenticate extends React.Component
+{
   static propTypes = {
     /**
      * Instance of sdk storage.
@@ -30,16 +30,18 @@ class PageAuthenticate extends React.Component {
      * Instance of sdk ui.
      * @see https://deskpro.gitbooks.io/deskpro-apps/content/api/props/ui.html
      */
-    ui:      PropTypes.object
+    ui:      PropTypes.object,
+
+    /**
+     * Authenticate the current user with Salesforce
+     */
+    authenticate: PropTypes.func.isRequired,
   };
 
   handleClick = () => {
     const { route, ui, dpapp } = this.props;
 
-    fetchAccessToken(dpapp)
-      .then(resp => {
-          return storeAuthTokens(resp, dpapp)
-      })
+  this.props.authenticate()
       .then(() => route.to('home'))
       .catch(ui.error)
     ;
@@ -66,4 +68,8 @@ class PageAuthenticate extends React.Component {
   }
 }
 
-export default sdkConnect(PageAuthenticate);
+export { PageAuthenticate };
+export default connector(PageAuthenticate, { authenticate });
+
+
+

@@ -1,13 +1,12 @@
-export class ChildRelationship
+class ApiObject
 {
   /**
-   * @param {String | Object} js
-   * @returns {ChildRelationship}
+   * @param {String | Object} raw
+   * @return {*}
    */
-  static instance(js)
+  static parse(raw)
   {
-    const data = typeof js === 'string' ? JSON.parse(js) : JSON.parse(JSON.stringify(js));
-    return new ChildRelationship(data)
+    return typeof raw === 'string' ? JSON.parse(raw) : JSON.parse(JSON.stringify(raw));
   }
 
   /**
@@ -29,6 +28,19 @@ export class ChildRelationship
    * @return {Object}
    */
   toJS = () => this.toJSON();
+}
+
+export class ChildRelationship extends ApiObject
+{
+  /**
+   * @param {String | Object} js
+   * @returns {ChildRelationship}
+   */
+  static instance(js)
+  {
+    const data = ApiObject.parse(js);
+    return new ChildRelationship(data)
+  }
 
   /**
    * @type {string}
@@ -41,7 +53,7 @@ export class ChildRelationship
   get childSObject() { return this.props.childSObject; }
 }
 
-export class SFObject
+export class SFObject extends ApiObject
 {
   /**
    * @param {String | Object} js
@@ -49,7 +61,7 @@ export class SFObject
    */
   static instance(js)
   {
-    const data = typeof js === 'string' ? JSON.parse(js) : JSON.parse(JSON.stringify(js));
+    const data = ApiObject.parse(js);
     return new SFObject(data)
   }
 
@@ -60,20 +72,8 @@ export class SFObject
    */
   constructor({ name, label, ...props })
   {
-    this.props = { name, label, ...props };
+    super({ name, label, ...props });
   }
-
-  toJSON = () => {
-    return JSON.parse(JSON.stringify(this.props));
-  };
-
-  /**
-   * Returns a deep clone of this object
-   *
-   * @method
-   * @return {Object}
-   */
-  toJS = () => this.toJSON();
 
   /**
    * @type {string}
@@ -86,7 +86,7 @@ export class SFObject
   get name() { return this.props.name; }
 }
 
-export class SFObjectField
+export class SFObjectField extends ApiObject
 {
   static TYPE_REF = 'reference';
 
@@ -116,7 +116,7 @@ export class SFObjectField
    */
   static instance(js)
   {
-    const data = typeof js === 'string' ? JSON.parse(js) : JSON.parse(JSON.stringify(js));
+    const data = ApiObject.parse(js);
     return new SFObjectField(data)
   }
 
@@ -127,20 +127,8 @@ export class SFObjectField
    * @param {...*} props
    */
   constructor({name, type, label,...props}) {
-    this.props = {name, type, label, ...props};
+    super({name, type, label, ...props});
   }
-
-  toJSON = () => {
-    return JSON.parse(JSON.stringify(this.props));
-  };
-
-  /**
-   * Returns a deep clone of this object
-   *
-   * @method
-   * @return {Object}
-   */
-  toJS = () => this.toJSON();
 
   /**
    * @type {string}
@@ -172,7 +160,7 @@ export class SFObjectField
 
 }
 
-class RecordAttributes
+class RecordAttributes extends ApiObject
 {
   /**
    * @param {String | Object} js
@@ -180,7 +168,7 @@ class RecordAttributes
    */
   static instance(js)
   {
-    const data = typeof js === 'string' ? JSON.parse(js) : JSON.parse(JSON.stringify(js));
+    const data = ApiObject.parse(js);
     return new RecordAttributes(data)
   }
 
@@ -191,20 +179,8 @@ class RecordAttributes
    */
   constructor({ type, url, ...rest })
   {
-    this.props = { type, url, ...rest };
+    super({ type, url, ...rest });
   }
-
-  toJSON = () => {
-    return JSON.parse(JSON.stringify(this.props));
-  };
-
-  /**
-   * Returns a deep clone of this object
-   *
-   * @method
-   * @return {Object}
-   */
-  toJS = () => this.toJSON();
 
   /**
    * @type {string}
@@ -218,7 +194,7 @@ class RecordAttributes
 
 }
 
-export class QueryRecord
+export class QueryRecord extends ApiObject
 {
   /**
    * @param {String | Object} js
@@ -226,10 +202,7 @@ export class QueryRecord
    */
   static instance(js)
   {
-    const data = typeof js === 'string' ? JSON.parse(js) : JSON.parse(JSON.stringify(js));
-    const { attributes, ...fields }  = data;
-
-
+    const { attributes, ...fields } = ApiObject.parse(js);
     return new QueryRecord({
       attributes: RecordAttributes.instance(attributes),
       ...fields
@@ -243,20 +216,8 @@ export class QueryRecord
    */
   constructor({ attributes, ...rest })
   {
-    this.props = { attributes, ...rest };
+    super({ attributes, ...rest });
   }
-
-  toJSON = () => {
-    return JSON.parse(JSON.stringify(this.props));
-  };
-
-  /**
-   * Returns a deep clone of this object
-   *
-   * @method
-   * @return {Object}
-   */
-  toJS = () => this.toJSON();
 
   /**
    * @type {string}
@@ -267,4 +228,40 @@ export class QueryRecord
    * @type {string}
    */
   get childSObject() { return this.props.childSObject; }
+}
+
+export class UserInfo extends ApiObject
+{
+  /**
+   * @param {String | Object} js
+   * @returns {UserInfo}
+   */
+  static instance(js)
+  {
+    const data = ApiObject.parse(js);
+    return new UserInfo(data);
+  }
+
+  /**
+   * @param {String} name
+   * @param {String} nickname
+   * @param {String} email
+   * @param [rest]
+   */
+  constructor({ name, nickname, email, ...rest })
+  {
+    super({ name, nickname, email, ...rest });
+  }
+
+  /**
+   * @type {string}
+   */
+  get name() { return this.props.name; }
+
+  /**
+   * @type {string}
+   */
+  get nickname() { return this.props.nickname; }
+
+  get email() { return this.props.email; }
 }

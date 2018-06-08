@@ -1,37 +1,35 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { sdkConnect } from '@deskpro/apps-sdk-react';
 import { Loader } from '@deskpro/react-components';
 
-import { getReadUserInfo } from '../salesforce/api';
-import { fetch } from '../salesforce/http';
+import { readUserInfo } from '../app/actions'
+import { default as connector} from '../app/connectors'
 
 class PageHome extends React.Component
 {
-  /**
-   * Constructor
-   *
-   * @param {*} props
-   */
-  constructor(props) {
-    super(props);
+  static propTypes = {
 
-    this.state = {
-      user: null
-    };
-  }
+    /**
+     * Reads the salesforce user's info
+     */
+    readUserInfo: PropTypes.func.isRequired,
+  };
+
+  state = {
+    user: null
+  };
 
   /**
    * Invoked immediately after a component is mounted
    */
   componentDidMount() {
-    const { dpapp, ui } = this.props;
+    const { ui } = this.props;
 
-    fetch(dpapp, getReadUserInfo)
-      .then(user => {
-        this.setState({ user })
-      })
-      .catch(ui.error);
+    this.props.readUserInfo()
+      .then(user => this.setState({ user }))
+      .catch(ui.error)
+    ;
+
   }
 
   render() {
@@ -51,5 +49,5 @@ class PageHome extends React.Component
   }
 }
 
-export default sdkConnect(PageHome);
-
+export { PageHome };
+export default connector(PageHome, { readUserInfo });
