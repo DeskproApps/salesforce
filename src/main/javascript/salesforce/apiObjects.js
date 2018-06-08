@@ -88,6 +88,28 @@ export class SFObject
 
 export class SFObjectField
 {
+  static TYPE_REF = 'reference';
+
+  static TYPE_STRING = 'string';
+
+  static TYPE_ID = 'id';
+
+  static TYPE_ADDRESS = 'address';
+
+  static TYPE_BOOL = 'boolean';
+
+  static TYPE_CURRENCY = 'currency';
+
+  static TYPE_DOUBLE = 'double';
+
+  static TYPE_INT = 'int';
+
+  static TYPE_PHONE = 'phone';
+
+  static TYPE_PICKLIST = 'picklist';
+
+  static TYPE_URL = 'url';
+
   /**
    * @param {String|Object} js
    * @returns {SFObjectField}
@@ -99,10 +121,13 @@ export class SFObjectField
   }
 
   /**
+   * @param {string} name
+   * @param {string} type
+   * @param {string} label
    * @param {...*} props
    */
-  constructor({...props}) {
-    this.props = {...props};
+  constructor({name, type, label,...props}) {
+    this.props = {name, type, label, ...props};
   }
 
   toJSON = () => {
@@ -132,6 +157,13 @@ export class SFObjectField
   }
 
   /**
+   * @type {string}
+   */
+  get type() {
+    return this.props.type;
+  }
+
+  /**
    * @type {bool}
    */
   get nameField() {
@@ -140,24 +172,26 @@ export class SFObjectField
 
 }
 
-export class DescribeGlobal
+class RecordAttributes
 {
   /**
-   * @param {Object|string} js
-   * @returns {DescribeGlobal}
+   * @param {String | Object} js
+   * @returns {RecordAttributes}
    */
   static instance(js)
   {
     const data = typeof js === 'string' ? JSON.parse(js) : JSON.parse(JSON.stringify(js));
-    const sobjects = data.sobjects.map(SFObject.instance);
-    return new DescribeGlobal({...data, sobjects})
+    return new RecordAttributes(data)
   }
 
   /**
-   * @param {...*} props
+   * @param {string} type
+   * @param {string} url
+   * @param [rest]
    */
-  constructor({...props}) {
-    this.props = {...props};
+  constructor({ type, url, ...rest })
+  {
+    this.props = { type, url, ...rest };
   }
 
   toJSON = () => {
@@ -173,40 +207,43 @@ export class DescribeGlobal
   toJS = () => this.toJSON();
 
   /**
-   * @public
-   * @type {Number}
+   * @type {string}
    */
-  get maxBatchSize() {
-    return this.props.maxBatchSize;
-  }
+  get type() { return this.props.type; }
 
   /**
-   * @public
-   * @type {Array<SFObject>}
+   * @type {string}
    */
-  get sobjects() { return this.props.sobjects; }
+  get url() { return this.props.url; }
+
 }
 
-export class SObjectDescription
+export class QueryRecord
 {
   /**
-   * @param {Object|string} js
-   * @returns {SObjectDescription}
+   * @param {String | Object} js
+   * @returns {QueryRecord}
    */
   static instance(js)
   {
     const data = typeof js === 'string' ? JSON.parse(js) : JSON.parse(JSON.stringify(js));
-    const fields = data.fields ? data.fields.map(SFObjectField.instance) : [];
-    const childRelationships = data.childRelationships ? data.childRelationships.map(ChildRelationship.instance) : [];
+    const { attributes, ...fields }  = data;
 
-    return new SObjectDescription({...data, fields, childRelationships})
+
+    return new QueryRecord({
+      attributes: RecordAttributes.instance(attributes),
+      ...fields
+    })
   }
 
   /**
-   * @param {...*} props
+   *
+   * @param {{type: string, url: string}} attributes
+   * @param [rest]
    */
-  constructor({...props}) {
-    this.props = {...props};
+  constructor({ attributes, ...rest })
+  {
+    this.props = { attributes, ...rest };
   }
 
   toJSON = () => {
@@ -222,23 +259,12 @@ export class SObjectDescription
   toJS = () => this.toJSON();
 
   /**
-   * @public
-   * @type {bool}
+   * @type {string}
    */
-  get custom() {
-    return this.props.custom;
-  }
+  get field() { return this.props.field; }
 
   /**
-   * @public
-   * @type {Array<SFObjectField>}
+   * @type {string}
    */
-  get fields() { return this.props.fields; }
-
-  /**
-   * @public
-   * @type {Array<ChildRelationship>}
-   */
-  get childRelationships() { return this.props.childRelationships; }
+  get childSObject() { return this.props.childSObject; }
 }
-

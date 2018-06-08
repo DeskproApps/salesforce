@@ -1,10 +1,10 @@
-import {DescribeGlobal, SObjectDescription} from './models'
+import {DescribeGlobal, SObjectDescription, Query} from './responseObjects'
 
 /**
  * @param {function(string, object): Promise<Object, Error>} client
  * @return {Promise<Object, Error>}
  */
-function readUserInfo(client)
+function getReadUserInfo(client)
 {
   const req = { method: 'GET' };
   const url = 'https://login.salesforce.com/services/oauth2/userinfo';
@@ -40,9 +40,22 @@ function getSObjectDescribe(client, object)
   return client(url, req).then(resp => SObjectDescription.instance(resp.body));
 }
 
+/**
+ * @param {function(string, object): Promise<Object, Error>} client
+ * @param {string} query
+ * @return {Promise<Query, Error>}
+ */
+function query(client, query)
+{
+  const req = { method: 'GET' };
+  const url = encodeURI(`https://eu8.salesforce.com/services/data/v37.0/query?q=${query}`);
+
+  return client(url, req).then(resp => Query.instance(resp.body));
+}
+
 module.exports =
 {
-  readUserInfo,
+  getReadUserInfo,
 
   getDescribeGlobal,
 

@@ -5,7 +5,7 @@ import { Container, Heading, Button } from '@deskpro/react-components';
 
 import {DeskproContextDropdown, SalesforceObjectDropdown, SalesforceFieldList} from '../Lists'
 import { default as ContextMappingInput } from '../ContextMappingInput'
-import { SFObjectField, SFObject } from '../../salesforce/models';
+import { SFObjectField, SFObject } from '../../salesforce/apiObjects';
 import {ContextDetails, ContextPropertyList, Contexts} from '../../deskpro';
 import { ContextMapping } from '../../mapping'
 

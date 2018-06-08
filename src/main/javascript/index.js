@@ -1,12 +1,20 @@
 import ReactDOM from 'react-dom';
-import { createAppContainer } from '@deskpro/apps-sdk-react';
-import AppAgent from './AppAgent';
+import { DeskproSDK} from '@deskpro/apps-sdk-react';
+
+import {default as configureStore} from './app/store';
+import { default as AgentApp } from './agent';
+
 
 /**
- * @param appClient @see https://deskpro.github.io/apps-sdk-core/reference/AppClient.html
+ * @param {AppClient} appClient @see https://deskpro.github.io/apps-sdk-core/reference/AppClient.html
  */
 export function runApp(appClient)
 {
-  const container = createAppContainer(appClient)(<AppAgent dpapp={appClient} />);
-  ReactDOM.render(container, document.getElementById('deskpro-app'));
+  return configureStore(appClient).then(store => {
+    ReactDOM.render(
+      <DeskproSDK dpapp={appClient} store={store} component={AgentApp}/>,
+      document.getElementById('deskpro-app')
+    );
+  });
 }
+//https://deskpro-dev/agent/?appstore.applicationId=9&appstore.environment=development&appstore.instanceId=10&appstore.storageadapter=fetch#app.tickets,inbox:agent,t.o:37,vis:7

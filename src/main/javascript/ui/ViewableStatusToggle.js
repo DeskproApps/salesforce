@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import {SalesforceFieldList} from './Lists'
-import {SFObjectField, SFObject} from "../salesforce/models";
+import {SFObjectField, SFObject} from "../salesforce/apiObjects";
 
 export class ViewableStatusToggle extends React.PureComponent
 {

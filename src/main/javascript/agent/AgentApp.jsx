@@ -2,22 +2,24 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Routes, Route } from '@deskpro/apps-sdk-react';
 import { Loader } from '@deskpro/react-components';
-import { PageHome, PageAuthenticate, PageError } from './ui'
-
-import { getReadUserInfo } from './salesforce/api';
-import { fetch } from './salesforce/http';
-import {SalesforceAuthenticationError} from "./salesforce/security";
+import { PageHome, PageAuthenticate, PageError } from '../ui'
+import {SalesforceAuthenticationError} from "../salesforce/security";
+import { default as connector} from './connector'
 
 /**
  * Renders a Deskpro app.
  */
-export default class AppAgent extends React.Component {
+class AgentApp extends React.Component {
 
   static propTypes = {
     /**
      * Instance of the Deskpro App Sdk Client
      */
-    dpapp: PropTypes.object
+    dpapp: PropTypes.object,
+
+    readUserInfo: PropTypes.func.isRequired,
+
+    loadMappings: PropTypes.func.isRequired
   };
 
   /**
@@ -28,7 +30,12 @@ export default class AppAgent extends React.Component {
     const { oauth, mappings, context, ui, route, dpapp } = this.props;
     const { storage } = this.props.dpapp;
 
-    fetch(dpapp, getReadUserInfo)
+    this.props.loadMappings()
+      .then(mappings => {
+        console.log('the mappings ', mappings);
+        return mappings;
+      })
+      .then(() => this.props.readUserInfo())
       .then(() => route.to('home'))
       .catch(err => {
         if (err instanceof SalesforceAuthenticationError) {
@@ -36,7 +43,6 @@ export default class AppAgent extends React.Component {
         }
         route.to('error', { error: err });
       });
-
   }
 
   render() {
@@ -55,3 +61,6 @@ export default class AppAgent extends React.Component {
 
   }
 }
+
+const AgentAppConnected = connector(AgentApp);
+export { AgentApp, AgentAppConnected }

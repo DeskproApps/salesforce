@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {DefaultUI} from "./DefaultUI";
-import {SFObject, SFObjectField} from "../../salesforce/models";
+import {SFObject, SFObjectField} from "../../salesforce/apiObjects";
 import {ContextDetails, MappableProperty} from "../../deskpro";
 import {ContextMapping} from "../../mapping";
 

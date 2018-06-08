@@ -3,9 +3,7 @@ import PropTypes from 'prop-types';
 import { Container, Heading, Button } from '@deskpro/react-components';
 
 import {SalesforceObjectDropdown} from '../Lists'
-
-import { SFObjectField, SFObject } from '../../salesforce/models';
-
+import { SFObjectField, SFObject } from '../../salesforce/apiObjects';
 import {default as SalesforceMappingInput} from '../SalesforceMappingInput';
 import {ContextMapping} from "../../mapping";
 

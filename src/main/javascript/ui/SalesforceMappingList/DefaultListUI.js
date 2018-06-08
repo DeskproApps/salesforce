@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import {ObjectView, ContextMapping} from "../../mapping";
-import {SFObject} from "../../salesforce/models";
+import {SFObject} from "../../salesforce/apiObjects";
 import { Scrollbar, SelectableList, QueryableList, ListElement, Container, Button } from '@deskpro/react-components';
 
 function uniqueList (arrArg) {

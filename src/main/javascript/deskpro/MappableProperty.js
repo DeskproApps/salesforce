@@ -11,13 +11,12 @@ export class MappableProperty
   }
 
   /**
-   * @param {string} name
    * @param {string} label
    * @param {...*} [props]
    */
-  constructor({name, label, ...props })
+  constructor({label, ...props })
   {
-    this.props = {name, label, ...props };
+    this.props = {label, ...props };
   }
 
   toJSON = () => {
@@ -35,10 +34,19 @@ export class MappableProperty
   /**
    * @type {string}
    */
-  get name() { return this.props.name; }
+  get label() { return this.props.label; }
 
   /**
-   * @type {string}
+   * @param {{}} object
+   * @param {*}defaults
+   * @return {string|null}
    */
-  get label() { return this.props.label; }
+  value(object, defaults = null)
+  {
+    throw new Error('value must be implemented in a subclass')
+  }
+
+  equals(other) {
+    throw new Error('equals must be implemented in a subclass')
+  }
 }

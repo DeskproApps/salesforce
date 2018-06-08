@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { Container, Heading, Button } from '@deskpro/react-components';
-import {SFObjectField} from "../../salesforce/models";
+import {SFObjectField} from "../../salesforce/apiObjects";
 import {MappableProperty} from "../../deskpro";
 import { FieldDropDown, PropertyDropdown } from '../Lists'
 

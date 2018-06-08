@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Select from 'react-select';
 
-import { SFObject } from '../../salesforce/models';
+import { SFObject } from '../../salesforce/apiObjects';
 
 /**
  * @param {SFObject} SFObject
@@ -27,6 +27,10 @@ export default class SalesforceObjectDropdown extends React.PureComponent
   loadOptions = () => this.props.loadObjects()
     .then(objects => objects.map(toOption))
     .then(options => ({ options }))
+    .then(options => {
+      console.log('these options', options)
+      return options;
+    })
   ;
 
   /**

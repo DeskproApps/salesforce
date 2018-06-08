@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Select from 'react-select';
 
 import { Scrollbar, SelectableList, QueryableList, ListElement, Container } from '@deskpro/react-components';
-import { SFObjectField } from '../../salesforce/models';
+import { SFObjectField } from '../../salesforce/apiObjects';
 
 /**
  * @param {SFObjectField} field

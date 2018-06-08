@@ -31,9 +31,25 @@ export function loadMappings()
    */
   function thunk (dispatch, getState, dpapp)
   {
-    const { objectViews, contextMappings, loaded } = getState().mappings;
+    const state = getState();
+    const { objectViews, contextMappings, loaded } = state.mappings;
     if (loaded) {
       return Promise.resolve({ objectViews, contextMappings });
+    }
+
+    // hack for admin
+    try {
+      const { objectViews, contextMappings } = state.sdk.storage.app.mappings;
+      if (objectViews.length && contextMappings.length) {
+        const mappings = {
+          objectViews: objectViews.map(ObjectView.instance),
+          contextMappings: contextMappings.map(ContextMapping.instance)
+        };
+        dispatch({ type:LOADED, ...mappings });
+        return Promise.resolve(JSON.parse(JSON.stringify(mappings)))
+      }
+    } catch (e) {
+      /** ignored on purpose **/
     }
 
     return dpapp.storage.getAppStorage("mappings")
@@ -46,7 +62,7 @@ export function loadMappings()
       }))
       .then(mappings => {
         dispatch({ type:LOADED, ...mappings });
-        return Promise.resolve(JSON.parse(JSON.stringify(mappings)))
+        return JSON.parse(JSON.stringify(mappings));
       })
     ;
   }

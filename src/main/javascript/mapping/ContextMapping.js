@@ -1,5 +1,6 @@
-import {SFObject, SFObjectField} from "../salesforce/models";
-import {MappableProperty, ContextDetails} from "../deskpro";
+import {SFObject, SFObjectField} from "../salesforce/apiObjects";
+import {MappableProperties, ContextDetails} from "../deskpro";
+import {FieldValue} from "./FieldValue";
 
 export default class ContextMapping
 {
@@ -16,7 +17,7 @@ export default class ContextMapping
       field : SFObjectField.instance(field),
       object: SFObject.instance(object),
       context: ContextDetails.instance(context),
-      property: MappableProperty.instance(property),
+      property: MappableProperties.parse(property),
       ...props
     });
   }
@@ -30,11 +31,13 @@ export default class ContextMapping
    */
   constructor({ field, object, context, property, ...props })
   {
-    this.props = { field, object, context, property, ...props };
+    this.props = { field, object, context, property,...props };
   }
 
   toJSON = () => {
-    return JSON.parse(JSON.stringify(this.props));
+    const { property, ...rest } = this.props;
+    const props = { property: MappableProperties.toJSON(property), ...rest }
+    return JSON.parse(JSON.stringify(props));
   };
 
   /**
@@ -55,7 +58,7 @@ export default class ContextMapping
       return false;
     }
 
-    return this.property.name === other.property.name &&
+    return this.property.equals(other.property) &&
       this.context.name === other.context.name &&
       this.field.name === other.field.name &&
       this.object.name === other.object.name
@@ -81,4 +84,14 @@ export default class ContextMapping
    * @type {MappableProperty}
    */
   get property() { return this.props.property; }
+
+  contextValue(context)
+  {
+    const value = this.property.value(context, null);
+    if (value === null || value === undefined ) {
+      return null;
+    }
+
+    return new FieldValue({ field: this.props.field, value })
+  }
 }

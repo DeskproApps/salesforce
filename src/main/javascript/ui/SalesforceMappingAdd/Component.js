@@ -1,10 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { SFObjectField, SFObject } from '../../salesforce/models';
-
+import { SFObjectField, SFObject } from '../../salesforce/apiObjects';
 import {ContextMapping, ObjectView} from '../../mapping';
-
 import { DefaultUI } from './DefaultUI';
 
 /**
@@ -95,7 +93,10 @@ export class Component extends React.Component
   {
     console.log('SalesforceMappingAdd loadObjects', this.props)
 
-    return this.props.loadObjects();
+    return this.props.loadObjects().catch(e => {
+      console.log('error loading objects', e)
+      return []
+    });
   };
 
   render()

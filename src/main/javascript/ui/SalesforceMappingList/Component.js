@@ -4,7 +4,7 @@ import {ObjectView, ContextMapping} from "../../mapping";
 import { hasMapping, hasView } from "../../mapping/predicates"
 
 import { DefaultUI } from './DefaultUI';
-import {SFObject, SFObjectField} from "../../salesforce/models";
+import {SFObject, SFObjectField} from "../../salesforce/apiObjects";
 
 /**
  * @param {Object} props

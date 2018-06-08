@@ -1,4 +1,4 @@
-import {SFObject, SFObjectField} from "../salesforce/models";
+import {SFObject, SFObjectField} from "../salesforce/apiObjects";
 
 export default class ObjectView
 {

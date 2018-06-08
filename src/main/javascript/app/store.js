@@ -4,10 +4,8 @@ import { default as mappings } from '../mapping/dux'
 import { default as salesforce } from '../salesforce/dux'
 import { default as deskpro } from '../deskpro/dux'
 
-import {ContextDetails, MappableProperty, ContextPropertyList} from "../deskpro";
+import {ContextDetails, MappablePathProperty, ContextPropertyList} from "../deskpro";
 import { loadMappings } from "./actions";
-
-
 
 /**
  * @param {AppClient} dpapp
@@ -40,19 +38,19 @@ function createStore (dpapp)
           new ContextPropertyList({
             context: new ContextDetails({ name: "ticket", label: "Ticket" }),
             properties: [
-              new MappableProperty({ name: "email", label: "Email" })
+              new MappablePathProperty({ label: "Ticket Owner Email", path: "person_email.email" })
             ]
           }) ,
           new ContextPropertyList({
             context: new ContextDetails({ name: "person", label: "Person" }),
             properties: [
-              new MappableProperty({ name: "email", label: "Email" })
+              new MappablePathProperty({ label: "Email", path: "email" })
             ]
           }),
           new ContextPropertyList({
             context: new ContextDetails({ name: "organization", label: "Organization" }),
             properties: [
-              new MappableProperty({ name: "email", label: "Email" })
+              new MappablePathProperty({ label: "Organization  Email", path: "email" })
             ]
           })
         ]
@@ -64,6 +62,7 @@ function createStore (dpapp)
 
 /**
  * @param {AppClient} dpapp
+ * @return {Promise<store, Error>}
  */
 export default function configureStore (dpapp)
 {

@@ -2,8 +2,9 @@ const LOAD_FIELDS = 'LOAD_FIELDS';
 const LOAD_OBJECTS = 'LOAD_OBJECT';
 
 import { fetch } from './http';
-import { getDescribeGlobal, getSObjectDescribe } from './api';
-import { SFObjectField, SFObject, SObjectDescription } from './models';
+import { getDescribeGlobal, getSObjectDescribe, getReadUserInfo } from './api';
+import { SFObjectField, SFObject } from './apiObjects';
+import { SObjectDescription } from './responseObjects';
 
 export default function reducer(state = {}, action={})
 {
@@ -50,6 +51,7 @@ export function loadObjects()
     return fetch(dpapp, getDescribeGlobal).then(toObjects)
       .then(objects => {
         dispatch({ type:LOAD_OBJECTS, objects });
+        console.log('the objects ', objects)
         return [].concat(objects)
       })
   }
@@ -94,3 +96,19 @@ export function loadFields(object)
   return thunk;
 }
 
+/**
+ * @return {function}
+ */
+export function readUserInfo()
+{
+  /**
+   * @param {Function} dispatch
+   * @param {Function} getState
+   * @param {AppClient} dpapp
+   */
+  function thunk (dispatch, getState, dpapp) {
+    return fetch(dpapp, getReadUserInfo)
+  }
+
+  return thunk;
+}

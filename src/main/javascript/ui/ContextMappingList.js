@@ -20,7 +20,7 @@ function matchDom(item, dom)
  */
 function toUnique(mapping)
 {
-  return [mapping.object.name, mapping.field.name, mapping.context.name, mapping.property.name ].join('-');
+  return [mapping.object.name, mapping.field.name, mapping.context.name, mapping.property.hashCode() ].join('-');
 }
 
 /**
