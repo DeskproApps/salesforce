@@ -39,7 +39,7 @@ export class MappableProperty
   /**
    * @param {{}} object
    * @param {*}defaults
-   * @return {string|null}
+   * @return {*|null}
    */
   value(object, defaults = null)
   {

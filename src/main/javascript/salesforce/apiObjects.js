@@ -157,19 +157,18 @@ export class SFObjectField extends ApiObject
   get nameField() {
     return this.props.nameField;
   }
-
 }
 
-class RecordAttributes extends ApiObject
+class ProjectionAttributes extends ApiObject
 {
   /**
    * @param {String | Object} js
-   * @returns {RecordAttributes}
+   * @returns {ProjectionAttributes}
    */
   static instance(js)
   {
     const data = ApiObject.parse(js);
-    return new RecordAttributes(data)
+    return new ProjectionAttributes(data)
   }
 
   /**
@@ -194,17 +193,17 @@ class RecordAttributes extends ApiObject
 
 }
 
-export class QueryRecord extends ApiObject
+export class QueryProjection extends ApiObject
 {
   /**
    * @param {String | Object} js
-   * @returns {QueryRecord}
+   * @returns {QueryProjection}
    */
   static instance(js)
   {
     const { attributes, ...fields } = ApiObject.parse(js);
-    return new QueryRecord({
-      attributes: RecordAttributes.instance(attributes),
+    return new QueryProjection({
+      attributes: ProjectionAttributes.instance(attributes),
       ...fields
     })
   }
@@ -216,18 +215,23 @@ export class QueryRecord extends ApiObject
    */
   constructor({ attributes, ...rest })
   {
-    super({ attributes, ...rest });
+    super({ attributes, fields: rest });
   }
 
-  /**
-   * @type {string}
-   */
-  get field() { return this.props.field; }
+  toJSON = () => {
+    const { attributes, fields } = this.props;
+    return JSON.parse(JSON.stringify({ attributes, ...fields }));
+  };
 
   /**
-   * @type {string}
+   * @type {ProjectionAttributes}
    */
-  get childSObject() { return this.props.childSObject; }
+  get attributes() { return this.props.attributes; }
+
+  /**
+   * @type {{}}
+   */
+  get fields() { return this.props.fields; }
 }
 
 export class UserInfo extends ApiObject

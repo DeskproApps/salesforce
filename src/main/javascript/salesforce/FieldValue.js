@@ -1,28 +1,15 @@
-import {SFObjectField} from "../salesforce/apiObjects";
+import {SFObjectField} from "./apiObjects";
 
 export class FieldValue
 {
   /**
    * @param {SFObjectField} field
-   * @param {*} value
-   * @param {...*} [props]
+   * @param {Value} value
    */
-  constructor({object: field, value, ...props })
+  constructor({field, value})
   {
-    this.props = {field, value, ...props };
+    this.props = {field, value };
   }
-
-  toJSON = () => {
-    return JSON.parse(JSON.stringify(this.props));
-  };
-
-  /**
-   * Returns a deep clone of this object
-   *
-   * @method
-   * @return {Object}
-   */
-  toJS = () => this.toJSON();
 
   /**
    * @return {SFObjectField}

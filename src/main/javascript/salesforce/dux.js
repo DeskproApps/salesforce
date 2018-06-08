@@ -56,13 +56,11 @@ export function loadObjects()
     return fetch(dpapp, getDescribeGlobal).then(toObjects)
       .then(objects => {
         dispatch({ type:LOAD_OBJECTS, objects });
-        console.log('the objects ', objects)
         return [].concat(objects)
       })
   }
 
   return thunk;
-
 }
 
 /**

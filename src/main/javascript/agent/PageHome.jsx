@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Loader } from '@deskpro/react-components';
 
-import { readUserInfo } from '../app/actions'
+import { readUserInfo, readRecords } from '../app/actions'
 import { default as connector} from '../app/connectors'
 
 class PageHome extends React.Component
@@ -13,6 +13,11 @@ class PageHome extends React.Component
      * Reads the salesforce user's info
      */
     readUserInfo: PropTypes.func.isRequired,
+
+    /**
+     * Loads the mapped object
+     */
+    readRecords: PropTypes.func.isRequired,
   };
 
   state = {
@@ -23,10 +28,14 @@ class PageHome extends React.Component
    * Invoked immediately after a component is mounted
    */
   componentDidMount() {
-    const { ui } = this.props;
+    const { ui, tabData } = this.props;
 
-    this.props.readUserInfo()
-      .then(user => this.setState({ user }))
+    tabData.person_email.email = 'a_young@dickenson.com'
+
+    Promise.resolve({ ready: true })
+      .then(state => this.props.readUserInfo().then(user => ({ ...state, user })))
+      .then(state => this.props.readRecords(tabData).then(records => ({ ...state, records })))
+      .then(state => this.setState(state))
       .catch(ui.error)
     ;
 
@@ -34,11 +43,15 @@ class PageHome extends React.Component
 
   render() {
 
-    const { user } = this.state;
-    if (user) {
+    const { user, records, ready } = this.state;
+    if (ready) {
       return (
-        <div className="dp-text-center">Hello {user.name}</div>
-      );
+        <div>
+          <div>Logged in as {user.name}</div>
+
+          {records.map(this.renderRecordSet)}
+        </div>
+      )
     }
 
     return(
@@ -47,7 +60,47 @@ class PageHome extends React.Component
       </div>
     )
   }
+
+  /**
+   * @param {RecordSet} recordSet
+   */
+  renderRecordSet = (recordSet) =>
+  {
+    return (
+      <div>
+        <h2>{recordSet.object.label}</h2>
+
+        <ul>
+          {recordSet.records.map(record => this.renderRecord(record))}
+        </ul>
+      </div>
+    )
+  };
+
+  /**
+   * @param {Record} record
+   */
+  renderRecord = (record) =>
+  {
+    return (
+      <ul>
+        <li>ID: {record.id}</li>
+        {record.values.map(this.renderFieldValue)}
+      </ul>
+    );
+  };
+
+  /**
+   * @param {FieldValue} fieldValue
+   * @return {*}
+   */
+  renderFieldValue = (fieldValue) =>
+  {
+    return (
+      <li>{fieldValue.field.label}: {fieldValue.asString()}</li>
+    );
+  }
 }
 
 export { PageHome };
-export default connector(PageHome, { readUserInfo });
+export default connector(PageHome, { readUserInfo, readRecords });

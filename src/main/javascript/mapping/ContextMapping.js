@@ -1,6 +1,6 @@
 import {SFObject, SFObjectField} from "../salesforce/apiObjects";
 import {MappableProperties, ContextDetails} from "../deskpro";
-import {FieldValue} from "./FieldValue";
+import {RecordValue} from "../salesforce/FieldValue";
 
 export default class ContextMapping
 {
@@ -85,13 +85,16 @@ export default class ContextMapping
    */
   get property() { return this.props.property; }
 
-  contextValue(context)
+  /**
+   * @param {{}}  context
+   * @return {*}
+   */
+  readFieldValueFromContext(context)
   {
     const value = this.property.value(context, null);
     if (value === null || value === undefined ) {
       return null;
     }
-
-    return new FieldValue({ field: this.props.field, value })
+    return value;
   }
 }

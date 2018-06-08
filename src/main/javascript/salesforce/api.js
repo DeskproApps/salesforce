@@ -46,7 +46,7 @@ function getSObjectDescribe(client, object)
  * @param {string} query
  * @return {Promise<Query, Error>}
  */
-function query(client, query)
+function getQuery(client, query)
 {
   const req = { method: 'GET' };
   const url = encodeURI(`https://eu8.salesforce.com/services/data/v37.0/query?q=${query}`);
@@ -60,7 +60,9 @@ module.exports =
 
   getDescribeGlobal,
 
-  getSObjectDescribe
+  getSObjectDescribe,
+
+  getQuery
 };
 
 

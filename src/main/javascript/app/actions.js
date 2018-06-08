@@ -2,5 +2,6 @@ export { replaceMappings, removeMappings, addMappings, persistMappings, loadMapp
 export { loadFields, loadObjects, readUserInfo } from '../salesforce/dux'
 export { loadContextProperties, loadContexts } from '../deskpro/dux'
 
-export {default as authenticate} from './authenticate'
+export { default as authenticate } from './authenticate'
+export { default as readRecords } from './readRecords'
 
