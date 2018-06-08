@@ -1,4 +1,4 @@
-import {ChildRelationship, QueryProjection, SFObject, SFObjectField} from "./apiObjects";
+import {ChildRelationship, Projection, SFObject, SFObjectField} from "./apiObjects";
 
 export class DescribeGlobal
 {
@@ -116,7 +116,7 @@ export class Query
     return new Query({
       totalSize,
       nextRecordsUrl,
-      records: records ? records.map(QueryProjection.instance) : [],
+      records: records ? records.map(Projection.instance) : [],
       ...rest
     })
   }
@@ -161,7 +161,7 @@ export class Query
 
   /**
    * @public
-   * @type {Array<QueryProjection>}
+   * @type {Array<Projection>}
    */
   get records() { return this.props.records; }
 }

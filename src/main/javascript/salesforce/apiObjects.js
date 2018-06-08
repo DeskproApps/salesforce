@@ -193,16 +193,16 @@ class ProjectionAttributes extends ApiObject
 
 }
 
-export class QueryProjection extends ApiObject
+export class Projection extends ApiObject
 {
   /**
    * @param {String | Object} js
-   * @returns {QueryProjection}
+   * @returns {Projection}
    */
   static instance(js)
   {
     const { attributes, ...fields } = ApiObject.parse(js);
-    return new QueryProjection({
+    return new Projection({
       attributes: ProjectionAttributes.instance(attributes),
       ...fields
     })

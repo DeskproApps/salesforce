@@ -9,7 +9,7 @@ import {FieldValue} from "./FieldValue";
 const ID = 'Id';
 
 /**
- * @param {QueryProjection} queryProjection
+ * @param {Projection} queryProjection
  * @param {SFObject} type
  * @param {Array<SFObjectField>} fields
  * @return {Record}
