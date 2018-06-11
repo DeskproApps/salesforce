@@ -1,2 +1,2 @@
-import {ScreenSettings} from './ScreenSettings';
-export default ScreenSettings;
+import App from './App';
+export default App;

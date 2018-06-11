@@ -2,18 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Routes, Route } from '@deskpro/apps-sdk-react';
 import { Loader } from '@deskpro/react-components';
-import PageHome from './UI/PageHome'
-import PageAuthenticate from './UI/PageAuthenticate'
-import PageError from './UI/PageError'
+import { PageHome, PageAuthenticate, PageError } from './ui'
 
-import { readUserInfo } from './salesforce/api';
+import { getReadUserInfo } from './salesforce/api';
 import { fetch } from './salesforce/http';
 import {SalesforceAuthenticationError} from "./salesforce/security";
 
 /**
  * Renders a Deskpro app.
  */
-export default class App extends React.Component {
+export default class AppAgent extends React.Component {
 
   static propTypes = {
     /**
@@ -27,10 +25,10 @@ export default class App extends React.Component {
    */
   componentDidMount() {
 
-    const { oauth, settings, context, ui, route, dpapp } = this.props;
+    const { oauth, mappings, context, ui, route, dpapp } = this.props;
     const { storage } = this.props.dpapp;
 
-    fetch(dpapp, readUserInfo)
+    fetch(dpapp, getReadUserInfo)
       .then(() => route.to('home'))
       .catch(err => {
         if (err instanceof SalesforceAuthenticationError) {

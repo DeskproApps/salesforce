@@ -36,6 +36,14 @@
       {
         "target": "ticket-sidebar",
         "url": "html/index.html"
+      },
+      {
+        "target": "person-sidebar",
+        "url": "html/index.html"
+      },
+      {
+        "target": "org-sidebar",
+        "url": "html/index.html"
       }
     ],
     "storage": [
@@ -56,6 +64,12 @@
         "isBackendOnly": true,
         "permRead": "EVERYBODY",
         "permWrite": "EVERYBODY"
+      },
+      {
+        "name": "mappings",
+        "isBackendOnly": false,
+        "permRead": "EVERYBODY",
+        "permWrite": "OWNER"
       },
       {
         "name": "consumerKey",
@@ -101,16 +115,21 @@
   },
   "devDependencies": {
     "@deskpro/apps-dpat": "^0.10.5",
-    "@deskpro/apps-installer": "github:deskpro/apps-installer#v0.4.5",
+    "@deskpro/apps-installer": "github:deskpro/apps-installer#v0.4.6",
     "@deskpro/apps-sdk-core": "^1.0.1",
     "@deskpro/apps-sdk-react": "^0.2.13",
     "@deskpro/react-components": "^1.3.24",
     "@deskpro/redux-components": "^1.0.3",
     "error-subclass": "2.2.0",
     "error-wrapper": "2.1.0",
+    "history": "4.7.2",
     "prop-types": "^15.6.0",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
-    "react-test-renderer": "^15.6.1"
+    "react-redux": "5.0.7",
+    "react-router": "^4.2.0",
+    "react-select": "1.2.1",
+    "react-test-renderer": "^15.6.1",
+    "redux": "4.0.0"
   }
 }

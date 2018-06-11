@@ -1,5 +1,5 @@
 import { fetch } from '../../../main/javascript/salesforce/http';
-import { readUserInfo } from '../../../main/javascript/salesforce/api';
+import { getReadUserInfo } from '../../../main/javascript/salesforce/api';
 
 test('fetch retries authentication errors', () => {
 
@@ -30,7 +30,7 @@ test('fetch retries authentication errors', () => {
     }
   };
 
-  return fetch(dpappMock, readUserInfo).then(x => {
+  return fetch(dpappMock, getReadUserInfo).then(x => {
     throw new Error('fetch should not resolve in case retry fails');
   }).catch(err => {
     const names = requests.map(entry => entry[0]);

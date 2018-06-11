@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {establishConnection, oauthConnectionFactory, oauthProviderName} from '@app/main/javascript/salesforce/security';
+import {establishConnection, oauthConnectionFactory, oauthProviderName} from '../salesforce/security';
 
-export class ScreenSettings extends React.Component
+export default class FormConnectionSettings extends React.Component
 {
   static propTypes = {
     finishInstall: PropTypes.func.isRequired,
@@ -12,13 +12,10 @@ export class ScreenSettings extends React.Component
     dpapp:         PropTypes.object.isRequired
   };
 
-  constructor() {
-    super();
-    this.state = {
-      oauthSettings: null,
-      error:         null
-    };
-  }
+  state = {
+    oauthSettings: null,
+    error:         null
+  };
 
   componentDidMount() {
     const { oauth } = this.props.dpapp;
@@ -40,7 +37,7 @@ export class ScreenSettings extends React.Component
       });
   }
 
-  onSettings(settings) {
+  onSettings = (settings) => {
     const { finishInstall, dpapp } = this.props;
 
     const connectionProps = oauthConnectionFactory({
@@ -55,7 +52,7 @@ export class ScreenSettings extends React.Component
       .catch(error => {
         return new Error(error);
       });
-  }
+  };
 
   render() {
 
@@ -79,7 +76,7 @@ export class ScreenSettings extends React.Component
             settings={newSettings}
             values={newValues}
             ref={ref => { formRef = ref; }}
-            onSubmit={this.onSettings.bind(this)}
+            onSubmit={this.onSettings}
           />
           <button className={'btn-action'} onClick={() => formRef.submit()}>
             Update Settings

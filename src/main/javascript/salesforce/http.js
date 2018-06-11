@@ -38,7 +38,7 @@ function apiError(err)
  */
 function isErrorAuth(err)
 {
-  return typeof err.errorData === 'object' && [403].indexOf(err.errorData.statusCode) !== -1;
+  return typeof err.errorData === 'object' && [403, 401].indexOf(err.errorData.statusCode) !== -1;
 }
 
 /**
@@ -67,6 +67,7 @@ const apiClient = (dpapp) => (url, req) => {
 const fetch = (dpapp, request) => {
     const client = apiClient(dpapp);
     return request(client).catch(err => {
+
         // retry
         if (isErrorRetryable(err)) {
           return refreshAccessToken(dpapp).then(() => request(client)).catch(apiError)

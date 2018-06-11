@@ -95,13 +95,19 @@ function establishConnection(dpapp, props)
  */
 function refreshAccessToken(dpapp)
 {
-  const query = { refresh_token: oauthTokenStorage }
-  return dpapp.oauth.refreshAccess(oauthProviderName, { query })
-    .then(resp => storeAuthTokens(resp, dpapp))
-    .catch(err => {
-      // TODO should wrap in specific error
-      return Promise.reject(err);
-    })
+  try {
+    const query = { refresh_token: oauthTokenStorage };
+    return dpapp.oauth.refreshAccess(oauthProviderName, { query })
+      .then(resp => storeAuthTokens(resp, dpapp))
+      .catch(err => {
+        // TODO should wrap in specific error
+        return Promise.reject(err);
+      })
+      ;
+  } catch (e) {
+    console.log('refreshAccessToken error ', e)
+  }
+
 }
 
 export { SalesforceAuthenticationError, establishConnection, refreshAccessToken, fetchAccessToken, storeAuthTokens, oauthProviderName, oauthConnectionFactory }
