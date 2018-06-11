@@ -26,8 +26,6 @@ export class DefaultUI extends React.PureComponent
 
   render()
   {
-    console.log('DefaultUI SalesforceMappingAdd render', this.props);
-
     return (
       <div>
 

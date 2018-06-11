@@ -5,7 +5,6 @@
  */
 export function hasView(object, view)
 {
-  console.log('has hasView', object, view, view.object)
   return object.name === view.object.name;
 }
 
@@ -16,6 +15,5 @@ export function hasView(object, view)
  */
 export function hasMapping(object, mapping)
 {
-  console.log('has mapping', object, mapping, mapping.object)
   return object.name === mapping.object.name;
 }

@@ -19,7 +19,6 @@ function uniqueList (arrArg) {
  */
 function isContextMappingForObject(mapping, object)
 {
-  console.log("isContextMappingForObject ", mapping, object)
   return mapping.object.name === object.name;
 }
 

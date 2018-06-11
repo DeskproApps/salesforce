@@ -33,8 +33,6 @@ export default class PropertyCheckboxList extends React.PureComponent
 
   render()
   {
-    console.log('PropertyCheckboxList render', this.props);
-
     return (
       <Scrollbar>
         <QueryableList >

@@ -23,8 +23,6 @@ export class DefaultUI extends React.PureComponent
 
   render()
   {
-    console.log('DefaultUI render', this.props);
-
     const containerStyleFields = {
       display: "flex",
       justifyContent: "flex-start",

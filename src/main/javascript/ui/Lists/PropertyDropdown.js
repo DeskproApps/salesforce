@@ -33,7 +33,6 @@ export default class PropertyDropdown extends React.PureComponent
 
   render()
   {
-    console.log('PropertyDropdown render', this.props);
     const { items, value, onChange, ...rest } = this.props;
 
     const props = {

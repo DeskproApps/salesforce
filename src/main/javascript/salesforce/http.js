@@ -19,8 +19,6 @@ const buildReqObj = obj => {
  */
 function apiError(err)
 {
-  console.log('the api error is', err)
-
   if (err instanceof SalesforceAuthenticationError) {
     return Promise.reject(err);
   }

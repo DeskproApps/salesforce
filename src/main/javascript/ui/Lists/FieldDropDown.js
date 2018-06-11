@@ -34,7 +34,6 @@ export default class FieldDropDown extends React.PureComponent
 
   render()
   {
-    console.log('FieldDropDown render', this.props);
     const { items, value, onChange, ...rest } = this.props;
     const props = {
       ...rest,

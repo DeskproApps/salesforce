@@ -46,7 +46,6 @@ function mapStateToProps(state, ownProps)
   };
 
   const props = { ...salesforceProps, ...deskproProps };
-  console.log('afanasie ', props);
   return props;
 }
 

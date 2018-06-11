@@ -15,20 +15,16 @@ export class ViewableStatusToggle extends React.PureComponent
 
   setViewableState = (item) =>
   {
-    console.log('setViewable state', item)
     this.props.changeViewableStatus(item, "viewable");
   };
 
   unsetViewableState = (item) =>
   {
-    console.log('unsetViewableState state', item)
     this.props.changeViewableStatus(item, "not-viewable");
   };
 
-  render() {
-
-    console.log('ViewableStatusToggle render ', this.props);
-
+  render()
+  {
     const containerStyleFields = {
       display: "flex",
       justifyContent: "flex-start"

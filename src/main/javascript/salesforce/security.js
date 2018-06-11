@@ -105,7 +105,7 @@ function refreshAccessToken(dpapp)
       })
       ;
   } catch (e) {
-    console.log('some weird stuff', e)
+    console.log('refreshAccessToken error ', e)
   }
 
 }

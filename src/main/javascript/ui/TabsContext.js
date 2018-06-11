@@ -28,8 +28,6 @@ export class TabsContext extends React.PureComponent
 
   render()
   {
-    console.log('TabsContext render', this.props);
-
     const active = this.props.active ? this.props.active : this.props.items[0];
     const activeTab = active ? active.name : "";
 

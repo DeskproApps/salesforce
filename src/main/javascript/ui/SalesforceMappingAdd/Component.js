@@ -91,8 +91,6 @@ export class Component extends React.Component
    */
   loadObjects = () =>
   {
-    console.log('SalesforceMappingAdd loadObjects', this.props)
-
     return this.props.loadObjects().catch(e => {
       console.log('error loading objects', e)
       return []
@@ -101,7 +99,6 @@ export class Component extends React.Component
 
   render()
   {
-    console.log("SalesforceMappingAdd component render ", this.props, this.state)
     const { /** @type {SFObject} */ object, objectFields, fields, mappings } = this.state;
 
     const UI = chooseUI(this.props);

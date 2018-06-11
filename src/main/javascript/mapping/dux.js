@@ -90,8 +90,6 @@ export function removeMappings(object)
     };
 
     dispatch({ type: CHANGED, ...mappings });
-
-    console.log("removeMappings ", JSON.stringify(mappings));
     return Promise.resolve(mappings);
   }
   return thunk
@@ -133,8 +131,6 @@ export function replaceMappings(object, newObjectView, newContextMappings)
     };
 
     dispatch({ type: CHANGED, ...mappings });
-
-    console.log("hububub ", JSON.stringify(mappings));
     return Promise.resolve(mappings);
   }
 
@@ -163,8 +159,6 @@ export function addMappings(object, newObjectView, newContextMappings)
     };
 
     dispatch({ type: CHANGED, ...mappings });
-
-    console.log("hububub ", JSON.stringify(mappings));
     return Promise.resolve(mappings);
   }
 

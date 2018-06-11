@@ -24,8 +24,6 @@ class AppAdmin extends React.Component
 
   render()
   {
-    console.log('render Admin ', this.props)
-
     return (
       <MemoryRouter initialEntries={nav.map(route => route.path)} initialIndex={0}>
         <div>

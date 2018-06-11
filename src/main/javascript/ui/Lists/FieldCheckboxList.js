@@ -40,8 +40,6 @@ export default class FieldCheckboxList extends React.PureComponent
 
   render()
   {
-    console.log('FieldCheckboxList render', this.props);
-
     return (
       <Scrollbar>
         <QueryableList >

@@ -22,7 +22,6 @@ function mapDispatchToProps(dispatch, ownProps)
  */
 function mapPropsToState(state, ownProps)
 {
-  console.log('wtf wtf ', state, ownProps);
   const { contextList, propertyList } = state.deskpro;
 
   const mappedProps = {
@@ -30,10 +29,8 @@ function mapPropsToState(state, ownProps)
     contexts: contextList.map(o => JSON.stringify(o)).map(ContextDetails.instance),
 
     contextProperties: propertyList.map(o => JSON.stringify(o)).map(ContextPropertyList.instance),
-
   };
 
-  console.log('mapped props ', mappedProps);
   return mappedProps;
 }
 

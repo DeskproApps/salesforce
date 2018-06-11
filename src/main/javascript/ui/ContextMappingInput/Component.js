@@ -34,7 +34,6 @@ export class Component extends React.Component
 
   componentDidUpdate(prevProps)
   {
-    console.log("componentDidUpdate start")
     if (
       !this.props.object && prevProps.object
       || this.props.object && !prevProps.object
@@ -45,7 +44,6 @@ export class Component extends React.Component
     ) {
       this.setState({ field: null, property: null })
     }
-    console.log("componentDidUpdate end")
   }
 
   /**
@@ -78,8 +76,6 @@ export class Component extends React.Component
 
   render()
   {
-    console.log('Component render', this.props);
-
     const UI = chooseUI(this.props);
     return (<UI
       field             = {this.state.field}

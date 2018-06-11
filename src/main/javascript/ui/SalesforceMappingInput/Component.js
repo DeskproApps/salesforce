@@ -166,8 +166,6 @@ export class Component extends React.Component
    */
   changeViewableStatus = (item, status) =>
   {
-    console.log('changing viewable stateus', item, status)
-
     if (status === 'viewable') {
       this.addFieldViewable(item);
     }
@@ -224,8 +222,6 @@ export class Component extends React.Component
 
   render()
   {
-    console.log('these are my props SalesforceMappingInput ', this.props);
-
     const UI = chooseUI(this.props);
     return (<UI
       object                  = {this.props.object}

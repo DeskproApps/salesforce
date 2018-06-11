@@ -99,8 +99,6 @@ export class Component extends React.Component
 
   render()
   {
-    console.log('render SalesforceMappingList', this.props, this.state)
-
     const UI = chooseUI(this.props);
     return (<UI
       objectViews           = {this.props.objectViews}

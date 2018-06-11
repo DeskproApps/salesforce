@@ -27,10 +27,6 @@ export default class SalesforceObjectDropdown extends React.PureComponent
   loadOptions = () => this.props.loadObjects()
     .then(objects => objects.map(toOption))
     .then(options => ({ options }))
-    .then(options => {
-      console.log('these options', options)
-      return options;
-    })
   ;
 
   /**

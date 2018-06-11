@@ -53,8 +53,6 @@ export default class ContextMappingList extends React.PureComponent
 
   render()
   {
-    console.log('MappingList render', this.props);
-
     return (
         <Scrollbar>
           <QueryableList >

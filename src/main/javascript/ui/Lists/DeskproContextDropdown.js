@@ -32,8 +32,6 @@ export default class DeskproContextDropdown extends React.PureComponent
 
   render()
   {
-    console.log('DeskproContextDropdown render', this.props);
-
     const { loadOptions, options, onChange, selected, ...rest } = this.props;
 
     const props = {
