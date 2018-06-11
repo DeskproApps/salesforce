@@ -23,7 +23,7 @@ function buildQueries(context, {objectViews, contextMappings})
 
   for (const mapping of contextMappings) {
     const { field, object } = mapping;
-    const value = mapping.readFieldValueFromContext(context)
+    const value = mapping.readFieldValueFromContext(context);
 
     const query = builders[object.name];
     query.andWhere(field, value);
@@ -32,21 +32,72 @@ function buildQueries(context, {objectViews, contextMappings})
   return Object.keys(builders).map(key => builders[key]).map(builder => builder.asCallback())
 }
 
-export default function readRecords(context)
+/**
+ * @param {string} name
+ * @return {function(Array<ContextMapping>): ContextMapping[]}
+ */
+function filterMappingsByContextName (name)
+{
+  /**
+   * @param {ContextMapping} mapping
+   * @return {boolean}
+   */
+  function filterMappings (mapping)
+  {
+    return mapping.context.name === name;
+  }
+
+  /**
+   * @param {Array<ContextMapping>} mappings
+   * @return {ContextMapping[]}
+   */
+
+  /**
+   * @param {Array<ObjectView>} objectViews
+   * @param {Array<ContextMapping>} contextMappings
+   * @return {{objectViews: Array<ObjectView>, contextMappings: Array<ContextMapping>}}
+   */
+  function handler({objectViews, contextMappings})
+  {
+    const mappings = contextMappings.filter(filterMappings);
+    const views = [];
+
+    if (mappings.length) {
+      for(const objectView of objectViews) {
+        for (const mapping of mappings) {
+          if ( objectView.object.name === mapping.object.name) {
+            views.push(objectView)
+          }
+        }
+      }
+      return {objectViews: views, contextMappings: mappings}
+    }
+
+    return {objectViews: [], contextMappings: []}
+  }
+
+  return handler
+}
+
+/**
+ * @param {{}} contextData
+ * @param {string} contextName
+ * @return {function(Function, Function, AppClient): *}
+ */
+export default function readRecords(contextData, contextName)
 {
   /**
    * @param {Function} dispatch
    * @param {Function} getState
    * @param {AppClient} dpapp
+   * @return {Promise<Array<RecordSet>, Error>}
    */
   function thunk (dispatch, getState, dpapp) {
     return dispatch(loadMappings())
-      .then(mappings => buildQueries(context, mappings))
+      .then(filterMappingsByContextName(contextName))
+      .then(mappings => buildQueries(contextData, mappings))
       .then(queries => Promise.all(queries.map(query => query(dpapp))))
-      .then(results => {
-        console.log('loading mapped objects' , results);
-        return results;
-      });
+    ;
   }
 
   return thunk;

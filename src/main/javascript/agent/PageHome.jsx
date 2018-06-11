@@ -28,13 +28,11 @@ class PageHome extends React.Component
    * Invoked immediately after a component is mounted
    */
   componentDidMount() {
-    const { ui, tabData } = this.props;
-
-    tabData.person_email.email = 'a_young@dickenson.com'
+    const { ui, contextData, contextName } = this.props;
 
     Promise.resolve({ ready: true })
       .then(state => this.props.readUserInfo().then(user => ({ ...state, user })))
-      .then(state => this.props.readRecords(tabData).then(records => ({ ...state, records })))
+      .then(state => this.props.readRecords(contextData, contextName).then(records => ({ ...state, records })))
       .then(state => this.setState(state))
       .catch(ui.error)
     ;

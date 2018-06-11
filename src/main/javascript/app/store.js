@@ -8,6 +8,16 @@ import {ContextDetails, MappablePathProperty, ContextPropertyList} from "../desk
 import { loadMappings } from "./actions";
 
 /**
+ * @see {ContextFactory.contextObjectTypes} from @deskpro/apps-sdk-core
+ * @type {Array}
+ */
+const contextList = [
+  new ContextDetails({ name: "ticket", label: "Ticket" }),
+  new ContextDetails({ name: "person", label: "Person" }),
+  new ContextDetails({ name: "organization", label: "Organization" })
+];
+
+/**
  * @param {AppClient} dpapp
  */
 function createStore (dpapp)
@@ -29,11 +39,7 @@ function createStore (dpapp)
       },
 
       deskpro : {
-        contextList: [
-          new ContextDetails({ name: "ticket", label: "Ticket" }),
-          new ContextDetails({ name: "person", label: "Person" }),
-          new ContextDetails({ name: "organization", label: "Organization" })
-        ],
+        contextList,
 
         propertyList: [
           new ContextPropertyList({
@@ -45,13 +51,13 @@ function createStore (dpapp)
           new ContextPropertyList({
             context: new ContextDetails({ name: "person", label: "Person" }),
             properties: [
-              new MappablePathProperty({ label: "Email", path: "email" })
+              new MappablePathProperty({ label: "Person primary email", path: "primary_email.email" })
             ]
           }),
           new ContextPropertyList({
             context: new ContextDetails({ name: "organization", label: "Organization" }),
             properties: [
-              new MappablePathProperty({ label: "Organization  Email", path: "email" })
+              new MappablePathProperty({ label: "Organization  Name", path: "name" })
             ]
           })
         ]

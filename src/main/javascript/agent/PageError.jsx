@@ -6,11 +6,17 @@ class PageError extends React.PureComponent
 {
 
   static propTypes = {
+
     /**
-     * Instance of sdk storage.
-     * @see https://deskpro.gitbooks.io/deskpro-apps/content/api/props/storage.html
+     * The history object of the MemoryRouter
      */
-    error: PropTypes.object,
+    history: PropTypes.object.isRequired,
+
+    /**
+     * The location object of the MemoryRouter
+     */
+    location: PropTypes.object.isRequired,
+
     /**
      * Instance of sdk oauth.
      * @see https://deskpro.gitbooks.io/deskpro-apps/content/api/props/oauth.html
@@ -36,7 +42,7 @@ class PageError extends React.PureComponent
 
   render()
   {
-    console.log('the error', this.props.route.params.error);
+    console.log('the error', this.props.location.state.error);
 
     return (
       <div>App encountered an error</div>

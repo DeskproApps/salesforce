@@ -11,6 +11,12 @@ import { default as connector} from '../app/connectors'
 class PageAuthenticate extends React.Component
 {
   static propTypes = {
+
+    /**
+     * The history object of the MemoryRouter
+     */
+    history: PropTypes.object.isRequired,
+
     /**
      * Instance of sdk storage.
      * @see https://deskpro.gitbooks.io/deskpro-apps/content/api/props/storage.html
@@ -21,11 +27,7 @@ class PageAuthenticate extends React.Component
      * @see https://deskpro.gitbooks.io/deskpro-apps/content/api/props/oauth.html
      */
     oauth:   PropTypes.object,
-    /**
-     * Instance of sdk route.
-     * @see https://deskpro.gitbooks.io/deskpro-apps/content/api/props/route.html
-     */
-    route:   PropTypes.object,
+
     /**
      * Instance of sdk ui.
      * @see https://deskpro.gitbooks.io/deskpro-apps/content/api/props/ui.html
@@ -39,10 +41,13 @@ class PageAuthenticate extends React.Component
   };
 
   handleClick = () => {
-    const { route, ui, dpapp } = this.props;
+    const { ui, dpapp } = this.props;
 
   this.props.authenticate()
-      .then(() => route.to('home'))
+      .then(() => {
+        this.props.history.push('home');
+        this.props.history.goForward();
+      })
       .catch(ui.error)
     ;
 

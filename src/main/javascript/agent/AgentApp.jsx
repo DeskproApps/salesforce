@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Routes, Route } from '@deskpro/apps-sdk-react';
+import { Router, Route, Switch } from 'react-router'
+import { createMemoryHistory } from 'history'
 import { Loader } from '@deskpro/react-components';
 
 import { default as PageHome } from './PageHome'
@@ -11,10 +12,16 @@ import {SalesforceAuthenticationError} from "../salesforce/security";
 import { default as connector} from '../app/connectors'
 import { readUserInfo, loadMappings  } from '../app/actions'
 
+const routes = ["home", "authenticate", "error", "loading"];
+const history = createMemoryHistory({
+  initialEntries: ["loading"],
+  initialIndex: 0
+});
+
 /**
  * Renders a Deskpro app.
  */
-class AgentApp extends React.Component
+class AgentApp extends React.PureComponent
 {
 
   static propTypes = {
@@ -26,12 +33,7 @@ class AgentApp extends React.Component
     /**
      * Reads the salesforce user's info
      */
-    readUserInfo: PropTypes.func.isRequired,
-
-    /**
-     * Loads the current salesforce mappings
-     */
-    loadMappings: PropTypes.func.isRequired
+    readUserInfo: PropTypes.func.isRequired
   };
 
   /**
@@ -39,40 +41,45 @@ class AgentApp extends React.Component
    */
   componentDidMount() {
 
-    const { oauth, mappings, context, ui, route, dpapp } = this.props;
-    const { storage } = this.props.dpapp;
+    const { tabData } = this.props;
+    const { /** @type {Context} **/ context } = this.props.dpapp;
 
-    this.props.loadMappings()
-      .then(mappings => {
-        console.log('the mappings ', mappings);
-        return mappings;
+    this.props.readUserInfo()
+      .then(() => {
+        history.push("home", { contextData: tabData, contextName: context.object.type });
       })
-      .then(() => this.props.readUserInfo())
-      .then(() => route.to('home'))
-      .catch(err => {
-        if (err instanceof SalesforceAuthenticationError) {
-          return route.to('authenticate');
-        }
-        route.to('error', { error: err });
+      .catch(error => {
+        console.log(error);
+        const route = error instanceof SalesforceAuthenticationError ? 'authenticate': 'error';
+        history.push(route, { error });
+        history.goForward();
       });
   }
 
   render() {
-      return (
-        <Routes>
-          <Route location={'authenticate'} component={PageAuthenticate} />
-          <Route location={'home'} component={PageHome} />
-          <Route location={'error'} component={PageError} />
-          <Route defaultRoute>
+    return (
+      <Router history={history}>
+        <Switch>
+          <Route exact path={'authenticate'} component={PageAuthenticate}/>
+          <Route exact path={'home'} render={this.renderPageHome}/>
+          <Route exact path={'error'} component={PageError}/>
+          <Route render={props => (
             <div className="dp-text-center">
               <Loader />
             </div>
-          </Route>
-        </Routes>
-      );
-
+          )}/>
+        </Switch>
+      </Router>
+    );
   }
+
+  renderPageHome = ({match, location, history}) =>
+  {
+    const { contextData, contextName } = location.state;
+    return (<PageHome contextData={contextData} contextName={contextName} history={history}/>);
+  }
+
 }
 
-const AgentAppConnected = connector(AgentApp, { readUserInfo, loadMappings  });
+const AgentAppConnected = connector(AgentApp, { readUserInfo });
 export { AgentApp, AgentAppConnected }

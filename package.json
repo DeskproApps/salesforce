@@ -36,6 +36,14 @@
       {
         "target": "ticket-sidebar",
         "url": "html/index.html"
+      },
+      {
+        "target": "person-sidebar",
+        "url": "html/index.html"
+      },
+      {
+        "target": "org-sidebar",
+        "url": "html/index.html"
       }
     ],
     "storage": [
@@ -114,6 +122,7 @@
     "@deskpro/redux-components": "^1.0.3",
     "error-subclass": "2.2.0",
     "error-wrapper": "2.1.0",
+    "history": "4.7.2",
     "prop-types": "^15.6.0",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
