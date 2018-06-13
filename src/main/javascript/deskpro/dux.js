@@ -1,10 +1,14 @@
-import { hasPropertyList } from "./services";
+import { contextHasPropertyList } from "./predicates";
+import { contextList, propertyList } from './dux.state'
 
 export default function reducer(state = {}, action={})
 {
   return state
 }
 
+/**
+ * @return {function(Function, Function, AppClient): Promise<*[]>}
+ */
 export function loadContexts()
 {
   /**
@@ -15,13 +19,18 @@ export function loadContexts()
    * @return {Promise}
    */
   function thunk (dispatch, getState, dpapp) {
-    const { contextList } = getState().deskpro;
-    return Promise.resolve([].concat(contextList));
+    const state = getState();
+    const result = contextList(state);
+    return Promise.resolve(result);
   }
 
   return thunk;
 }
 
+/**
+ * @param {ContextDetails} context
+ * @return {function}
+ */
 export function loadContextProperties(context)
 {
   /**
@@ -32,12 +41,13 @@ export function loadContextProperties(context)
    * @return {Promise}
    */
   function thunk (dispatch, getState, dpapp) {
-    const { propertyList } = getState().deskpro;
+
+    const state = getState();
 
     /**
      * @type {ContextPropertyList | undefined}
      */
-    const list = propertyList.filter(list => hasPropertyList(context, list)).pop();
+    const list = propertyList(state).filter(contextHasPropertyList(context)).pop();
     if (list) {
       return Promise.resolve(list.properties)
     }

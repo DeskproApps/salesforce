@@ -1,7 +1,5 @@
+export { FieldDropDown, DeskproContextDropdown, SalesforceObjectDropdown, PropertyDropdown } from './dropdowns'
+
 export { default as FieldCheckboxList } from './FieldCheckboxList'
-export { default as FieldDropDown } from './FieldDropDown'
 export { default as PropertyCheckboxList } from './PropertyCheckboxList'
-export { default as PropertyDropdown } from './PropertyDropdown'
-export { default as DeskproContextDropdown } from './DeskproContextDropdown'
-export { default as SalesforceObjectDropdown } from './SalesforceObjectDropdown'
 export { default as SalesforceFieldList } from './SalesforceFieldList'

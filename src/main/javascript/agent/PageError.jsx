@@ -42,8 +42,6 @@ class PageError extends React.PureComponent
 
   render()
   {
-    console.log('the error', this.props.location.state.error);
-
     return (
       <div>App encountered an error</div>
     );

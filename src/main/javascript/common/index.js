@@ -1,6 +1,3 @@
-export { RouteWithFactory } from './RouteWithFactory'
-export { RoutesContainer } from './RoutesContainer'
-
 export function createThrottle (callback, delay)
 {
   let isThrottled = false, args, context;

@@ -1,9 +1,11 @@
-import {ContextMapping} from "./index";
+import { ContextMapping } from "./index";
+import { hasMapping, hasView } from './predicates'
+import ObjectView from "./ObjectView";
+import { contextMappings as selectContextMappings, objectViews as selectObjectViews, loaded as selectLoaded } from './dux.state'
+import { logAndReject } from '../common/logging'
 
 const CHANGED = 'MAPPING_CHANGED';
 const LOADED = 'MAPPING_LOADED';
-import { hasMapping, hasView } from './predicates'
-import ObjectView from "./ObjectView";
 
 export default function reducer(state = {}, action={})
 {
@@ -22,6 +24,9 @@ export default function reducer(state = {}, action={})
   }
 }
 
+/**
+ * @return {function(Function, Function, AppClient): Promise<Object, Error>}
+ */
 export function loadMappings()
 {
   /**
@@ -32,14 +37,19 @@ export function loadMappings()
   function thunk (dispatch, getState, dpapp)
   {
     const state = getState();
-    const { objectViews, contextMappings, loaded } = state.mappings;
+    const objectViews     = selectObjectViews(state);
+    const contextMappings = selectContextMappings(state);
+    const loaded     = selectLoaded(state);
+
     if (loaded) {
       return Promise.resolve({ objectViews, contextMappings });
     }
 
     // hack for admin
     try {
-      const { objectViews, contextMappings } = state.sdk.storage.app.mappings;
+      const objectViews = selectObjectViews(state.sdk.storage.app);
+      const contextMappings = selectContextMappings(state.sdk.storage.app);
+
       if (objectViews.length && contextMappings.length) {
         const mappings = {
           objectViews: objectViews.map(ObjectView.instance),
@@ -49,22 +59,10 @@ export function loadMappings()
         return Promise.resolve(JSON.parse(JSON.stringify(mappings)))
       }
     } catch (e) {
-      /** ignored on purpose **/
+      /** ignored on purpose the path state.sdk.storage.app is only set in the agent app**/
     }
 
-    return dpapp.storage.getAppStorage("mappings")
-      .then(mappings => {
-        return mappings || { objectViews : [], contextMappings: [] }
-      })
-      .then(({objectViews, contextMappings}) => ({
-        objectViews: objectViews.map(ObjectView.instance),
-        contextMappings: contextMappings.map(ContextMapping.instance)
-      }))
-      .then(mappings => {
-        dispatch({ type:LOADED, ...mappings });
-        return JSON.parse(JSON.stringify(mappings));
-      })
-    ;
+    return dispatch(hydrateMappings());
   }
 
   return thunk;
@@ -72,7 +70,7 @@ export function loadMappings()
 
 /**
  * @param {SFObject} object
- * @return {function}
+ * @return {function(Function, Function, AppClient): Promise<Object, Error>}
  */
 export function removeMappings(object)
 {
@@ -82,11 +80,11 @@ export function removeMappings(object)
    * @param {AppClient} dpapp
    */
   function thunk (dispatch, getState, dpapp) {
-    const { objectViews, contextMappings } = getState().mappings;
+    const state = getState();
 
     const mappings = {
-      objectViews: objectViews.filter(view => !hasView(object, view)),
-      contextMappings: contextMappings.filter(mapping => !hasMapping(object, mapping))
+      objectViews: selectObjectViews(state).filter(view => !hasView(object, view)),
+      contextMappings: selectContextMappings(state).filter(mapping => !hasMapping(object, mapping))
     };
 
     dispatch({ type: CHANGED, ...mappings });
@@ -99,7 +97,7 @@ export function removeMappings(object)
  * @param {SFObject} object
  * @param {ObjectView} newObjectView
  * @param {Array<ContextMapping>}  newContextMappings
- * @return {function}
+ * @return {function(Function, Function, AppClient): Promise<Object, Error>}
  */
 export function replaceMappings(object, newObjectView, newContextMappings)
 {
@@ -113,7 +111,6 @@ export function replaceMappings(object, newObjectView, newContextMappings)
     if (newView.object.name === oldView.object.name) {
       return newView
     }
-
     return oldView;
   }
 
@@ -123,11 +120,11 @@ export function replaceMappings(object, newObjectView, newContextMappings)
    * @param {AppClient} dpapp
    */
   function thunk (dispatch, getState, dpapp) {
-    const { objectViews, contextMappings } = getState().mappings;
+    const state = getState();
 
     const mappings = {
-      objectViews: objectViews.map(oldView => replaceView(newObjectView, oldView)),
-      contextMappings: contextMappings.filter(mapping => !hasMapping(object, mapping)).concat(newContextMappings)
+      objectViews: selectObjectViews(state).map(oldView => replaceView(newObjectView, oldView)),
+      contextMappings: selectContextMappings(state).filter(mapping => !hasMapping(object, mapping)).concat(newContextMappings)
     };
 
     dispatch({ type: CHANGED, ...mappings });
@@ -141,7 +138,7 @@ export function replaceMappings(object, newObjectView, newContextMappings)
  * @param {SFObject} object
  * @param {ObjectView} newObjectView
  * @param {Array<ContextMapping>}  newContextMappings
- * @return {function}
+ * @return {function(Function, Function, AppClient): Promise<Object, Error>}
  */
 export function addMappings(object, newObjectView, newContextMappings)
 {
@@ -150,12 +147,12 @@ export function addMappings(object, newObjectView, newContextMappings)
    * @param {Function} getState
    * @param {AppClient} dpapp
    */
-  function thunk (dispatch, getState, dpapp) {
-
-    const { objectViews, contextMappings } = getState().mappings;
+  function thunk (dispatch, getState, dpapp)
+  {
+    const state = getState();
     const mappings = {
-      objectViews: objectViews.concat([newObjectView]),
-      contextMappings: contextMappings.concat(newContextMappings)
+      objectViews: selectObjectViews(state).concat([newObjectView]),
+      contextMappings: selectContextMappings(state).concat(newContextMappings)
     };
 
     dispatch({ type: CHANGED, ...mappings });
@@ -166,7 +163,7 @@ export function addMappings(object, newObjectView, newContextMappings)
 }
 
 /**
- * @return {function}
+ * @return {function(Function, Function, AppClient): Promise<Object, Error>}
  */
 export function persistMappings()
 {
@@ -175,12 +172,45 @@ export function persistMappings()
    * @param {Function} getState
    * @param {AppClient} dpapp
    */
-  function thunk (dispatch, getState, dpapp) {
+  function thunk (dispatch, getState, dpapp)
+  {
+    const state = getState();
+    const mappings = {
+      objectViews: selectObjectViews(state),
+      contextMappings: selectContextMappings(state)
+    };
+    return dpapp.storage.setAppStorage("mappings", mappings).catch(logAndReject('persistMappings error'));
+  }
 
-    const { objectViews, contextMappings } = getState().mappings;
-    const mappings = { objectViews, contextMappings };
+  return thunk;
+}
 
-    return dpapp.storage.setAppStorage("mappings", mappings);
+/**
+ * @return {function(Function, Function, AppClient): Promise<Object, Error>}
+ */
+export function hydrateMappings()
+{
+  /**
+   * @param {Function} dispatch
+   * @param {Function} getState
+   * @param {AppClient} dpapp
+   */
+  function thunk (dispatch, getState, dpapp)
+  {
+    return dpapp.storage.getAppStorage("mappings")
+      .then(mappings => {
+        return mappings || { objectViews : [], contextMappings: [] }
+      })
+      .then(({objectViews, contextMappings}) => ({
+        objectViews: objectViews.map(ObjectView.instance),
+        contextMappings: contextMappings.map(ContextMapping.instance)
+      }))
+      .catch(logAndReject('hydrateMappings error'))
+      .then(mappings => {
+        dispatch({ type:LOADED, ...mappings });
+        return JSON.parse(JSON.stringify(mappings));
+      })
+      ;
   }
 
   return thunk;

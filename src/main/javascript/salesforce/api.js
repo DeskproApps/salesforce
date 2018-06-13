@@ -5,7 +5,7 @@ import {UserInfo} from './apiObjects'
  * @param {function(string, object): Promise<Object, Error>} client
  * @return {Promise<UserInfo, Error>}
  */
-function getReadUserInfo(client)
+function getUserInfo(client)
 {
   const req = { method: 'GET' };
   const url = 'https://login.salesforce.com/services/oauth2/userinfo';
@@ -20,7 +20,7 @@ function getReadUserInfo(client)
 function getDescribeGlobal(client)
 {
   const req = { method: 'GET' };
-  const url = 'https://eu8.salesforce.com/services/data/v37.0/sobjects';
+  const url = '/sobjects';
 
   return client(url, req).then(resp => DescribeGlobal.instance(resp.body));
 }
@@ -36,7 +36,7 @@ function getSObjectDescribe(client, object)
   const name = typeof object === "string" ? object : object.name
 
   const req = { method: 'GET' };
-  const url = `https://eu8.salesforce.com/services/data/v37.0/sobjects/${name}/describe`;
+  const url = `/sobjects/${name}/describe`;
 
   return client(url, req).then(resp => SObjectDescription.instance(resp.body));
 }
@@ -49,14 +49,14 @@ function getSObjectDescribe(client, object)
 function getQuery(client, query)
 {
   const req = { method: 'GET' };
-  const url = encodeURI(`https://eu8.salesforce.com/services/data/v37.0/query?q=${query}`);
+  const url = `/query?q=${query}`;
 
   return client(url, req).then(resp => Query.instance(resp.body));
 }
 
 module.exports =
 {
-  getReadUserInfo,
+  getUserInfo,
 
   getDescribeGlobal,
 

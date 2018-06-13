@@ -118,13 +118,9 @@ export class Component extends React.Component
   };
 
   state = {
-
-    context: null,
-
-    contexts: [],
-
-    contextProperties: []
-
+    context           : null,
+    contexts          : [],
+    contextProperties : []
   };
 
   componentDidMount()

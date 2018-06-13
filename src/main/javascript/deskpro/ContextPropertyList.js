@@ -1,5 +1,5 @@
 import {ContextDetails} from "./ContextDetails";
-import {MappableProperty} from "./MappableProperty";
+import {MappableProperties} from "./MappableProperties";
 
 export class ContextPropertyList
 {
@@ -14,7 +14,7 @@ export class ContextPropertyList
 
     return new ContextPropertyList({
       context: ContextDetails.instance(context),
-      properties: properties.map(MappableProperty.instance)
+      properties: properties.map(MappableProperties.parse)
     })
   }
 
@@ -29,7 +29,12 @@ export class ContextPropertyList
   }
 
   toJSON = () => {
-    return JSON.parse(JSON.stringify(this.props));
+    const json = JSON.parse(JSON.stringify(this.props));
+
+    const { properties } = this.props;
+    json.properties = properties.map(MappableProperties.toJSON);
+
+    return json;
   };
 
   /**

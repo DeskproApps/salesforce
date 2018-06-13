@@ -22,7 +22,7 @@ export class MappableProperties
   }
 
   /**
-   * @param {MappableProperties} property
+   * @param {MappableProperty} property
    */
   static toJSON(property)
   {

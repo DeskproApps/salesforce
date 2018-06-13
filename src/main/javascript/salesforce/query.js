@@ -1,4 +1,4 @@
-import { fetch } from './http'
+import { clientFactory } from './http'
 import { getQuery } from './api'
 import { Record, RecordSet} from "./records";
 import { Value } from "./Value";
@@ -124,30 +124,35 @@ class SelectQueryBuilder
     const toFieldName = (field) => field.name;
     const toSOQLString = (expr) => expr.toSOQLString();
 
-    const fieldNames = this.props.fields.filter(field => field.name !== ID).map(toFieldName);
+    const {  where, fields, from } = this.props;
+    const fieldNames = fields.filter(field => field.name !== ID).map(toFieldName);
 
     const selectExpr = [ID].concat(fieldNames).join(', ');
-    const fromExpr = `${this.props.from.name}`;
-    const whereExpr = this.props.where.map(toSOQLString).join(' AND ');
+    const fromExpr = `FROM ${from.name}`;
 
-    return `SELECT ${selectExpr} FROM ${fromExpr} WHERE ${whereExpr}`;
+    if (where.length) {
+      const whereExpr = where.length ? 'WHERE ' + where.map(toSOQLString).join(' AND ') : '';
+      return `SELECT ${selectExpr} ${fromExpr} ${whereExpr}`;
+    }
+
+    return `SELECT ${selectExpr} ${fromExpr}`;
   }
 
   /**
-   * @return {function(*=): Promise<Record>}
+   * @return {function(function(string): Promise): Promise<RecordSet>}
    */
-  asCallback()
+
+  /**
+   * @param {function(string): Promise<Query, Error>} connection
+   * @return {Promise<RecordSet>}
+   */
+  asPromise(connection)
   {
     const query = this.asString();
     const { from, fields } = this.props;
     const parseQuery = query => toRecordSet(query, from, fields);
 
-    /**
-     * @param {AppClient} dpapp
-     */
-    return function callback(dpapp) {
-      return fetch(dpapp, (client) => getQuery(client, query)).then(parseQuery)
-    }
+    return connection(query).then(parseQuery);
   }
 }
 
@@ -155,7 +160,7 @@ class SelectQueryBuilder
  * @param {SFObject} from
  * @return {SelectQueryBuilder}
  */
-export function query (from)
+export function selectQuery (from)
 {
   return new SelectQueryBuilder({ from });
 }

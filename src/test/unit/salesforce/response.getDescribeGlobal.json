@@ -1,0 +1,72 @@
+{
+  "sobjects" : [
+    {
+      "name": "Contact",
+      "label": "Contact",
+      "activateable": false,
+      "createable": true,
+      "custom": false,
+      "customSetting": false,
+      "deletable": true,
+      "deprecatedAndHidden": false,
+      "feedEnabled": true,
+      "keyPrefix": "003",
+      "labelPlural": "Contacts",
+      "layoutable": true,
+      "mergeable": true,
+      "mruEnabled": true,
+      "queryable": true,
+      "replicateable": true,
+      "retrieveable": true,
+      "searchable": true,
+      "triggerable": true,
+      "undeletable": true,
+      "updateable": true,
+      "urls": {
+        "compactLayouts": "\/services\/data\/v37.0\/sobjects\/Contact\/describe\/compactLayouts",
+        "rowTemplate": "\/services\/data\/v37.0\/sobjects\/Contact\/{ID}",
+        "approvalLayouts": "\/services\/data\/v37.0\/sobjects\/Contact\/describe\/approvalLayouts",
+        "defaultValues": "\/services\/data\/v37.0\/sobjects\/Contact\/defaultValues?recordTypeId&fields",
+        "listviews": "\/services\/data\/v37.0\/sobjects\/Contact\/listviews",
+        "describe": "\/services\/data\/v37.0\/sobjects\/Contact\/describe",
+        "quickActions": "\/services\/data\/v37.0\/sobjects\/Contact\/quickActions",
+        "layouts": "\/services\/data\/v37.0\/sobjects\/Contact\/describe\/layouts",
+        "sobject": "\/services\/data\/v37.0\/sobjects\/Contact"
+      }
+    },
+    {
+      "name": "Lead",
+      "label": "Lead",
+      "activateable": false,
+      "createable": true,
+      "custom": false,
+      "customSetting": false,
+      "deletable": true,
+      "deprecatedAndHidden": false,
+      "feedEnabled": true,
+      "keyPrefix": "00Q",
+      "labelPlural": "Leads",
+      "layoutable": true,
+      "mergeable": true,
+      "mruEnabled": true,
+      "queryable": true,
+      "replicateable": true,
+      "retrieveable": true,
+      "searchable": true,
+      "triggerable": true,
+      "undeletable": true,
+      "updateable": true,
+      "urls": {
+        "compactLayouts": "\/services\/data\/v37.0\/sobjects\/Lead\/describe\/compactLayouts",
+        "rowTemplate": "\/services\/data\/v37.0\/sobjects\/Lead\/{ID}",
+        "approvalLayouts": "\/services\/data\/v37.0\/sobjects\/Lead\/describe\/approvalLayouts",
+        "defaultValues": "\/services\/data\/v37.0\/sobjects\/Lead\/defaultValues?recordTypeId&fields",
+        "listviews": "\/services\/data\/v37.0\/sobjects\/Lead\/listviews",
+        "describe": "\/services\/data\/v37.0\/sobjects\/Lead\/describe",
+        "quickActions": "\/services\/data\/v37.0\/sobjects\/Lead\/quickActions",
+        "layouts": "\/services\/data\/v37.0\/sobjects\/Lead\/describe\/layouts",
+        "sobject": "\/services\/data\/v37.0\/sobjects\/Lead"
+      }
+    }
+  ]
+}

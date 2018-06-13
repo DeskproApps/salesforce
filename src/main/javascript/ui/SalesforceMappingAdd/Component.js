@@ -5,6 +5,19 @@ import { SFObjectField, SFObject } from '../../salesforce/apiObjects';
 import {ContextMapping, ObjectView} from '../../mapping';
 import { DefaultUI } from './DefaultUI';
 
+import {
+  persistMappings,
+  addMappings,
+  loadObjects,
+  loadFields,
+  loadContexts,
+  loadContextProperties
+} from "../../app/actions";
+
+import { propertyList, contextList } from "../../app/state";
+
+import {reduxConnector} from "../../app/connectors";
+
 /**
  * @param {Object} props
  * @return {function}
@@ -19,7 +32,7 @@ function chooseUI(props)
   return DefaultUI;
 }
 
-export class Component extends React.Component
+class Component extends React.Component
 {
   static propTypes = {
 
@@ -92,8 +105,7 @@ export class Component extends React.Component
   loadObjects = () =>
   {
     return this.props.loadObjects().catch(e => {
-      console.log('error loading objects', e)
-      return []
+      return [];
     });
   };
 
@@ -118,5 +130,18 @@ export class Component extends React.Component
       onAdd = { this.addMappings }
     />);
   }
-
 }
+
+export { Component }
+
+export default reduxConnector(
+  Component,
+  {
+    persistMappings,
+    addMappings,
+    loadObjects,
+    loadFields,
+    loadContexts,
+    loadContextProperties
+  }
+);

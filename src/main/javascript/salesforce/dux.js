@@ -1,23 +1,33 @@
-import { fetch } from './http';
-import { getDescribeGlobal, getSObjectDescribe, getReadUserInfo } from './api';
+import { clientFactory } from './http';
+import { getDescribeGlobal, getSObjectDescribe, getUserInfo, getQuery } from './api';
 import { SFObjectField, SFObject } from './apiObjects';
 import { SObjectDescription } from './responseObjects';
+import {
+  fields as selFields,
+  apiVersion as selApiVersion,
+  instanceUrl as selInstanceUrl,
+  objectsLoaded as selObjectsLoaded,
+  objects as selObjects,
+  userInfo as selectUserInfo
+} from './dux.state'
 
-const LOAD_FIELDS = 'LOAD_FIELDS';
-const LOAD_OBJECTS = 'LOAD_OBJECT';
-const LOAD_USER = 'LOAD_USER';
+import { logAndReject } from '../common/logging'
+
+const LOAD_FIELDS   = 'LOAD_FIELDS';
+const LOAD_OBJECTS  = 'LOAD_OBJECT';
+const LOAD_USER     = 'LOAD_USER';
 
 export default function reducer(state = {}, action={})
 {
   switch (action.type)
   {
     case LOAD_USER:
-      const { user } = action;
-      return { ...state, user };
+      const { userInfo } = action
+      return { ...state, userInfo };
 
     case LOAD_OBJECTS:
-      const { objects } = action;
-      return { ...state, objects, objectsLoaded: true };
+      const { objects } = action
+      return { ...state, objects , objectsLoaded: true };
 
     case LOAD_FIELDS:
       const { object } = action;
@@ -30,9 +40,11 @@ export default function reducer(state = {}, action={})
 }
 
 /**
+ *
+ * @param {Function} [fetchClientFactory] a custom salesforce http fetch function
  * @return {function}
  */
-export function loadObjects()
+export function loadObjects(fetchClientFactory)
 {
   /**
    * @param {DescribeGlobal} resp
@@ -41,23 +53,31 @@ export function loadObjects()
   const toObjects = (resp) => resp.sobjects;
 
   /**
+   * @type {function(AppClient, String, String)}
+   */
+  const httpClientFactory = typeof fetchClientFactory === 'function' ? fetchClientFactory : clientFactory;
+
+  /**
    * @param {Function} dispatch
    * @param {Function} getState
    * @param {AppClient} dpapp
    */
   function thunk (dispatch, getState, dpapp) {
 
-    const { salesforce } = getState();
-
-    if (salesforce.objectsLoaded) {
-      return Promise.resolve([].concat(salesforce.objects))
+    const state = getState();
+    if (selObjectsLoaded(state)) {
+      return Promise.resolve(selObjects(state))
     }
 
-    return fetch(dpapp, getDescribeGlobal).then(toObjects)
+    const client = httpClientFactory(dpapp, selInstanceUrl(state), selApiVersion(state));
+
+    return getDescribeGlobal(client)
+      .then(toObjects)
       .then(objects => {
         dispatch({ type:LOAD_OBJECTS, objects });
         return [].concat(objects)
       })
+      .catch(logAndReject('loadObjects error'))
   }
 
   return thunk;
@@ -65,9 +85,10 @@ export function loadObjects()
 
 /**
  * @param {SFObject} object
+ * @param {Function} [fetchClientFactory] a custom salesforce http fetch function
  * @return {function}
  */
-export function loadFields(object)
+export function loadFields(object, fetchClientFactory)
 {
   /**
    * @param {SObjectDescription} response
@@ -76,34 +97,10 @@ export function loadFields(object)
   const toFields = response => response.fields;
 
   /**
-   * @param {Function} dispatch
-   * @param {Function} getState
-   * @param {AppClient} dpapp
+   * @type {function(AppClient, String, String)}
    */
-  function thunk (dispatch, getState, dpapp) {
+  const httpClientFactory = typeof fetchClientFactory === 'function' ? fetchClientFactory : clientFactory;
 
-    const { fields } = getState().salesforce;
-    const objectFields = fields[object.name];
-
-    if (objectFields) {
-      return Promise.resolve([].concat(objectFields));
-    }
-
-    return fetch(dpapp, (client) => getSObjectDescribe(client, object)).then(toFields)
-      .then(fields => {
-        dispatch({ type:LOAD_FIELDS, object, fields });
-        return fields;
-      })
-  }
-
-  return thunk;
-}
-
-/**
- * @return {function}
- */
-export function readUserInfo()
-{
   /**
    * @param {Function} dispatch
    * @param {Function} getState
@@ -111,19 +108,99 @@ export function readUserInfo()
    */
   function thunk (dispatch, getState, dpapp) {
 
-    const { user } = getState().salesforce;
-    if (user) {
-      return Promise.resolve(user)
+    const state = getState();
+    const objectFields = selFields(state)[object.name];
+
+    if (objectFields) {
+      return Promise.resolve([].concat(objectFields));
     }
 
-    return fetch(dpapp, getReadUserInfo).then(userInfo => {
-      dispatch({type: LOAD_USER, userInfo});
-      return userInfo
-    }).catch (err => {
-      dispatch({type: LOAD_USER, userInfo: null});
-      return Promise.reject(err)
-    })
+    const client = httpClientFactory(dpapp, selInstanceUrl(state), selApiVersion(state));
+
+    return getSObjectDescribe(client, object)
+      .then(toFields)
+      .catch(logAndReject('loadFields error'))
+      .then(fields => {
+        dispatch({ type:LOAD_FIELDS, object, fields });
+        return fields;
+      });
   }
 
   return thunk;
+}
+
+/**
+ * @param {Function} [fetchClientFactory] a custom salesforce http fetch function
+ * @return {function}
+ */
+export function loadUserInfo(fetchClientFactory)
+{
+  /**
+   * @type {function(AppClient, String, String)}
+   */
+  const httpClientFactory = typeof fetchClientFactory === 'function' ? fetchClientFactory : clientFactory;
+
+  /**
+   * @param {Function} dispatch
+   * @param {Function} getState
+   * @param {AppClient} dpapp
+   */
+  function thunk (dispatch, getState, dpapp) {
+
+    const state = getState();
+    const client = httpClientFactory(dpapp, selInstanceUrl(state), selApiVersion(state));
+
+    return getUserInfo(client)
+      .then(userInfo => {
+        dispatch({type: LOAD_USER, userInfo});
+        return userInfo
+      })
+      .catch(logAndReject('loadUserInfo error'))
+  }
+
+  return thunk;
+}
+
+/**
+ * @param {SelectQueryBuilder} queryBuilder
+ * @param {Function} [fetchClientFactory] a custom salesforce http fetch function
+ * @return {function}
+ */
+export function selectRecords(queryBuilder, fetchClientFactory)
+{
+  /**
+   * @type {function(AppClient, String, String)}
+   */
+  const httpClientFactory = typeof fetchClientFactory === 'function' ? fetchClientFactory : clientFactory;
+
+  /**
+   * @param {Function} dispatch
+   * @param {Function} getState
+   * @param {AppClient} dpapp
+   */
+  function thunk (dispatch, getState, dpapp) {
+
+    const state = getState();
+    const client = httpClientFactory(dpapp, selInstanceUrl(state), selApiVersion(state));
+
+    /**
+     * @param {String} query
+     * @return {Promise<Query, Error>}
+     */
+    function connection(query) {
+      return getQuery(client, query);
+    }
+
+    return queryBuilder.asPromise(connection).catch(logAndReject('loadUserInfo error'))
+  }
+
+  return thunk;
+}
+
+/**
+ * @return {{type: string, userInfo: null}}
+ */
+export function unloadUserInfo()
+{
+  return {type: LOAD_USER, userInfo: null};
 }
