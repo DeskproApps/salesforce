@@ -1,11 +1,13 @@
 import { loadMappings } from '../mapping/dux'
-import { query } from '../salesforce/query'
+import { selectQuery } from '../salesforce/query'
+import { selectRecords } from '../salesforce/dux'
+
 
 /**
  * @param {*} context
  * @param {Array<ObjectView>} objectViews
  * @param {Array<ContextMapping>} contextMappings
- * @return {Array<function>}
+ * @return {Array<SelectQueryBuilder>}
  */
 function buildQueries(context, {objectViews, contextMappings})
 {
@@ -15,7 +17,7 @@ function buildQueries(context, {objectViews, contextMappings})
    * @return {{}}
    */
   const reducer = function (acc, view) {
-    acc[view.object.name] = query(view.object).select(view.fields);
+    acc[view.object.name] = selectQuery(view.object).select(view.fields);
     return acc;
   };
 
@@ -29,7 +31,7 @@ function buildQueries(context, {objectViews, contextMappings})
     query.andWhere(field, value);
   }
 
-  return Object.keys(builders).map(key => builders[key]).map(builder => builder.asCallback())
+  return Object.keys(builders).map(key => builders[key]);
 }
 
 /**
@@ -93,10 +95,17 @@ export default function readRecords(contextData, contextName)
    * @return {Promise<Array<RecordSet>, Error>}
    */
   function thunk (dispatch, getState, dpapp) {
+
+    /**
+     * @param {SelectQueryBuilder} query
+     * @return {Promise<RecordSet, Error>}
+     */
+    const runQuery = query => dispatch(selectRecords(query));
+
     return dispatch(loadMappings())
       .then(filterMappingsByContextName(contextName))
       .then(mappings => buildQueries(contextData, mappings))
-      .then(queries => Promise.all(queries.map(query => query(dpapp))))
+      .then(queries => Promise.all(queries.map(runQuery)))
     ;
   }
 

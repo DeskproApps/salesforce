@@ -3,13 +3,12 @@ import PropTypes from 'prop-types';
 import { Tabs, TabLink, Container } from '@deskpro/react-components';
 import { ContextDetails } from "../deskpro";
 
-
 export class TabsContext extends React.PureComponent
 {
   static propTypes = {
     onChange: PropTypes.func,
-    active: PropTypes.instanceOf(ContextDetails),
-    items: PropTypes.arrayOf(ContextDetails)
+    active  : PropTypes.instanceOf(ContextDetails),
+    items   : PropTypes.arrayOf(ContextDetails)
   };
 
   /**
@@ -21,9 +20,9 @@ export class TabsContext extends React.PureComponent
 
     if (context) {
       this.props.onChange(context);
+    } else {
+      throw new Error('unknown tab: ' + tab)
     }
-
-    throw new Error('unknown tab: ' + tab)
   };
 
   render()

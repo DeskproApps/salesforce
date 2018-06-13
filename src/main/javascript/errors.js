@@ -6,7 +6,7 @@ class GenericError extends ErrorSubclass
 
   constructor(data, ...rest)
   {
-    super(...rest)
+    super(...rest);
     this.data = data
   }
 }

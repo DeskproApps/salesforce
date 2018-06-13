@@ -13,15 +13,6 @@ function matchDom(field, dom)
   return field.name === dom.name;
 }
 
-/**
- * @param {SFObjectField} field
- * @return {{value: string, label: string, object: SFObjectField}}
- */
-function toOption(field)
-{
-  return { value : field.name, label: field.label, object: field }
-}
-
 export default class FieldCheckboxList extends React.PureComponent
 {
   static propTypes = {

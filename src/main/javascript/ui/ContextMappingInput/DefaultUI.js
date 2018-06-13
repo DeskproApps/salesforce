@@ -38,11 +38,11 @@ export class DefaultUI extends React.PureComponent
       <div style={containerStyleFields}>
 
         <div style={styleFieldList} className="dp-column">
-          <FieldDropDown items={this.props.fields} value={this.props.field} onChange={this.props.onChangeField} />
+          <FieldDropDown options={this.props.fields} value={this.props.field} onChange={this.props.onChangeField} />
         </div>
 
         <div style={styleFieldList} className="dp-column">
-          <PropertyDropdown items={this.props.properties} value={this.props.property} onChange={this.props.onChangeProperty} />
+          <PropertyDropdown options={this.props.properties} value={this.props.property} onChange={this.props.onChangeProperty} />
         </div>
 
         <Button onClick={this.props.onCreate}>Create field mapping</Button>

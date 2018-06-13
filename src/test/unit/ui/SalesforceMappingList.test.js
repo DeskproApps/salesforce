@@ -1,0 +1,20 @@
+import React from 'react';
+import { mount, shallow } from 'enzyme';
+import { Provider } from 'react-redux'
+import { createMockDpapp } from '../../mocks';
+
+import { createStore } from '../../../main/javascript/app/store';
+import { default as Component } from '../../../main/javascript/ui/SalesforceMappingList';
+
+test('connected component is exported as default', () => {
+
+  const dpapp = createMockDpapp();
+  const store = createStore(dpapp);
+  const wrapper = mount(<Provider store={store}><Component /></Provider>);
+
+  expect(wrapper.isEmptyRender()).toBe(false);
+
+  // check a property to be sure
+  const loadFields = wrapper.find('Component').prop('loadFields');
+  expect(typeof loadFields).toBe('function');
+});

@@ -2,5 +2,8 @@
   "collectCoverage": true,
   "collectCoverageFrom": [
     "src/main/javascript/*"
+  ],
+  "setupFiles": [
+    "./src/test/setup.js"
   ]
 }

@@ -4,6 +4,7 @@ import { Loader } from '@deskpro/react-components';
 
 import { readUserInfo, readRecords } from '../app/actions'
 import { default as connector} from '../app/connectors'
+import { logAndReject } from '../common/logging'
 
 class PageHome extends React.Component
 {
@@ -34,9 +35,9 @@ class PageHome extends React.Component
       .then(state => this.props.readUserInfo().then(user => ({ ...state, user })))
       .then(state => this.props.readRecords(contextData, contextName).then(records => ({ ...state, records })))
       .then(state => this.setState(state))
+      .catch(logAndReject('page home error'))
       .catch(ui.error)
     ;
-
   }
 
   render() {

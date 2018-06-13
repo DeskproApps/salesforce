@@ -1,12 +1,22 @@
 import { sdkConnect } from '@deskpro/apps-sdk-react';
 import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 
 
-function noPropsToState(state, ownProps)
+function noMap(state, ownProps)
 {
   return {};
 }
 
+function mapPropFactoriesToProps(state, ownProps, propFactories)
+{
+  function reducer(acc, key) {
+    acc[key] = propFactories[key](state);
+    return acc;
+  }
+
+  return Object.keys(propFactories).reduce(reducer, {});
+}
 
 function mapActionCreatorsToProps(dispatch, ownProps, actionCreators)
 {
@@ -34,9 +44,34 @@ function mapActionCreatorsToProps(dispatch, ownProps, actionCreators)
 export default function connector(Component, actionCreators)
 {
   if (! actionCreators) {
-    return sdkConnect(Component, noPropsToState);
+    return sdkConnect(Component, noMap);
   }
 
   const mapDispatchToProps = (dispatch, ownProps) => mapActionCreatorsToProps(dispatch, ownProps, actionCreators);
-  return sdkConnect(Component, noPropsToState, mapDispatchToProps);
+  return sdkConnect(Component, noMap, mapDispatchToProps);
+}
+
+/**
+ * @param {function} Component
+ * @param {object} actionCreators
+ * @param {object} [propFactories]
+ * @return {function}
+ */
+export function reduxConnector(Component, actionCreators, propFactories)
+{
+  let mapDispatchToProps;
+  if (actionCreators && typeof actionCreators === 'object') {
+    mapDispatchToProps = (dispatch, ownProps) => mapActionCreatorsToProps(dispatch, ownProps, actionCreators);
+  } else {
+    mapDispatchToProps = noMap
+  }
+
+  let mapStateToProps;
+  if (propFactories && typeof propFactories === 'object') {
+    mapStateToProps = (state, ownProps) =>  mapPropFactoriesToProps(state, ownProps, propFactories);
+  } else {
+    mapStateToProps = noMap
+  }
+
+  return connect(mapStateToProps, mapDispatchToProps)(Component);
 }

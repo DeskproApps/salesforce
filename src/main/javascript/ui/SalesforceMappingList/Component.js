@@ -6,6 +6,19 @@ import { hasMapping, hasView } from "../../mapping/predicates"
 import { DefaultUI } from './DefaultUI';
 import {SFObject, SFObjectField} from "../../salesforce/apiObjects";
 
+import {
+  loadFields,
+  removeMappings,
+  replaceMappings,
+  loadContexts,
+  loadContextProperties,
+  persistMappings
+} from "../../app/actions";
+
+import { propertyList,contextList, objectViews, contextMappings } from "../../app/state";
+
+import {reduxConnector} from "../../app/connectors";
+
 /**
  * @param {Object} props
  * @return {function}
@@ -20,7 +33,7 @@ function chooseUI(props)
   return DefaultUI;
 }
 
-export class Component extends React.Component
+class Component extends React.Component
 {
   static propTypes = {
 
@@ -120,3 +133,18 @@ export class Component extends React.Component
     />);
   }
 }
+
+export { Component }
+
+export default reduxConnector(
+  Component,
+  {
+    loadFields, persistMappings, removeMappings, replaceMappings, loadContexts, loadContextProperties
+  },
+  {
+    contexts: contextList,
+    contextProperties: propertyList,
+    objectViews,
+    contextMappings
+  }
+);

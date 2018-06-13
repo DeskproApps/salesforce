@@ -4,6 +4,7 @@ import { Container, Heading, Button } from '@deskpro/react-components';
 
 import { authenticate } from '../app/actions'
 import { default as connector} from '../app/connectors'
+import { logAndReject} from '../common/logging'
 
 /**
  * Renders the authentication page.
@@ -16,17 +17,6 @@ class PageAuthenticate extends React.Component
      * The history object of the MemoryRouter
      */
     history: PropTypes.object.isRequired,
-
-    /**
-     * Instance of sdk storage.
-     * @see https://deskpro.gitbooks.io/deskpro-apps/content/api/props/storage.html
-     */
-    storage: PropTypes.object,
-    /**
-     * Instance of sdk oauth.
-     * @see https://deskpro.gitbooks.io/deskpro-apps/content/api/props/oauth.html
-     */
-    oauth:   PropTypes.object,
 
     /**
      * Instance of sdk ui.
@@ -48,6 +38,7 @@ class PageAuthenticate extends React.Component
         this.props.history.push('home');
         this.props.history.goForward();
       })
+      .catch(logAndReject)
       .catch(ui.error)
     ;
 

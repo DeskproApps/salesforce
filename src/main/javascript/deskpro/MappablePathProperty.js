@@ -29,19 +29,6 @@ export class MappablePathProperty extends  MappableProperty
     super({label, path, ...props});
   }
 
-
-  toJSON = () => {
-    return JSON.parse(JSON.stringify(this.props));
-  };
-
-  /**
-   * Returns a deep clone of this object
-   *
-   * @method
-   * @return {Object}
-   */
-  toJS = () => this.toJSON();
-
   /**
    * @type {string}
    */

@@ -33,8 +33,8 @@ export class DefaultUI extends React.PureComponent
 
         <SalesforceObjectDropdown
           name        = "objects"
-          object      = {this.props.object}
-          loadObjects = {this.props.loadObjects}
+          value      = {this.props.object}
+          loadOptions = {this.props.loadObjects}
           onChange    = {this.props.onObjectSelected}
         />
 

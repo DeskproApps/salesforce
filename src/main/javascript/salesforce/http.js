@@ -52,32 +52,69 @@ function isErrorRetryable(err)
 
 /**
  * @param {AppClient} dpapp
- * @returns {function(string, object): Promise<DeskproAPIResponse, Error>}
+ * @param {String} url
+ * @param {Object} req
+ * @returns {Promise<DeskproAPIResponse, Error>}
  */
-const apiClient = (dpapp) => (url, req) => {
+function fetch (dpapp, url, req)
+{
   const dpReq = buildReqObj(req);
-  return dpapp.restApi.fetchProxy(url, dpReq);
-};
+  return dpapp.restApi.fetchProxy(url, dpReq).catch(err => {
+
+    // retry
+    if (isErrorRetryable(err)) {
+      return refreshAccessToken(dpapp).then(() => dpapp.restApi.fetchProxy(url, dpReq)).catch(apiError)
+    }
+    return Promise.reject(err);
+
+  });
+}
 
 /**
  * @param {AppClient} dpapp
- * @param {function(*=, *=): Promise<DeskproAPIResponse>} request
- * @returns {Promise<DeskproAPIResponse, Error>}
+ * @param {String} instanceUrl
+ * @param {String} apiVersion
+ * @return {function(string, Object): Promise<DeskproAPIResponse, Error>}
  */
-const fetch = (dpapp, request) => {
-    const client = apiClient(dpapp);
-    return request(client).catch(err => {
+function clientFactory (dpapp, instanceUrl, apiVersion) {
 
-        // retry
-        if (isErrorRetryable(err)) {
-          return refreshAccessToken(dpapp).then(() => request(client)).catch(apiError)
-        }
-        return Promise.reject(err);
-      })
-    ;
-};
+  if (!instanceUrl) {
+    throw new Error('missing instance url')
+  }
+
+  if (!apiVersion) {
+    throw new Error('missing api version url')
+  }
+
+  /**
+   * @param {string} url
+   * @param {object} req
+   * @return {Promise<DeskproAPIResponse, Error>}
+   */
+  function client(url, req) {
+    const reqUrl = apiUrl(instanceUrl, apiVersion, url);
+    return fetch (dpapp, reqUrl, req)
+  }
+  return client;
+}
+
+/**
+ * @param {string} instanceUrl
+ * @param {string} apiVersion
+ * @param {string} resourceUrl
+ * @return {string}
+ */
+function apiUrl(instanceUrl, apiVersion, resourceUrl)
+{
+  if (resourceUrl.startsWith('http://') || resourceUrl.startsWith('https://')) {
+    return resourceUrl;
+  }
+
+  return encodeURI(`${instanceUrl}/services/data/${apiVersion}${resourceUrl}`);
+}
 
 module.exports =
 {
-  fetch
+  clientFactory,
+  apiUrl
 };

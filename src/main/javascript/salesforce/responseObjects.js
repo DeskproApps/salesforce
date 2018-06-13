@@ -1,18 +1,7 @@
 import {ChildRelationship, Projection, SFObject, SFObjectField} from "./apiObjects";
 
-export class DescribeGlobal
+class ResponseObject
 {
-  /**
-   * @param {Object|string} js
-   * @returns {DescribeGlobal}
-   */
-  static instance(js)
-  {
-    const data = typeof js === 'string' ? JSON.parse(js) : JSON.parse(JSON.stringify(js));
-    const sobjects = data.sobjects.map(SFObject.instance);
-    return new DescribeGlobal({...data, sobjects})
-  }
-
   /**
    * @param {...*} props
    */
@@ -31,6 +20,28 @@ export class DescribeGlobal
    * @return {Object}
    */
   toJS = () => this.toJSON();
+
+}
+
+export class DescribeGlobal extends ResponseObject
+{
+  /**
+   * @param {Object|string} js
+   * @returns {DescribeGlobal}
+   */
+  static instance(js)
+  {
+    const data = typeof js === 'string' ? JSON.parse(js) : JSON.parse(JSON.stringify(js));
+    const sobjects = data.sobjects.map(SFObject.instance);
+    return new DescribeGlobal({...data, sobjects})
+  }
+
+  /**
+   * @param {object} props
+   */
+  constructor(props) {
+    super(props)
+  }
 
   /**
    * @public
@@ -47,7 +58,7 @@ export class DescribeGlobal
   get sobjects() { return this.props.sobjects; }
 }
 
-export class SObjectDescription
+export class SObjectDescription extends ResponseObject
 {
   /**
    * @param {Object|string} js
@@ -63,23 +74,11 @@ export class SObjectDescription
   }
 
   /**
-   * @param {...*} props
+   * @param {object} props
    */
-  constructor({...props}) {
-    this.props = {...props};
+  constructor(props) {
+    super(props)
   }
-
-  toJSON = () => {
-    return JSON.parse(JSON.stringify(this.props));
-  };
-
-  /**
-   * Returns a deep clone of this object
-   *
-   * @method
-   * @return {Object}
-   */
-  toJS = () => this.toJSON();
 
   /**
    * @public
@@ -102,7 +101,7 @@ export class SObjectDescription
   get childRelationships() { return this.props.childRelationships; }
 }
 
-export class Query
+export class Query extends ResponseObject
 {
   /**
    * @param {Object|string} js
@@ -111,7 +110,7 @@ export class Query
   static instance(js)
   {
     const data = typeof js === 'string' ? JSON.parse(js) : JSON.parse(JSON.stringify(js));
-    const {totalSize, nextRecordsUrl, records, ...rest} = data
+    const {totalSize, nextRecordsUrl, records, ...rest} = data;
 
     return new Query({
       totalSize,
@@ -128,20 +127,8 @@ export class Query
    * @param {...*} props
    */
   constructor({totalSize, nextRecordsUrl, records, ...props}) {
-    this.props = {totalSize, nextRecordsUrl, records, ...props};
+    super ({totalSize, nextRecordsUrl, records, ...props});
   }
-
-  toJSON = () => {
-    return JSON.parse(JSON.stringify(this.props));
-  };
-
-  /**
-   * Returns a deep clone of this object
-   *
-   * @method
-   * @return {Object}
-   */
-  toJS = () => this.toJSON();
 
   /**
    * @public

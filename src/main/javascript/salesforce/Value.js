@@ -2,7 +2,6 @@ export class Value
 {
   /**
    * @param {*} value
-   * @param {...*} [props]
    */
   constructor(value)
   {

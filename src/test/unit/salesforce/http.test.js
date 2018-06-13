@@ -1,5 +1,5 @@
-import { fetch } from '../../../main/javascript/salesforce/http';
-import { getReadUserInfo } from '../../../main/javascript/salesforce/api';
+import { clientFactory } from '../../../main/javascript/salesforce/http';
+import { getUserInfo } from '../../../main/javascript/salesforce/api';
 
 test('fetch retries authentication errors', () => {
 
@@ -30,7 +30,8 @@ test('fetch retries authentication errors', () => {
     }
   };
 
-  return fetch(dpappMock, getReadUserInfo).then(x => {
+  const client = clientFactory(dpappMock, "https://eu8.salesforce.com", "v37.0");
+  return getUserInfo(client).then(x => {
     throw new Error('fetch should not resolve in case retry fails');
   }).catch(err => {
     const names = requests.map(entry => entry[0]);
