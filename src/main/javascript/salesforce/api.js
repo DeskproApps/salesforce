@@ -1,5 +1,17 @@
 import {DescribeGlobal, SObjectDescription, Query} from './responseObjects'
-import {UserInfo} from './apiObjects'
+import {UserInfo, ApiVersion} from './apiObjects'
+
+/**
+ * @param {function(string, object): Promise<Object, Error>} client
+ * @return {Promise<Array<Version>, Error>}
+ */
+function getVersions(client)
+{
+  const req = { method: 'GET' };
+  const url = '/';
+
+  return client(url, req).then(resp => resp.body.map(ApiVersion.instance));
+}
 
 /**
  * @param {function(string, object): Promise<Object, Error>} client
@@ -20,7 +32,7 @@ function getUserInfo(client)
 function getDescribeGlobal(client)
 {
   const req = { method: 'GET' };
-  const url = '/sobjects';
+  const url = '/vXX.X/sobjects';
 
   return client(url, req).then(resp => DescribeGlobal.instance(resp.body));
 }
@@ -36,7 +48,7 @@ function getSObjectDescribe(client, object)
   const name = typeof object === "string" ? object : object.name
 
   const req = { method: 'GET' };
-  const url = `/sobjects/${name}/describe`;
+  const url = `/vXX.X/sobjects/${name}/describe`;
 
   return client(url, req).then(resp => SObjectDescription.instance(resp.body));
 }
@@ -49,13 +61,15 @@ function getSObjectDescribe(client, object)
 function getQuery(client, query)
 {
   const req = { method: 'GET' };
-  const url = `/query?q=${query}`;
+  const url = `/vXX.X/query?q=${query}`;
 
   return client(url, req).then(resp => Query.instance(resp.body));
 }
 
 module.exports =
 {
+  getVersions,
+
   getUserInfo,
 
   getDescribeGlobal,

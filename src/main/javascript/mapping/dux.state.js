@@ -2,13 +2,19 @@ import {ContextPropertyList} from "../deskpro/ContextPropertyList";
 import {ContextDetails} from "../deskpro/ContextDetails";
 import {ContextMapping, ObjectView} from "./index";
 
-export default function initialState()
+/**
+ * @param {Object}  [additionalState]
+ * @return {{loaded: boolean, objectViews: Array, contextMappings: Array}}
+ */
+export default function initialState(additionalState)
 {
-  return {
+  const state = {
     loaded: false,
     objectViews: [],
     contextMappings: []
   };
+
+  return additionalState && typeof additionalState === 'object' ? { ...state, ...additionalState } : state;
 }
 
 /**

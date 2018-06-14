@@ -1,4 +1,4 @@
-import { clientFactory } from '../../../main/javascript/salesforce/http';
+import { clientFactory,apiUrl } from '../../../main/javascript/salesforce/http';
 import { getUserInfo } from '../../../main/javascript/salesforce/api';
 
 test('fetch retries authentication errors', () => {
@@ -37,5 +37,30 @@ test('fetch retries authentication errors', () => {
     const names = requests.map(entry => entry[0]);
     expect(names).toEqual(["fetchProxy", "refreshAccess", "setAppStorage", "fetchProxy"]);
   })
+
+});
+
+test('apiUrl builds a versioned url', () => {
+    const expectedUrl = 'https://eu8.salesforce.com/services/data/v43.0/sobjects';
+    const actualUrl = apiUrl('/vXX.X/sobjects', 'https://eu8.salesforce.com', '43.0');
+    expect(actualUrl).toEqual(expectedUrl);
+});
+
+test('apiUrl leaves absolute urls intact', () => {
+    const expectedUrl = 'https://login.salesforce.com/services/oauth2/userinfo';
+    const actualUrl = apiUrl(expectedUrl, 'https://eu8.salesforce.com', '43.0');
+    expect(actualUrl).toEqual(expectedUrl);
+});
+
+test('apiUrl throws error if apiVersion is missing and resource url is versioned', () => {
+
+  let error = null;
+  try {
+    apiUrl('/vXX.X/sobjects', 'https://eu8.salesforce.com')
+  } catch (err) {
+    error = err;
+  }
+
+  expect(error).toBeInstanceOf(Error);
 
 });

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { MemoryRouter, Route } from 'react-router'
 
-import { SalesforceMappingList, SalesforceMappingAdd, TabNavigation, RouteDefinition } from './ui'
+import { SalesforceMappingList, SalesforceMappingAdd, TabNavigation, RouteDefinition } from '../ui'
 
 const nav = [
   new RouteDefinition({ path: 'connection', label: 'Connection Settings' }),
@@ -10,7 +10,7 @@ const nav = [
   new RouteDefinition({ path: 'viewObjects', label: 'View Salesforce Objects' }),
 ];
 
-class AppAdmin extends React.Component
+class AdminApp extends React.Component
 {
   static propTypes = {
     renderSettingsForm: PropTypes.func.isRequired,
@@ -66,4 +66,4 @@ class AppAdmin extends React.Component
   };
 }
 
-export default AppAdmin;
+export default AdminApp;

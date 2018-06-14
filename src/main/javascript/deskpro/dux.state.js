@@ -5,7 +5,7 @@ import {ContextPropertyList} from "./ContextPropertyList";
 /**
  * @return {{contextList: Array<ContextDetails>, propertyList: Array<ContextPropertyList>}}
  */
-export default function initialState()
+export default function initialState(additionalState)
 {
   /**
    * @see {ContextFactory.contextObjectTypes} from @deskpro/apps-sdk-core
@@ -38,7 +38,7 @@ export default function initialState()
     })
   ];
 
-  return { contextList, propertyList };
+  return additionalState && typeof additionalState === 'object' ? { contextList, propertyList, ...additionalState } : { contextList, propertyList };
 }
 
 /**

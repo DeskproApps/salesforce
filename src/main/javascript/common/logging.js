@@ -10,8 +10,7 @@ export function logAndReject(message) {
    * @return {Promise<null, Error>}
    */
   function handler(err) {
-    // console.log(message + ': ', err);
-    console.log(message);
+    console.log(message + ': ', err);
     return Promise.reject(err);
   }
 

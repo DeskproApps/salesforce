@@ -1,5 +1,6 @@
-import {refreshAccessToken, SalesforceAuthenticationError} from "./security";
-import {GenericError} from "../errors";
+import { refreshAccessToken, SalesforceAuthenticationError } from "./security";
+import { GenericError } from "../errors";
+import { getVersions } from "./api";
 
 const buildReqObj = obj => {
   return Object.assign({
@@ -73,6 +74,25 @@ function fetch (dpapp, url, req)
 /**
  * @param {AppClient} dpapp
  * @param {String} instanceUrl
+ * @return {Promise<Array<ApiVersion>, Error>}
+ */
+function apiVersions (dpapp, instanceUrl) {
+  /**
+   * @param {string} url
+   * @param {object} req
+   * @return {Promise<DeskproAPIResponse, Error>}
+   */
+  function client(url, req) {
+    const reqUrl = apiUrl(url, instanceUrl);
+    return fetch (dpapp, reqUrl, req)
+  }
+
+  return getVersions(client);
+}
+
+/**
+ * @param {AppClient} dpapp
+ * @param {String} instanceUrl
  * @param {String} apiVersion
  * @return {function(string, Object): Promise<DeskproAPIResponse, Error>}
  */
@@ -92,29 +112,36 @@ function clientFactory (dpapp, instanceUrl, apiVersion) {
    * @return {Promise<DeskproAPIResponse, Error>}
    */
   function client(url, req) {
-    const reqUrl = apiUrl(instanceUrl, apiVersion, url);
+    const reqUrl = apiUrl(url, instanceUrl, apiVersion);
     return fetch (dpapp, reqUrl, req)
   }
   return client;
 }
 
 /**
- * @param {string} instanceUrl
- * @param {string} apiVersion
  * @param {string} resourceUrl
+ * @param {string} instanceUrl
+ * @param {string} [apiVersion] the api version number XX.X
  * @return {string}
  */
-function apiUrl(instanceUrl, apiVersion, resourceUrl)
+function apiUrl(resourceUrl, instanceUrl, apiVersion)
 {
   if (resourceUrl.startsWith('http://') || resourceUrl.startsWith('https://')) {
     return resourceUrl;
   }
 
-  return encodeURI(`${instanceUrl}/services/data/${apiVersion}${resourceUrl}`);
+  const isVersionUrl = -1 !== resourceUrl.indexOf('vXX.X');
+  if (! apiVersion && isVersionUrl) {
+    throw new Error('resource url requires a version the version is missing ')
+  }
+
+  const versionUrl = isVersionUrl ? resourceUrl.replace('vXX.X', 'v' + apiVersion) : resourceUrl;
+  return encodeURI(`${instanceUrl}/services/data${versionUrl}`);
 }
 
 module.exports =
 {
   clientFactory,
-  apiUrl
+  apiUrl,
+  apiVersions
 };

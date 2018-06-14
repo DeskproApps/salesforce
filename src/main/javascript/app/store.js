@@ -7,11 +7,16 @@ import { loadMappings } from "./actions";
 
 /**
  * @param {AppClient} dpapp
+ * @param [additionalState]
  * @return {{dispatch: function, getState: function}}
  */
-export function createStore (dpapp)
+export function createStore (dpapp, additionalState)
 {
-  return dpConfigureStore(dpapp, [], getReducers(), getInitialState());
+  let initialState = getInitialState();
+  if (additionalState) {
+    initialState = {  ...initialState, ...additionalState }
+  }
+  return dpConfigureStore(dpapp, [], getReducers(), initialState);
 }
 
 /**

@@ -1,16 +1,21 @@
+import {contextMappings as selectContextMappings, objectViews as selectObjectViews} from "../mapping/dux.state";
+
 /**
- * @return {{apiVersion: string, instanceUrl: string, userInfo: null, objectsLoaded: boolean, objects: Array, fields: {}}}
+ * @param {Object} [additionalState]
+ * @return {{apiVersion: null, instanceUrl: null, userInfo: null, objectsLoaded: boolean, objects: Array, fields: {}}}
  */
-export default function initialState()
+export default function initialState(additionalState)
 {
-  return {
-    apiVersion: "v37.0",
-    instanceUrl: "https://eu8.salesforce.com",
-    userInfo: null,
-    objectsLoaded: false,
-    objects: [],
-    fields: {}
-  }
+  const state = {
+    apiVersion    : null,
+    instanceUrl   : null,
+    userInfo      : null,
+    objectsLoaded : false,
+    objects       : [],
+    fields        : {}
+  };
+
+  return additionalState && typeof additionalState === 'object' ? { ...state, ...additionalState } : state;
 }
 
 /**
@@ -34,23 +39,41 @@ export function objectsLoaded(state)
 }
 
 /**
- * @param {{apiVersion: String}} state
+ * @param {{apiVersionUrl: String}} state
  * @return {string}
  */
-export function apiVersion(state)
+export function apiVersionUrl(state)
 {
   const { apiVersion } = state.salesforce;
-  return apiVersion;
+  if ( apiVersion ) {
+    return apiVersion;
+  }
+
+  try {
+    const { apiVersion: autoloaded } = state.sdk.storage.app.salesforce;
+    return autoloaded ? autoloaded : apiVersion;
+  } catch (e) {
+    return apiVersion;
+  }
 }
 
 /**
  * @param {{instanceUrl: String}} state
- * @return {string}
+ * @return {string|undefined}
  */
 export function instanceUrl(state)
 {
   const { instanceUrl } = state.salesforce;
-  return instanceUrl;
+  if (instanceUrl) {
+    return instanceUrl;
+  }
+
+  try {
+    const { instanceUrl: autoloaded } = state.sdk.storage.app.salesforce;
+    return autoloaded ? autoloaded : instanceUrl;
+  } catch (e) {
+    return instanceUrl;
+  }
 }
 
 /**

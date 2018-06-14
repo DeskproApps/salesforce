@@ -72,6 +72,12 @@
         "permWrite": "OWNER"
       },
       {
+        "name": "salesforce",
+        "isBackendOnly": false,
+        "permRead": "EVERYBODY",
+        "permWrite": "OWNER"
+      },
+      {
         "name": "consumerKey",
         "isBackendOnly": false,
         "permRead": "OWNER",
@@ -103,6 +109,13 @@
         "name": "callbackUrl",
         "defaultValue": "",
         "title": "The connected app callback URL",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "name": "instanceUrl",
+        "defaultValue": "",
+        "title": "Your Salesforce instance url",
         "required": true,
         "type": "text"
       }

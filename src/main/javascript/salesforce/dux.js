@@ -4,7 +4,7 @@ import { SFObjectField, SFObject } from './apiObjects';
 import { SObjectDescription } from './responseObjects';
 import {
   fields as selFields,
-  apiVersion as selApiVersion,
+  apiVersionUrl as selApiVersionUrl,
   instanceUrl as selInstanceUrl,
   objectsLoaded as selObjectsLoaded,
   objects as selObjects,
@@ -22,11 +22,11 @@ export default function reducer(state = {}, action={})
   switch (action.type)
   {
     case LOAD_USER:
-      const { userInfo } = action
+      const { userInfo } = action;
       return { ...state, userInfo };
 
     case LOAD_OBJECTS:
-      const { objects } = action
+      const { objects } = action;
       return { ...state, objects , objectsLoaded: true };
 
     case LOAD_FIELDS:
@@ -69,7 +69,7 @@ export function loadObjects(fetchClientFactory)
       return Promise.resolve(selObjects(state))
     }
 
-    const client = httpClientFactory(dpapp, selInstanceUrl(state), selApiVersion(state));
+    const client = httpClientFactory(dpapp, selInstanceUrl(state), selApiVersionUrl(state));
 
     return getDescribeGlobal(client)
       .then(toObjects)
@@ -115,7 +115,7 @@ export function loadFields(object, fetchClientFactory)
       return Promise.resolve([].concat(objectFields));
     }
 
-    const client = httpClientFactory(dpapp, selInstanceUrl(state), selApiVersion(state));
+    const client = httpClientFactory(dpapp, selInstanceUrl(state), selApiVersionUrl(state));
 
     return getSObjectDescribe(client, object)
       .then(toFields)
@@ -148,7 +148,7 @@ export function loadUserInfo(fetchClientFactory)
   function thunk (dispatch, getState, dpapp) {
 
     const state = getState();
-    const client = httpClientFactory(dpapp, selInstanceUrl(state), selApiVersion(state));
+    const client = httpClientFactory(dpapp, selInstanceUrl(state), selApiVersionUrl(state));
 
     return getUserInfo(client)
       .then(userInfo => {
@@ -181,7 +181,7 @@ export function selectRecords(queryBuilder, fetchClientFactory)
   function thunk (dispatch, getState, dpapp) {
 
     const state = getState();
-    const client = httpClientFactory(dpapp, selInstanceUrl(state), selApiVersion(state));
+    const client = httpClientFactory(dpapp, selInstanceUrl(state), selApiVersionUrl(state));
 
     /**
      * @param {String} query
