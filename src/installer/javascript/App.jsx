@@ -2,8 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Provider } from 'react-redux'
 
-import { default as AppAdmin } from '@app/main/javascript/AppAdmin'
-import { FormConnectionSettings } from '@app/main/javascript/ui'
+import { default as AppAdmin, PageConnectionSettings } from '@app/main/javascript/admin'
 import { default as configureStore } from '@app/main/javascript/app/store'
 
 
@@ -18,9 +17,9 @@ class App extends React.Component
   };
 
   state = {
-    oauthSettings : null,
-    error         : null,
-    store         : null
+    oauthSettings: null,
+    error:         null,
+    store:         null
   };
 
   componentDidMount()
@@ -30,7 +29,7 @@ class App extends React.Component
 
   renderSettingsForm = () =>
   {
-    return (<FormConnectionSettings {...this.props} />);
+    return (<PageConnectionSettings {...this.props} />);
   };
 
   render()

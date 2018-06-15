@@ -36,15 +36,16 @@ export function createMockDpapp()
 
 /**
  * @param {AppClient} [dpapp]
+ * @param {Object} [additionalState]
  * @return {{dispatch: function, getState: function}}
  */
-export function createMockStore({ dpapp })
+export function createMockStore({ dpapp, additionalState })
 {
   if (!dpapp) {
     const mockDpApp = createMockDpapp();
-    return createStore(mockDpApp)
+    return createStore(mockDpApp, additionalState)
   }
 
-  return createStore(dpapp)
+  return createStore(dpapp, additionalState)
 }
 

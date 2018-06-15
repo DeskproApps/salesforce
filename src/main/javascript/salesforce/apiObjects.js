@@ -269,3 +269,43 @@ export class UserInfo extends ApiObject
 
   get email() { return this.props.email; }
 }
+
+export class ApiVersion extends ApiObject
+{
+
+  /**
+   * @param {String | Object} js
+   * @returns {ApiVersion}
+   */
+  static instance(js)
+  {
+    const data = ApiObject.parse(js);
+    return new ApiVersion(data);
+  }
+
+  /**
+   * @param {String} name
+   * @param {String} label
+   * @param {String} url
+   * @param [rest]
+   */
+  constructor({ version, label, url, ...rest })
+  {
+    super({ version, label, url, ...rest });
+  }
+
+  /**
+   * @type {string}
+   */
+  get version() { return this.props.version; }
+
+  /**
+   * @type {string}
+   */
+  get label() { return this.props.label; }
+
+  /**
+   * @return {*}
+   */
+  get url() { return this.props.url; }
+}

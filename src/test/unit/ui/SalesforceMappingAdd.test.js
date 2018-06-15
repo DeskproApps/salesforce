@@ -1,15 +1,21 @@
 import React from 'react';
 import { mount, shallow } from 'enzyme';
 import { Provider } from 'react-redux'
-import { createMockDpapp } from '../../mocks';
+import { createMockDpapp, createMockStore } from '../../mocks';
 
-import { createStore } from '../../../main/javascript/app/store';
+import { default as getInitialState } from '../../../main/javascript/salesforce/dux.state';
 import { default as Component } from '../../../main/javascript/ui/SalesforceMappingAdd';
 
 test('connected component is mounted', () => {
 
   const dpapp = createMockDpapp();
-  const store = createStore(dpapp);
+  const store = createMockStore({
+      dpapp,
+      additionalState: {
+        salesforce: {  ...getInitialState(), apiVersion: "v37.0", instanceUrl: "https://eu8.salesforce.com" }
+      }
+    }
+  );
   const wrapper = mount(<Provider store={store}><Component /></Provider>);
 
   expect(wrapper.isEmptyRender()).toBe(false);
