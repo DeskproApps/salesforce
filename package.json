@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "dpat server .",
     "package": "dpat clean . && dpat compile . && dpat bundle-installer . && dpat verify ./dist && dpat package .",
-    "package-dev": "dpat bundle-installer . && dpat package .",
+    "version": "version-changelog CHANGELOG.md && changelog-verify CHANGELOG.md && git add CHANGELOG.md",
     "test": "dpat test ."
   },
   "repository": {
@@ -148,5 +148,9 @@
     "react-select": "1.2.1",
     "react-test-renderer": "^15.6.1",
     "redux": "4.0.0"
+  },
+  "optionalDependencies": {
+    "changelog-verify": "1.1.0",
+    "version-changelog": "3.1.0"
   }
 }
