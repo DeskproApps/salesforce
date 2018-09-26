@@ -1,0 +1,236 @@
+import { clientFactory } from './http';
+import { getDescribeGlobal, getSObjectDescribe, getUserInfo, getQuery } from './api';
+import { SFObjectField, SFObject } from './apiObjects';
+import { SObjectDescription } from './responseObjects';
+import {
+  fields as selFields,
+  apiVersionUrl as selApiVersionUrl,
+  instanceUrl as selInstanceUrl,
+  objectsLoaded as selObjectsLoaded,
+  objects as selObjects,
+  userInfo as selectUserInfo
+} from './dux.state'
+
+import { logAndReject } from '../common/logging'
+import ObjectView from "../mapping/ObjectView";
+import {ContextMapping} from "../mapping";
+
+const LOAD_FIELDS   = 'LOAD_FIELDS';
+const LOAD_OBJECTS  = 'LOAD_OBJECT';
+const LOAD_USER     = 'LOAD_USER';
+const LOAD_SETTINGS = 'LOAD_SETTINGS';
+
+export default function reducer(state = {}, action={})
+{
+  switch (action.type)
+  {
+    case LOAD_SETTINGS:
+      const { settings } = action;
+      return { ...state, settings };
+    case LOAD_USER:
+      const { userInfo } = action;
+      return { ...state, userInfo };
+
+    case LOAD_OBJECTS:
+      const { objects } = action;
+      return { ...state, objects , objectsLoaded: true };
+
+    case LOAD_FIELDS:
+      const { object } = action;
+      const { fields } = state;
+      fields[ object.name ] = [].concat(action.fields);
+      return {...state, fields};
+
+    default: return state;
+  }
+}
+
+
+/**
+ * @return {function(Function, Function, AppClient): Promise<Object, Error>}
+ */
+export function loadSettings()
+{
+  /**
+   * @param {Function} dispatch
+   * @param {Function} getState
+   * @param {AppClient} dpapp
+   */
+  function thunk (dispatch, getState, dpapp)
+  {
+    return dpapp.storage.getAppStorage("salesforce")
+      .catch(logAndReject('load salesforce settings error'))
+      .then(settings => {
+        dispatch({ type:LOAD_SETTINGS, settings });
+        return settings;
+      })
+      ;
+  }
+
+  return thunk;
+}
+
+/**
+ *
+ * @param {Function} [fetchClientFactory] a custom salesforce http fetch function
+ * @return {function}
+ */
+export function loadObjects(fetchClientFactory)
+{
+  /**
+   * @param {DescribeGlobal} resp
+   * @return {Array<SFObject>}
+   */
+  const toObjects = (resp) => resp.sobjects;
+
+  /**
+   * @type {function(AppClient, String, String)}
+   */
+  const httpClientFactory = typeof fetchClientFactory === 'function' ? fetchClientFactory : clientFactory;
+
+  /**
+   * @param {Function} dispatch
+   * @param {Function} getState
+   * @param {AppClient} dpapp
+   */
+  function thunk (dispatch, getState, dpapp) {
+    const state = getState();
+    if (selObjectsLoaded(state)) {
+      return Promise.resolve(selObjects(state))
+    }
+
+    const client = httpClientFactory(dpapp, selInstanceUrl(state), selApiVersionUrl(state));
+
+    return getDescribeGlobal(client)
+      .then(toObjects)
+      .then(objects => {
+        dispatch({ type:LOAD_OBJECTS, objects });
+        return [].concat(objects)
+      })
+      .catch(logAndReject('loadObjects error'))
+  }
+
+  return thunk;
+}
+
+/**
+ * @param {SFObject} object
+ * @param {Function} [fetchClientFactory] a custom salesforce http fetch function
+ * @return {function}
+ */
+export function loadFields(object, fetchClientFactory)
+{
+  /**
+   * @param {SObjectDescription} response
+   * @return {Array<SFObjectField>}
+   */
+  const toFields = response => response.fields;
+
+  /**
+   * @type {function(AppClient, String, String)}
+   */
+  const httpClientFactory = typeof fetchClientFactory === 'function' ? fetchClientFactory : clientFactory;
+
+  /**
+   * @param {Function} dispatch
+   * @param {Function} getState
+   * @param {AppClient} dpapp
+   */
+  function thunk (dispatch, getState, dpapp) {
+
+    const state = getState();
+    const objectFields = selFields(state)[object.name];
+
+    if (objectFields) {
+      return Promise.resolve([].concat(objectFields));
+    }
+
+    const client = httpClientFactory(dpapp, selInstanceUrl(state), selApiVersionUrl(state));
+
+    return getSObjectDescribe(client, object)
+      .then(toFields)
+      .catch(logAndReject('loadFields error'))
+      .then(fields => {
+        dispatch({ type:LOAD_FIELDS, object, fields });
+        return fields;
+      });
+  }
+
+  return thunk;
+}
+
+/**
+ * @param {Function} [fetchClientFactory] a custom salesforce http fetch function
+ * @return {function}
+ */
+export function loadUserInfo(fetchClientFactory)
+{
+  /**
+   * @type {function(AppClient, String, String)}
+   */
+  const httpClientFactory = typeof fetchClientFactory === 'function' ? fetchClientFactory : clientFactory;
+
+  /**
+   * @param {Function} dispatch
+   * @param {Function} getState
+   * @param {AppClient} dpapp
+   */
+  function thunk (dispatch, getState, dpapp) {
+
+    const state = getState();
+    const client = httpClientFactory(dpapp, selInstanceUrl(state), selApiVersionUrl(state));
+
+    return getUserInfo(client)
+      .then(userInfo => {
+        dispatch({type: LOAD_USER, userInfo});
+        return userInfo
+      })
+      .catch(logAndReject('loadUserInfo error'))
+  }
+
+  return thunk;
+}
+
+/**
+ * @param {SelectQueryBuilder} queryBuilder
+ * @param {Function} [fetchClientFactory] a custom salesforce http fetch function
+ * @return {function}
+ */
+export function selectRecords(queryBuilder, fetchClientFactory)
+{
+  /**
+   * @type {function(AppClient, String, String)}
+   */
+  const httpClientFactory = typeof fetchClientFactory === 'function' ? fetchClientFactory : clientFactory;
+
+  /**
+   * @param {Function} dispatch
+   * @param {Function} getState
+   * @param {AppClient} dpapp
+   */
+  function thunk (dispatch, getState, dpapp) {
+
+    const state = getState();
+    const client = httpClientFactory(dpapp, selInstanceUrl(state), selApiVersionUrl(state));
+
+    /**
+     * @param {String} query
+     * @return {Promise<Query, Error>}
+     */
+    function connection(query) {
+      return getQuery(client, query);
+    }
+
+    return queryBuilder.asPromise(connection).catch(logAndReject('loadUserInfo error'))
+  }
+
+  return thunk;
+}
+
+/**
+ * @return {{type: string, userInfo: null}}
+ */
+export function unloadUserInfo()
+{
+  return {type: LOAD_USER, userInfo: null};
+}
