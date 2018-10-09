@@ -4,6 +4,13 @@ This project is following [Semantic Versioning](http://semver.org)
 
 ## [Unreleased][]
 
+## [0.1.1-beta.2][] - 2018-10-09
+
+### Changes
+
+ - use `@deskpro/apps-sdk@~0.8.2`
+ - use `@deskpro/apps-components~@0.8.2`
+
 ## [0.1.1-beta.1][] - 2018-09-19
 
 ### Changes
@@ -17,6 +24,7 @@ This project is following [Semantic Versioning](http://semver.org)
 
  - authenticating, mapping salesforce objects onto deskpro objects, display salesforce objects
 
-[Unreleased]: https://github.com/DeskproApps/salesforce/compare/v0.1.1-beta.1...HEAD
+[Unreleased]: https://github.com/DeskproApps/salesforce/compare/v0.1.1-beta.2...HEAD
+[0.1.1-beta.2]: https://github.com/DeskproApps/salesforce/compare/v0.1.1-beta.1...v0.1.1-beta.2
 [0.1.1]: https://github.com/DeskproApps/salesforce/compare/v0.1.0...v0.1.1-beta.1
 [0.1.0]: https://github.com/DeskproApps/salesforce/tree/v0.1.0
