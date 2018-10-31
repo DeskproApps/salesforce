@@ -35,17 +35,17 @@
     https "^1.0.0"
     node-fetch "^2.2.0"
 
-"@deskpro/apps-components-style@^0.8.0":
-  version "0.8.0"
-  resolved "https://registry.yarnpkg.com/@deskpro/apps-components-style/-/apps-components-style-0.8.0.tgz#b87027b3d11cdf9e2ae10b2a9fd34b7f1374acfc"
-  integrity sha512-Fb/qe5b24/DqziGsXGvkD8r9MklaItZHkzWkD9uu2dG/eT88UI4jNsrNbYHpNR604lzUXEvAChYh7GnT4l4OaQ==
+"@deskpro/apps-components-style@^0.8.3":
+  version "0.8.3"
+  resolved "https://registry.yarnpkg.com/@deskpro/apps-components-style/-/apps-components-style-0.8.3.tgz#fa865c7032a9952fd72e06fbf6e431f6fd968d7f"
+  integrity sha512-YQsAo4VLYSsV6s6hZAKij2NSAjO+RFswHNHwapGVa19gzMSH1jaCukCmL3RUyW7rK0j0q4gFDvQtSGg8uLnbdg==
 
-"@deskpro/apps-components@^0.8.0":
-  version "0.8.0"
-  resolved "https://registry.yarnpkg.com/@deskpro/apps-components/-/apps-components-0.8.0.tgz#8dbc8a0e8c1e86fddea571041b8bb97e734fc556"
-  integrity sha512-dFh5F+9kuMrRP7+wsOx/jNUj9swcl27TofweQYbckjV0C08J19UsO+4LIvCmQfghcqG4GEryuIJ2X/4D3uqJ8A==
+"@deskpro/apps-components@~0.8.2":
+  version "0.8.3"
+  resolved "https://registry.yarnpkg.com/@deskpro/apps-components/-/apps-components-0.8.3.tgz#4d3726b7424ffea17a4e53f235096b52d20c048a"
+  integrity sha512-DxQpOZ6mLFhuTi6bE5v+gFkOpVq45Mku70eB99fO/zriCIo7B02oOPSNr8a9a/JeFj1efGB5fdaL9qEVahgzbg==
   dependencies:
-    "@deskpro/apps-components-style" "^0.8.0"
+    "@deskpro/apps-components-style" "^0.8.3"
     classnames "^2.2.6"
     react-custom-scrollbars "^4.2.1"
 
@@ -133,6 +133,19 @@
   version "0.8.0"
   resolved "https://registry.yarnpkg.com/@deskpro/apps-sdk/-/apps-sdk-0.8.0.tgz#b0f79b708be2252c985a5c47bb7aaff20cb9fd9c"
   integrity sha512-T6aSgXOmxJQToM1GBN+kCV2UpQhFgTY0tQGZK20bjVjoyTxpD89K34oXLW7k9OZ0mvdrJZ2Ci0z4vsJPiIsKzw==
+  dependencies:
+    element-resize-detector "^1.1.12"
+    eventemitter3 "2.0.3"
+    get-size "^2.0.2"
+    invariant "^2.2.4"
+    post-robot "^7.0.8"
+    query-string "^5.1.1"
+    warning "^4.0.1"
+
+"@deskpro/apps-sdk@~0.8.2":
+  version "0.8.3"
+  resolved "https://registry.yarnpkg.com/@deskpro/apps-sdk/-/apps-sdk-0.8.3.tgz#838806ecf57323e5d691457eac0e8a547e90801e"
+  integrity sha512-NbzrQ80qUsuAuLDW8lXEI/QzSyRzijmz2ZkWYFDAogTTPJvFCp2HbNUlPNQsZA6hr/5Jjq7K0ZCJn93tuZCGlg==
   dependencies:
     element-resize-detector "^1.1.12"
     eventemitter3 "2.0.3"
