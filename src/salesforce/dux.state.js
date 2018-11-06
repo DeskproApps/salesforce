@@ -12,7 +12,8 @@ export default function initialState(additionalState)
     userInfo      : null,
     objectsLoaded : false,
     objects       : [],
-    fields        : {}
+    fields        : {},
+    relations     : {},
   };
 
   return additionalState && typeof additionalState === 'object' ? { ...state, ...additionalState } : state;

@@ -7,7 +7,7 @@ import { DefaultUI } from './DefaultUI';
 import {SFObject, SFObjectField} from "../../salesforce/apiObjects";
 
 import {
-  loadFields,
+  loadDescription,
   removeMappings,
   replaceMappings,
   loadContexts,
@@ -51,7 +51,7 @@ class Component extends React.Component
 
     persistMappings : PropTypes.func.isRequired,
 
-    loadFields : PropTypes.func.isRequired
+    loadDescription: PropTypes.func.isRequired
 
   };
 
@@ -62,6 +62,8 @@ class Component extends React.Component
     objectFields: [],
 
     objectViewableFields: [],
+
+    objectRelated: [],
 
     objectMappings: []
 
@@ -89,8 +91,8 @@ class Component extends React.Component
     const objectViewableFields = objectView ? objectView.fields : [];
     const objectMappings = this.props.contextMappings.filter(mapping => hasMapping(object, mapping));
 
-    this.props.loadFields(object).then(fields => {
-      this.setState({object, objectFields: fields, objectViewableFields,  objectMappings})
+    this.props.loadDescription(object).then(description => {
+      this.setState({object, objectFields: description.fields, objectViewableFields,  objectMappings})
     });
   };
 
@@ -101,10 +103,10 @@ class Component extends React.Component
 
   onSave = () =>
   {
-    const { object, objectViewableFields: fields, objectMappings: mappings} = this.state;
+    const { object, objectViewableFields: fields, objectRelated: relations, objectMappings: mappings} = this.state;
 
     if (object && fields && fields.length && mappings && mappings.length) {
-      this.props.replaceMappings(object, new ObjectView({object, fields}), mappings)
+      this.props.replaceMappings(object, new ObjectView({object, fields, relations}), mappings)
         .then(() => this.props.persistMappings())
       ;
     }
@@ -139,7 +141,7 @@ export { Component }
 export default reduxConnector(
   Component,
   {
-    loadFields, persistMappings, removeMappings, replaceMappings, loadContexts, loadContextProperties
+    loadDescription, persistMappings, removeMappings, replaceMappings, loadContexts, loadContextProperties
   },
   {
     contexts: contextList,

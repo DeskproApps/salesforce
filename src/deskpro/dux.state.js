@@ -33,7 +33,7 @@ export default function initialState(additionalState)
     new ContextPropertyList({
       context: new ContextDetails({ name: "organization", label: "Organization" }),
       properties: [
-        new MappablePathProperty({ label: "Organization  Name", path: "name" })
+        new MappablePathProperty({ label: "Organization Name", path: "name" })
       ]
     })
   ];

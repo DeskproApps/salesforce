@@ -62,7 +62,6 @@ class ObjectDropdown extends React.PureComponent
 class ObjectAsyncDropdown extends React.PureComponent
 {
   static propTypes = {
-    options       : PropTypes.array,
     optionMapper  : PropTypes.func.isRequired,
     value         : PropTypes.object,
     onChange      : PropTypes.func.isRequired,
@@ -98,7 +97,7 @@ class ObjectAsyncDropdown extends React.PureComponent
 
   render()
   {
-    const { loadOptions, options, onChange, value, ...rest } = this.props;
+    const { value, ...rest } = this.props;
 
     const props = {
       ...rest,
@@ -203,5 +202,18 @@ export class SalesforceObjectDropdown extends React.PureComponent
   render()
   {
     return <ObjectAsyncDropdown  {...this.props} optionMapper={SalesforceObjectDropdown.toOption} />
+  }
+}
+
+export class RelatedObjectDropdown extends React.PureComponent
+{
+  static toOption(object)
+  {
+    return { value: object.childSObject, label: object.childSObject}
+  }
+
+  render()
+  {
+    return <ObjectDropdown  {...this.props} optionMapper={RelatedObjectDropdown.toOption} />
   }
 }

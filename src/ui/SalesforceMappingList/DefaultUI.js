@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { Button } from '@deskpro/apps-components';
-import { SFObjectField, SFObject } from '../../salesforce/apiObjects';
+import { SFObjectField, SFObject, SFObjectRelation } from '../../salesforce/apiObjects';
 
 import {default as SalesforceMappingInput} from '../SalesforceMappingInput';
 import {ContextMapping, ObjectView} from "../../mapping";
@@ -17,6 +17,7 @@ export class DefaultUI extends React.PureComponent
     object                : PropTypes.instanceOf(SFObject),
     objectFields          : PropTypes.arrayOf(SFObjectField),
     objectViewableFields  : PropTypes.arrayOf(SFObjectField),
+    objectRelations       : PropTypes.arrayOf(SFObjectRelation),
     objectMappings        : PropTypes.arrayOf(ContextMapping),
 
 
@@ -41,6 +42,7 @@ export class DefaultUI extends React.PureComponent
             object            = {this.props.object}
             fields            = {this.props.objectFields}
             fieldsViewable    = {this.props.objectViewableFields}
+            relations         = {this.props.objectRelations}
             mappings          = {this.props.objectMappings}
             loadContexts            = {this.props.loadContexts}
             loadContextProperties   = {this.props.loadContextProperties}

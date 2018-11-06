@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { SFObjectField, SFObject } from '../../salesforce/apiObjects';
+import { SFObjectField, SFObject, RelatedObject } from '../../salesforce/apiObjects';
 import {ContextMapping, ObjectView} from '../../mapping';
 import { DefaultUI } from './DefaultUI';
 
@@ -9,7 +9,7 @@ import {
   persistMappings,
   addMappings,
   loadObjects,
-  loadFields,
+  loadDescription,
   loadContexts,
   loadContextProperties
 } from "../../app/actions";
@@ -42,7 +42,7 @@ class Component extends React.Component
 
     loadObjects     : PropTypes.func.isRequired,
 
-    loadFields      : PropTypes.func.isRequired,
+    loadDescription : PropTypes.func.isRequired,
 
     addMappings     : PropTypes.func.isRequired,
 
@@ -55,7 +55,11 @@ class Component extends React.Component
 
     objectFields: [],
 
+    objectRelations: [],
+
     fields: [],
+
+    relations: [],
 
     mappings: [],
   };
@@ -63,19 +67,20 @@ class Component extends React.Component
   /**
    * @param {SFObject} object
    * @param {Array<SFObjectField>} fields
+   * @param {Array<RelatedObject>} relations
    * @param {Array<ContextMapping>} mappings
    */
-  onChange = ({ object, fields, mappings }) =>
+  onChange = ({ object, fields, relations, mappings }) =>
   {
-    this.setState({ object, fields, mappings })
+    this.setState({ object, fields, relations, mappings })
   };
 
   addMappings = () =>
   {
-    const {object, fields, mappings} = this.state;
+    const {object, fields, relations, mappings} = this.state;
 
     if (object && fields && fields.length && mappings && mappings.length) {
-      this.props.addMappings(object, new ObjectView({object, fields}), mappings)
+      this.props.addMappings(object, new ObjectView({object, fields, relations}), mappings)
         .then(() => this.props.persistMappings())
       ;
     }
@@ -91,9 +96,9 @@ class Component extends React.Component
       throw new Error('showObjectFields object is null')
     }
 
-    return this.props.loadFields(object).then(fields => {
-      this.setState({ object, objectFields: fields });
-      return fields;
+    return this.props.loadDescription(object).then(description => {
+      this.setState({ object, objectFields: description.fields, objectRelations: description.relations });
+      return description.fields;
     });
   };
 
@@ -110,14 +115,16 @@ class Component extends React.Component
 
   render()
   {
-    const { /** @type {SFObject} */ object, objectFields, fields, mappings } = this.state;
+    const { /** @type {SFObject} */ object, objectFields, objectRelations, fields, relations, mappings } = this.state;
 
     const UI = chooseUI(this.props);
 
     return (<UI
       object                = { object }
       objectFields          = { objectFields || [] }
+      objectRelations       = { objectRelations || [] }
       objectFieldsViewable  = { fields }
+      objectRelatedObjects  = { relations }
       contextMappings       = { mappings }
 
       loadObjects       = { this.loadObjects }
@@ -139,7 +146,7 @@ export default reduxConnector(
     persistMappings,
     addMappings,
     loadObjects,
-    loadFields,
+    loadDescription,
     loadContexts,
     loadContextProperties
   }

@@ -1,6 +1,6 @@
 import { clientFactory } from './http';
 import { getDescribeGlobal, getSObjectDescribe, getUserInfo, getQuery } from './api';
-import { SFObjectField, SFObject } from './apiObjects';
+import { SFObjectField, SFObjectDescription, SFObject } from './apiObjects';
 import { SObjectDescription } from './responseObjects';
 import {
   fields as selFields,
@@ -15,7 +15,7 @@ import { logAndReject } from '../common/logging'
 import ObjectView from "../mapping/ObjectView";
 import {ContextMapping} from "../mapping";
 
-const LOAD_FIELDS   = 'LOAD_FIELDS';
+const LOAD_DESCRIPTION   = 'LOAD_DESCRIPTION';
 const LOAD_OBJECTS  = 'LOAD_OBJECT';
 const LOAD_USER     = 'LOAD_USER';
 const LOAD_SETTINGS = 'LOAD_SETTINGS';
@@ -35,11 +35,12 @@ export default function reducer(state = {}, action={})
       const { objects } = action;
       return { ...state, objects , objectsLoaded: true };
 
-    case LOAD_FIELDS:
+    case LOAD_DESCRIPTION:
       const { object } = action;
-      const { fields } = state;
-      fields[ object.name ] = [].concat(action.fields);
-      return {...state, fields};
+      const { fields, relations } = state;
+      fields[ object.name ] = [].concat(action.description.fields);
+      relations[ object.name ] = [].concat(action.description.relationships);
+      return {...state, fields, relations};
 
     default: return state;
   }
@@ -118,13 +119,13 @@ export function loadObjects(fetchClientFactory)
  * @param {Function} [fetchClientFactory] a custom salesforce http fetch function
  * @return {function}
  */
-export function loadFields(object, fetchClientFactory)
+export function loadDescription(object, fetchClientFactory)
 {
   /**
    * @param {SObjectDescription} response
-   * @return {Array<SFObjectField>}
+   * @return {SFObjectDescription}
    */
-  const toFields = response => response.fields;
+  const toDescription = response => new SFObjectDescription({fields: response.fields, relations: response.childRelationships});
 
   /**
    * @type {function(AppClient, String, String)}
@@ -148,11 +149,11 @@ export function loadFields(object, fetchClientFactory)
     const client = httpClientFactory(dpapp, selInstanceUrl(state), selApiVersionUrl(state));
 
     return getSObjectDescribe(client, object)
-      .then(toFields)
-      .catch(logAndReject('loadFields error'))
-      .then(fields => {
-        dispatch({ type:LOAD_FIELDS, object, fields });
-        return fields;
+      .then(toDescription)
+      .catch(logAndReject('loadDescription error'))
+      .then(description => {
+        dispatch({ type:LOAD_DESCRIPTION, object, description });
+        return description;
       });
   }
 

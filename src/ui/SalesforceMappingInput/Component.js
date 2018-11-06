@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { ContextMapping } from "../../mapping";
 
-import { SFObject, SFObjectField } from "../../salesforce/apiObjects";
+import { RelatedObject, SFObject, SFObjectField, SFObjectRelation } from "../../salesforce/apiObjects";
 import { ContextDetails } from "../../deskpro";
 import { DefaultUI } from "./DefaultUI";
 
@@ -109,6 +109,8 @@ export class Component extends React.Component
     object            : PropTypes.arrayOf(SFObject),
     fields            : PropTypes.arrayOf(SFObjectField),
     fieldsViewable    : PropTypes.arrayOf(SFObjectField),
+    relations         : PropTypes.arrayOf(SFObjectRelation),
+    relatedObjects    : PropTypes.arrayOf(RelatedObject),
     mappings          : PropTypes.arrayOf(ContextMapping),
 
     loadContexts          : PropTypes.func,
@@ -223,6 +225,8 @@ export class Component extends React.Component
       object                  = {this.props.object}
       fields                  = {this.props.fields}
       fieldsViewable          = {this.props.fieldsViewable}
+      relations               = {this.props.relations}
+      relatedObjects          = {this.props.relatedObjects}
       changeViewableStatus    = {this.changeViewableStatus}
 
       context           = { this.state.context }

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Loader, Panel, Button, Tabs, TabMenu } from '@deskpro/apps-components';
 
 import {SalesforceObjectDropdown} from '../Lists'
-import { SFObjectField, SFObject } from '../../salesforce/apiObjects';
+import { SFObjectField, SFObject, SFObjectRelation, RelatedObject } from '../../salesforce/apiObjects';
 import {default as SalesforceMappingInput} from '../SalesforceMappingInput';
 import {ContextMapping} from "../../mapping";
 
@@ -13,7 +13,9 @@ export class DefaultUI extends React.PureComponent
     object                : PropTypes.instanceOf(SFObject),
     objectFields          : PropTypes.arrayOf(SFObjectField),
     objectFieldsViewable  : PropTypes.arrayOf(SFObjectField),
-    contextMappings   : PropTypes.arrayOf(ContextMapping),
+    objectRelations       : PropTypes.arrayOf(SFObjectRelation),
+    objectRelatedObjects  : PropTypes.arrayOf(RelatedObject),
+    contextMappings       : PropTypes.arrayOf(ContextMapping),
 
     loadObjects           : PropTypes.func,
     onObjectSelected      : PropTypes.func,
@@ -40,6 +42,8 @@ export class DefaultUI extends React.PureComponent
             object              = {this.props.object}
             fields              = {this.props.objectFields}
             fieldsViewable      = {this.props.objectFieldsViewable}
+            relations           = {this.props.objectRelations}
+            relatedObjects      = {this.props.objectRelatedObjects}
             mappings            = {this.props.contextMappings}
 
             loadContexts            = {this.props.loadContexts}

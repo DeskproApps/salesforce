@@ -1,16 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Loader, Panel, Button, Tabs, TabMenu } from '@deskpro/apps-components';
+import { Panel } from '@deskpro/apps-components';
 
 import { DeskproContextDropdown } from '../Lists'
 import { default as ContextMappingInput } from '../ContextMappingInput'
-import { SFObjectField, SFObject } from '../../salesforce/apiObjects';
+import { SFObjectField, SFObject, SFObjectRelation, RelatedObject } from '../../salesforce/apiObjects';
 import { ContextDetails, ContextPropertyList } from '../../deskpro';
 import { ContextMapping } from '../../mapping'
 
 import { TabsContext } from '../TabsContext';
 import { default as ContextMappingList } from '../ContextMappingList';
-import { ViewableStatusToggle } from '../ViewableStatusToggle'
+import { ViewableStatusToggle } from '../ViewableStatusToggle';
+import RelatedObjectInput from '../RelatedObjectInput';
 
 export class DefaultUI extends React.PureComponent
 {
@@ -18,6 +19,8 @@ export class DefaultUI extends React.PureComponent
     object                  : PropTypes.instanceOf(SFObject),
     fields                  : PropTypes.arrayOf(SFObjectField),
     fieldsViewable          : PropTypes.arrayOf(SFObjectField),
+    relations               : PropTypes.arrayOf(SFObjectRelation),
+    relatedObjects          : PropTypes.arrayOf(RelatedObject),
     changeViewableStatus    : PropTypes.func.isRequired,
 
     context           : PropTypes.instanceOf(ContextDetails),
@@ -49,6 +52,14 @@ export class DefaultUI extends React.PureComponent
           fields                  = {this.props.fields}
           fieldsViewable          = {this.props.fieldsViewable}
           object                  = {this.props.object}
+        />
+
+        Select the related objects to display
+
+        <RelatedObjectInput
+          object    = {this.props.object}
+          relations = {this.props.relations}
+          relatedObjects = {this.props.relatedObjects}
         />
 
         <DeskproContextDropdown
@@ -86,7 +97,7 @@ export class DefaultUI extends React.PureComponent
         </div>
 
       </Panel>
-    )
+    );
   }
 
 }

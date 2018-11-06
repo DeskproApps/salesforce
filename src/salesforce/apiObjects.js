@@ -159,6 +159,59 @@ export class SFObjectField extends ApiObject
   }
 }
 
+export class SFObjectRelation extends ApiObject
+{
+  static TYPE_FOREIGN_FIELD = 'field';
+
+  /**
+   * @param {String|Object} js
+   * @returns {SFObjectRelation}
+   */
+  static instance(js)
+  {
+    const data = ApiObject.parse(js);
+    return new SFObjectRelation(data);
+  }
+
+  /**
+   * @param {...*} props
+   */
+  constructor({props}) {
+    super({props});
+  }
+
+  /**
+   * @type {string}
+   */
+  get foreignField() {
+    return this.props.field;
+  }
+}
+
+export class SFObjectDescription extends ApiObject
+{
+  get fields() {
+    return this.props.fields;
+  }
+
+  get relations() {
+    return this.props.relations;
+  }
+}
+
+export class RelatedObject extends ApiObject
+{
+  /**
+   * @param {String | Object} js
+   * @returns {RelatedObject}
+   */
+  static instance(js)
+  {
+    const data = ApiObject.parse(js);
+    return new RelatedObject(data)
+  }
+}
+
 class ProjectionAttributes extends ApiObject
 {
   /**

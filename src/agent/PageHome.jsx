@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Loader } from '@deskpro/apps-components';
+import { DataList, Loader, Panel } from '@deskpro/apps-components';
 
 import { readUserInfo, readRecords } from '../app/actions'
 import { reduxConnector } from '../app/connectors'
@@ -44,14 +44,14 @@ class PageHome extends React.Component
    * Invoked immediately after a component is mounted
    */
   componentDidMount() {
-    const { ui, objectProperties, objectType } = this.props;
+    const { dpapp, objectProperties, objectType, readRecords } = this.props;
 
     Promise.resolve({ ready: true })
       .then(state => this.props.readUserInfo().then(user => ({ ...state, user })))
-      .then(state => this.props.readRecords(objectProperties, objectType).then(records => ({ ...state, records })))
+      .then(state => readRecords(objectProperties, objectType).then(records => ({ ...state, records })))
       .then(state => this.setState(state))
       .catch(logAndReject('page home error'))
-      .catch(this.props.dpapp.ui.showErrorNotification)
+      .catch(dpapp.ui.showErrorNotification)
     ;
   }
 
@@ -81,13 +81,9 @@ class PageHome extends React.Component
   renderRecordSet = (recordSet) =>
   {
     return (
-      <div>
-        <h2>{recordSet.object.label}</h2>
-
-        <ul>
-          {recordSet.records.map(record => this.renderRecord(record))}
-        </ul>
-      </div>
+      <Panel title={recordSet.object.label} border={"none"}>
+        {recordSet.records.map(record => this.renderRecord(record))}
+      </Panel>
     )
   };
 
@@ -97,10 +93,9 @@ class PageHome extends React.Component
   renderRecord = (record) =>
   {
     return (
-      <ul>
-        <li>ID: {record.id}</li>
-        {record.values.map(this.renderFieldValue)}
-      </ul>
+      <DataList
+        data={record.values.map(this.renderFieldValue)}
+      />
     );
   };
 
@@ -110,9 +105,10 @@ class PageHome extends React.Component
    */
   renderFieldValue = (fieldValue) =>
   {
-    return (
-      <li>{fieldValue.field.label}: {fieldValue.asString()}</li>
-    );
+    return {
+      label: fieldValue.field.label,
+      value: fieldValue.asString()
+    };
   }
 }
 
