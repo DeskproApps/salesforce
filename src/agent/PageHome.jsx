@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { DataList, Loader, Panel } from '@deskpro/apps-components';
+import { Action, DataList, Loader, Panel } from '@deskpro/apps-components';
 
 import { readUserInfo, readRecords } from '../app/actions'
 import { reduxConnector } from '../app/connectors'
@@ -50,10 +50,7 @@ class PageHome extends React.Component
 
     Promise.resolve({ ready: true })
       .then(state => this.props.readUserInfo().then(user => ({ ...state, user })))
-      .then(state => readRecords(objectProperties, objectType).then(records => {
-        console.warn(records);
-        return ({ ...state, records })
-      }))
+      .then(state => readRecords(objectProperties, objectType).then(records => ({ ...state, records })))
       .then(state => this.setState(state))
       .catch(logAndReject('page home error'))
       .catch(dpapp.ui.showErrorNotification)
@@ -84,45 +81,39 @@ class PageHome extends React.Component
    * @param {RecordSet} recordSet
    */
   renderRecordSet = (recordSet) =>
-  {
-    return (
-      <Panel border={"none"}>
-        {recordSet.records.map(record => this.renderRecord(record))}
-      </Panel>
-    )
-  };
+    recordSet.records.map(record => this.renderRecord(record));
 
   /**
    * @param {Record} record
    */
   renderRecord = (record) =>
   {
+    const { user } = this.state;
     return (
-      <div>
-        <h4>{record.type.label}</h4>
+      <Panel key={record.id} title={record.type.label} border={"none"}>
+        <Action key="open" icon={"open"} onClick={() => window.open(user.objectUrl(record.id), "_blank")} />
         <DataList
           data={record.values.map(this.renderFieldValue)}
         />
         {record.relatedResults && this.renderRelatedRecords(record.relatedResults)}
-      </div>
+      </Panel>
     );
   };
 
   renderRelatedRecords = (recordSets) =>
   {
+    const { user } = this.state;
     return recordSets.map(
       recordSet => (
-        <Panel border={"none"}>
-          {recordSet.records.map(
+        recordSet.records.map(
           record => (
-            <div>
-              <h4>{record.type.label}</h4>
+            <Panel key={record.id} title={record.type.label} border={"none"}>
+              <Action key="open" icon={"open"} onClick={() => window.open(user.objectUrl(record.id), "_blank")} />
               <DataList
                 data={record.values.map(this.renderFieldValue)}
               />
-            </div>
-          ))}
-        </Panel>
+            </Panel>
+          ))
         )
     );
   };

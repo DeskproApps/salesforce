@@ -383,6 +383,10 @@ export class UserInfo extends ApiObject
   get nickname() { return this.props.nickname; }
 
   get email() { return this.props.email; }
+
+  objectUrl = (id) => {
+    return this.props.profile.replace(/\/[^/]+$/, `/${id}`);
+  }
 }
 
 export class ApiVersion extends ApiObject

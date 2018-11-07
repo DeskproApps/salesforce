@@ -33,7 +33,6 @@ export default class SalesforceFieldList extends React.PureComponent
   render()
   {
     const { items } = this.props;
-    console.warn(items);
     if (items) {
       return (
           <List >

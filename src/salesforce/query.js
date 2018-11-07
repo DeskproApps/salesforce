@@ -21,7 +21,7 @@ function toRecord(queryProjection, type, fields)
    * @type {string}
    */
   const id = queryProjection.fields[ID];
-  return new Record({ id, type, values })
+  return new Record({ id, type, values, relatedResults: [] })
 }
 
 /**

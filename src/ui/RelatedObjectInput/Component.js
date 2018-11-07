@@ -106,7 +106,6 @@ class Component extends React.Component
   {
     const relatedObject = RelatedObject.instance(relation.props);
     const relatedObjects = addListItem(item, relatedObject, this.props.relatedObjects);
-    console.warn(relatedObjects);
     if (relatedObjects) {
       this.props.onRelationChange(relatedObjects);
     }
