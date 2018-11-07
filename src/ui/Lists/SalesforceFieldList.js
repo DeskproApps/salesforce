@@ -32,11 +32,16 @@ export default class SalesforceFieldList extends React.PureComponent
 
   render()
   {
-    return (
-        <List >
-          {this.props.items.map(this.renderField)}
-        </List>
-    );
+    const { items } = this.props;
+    console.warn(items);
+    if (items) {
+      return (
+          <List >
+            {this.props.items.map(this.renderField)}
+          </List>
+      );
+    }
+    return null;
   }
 
   /**

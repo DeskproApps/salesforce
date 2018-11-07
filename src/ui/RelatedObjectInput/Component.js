@@ -8,7 +8,7 @@ import {
 } from '../../app/actions';
 
 import {reduxConnector} from "../../app/connectors";
-import { RelatedObject, SFObject, SFObjectRelation } from "../../salesforce/apiObjects";
+import { diff, equalFields, indexOf, RelatedObject, SFObject, SFObjectRelation } from "../../salesforce/apiObjects";
 
 /**
  * @param {Object} props
@@ -24,13 +24,62 @@ function chooseUI(props)
   return DefaultUI;
 }
 
+const equalObject = (left, right) => left.props.childSObject === right.props.childSObject;
+
+/**
+ *
+ * @param {*} item
+ * @param {*} relatedObject
+ * @param {Array<*>} list
+ * @return {Array<*>|null}
+ */
+function addListItem (item, relatedObject, list)
+{
+  let objectIndex = indexOf(relatedObject, list, equalObject);
+  if (objectIndex === -1) {
+    relatedObject.addField(item);
+    return list.concat([relatedObject]);
+  }
+
+  const fieldPresent = indexOf(item, list[objectIndex].props.fields, equalFields) !== -1;
+  if (fieldPresent) {
+    return null;
+  }
+
+  list[objectIndex].addField(item);
+  return list.concat([]);
+}
+
+/**
+ *
+ * @param {*} item
+ * @param {*} relatedObject
+ * @param {Array<*>} list
+ * @return {Array<*>|null}
+ */
+function removeListItem (item, relatedObject, list)
+{
+  let objectIndex = indexOf(relatedObject, list, equalObject);
+  if (objectIndex === -1) {
+    return null;
+  }
+
+  const wasAdded = indexOf(item, list[objectIndex].fields, equalFields) !== -1;
+  if (wasAdded) {
+    list[objectIndex].fields = diff(list[objectIndex].fields, [item], equalFields);
+    return list.concat([]);
+  }
+  return null;
+}
+
 class Component extends React.Component
 {
   static propTypes = {
-    object          : PropTypes.instanceOf(SFObject),
-    relations       : PropTypes.arrayOf(SFObjectRelation),
-    relatedObjects  : PropTypes.arrayOf(RelatedObject),
-    loadDescription : PropTypes.func.isRequired,
+    object           : PropTypes.instanceOf(SFObject),
+    relations        : PropTypes.arrayOf(SFObjectRelation),
+    relatedObjects   : PropTypes.arrayOf(RelatedObject),
+    loadDescription  : PropTypes.func.isRequired,
+    onRelationChange : PropTypes.func.isRequired,
   };
 
   state = {
@@ -44,10 +93,52 @@ class Component extends React.Component
     });
 
     const sfObject = new SFObject({name: object.childSObject, label: object.childSObject});
-    console.warn(sfObject);
     this.props.loadDescription(sfObject).then(description => {
       this.setState({fields: description.fields});
     });
+  };
+
+  /**
+   * @param {SFObjectField} item
+   * @param {SFObjectRelation} relation
+   */
+  addFieldViewable = (item, relation) =>
+  {
+    const relatedObject = RelatedObject.instance(relation.props);
+    const relatedObjects = addListItem(item, relatedObject, this.props.relatedObjects);
+    console.warn(relatedObjects);
+    if (relatedObjects) {
+      this.props.onRelationChange(relatedObjects);
+    }
+  };
+
+  /**
+   * @param {SFObjectField} item
+   * @param {SFObjectRelation} relation
+   */
+  removeFieldViewable = (item, relation) =>
+  {
+    const relatedObject = RelatedObject.instance(relation.props);
+    const relatedObjects = removeListItem(item, relatedObject, this.props.relatedObjects);
+    if (relatedObjects) {
+      this.props.onRelationChange(relatedObjects);
+    }
+  };
+
+  /**
+   * @param {SFObjectField} item
+   * @param {RelatedObject} relatedObject
+   * @param {string} status
+   */
+  changeViewableStatus = (item, relatedObject, status) =>
+  {
+    if (status === 'viewable') {
+      this.addFieldViewable(item, relatedObject);
+    }
+
+    if (status === 'not-viewable') {
+      this.removeFieldViewable(item, relatedObject);
+    }
   };
 
   render() {
@@ -60,6 +151,7 @@ class Component extends React.Component
       selectedObjectFields={this.state.fields}
 
       onObjectSelected={this.onObjectSelected}
+      changeViewableStatus={this.changeViewableStatus}
     />);
   }
 }

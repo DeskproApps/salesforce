@@ -88,7 +88,8 @@ class SelectQueryBuilder
     this.props = {
       from: from,
       fields: [],
-      where: []
+      where: [],
+      relatedQueries: [],
     }
   }
 
@@ -112,6 +113,20 @@ class SelectQueryBuilder
     this.props.where.push(
       new Expression({field, value: new Value(value)})
     );
+
+    return this;
+  }
+
+  /**
+   * @param {SFObjectField} field
+   * @param {*} value
+   * @return {SelectQueryBuilder}
+   */
+  setWhere(field, value)
+  {
+    this.props.where = [
+      new Expression({field, value: new Value(value)})
+    ];
 
     return this;
   }
@@ -154,6 +169,26 @@ class SelectQueryBuilder
 
     return connection(query).then(parseQuery);
   }
+
+
+  get relatedQueries() {
+    return this.props.relatedQueries;
+  }
+
+  set relatedQueries(queries) {
+    this.props.relatedQueries = queries;
+    return this;
+  }
+
+  get where() {
+    return this.props.where;
+  }
+
+  set where(where) {
+    this.props.where = where;
+    return this;
+  }
+
 }
 
 /**

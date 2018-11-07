@@ -23,7 +23,7 @@ class PageHome extends React.Component
     /**
      * The type of the Deskpro Object which the properties belong to
      */
-    objectType: PropTypes.object.isRequired,
+    objectType: PropTypes.string.isRequired,
 
     /**
      * Reads the salesforce user's info
@@ -37,7 +37,9 @@ class PageHome extends React.Component
   };
 
   state = {
-    user: null
+    user: null,
+    records: [],
+    ready: false,
   };
 
   /**
@@ -48,7 +50,10 @@ class PageHome extends React.Component
 
     Promise.resolve({ ready: true })
       .then(state => this.props.readUserInfo().then(user => ({ ...state, user })))
-      .then(state => readRecords(objectProperties, objectType).then(records => ({ ...state, records })))
+      .then(state => readRecords(objectProperties, objectType).then(records => {
+        console.warn(records);
+        return ({ ...state, records })
+      }))
       .then(state => this.setState(state))
       .catch(logAndReject('page home error'))
       .catch(dpapp.ui.showErrorNotification)
@@ -81,7 +86,7 @@ class PageHome extends React.Component
   renderRecordSet = (recordSet) =>
   {
     return (
-      <Panel title={recordSet.object.label} border={"none"}>
+      <Panel border={"none"}>
         {recordSet.records.map(record => this.renderRecord(record))}
       </Panel>
     )
@@ -93,9 +98,32 @@ class PageHome extends React.Component
   renderRecord = (record) =>
   {
     return (
-      <DataList
-        data={record.values.map(this.renderFieldValue)}
-      />
+      <div>
+        <h4>{record.type.label}</h4>
+        <DataList
+          data={record.values.map(this.renderFieldValue)}
+        />
+        {record.relatedResults && this.renderRelatedRecords(record.relatedResults)}
+      </div>
+    );
+  };
+
+  renderRelatedRecords = (recordSets) =>
+  {
+    return recordSets.map(
+      recordSet => (
+        <Panel border={"none"}>
+          {recordSet.records.map(
+          record => (
+            <div>
+              <h4>{record.type.label}</h4>
+              <DataList
+                data={record.values.map(this.renderFieldValue)}
+              />
+            </div>
+          ))}
+        </Panel>
+        )
     );
   };
 

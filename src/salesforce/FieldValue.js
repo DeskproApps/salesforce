@@ -1,5 +1,3 @@
-import {SFObjectField} from "./apiObjects";
-
 export class FieldValue
 {
   /**

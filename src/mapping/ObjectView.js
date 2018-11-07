@@ -9,14 +9,12 @@ export default class ObjectView
   static instance(js)
   {
     const data = typeof js === 'string' ? JSON.parse(js) : JSON.parse(JSON.stringify(js));
-    const { fields, object, relations, ...rest } = data;
-
-    console.warn(data);
+    const { fields, object, relatedObjects, ...rest } = data;
 
     return new ObjectView({
       object: SFObject.instance(object),
       fields: fields.map(SFObjectField.instance),
-      relations: (relations || []).map(RelatedObject.instance),
+      relatedObjects: (relatedObjects || []).map(RelatedObject.instance),
       ...rest
     });
   }
@@ -24,12 +22,12 @@ export default class ObjectView
   /**
    * @param {SFObject} object
    * @param {Array<SFObjectField>} fields
-   * @param {Array<RelatedObject>} relations
+   * @param {Array<RelatedObject>} relatedObjects
    * @param {...*} [props]
    */
-  constructor({object, fields, relations, ...props })
+  constructor({object, fields, relatedObjects, ...props })
   {
-    this.props = {object, fields, relations, ...props };
+    this.props = {object, fields, relatedObjects, ...props };
   }
 
   toJSON = () => {
@@ -57,5 +55,5 @@ export default class ObjectView
   /**
    * @return {Array<RelatedObject>}
    */
-  get relations() { return this.props.relations }
+  get relatedObjects() { return this.props.relatedObjects }
 }

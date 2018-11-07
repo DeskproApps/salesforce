@@ -30,7 +30,8 @@ export class DefaultUI extends React.PureComponent
 
     mappings          : PropTypes.arrayOf(ContextMapping).isRequired,
     onMappingAdd      : PropTypes.func.isRequired,
-    onMappingRemove   : PropTypes.func.isRequired
+    onMappingRemove   : PropTypes.func.isRequired,
+    onRelationChange  : PropTypes.func.isRequired,
   };
 
   render()
@@ -60,6 +61,7 @@ export class DefaultUI extends React.PureComponent
           object    = {this.props.object}
           relations = {this.props.relations}
           relatedObjects = {this.props.relatedObjects}
+          onRelationChange = {this.props.onRelationChange}
         />
 
         <DeskproContextDropdown

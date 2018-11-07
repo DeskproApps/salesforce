@@ -1,4 +1,3 @@
-import {MappableProperty} from "./MappableProperty";
 import {MappablePathProperty} from "./MappablePathProperty";
 
 export class MappableProperties

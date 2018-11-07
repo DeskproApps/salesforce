@@ -59,7 +59,7 @@ class Component extends React.Component
 
     fields: [],
 
-    relations: [],
+    relatedObjects: [],
 
     mappings: [],
   };
@@ -67,20 +67,20 @@ class Component extends React.Component
   /**
    * @param {SFObject} object
    * @param {Array<SFObjectField>} fields
-   * @param {Array<RelatedObject>} relations
+   * @param {Array<RelatedObject>} relatedObjects
    * @param {Array<ContextMapping>} mappings
    */
-  onChange = ({ object, fields, relations, mappings }) =>
+  onChange = ({ object, fields, relatedObjects, mappings }) =>
   {
-    this.setState({ object, fields, relations, mappings })
+    this.setState({ object, fields, relatedObjects, mappings })
   };
 
   addMappings = () =>
   {
-    const {object, fields, relations, mappings} = this.state;
+    const {object, fields, relatedObjects, mappings} = this.state;
 
     if (object && fields && fields.length && mappings && mappings.length) {
-      this.props.addMappings(object, new ObjectView({object, fields, relations}), mappings)
+      this.props.addMappings(object, new ObjectView({object, fields, relatedObjects}), mappings)
         .then(() => this.props.persistMappings())
       ;
     }
@@ -115,7 +115,7 @@ class Component extends React.Component
 
   render()
   {
-    const { /** @type {SFObject} */ object, objectFields, objectRelations, fields, relations, mappings } = this.state;
+    const { /** @type {SFObject} */ object, objectFields, objectRelations, fields, relatedObjects, mappings } = this.state;
 
     const UI = chooseUI(this.props);
 
@@ -124,7 +124,7 @@ class Component extends React.Component
       objectFields          = { objectFields || [] }
       objectRelations       = { objectRelations || [] }
       objectFieldsViewable  = { fields }
-      objectRelatedObjects  = { relations }
+      objectRelatedObjects  = { relatedObjects }
       contextMappings       = { mappings }
 
       loadObjects       = { this.loadObjects }

@@ -30,6 +30,46 @@ class ApiObject
   toJS = () => this.toJSON();
 }
 
+/**
+ * @param {SFObjectField} left
+ * @param {SFObjectField} right
+ */
+export const equalFields = (left, right) => left.name === right.name;
+
+export function indexOf(item, list, equals)
+{
+  let index = -1;
+  for (const listItem of list) {
+    if (equals(item, listItem)) {
+      return index + 1
+    }
+  }
+
+  return index;
+}
+
+/**
+ * @param {Array} left
+ * @param {Array} right
+ * @param {Function} equals
+ * @return {Array}
+ */
+export function diff(left, right, equals)
+{
+  const diff = [];
+
+  for (const leftItem of left) {
+    for (const rightItem of right) {
+      if (!equals(leftItem, rightItem)) {
+        diff.push(leftItem);
+        break;
+      }
+    }
+  }
+
+  return diff;
+}
+
 export class ChildRelationship extends ApiObject
 {
   /**
@@ -174,13 +214,6 @@ export class SFObjectRelation extends ApiObject
   }
 
   /**
-   * @param {...*} props
-   */
-  constructor({props}) {
-    super({props});
-  }
-
-  /**
    * @type {string}
    */
   get foreignField() {
@@ -209,6 +242,35 @@ export class RelatedObject extends ApiObject
   {
     const data = ApiObject.parse(js);
     return new RelatedObject(data)
+  }
+
+  /**
+   * @param {array} fields
+   * @param {...*} props
+   */
+  constructor({fields, ...props}) {
+    super(props);
+
+    this.props.fields = fields || [];
+  }
+
+  addField(field) {
+    let objectIndex = indexOf(field, this.props.fields, equalFields);
+    if (objectIndex === -1) {
+      this.props.fields.push(field);
+    }
+  }
+
+  get fields() {
+    return this.props.fields;
+  }
+
+  get name() {
+    return this.props.childSObject;
+  }
+
+  get foreignField() {
+    return this.props.field;
   }
 }
 

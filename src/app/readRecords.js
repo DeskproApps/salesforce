@@ -1,6 +1,7 @@
 import { loadMappings } from '../mapping/dux'
 import { selectQuery } from '../salesforce/query'
 import { selectRecords } from '../salesforce/dux'
+import { SFObject, SFObjectField } from "../salesforce/apiObjects";
 
 
 /**
@@ -18,6 +19,14 @@ function buildQueries(context, {objectViews, contextMappings})
    */
   const reducer = function (acc, view) {
     acc[view.object.name] = selectQuery(view.object).select(view.fields);
+    if (view.relatedObjects) {
+      acc[view.object.name].relatedQueries = view.relatedObjects.map(relatedObject => {
+        const object = SFObject.instance({label: relatedObject.name, name: relatedObject.name});
+        const query = selectQuery(object).select(relatedObject.fields);
+        const foreignField = SFObjectField.instance({label: relatedObject.foreignField, name: relatedObject.foreignField});
+        return query.andWhere(foreignField, '%%ID%%')
+      });
+    }
     return acc;
   };
 

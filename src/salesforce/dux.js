@@ -14,6 +14,7 @@ import {
 import { logAndReject } from '../common/logging'
 import ObjectView from "../mapping/ObjectView";
 import {ContextMapping} from "../mapping";
+import { RecordSet } from "./records";
 
 const LOAD_DESCRIPTION   = 'LOAD_DESCRIPTION';
 const LOAD_OBJECTS  = 'LOAD_OBJECT';
@@ -222,7 +223,33 @@ export function selectRecords(queryBuilder, fetchClientFactory)
       return getQuery(client, query);
     }
 
-    return queryBuilder.asPromise(connection).catch(logAndReject('loadUserInfo error'))
+    function loadRelatedObjects(relatedQueries, record) {
+      return new Promise(resolve => {
+        if (relatedQueries.length) {
+          Promise.all(relatedQueries.map(query => {
+            query.setWhere(query.where[0].props.field, record.id);
+            return query.asPromise(connection);
+          })).then(relatedResults => {
+            record.relatedResults = relatedResults;
+            resolve(record);
+          });
+        } else {
+          resolve(record);
+        }
+      });
+    }
+
+    return queryBuilder.asPromise(connection)
+      .then(results => {
+        return new Promise(resolve => {
+          Promise.all(results.records.map(record => {
+            return loadRelatedObjects(queryBuilder.relatedQueries, record);
+          })).then(records => {
+            resolve(new RecordSet({object: results.object, records}));
+          });
+        });
+      })
+      .catch(logAndReject('loadUserInfo error'))
   }
 
   return thunk;

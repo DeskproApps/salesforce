@@ -1,5 +1,3 @@
-import {ContextPropertyList} from "../deskpro/ContextPropertyList";
-import {ContextDetails} from "../deskpro/ContextDetails";
 import {ContextMapping, ObjectView} from "./index";
 
 /**

@@ -7,8 +7,8 @@ import { apiVersions } from '../salesforce/http';
  */
 export function compareVersions(a, b)
 {
-  const versionA = parseInt(a.version.replace(/[^0-9]/gi, ''));
-  const versionB = parseInt(b.version.replace(/[^0-9]/gi, ''));
+  const versionA = parseInt(a.version.replace(/[^0-9]/gi, ''), 10);
+  const versionB = parseInt(b.version.replace(/[^0-9]/gi, ''), 10);
 
   return versionA - versionB;
 }

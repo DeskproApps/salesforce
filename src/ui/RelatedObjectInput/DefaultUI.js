@@ -13,16 +13,19 @@ export class DefaultUI extends React.Component
     selectedObject        : PropTypes.instanceOf(RelatedObject),
     selectedObjectFields  : PropTypes.arrayOf(SFObjectField),
     onObjectSelected      : PropTypes.func.isRequired,
+    changeViewableStatus  : PropTypes.func.isRequired,
   };
 
   setViewableState = (item) =>
   {
-    this.props.changeViewableStatus(item, "viewable");
+    const { selectedObject } = this.props;
+    this.props.changeViewableStatus(item, selectedObject, "viewable");
   };
 
   unsetViewableState = (item) =>
   {
-    this.props.changeViewableStatus(item, "not-viewable");
+    const { selectedObject } = this.props;
+    this.props.changeViewableStatus(item, selectedObject, "not-viewable");
   };
 
   render()
@@ -49,7 +52,12 @@ export class DefaultUI extends React.Component
           <SalesforceFieldList items={this.props.selectedObjectFields} onSelect={this.setViewableState} />
         </div>
         <div style={styleFieldList} className="dp-column">
-          {this.props.relatedObjects.map(relation => <div>{relation.childSObject}</div>)}
+          {this.props.relatedObjects.map(object => (
+              <div>
+                <h4>{object.name}</h4>
+                <SalesforceFieldList items={object.fields} onSelect={this.unsetViewableState} />
+              </div>
+          ))}
         </div>
       </div>
     );

@@ -63,7 +63,7 @@ class Component extends React.Component
 
     objectViewableFields: [],
 
-    objectRelated: [],
+    objectsRelated: [],
 
     objectMappings: []
 
@@ -103,10 +103,10 @@ class Component extends React.Component
 
   onSave = () =>
   {
-    const { object, objectViewableFields: fields, objectRelated: relations, objectMappings: mappings} = this.state;
+    const { object, objectViewableFields: fields, objectsRelated: relatedObjects, objectMappings: mappings} = this.state;
 
     if (object && fields && fields.length && mappings && mappings.length) {
-      this.props.replaceMappings(object, new ObjectView({object, fields, relations}), mappings)
+      this.props.replaceMappings(object, new ObjectView({object, fields, relatedObjects}), mappings)
         .then(() => this.props.persistMappings())
       ;
     }
