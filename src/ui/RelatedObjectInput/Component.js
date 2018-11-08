@@ -92,10 +92,15 @@ class Component extends React.Component
       object
     });
 
-    const sfObject = new SFObject({name: object.childSObject, label: object.childSObject});
-    this.props.loadDescription(sfObject).then(description => {
-      this.setState({fields: description.fields});
-    });
+    if (object) {
+      const sfObject = new SFObject({name: object.childSObject, label: object.childSObject});
+      this.props.loadDescription(sfObject).then(description => {
+        console.warn(description);
+        this.setState({fields: description.fields});
+      });
+    } else {
+      this.setState({fields: []});
+    }
   };
 
   /**

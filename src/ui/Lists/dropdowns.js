@@ -209,7 +209,10 @@ export class RelatedObjectDropdown extends React.PureComponent
 {
   static toOption(object)
   {
-    return { value: object.childSObject, label: object.childSObject}
+    if (object) {
+      return { value: object.childSObject, label: object.childSObject}
+    }
+    return {value: '', label: ''};
   }
 
   render()

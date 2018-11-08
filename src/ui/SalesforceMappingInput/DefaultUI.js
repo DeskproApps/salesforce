@@ -55,14 +55,19 @@ export class DefaultUI extends React.PureComponent
           object                  = {this.props.object}
         />
 
-        Select the related objects to display
 
-        <RelatedObjectInput
-          object    = {this.props.object}
-          relations = {this.props.relations}
-          relatedObjects = {this.props.relatedObjects}
-          onRelationChange = {this.props.onRelationChange}
-        />
+        {this.props.relations.length > 0 &&
+          <div>
+            Select the related objects to display
+
+            <RelatedObjectInput
+              object    = {this.props.object}
+              relations = {this.props.relations}
+              relatedObjects = {this.props.relatedObjects}
+              onRelationChange = {this.props.onRelationChange}
+            />
+          </div>
+        }
 
         <DeskproContextDropdown
           onChange  = {this.props.onContextChanged}

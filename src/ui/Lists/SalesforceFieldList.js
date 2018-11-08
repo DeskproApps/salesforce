@@ -13,7 +13,7 @@ function matchDom(field, dom)
   return field.name === dom.getAttribute("name");
 }
 
-export default class SalesforceFieldList extends React.PureComponent
+export default class SalesforceFieldList extends React.Component
 {
   static propTypes = {
     items: PropTypes.arrayOf(PropTypes.instanceOf(SFObjectField)).isRequired,

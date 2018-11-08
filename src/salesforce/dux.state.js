@@ -88,6 +88,17 @@ export function fields(state)
 }
 
 /**
+ * @param {{relations: Object}} state
+ * @return {Object}
+ */
+export function relations(state)
+{
+  const { relations } = state.salesforce;
+  console.warn(state);
+  return relations;
+}
+
+/**
  * @param {{objects: Array<SFObject>}} state
  * @return {Array<SFObject>}
  */

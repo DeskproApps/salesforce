@@ -4,6 +4,7 @@ import { SFObjectField, SFObjectDescription, SFObject } from './apiObjects';
 import { SObjectDescription } from './responseObjects';
 import {
   fields as selFields,
+  relations as selRelations,
   apiVersionUrl as selApiVersionUrl,
   instanceUrl as selInstanceUrl,
   objectsLoaded as selObjectsLoaded,
@@ -40,7 +41,7 @@ export default function reducer(state = {}, action={})
       const { object } = action;
       const { fields, relations } = state;
       fields[ object.name ] = [].concat(action.description.fields);
-      relations[ object.name ] = [].concat(action.description.relationships);
+      relations[ object.name ] = [].concat(action.description.relations);
       return {...state, fields, relations};
 
     default: return state;
@@ -142,9 +143,13 @@ export function loadDescription(object, fetchClientFactory)
 
     const state = getState();
     const objectFields = selFields(state)[object.name];
+    const objectRelations = selRelations(state)[object.name];
 
     if (objectFields) {
-      return Promise.resolve([].concat(objectFields));
+      console.warn(objectRelations);
+      return Promise.resolve(
+        new SFObjectDescription({fields: objectFields, relations: objectRelations || []})
+      );
     }
 
     const client = httpClientFactory(dpapp, selInstanceUrl(state), selApiVersionUrl(state));
