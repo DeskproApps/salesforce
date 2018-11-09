@@ -67,6 +67,9 @@ function removeListItem (item, relatedObject, list)
   const wasAdded = indexOf(item, list[objectIndex].fields, equalFields) !== -1;
   if (wasAdded) {
     list[objectIndex].fields = diff(list[objectIndex].fields, [item], equalFields);
+    if (list[objectIndex].fields.length === 0) {
+      return diff(list, [relatedObject], equalObject);
+    }
     return list.concat([]);
   }
   return null;
@@ -130,7 +133,7 @@ class Component extends React.Component
 
   /**
    * @param {SFObjectField} item
-   * @param {RelatedObject} relatedObject
+   * @param {SFObjectRelation} relatedObject
    * @param {string} status
    */
   changeViewableStatus = (item, relatedObject, status) =>

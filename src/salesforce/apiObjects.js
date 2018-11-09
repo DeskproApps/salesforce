@@ -265,6 +265,11 @@ export class RelatedObject extends ApiObject
     return this.props.fields;
   }
 
+  set fields(fields) {
+    this.props.fields = fields;
+    return this;
+  }
+
   get name() {
     return this.props.childSObject;
   }

@@ -22,10 +22,9 @@ export class DefaultUI extends React.Component
     this.props.changeViewableStatus(item, selectedObject, "viewable");
   };
 
-  unsetViewableState = (item) =>
+  unsetViewableState = (item, object) =>
   {
-    const { selectedObject } = this.props;
-    this.props.changeViewableStatus(item, selectedObject, "not-viewable");
+    this.props.changeViewableStatus(item, object, "not-viewable");
   };
 
   render()
@@ -55,7 +54,7 @@ export class DefaultUI extends React.Component
           {this.props.relatedObjects.map(object => (
               <div>
                 <h4>{object.name}</h4>
-                <SalesforceFieldList items={object.fields} onSelect={this.unsetViewableState} />
+                <SalesforceFieldList items={object.fields} onSelect={(field) => this.unsetViewableState(field, object)} />
               </div>
           ))}
         </div>

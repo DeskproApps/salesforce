@@ -74,11 +74,12 @@ class Component extends React.Component
   /**
    * @param {SFObject} object
    * @param {Array<SFObjectField>} fields
+   * @param {Array<RelatedObject>} relatedObjects
    * @param {Array<ContextMapping>} mappings
    */
-  onChange = ({ object, fields, mappings }) =>
+  onChange = ({ object, fields, relatedObjects, mappings }) =>
   {
-    this.setState({ object, objectViewableFields: fields, objectMappings: mappings })
+    this.setState({ object, objectViewableFields: fields, objectMappings: mappings, objectsRelated: relatedObjects })
   };
 
   onRemove = (object) =>
