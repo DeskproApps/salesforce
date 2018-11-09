@@ -97,7 +97,11 @@ class Component extends React.Component
     }
 
     return this.props.loadDescription(object).then(description => {
-      this.setState({ object, objectFields: description.fields, objectRelations: description.relations });
+      this.setState({
+        object,
+        objectFields: description.fields,
+        objectRelations: description.relations
+      });
       return description.fields;
     });
   };

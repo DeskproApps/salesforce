@@ -61,6 +61,8 @@ class Component extends React.Component
 
     objectFields: [],
 
+    objectRelations: [],
+
     objectViewableFields: [],
 
     objectsRelated: [],
@@ -89,10 +91,20 @@ class Component extends React.Component
     /** @type {ObjectView} **/
     const objectView = this.props.objectViews.filter(view => hasView(object, view)).pop();
     const objectViewableFields = objectView ? objectView.fields : [];
+    const objectsRelated = objectView ? objectView.relatedObjects : [];
     const objectMappings = this.props.contextMappings.filter(mapping => hasMapping(object, mapping));
 
     this.props.loadDescription(object).then(description => {
-      this.setState({object, objectFields: description.fields, objectViewableFields,  objectMappings})
+      this.setState(
+        {
+          object,
+          objectFields: description.fields,
+          objectRelations: description.relations,
+          objectViewableFields,
+          objectsRelated,
+          objectMappings
+        }
+      );
     });
   };
 
@@ -121,7 +133,9 @@ class Component extends React.Component
 
       object                = {this.state.object}
       objectFields          = {this.state.objectFields}
+      objectRelations       = {this.state.objectRelations}
       objectViewableFields  = {this.state.objectViewableFields}
+      objectsRelated        = {this.state.objectsRelated}
       objectMappings        = {this.state.objectMappings}
 
       loadContexts          = { this.props.loadContexts }

@@ -94,7 +94,6 @@ export function fields(state)
 export function relations(state)
 {
   const { relations } = state.salesforce;
-  console.warn(state);
   return relations;
 }
 

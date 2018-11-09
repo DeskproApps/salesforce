@@ -146,7 +146,6 @@ export function loadDescription(object, fetchClientFactory)
     const objectRelations = selRelations(state)[object.name];
 
     if (objectFields) {
-      console.warn(objectRelations);
       return Promise.resolve(
         new SFObjectDescription({fields: objectFields, relations: objectRelations || []})
       );
