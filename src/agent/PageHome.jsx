@@ -58,6 +58,7 @@ class PageHome extends React.Component
   }
 
   render() {
+
     const { records, ready } = this.state;
     if (ready) {
       return records.length ? this.renderNormal() : this.renderEmpty();
