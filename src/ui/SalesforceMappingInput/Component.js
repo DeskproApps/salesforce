@@ -2,7 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { ContextMapping } from "../../mapping";
 
-import { SFObject, SFObjectField } from "../../salesforce/apiObjects";
+import {
+  diff,
+  equalFields,
+  indexOf,
+  RelatedObject,
+  SFObject,
+  SFObjectField,
+  SFObjectRelation
+} from "../../salesforce/apiObjects";
 import { ContextDetails } from "../../deskpro";
 import { DefaultUI } from "./DefaultUI";
 
@@ -25,46 +33,6 @@ function chooseUI(props)
  * @param {ContextMapping} right
  */
 const equalMappings = (left, right) => left.equals(right);
-
-/**
- * @param {SFObjectField} left
- * @param {SFObjectField} right
- */
-const equalFields = (left, right) => left.name === right.name;
-
-function indexOf(item, list, equals)
-{
-  let index = -1;
-  for (const listItem of list) {
-    if (equals(item, listItem)) {
-      return index + 1
-    }
-  }
-
-  return index;
-}
-
-/**
- * @param {Array} left
- * @param {Array} right
- * @param {Function} equals
- * @return {Array}
- */
-function diff(left, right, equals)
-{
-  const diff = [];
-
-  for (const leftItem of left) {
-    for (const rightItem of right) {
-      if (!equals(leftItem, rightItem)) {
-        diff.push(leftItem);
-        break;
-      }
-    }
-  }
-
-  return diff;
-}
 
 /**
  *
@@ -109,6 +77,8 @@ export class Component extends React.Component
     object            : PropTypes.arrayOf(SFObject),
     fields            : PropTypes.arrayOf(SFObjectField),
     fieldsViewable    : PropTypes.arrayOf(SFObjectField),
+    relations         : PropTypes.arrayOf(SFObjectRelation),
+    relatedObjects    : PropTypes.arrayOf(RelatedObject),
     mappings          : PropTypes.arrayOf(ContextMapping),
 
     loadContexts          : PropTypes.func,
@@ -178,7 +148,7 @@ export class Component extends React.Component
   {
     const fieldsViewable = addListItem(item, this.props.fieldsViewable, equalFields);
     if (fieldsViewable) {
-      this.props.onChange({ object: this.props.object, fields: fieldsViewable, mappings: this.props.mappings });
+      this.props.onChange({ object: this.props.object, fields: fieldsViewable, relatedObjects: this.props.relatedObjects, mappings: this.props.mappings });
     }
   };
 
@@ -189,7 +159,7 @@ export class Component extends React.Component
   {
     const fieldsViewable = removeListItem(item, this.props.fieldsViewable, equalFields);
     if (fieldsViewable) {
-      this.props.onChange({ object: this.props.object, fields: fieldsViewable, mappings: this.props.mappings });
+      this.props.onChange({ object: this.props.object, fields: fieldsViewable, relatedObjects: this.props.relatedObjects, mappings: this.props.mappings });
     }
   };
 
@@ -201,7 +171,7 @@ export class Component extends React.Component
   {
     const mappings = addListItem(item, this.props.mappings, equalMappings);
     if (mappings) {
-      this.props.onChange({ object: this.props.object, fields: this.props.fieldsViewable, mappings });
+      this.props.onChange({ object: this.props.object, fields: this.props.fieldsViewable, relatedObjects: this.props.relatedObjects, mappings });
     }
   };
 
@@ -212,7 +182,14 @@ export class Component extends React.Component
   {
     const mappings = removeListItem(item, this.props.mappings, equalMappings);
     if (mappings) {
-      this.props.onChange({ object: this.props.object, fields: this.props.fieldsViewable, mappings });
+      this.props.onChange({ object: this.props.object, fields: this.props.fieldsViewable, relatedObjects: this.props.relatedObjects, mappings });
+    }
+  };
+
+  onRelationChange = (relatedObjects) =>
+  {
+    if (relatedObjects) {
+      this.props.onChange({ object: this.props.object, fields: this.props.fieldsViewable, relatedObjects, mappings: this.props.mappings });
     }
   };
 
@@ -223,6 +200,8 @@ export class Component extends React.Component
       object                  = {this.props.object}
       fields                  = {this.props.fields}
       fieldsViewable          = {this.props.fieldsViewable}
+      relations               = {this.props.relations}
+      relatedObjects          = {this.props.relatedObjects}
       changeViewableStatus    = {this.changeViewableStatus}
 
       context           = { this.state.context }
@@ -233,6 +212,7 @@ export class Component extends React.Component
       mappings        = { this.props.mappings }
       onMappingAdd    = {this.addContextMapping}
       onMappingRemove = {this.removeContextMapping}
+      onRelationChange = {this.onRelationChange}
     />);
   }
 }

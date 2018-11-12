@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Loader } from '@deskpro/apps-components';
+import { Action, DataList, Loader, Panel } from '@deskpro/apps-components';
 
 import { readUserInfo, readRecords } from '../app/actions'
 import { reduxConnector } from '../app/connectors'
@@ -23,7 +23,7 @@ class PageHome extends React.Component
     /**
      * The type of the Deskpro Object which the properties belong to
      */
-    objectType: PropTypes.object.isRequired,
+    objectType: PropTypes.string.isRequired,
 
     /**
      * Reads the salesforce user's info
@@ -37,21 +37,23 @@ class PageHome extends React.Component
   };
 
   state = {
-    user: null
+    user: null,
+    records: [],
+    ready: false,
   };
 
   /**
    * Invoked immediately after a component is mounted
    */
   componentDidMount() {
-    const { ui, objectProperties, objectType } = this.props;
+    const { dpapp, objectProperties, objectType, readRecords } = this.props;
 
     Promise.resolve({ ready: true })
       .then(state => this.props.readUserInfo().then(user => ({ ...state, user })))
-      .then(state => this.props.readRecords(objectProperties, objectType).then(records => ({ ...state, records })))
+      .then(state => readRecords(objectProperties, objectType).then(records => ({ ...state, records })))
       .then(state => this.setState(state))
       .catch(logAndReject('page home error'))
-      .catch(this.props.dpapp.ui.showErrorNotification)
+      .catch(dpapp.ui.showErrorNotification)
     ;
   }
 
@@ -79,28 +81,40 @@ class PageHome extends React.Component
    * @param {RecordSet} recordSet
    */
   renderRecordSet = (recordSet) =>
-  {
-    return (
-      <div>
-        <h2>{recordSet.object.label}</h2>
-
-        <ul>
-          {recordSet.records.map(record => this.renderRecord(record))}
-        </ul>
-      </div>
-    )
-  };
+    recordSet.records.map(record => this.renderRecord(record));
 
   /**
    * @param {Record} record
    */
   renderRecord = (record) =>
   {
+    const { user } = this.state;
     return (
-      <ul>
-        <li>ID: {record.id}</li>
-        {record.values.map(this.renderFieldValue)}
-      </ul>
+      <Panel key={record.id} title={record.type.label} border={"none"}>
+        <Action key="open" icon={"open"} onClick={() => window.open(user.objectUrl(record.id), "_blank")} />
+        <DataList
+          data={record.values.map(this.renderFieldValue)}
+        />
+        {record.relatedResults && this.renderRelatedRecords(record.relatedResults)}
+      </Panel>
+    );
+  };
+
+  renderRelatedRecords = (recordSets) =>
+  {
+    const { user } = this.state;
+    return recordSets.map(
+      recordSet => (
+        recordSet.records.map(
+          record => (
+            <Panel key={record.id} title={record.type.label} border={"none"}>
+              <Action key="open" icon={"open"} onClick={() => window.open(user.objectUrl(record.id), "_blank")} />
+              <DataList
+                data={record.values.map(this.renderFieldValue)}
+              />
+            </Panel>
+          ))
+        )
     );
   };
 
@@ -110,9 +124,10 @@ class PageHome extends React.Component
    */
   renderFieldValue = (fieldValue) =>
   {
-    return (
-      <li>{fieldValue.field.label}: {fieldValue.asString()}</li>
-    );
+    return {
+      label: fieldValue.field.label,
+      value: fieldValue.asString()
+    };
   }
 }
 

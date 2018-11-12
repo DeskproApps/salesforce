@@ -5,11 +5,6 @@ import { logAndReject } from '../common/logging';
 class SalesforceAuthenticationError extends ErrorWrapper
 {
   static displayName = 'SalesforceAuthenticationError'; // optional. survives minification
-
-  constructor (message, childError)
-  {
-    super(message, childError);
-  }
 }
 
 const oauthProviderName = 'salesforce';

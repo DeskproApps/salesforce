@@ -12,7 +12,8 @@ export default function initialState(additionalState)
     userInfo      : null,
     objectsLoaded : false,
     objects       : [],
-    fields        : {}
+    fields        : {},
+    relations     : {},
   };
 
   return additionalState && typeof additionalState === 'object' ? { ...state, ...additionalState } : state;
@@ -84,6 +85,16 @@ export function fields(state)
 {
   const { fields } = state.salesforce;
   return fields;
+}
+
+/**
+ * @param {{relations: Object}} state
+ * @return {Object}
+ */
+export function relations(state)
+{
+  const { relations } = state.salesforce;
+  return relations;
 }
 
 /**

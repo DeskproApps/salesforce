@@ -4,10 +4,11 @@ export class Record
    * @param {string} id
    * @param {SFObject} type
    * @param {Array<FieldValue>} values
+   * @param {Array<Record>} relatedResults
    */
-  constructor({ id, type, values })
+  constructor({ id, type, values, relatedResults })
   {
-    this.props = { id, type, values }
+    this.props = { id, type, values, relatedResults }
   }
 
   /**
@@ -24,6 +25,16 @@ export class Record
    * @type {Array<FieldValue>}
    */
   get values() { return this.props.values; }
+
+  get relatedResults() {
+    return this.props.relatedResults;
+  }
+
+  set relatedResults(results) {
+    this.props.relatedResults = results;
+    return this;
+  }
+
 }
 
 export class RecordSet

@@ -10,7 +10,7 @@ import { default as PageError } from './PageError'
 
 import {SalesforceAuthenticationError} from "../salesforce/security";
 import { reduxConnector } from '../app/connectors'
-import { readUserInfo, loadMappings  } from '../app/actions'
+import { readUserInfo } from '../app/actions'
 
 const history = createMemoryHistory({
   initialEntries: ["loading"],

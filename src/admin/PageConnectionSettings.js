@@ -63,7 +63,7 @@ export default class PageConnectionSettings extends React.Component
     resolveSalesforceSettings(dpapp, settingsForm).then(salesforce => ({ salesforce }))
       .then(otherSettings => {
         const cleanSettings = removeVirtualSettings(settingsForm);
-        return { ... otherSettings, cleanSettings }
+        return { ...otherSettings, cleanSettings }
       })
       .then(storage => establishConnection(dpapp, connectionProps).then(() => storage))
       .then(storage => finishInstall(storage).then(({ onStatus }) => onStatus()))

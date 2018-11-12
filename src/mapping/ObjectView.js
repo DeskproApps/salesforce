@@ -1,4 +1,4 @@
-import {SFObject, SFObjectField} from "../salesforce/apiObjects";
+import { SFObject, SFObjectField, RelatedObject } from "../salesforce/apiObjects";
 
 export default class ObjectView
 {
@@ -9,11 +9,12 @@ export default class ObjectView
   static instance(js)
   {
     const data = typeof js === 'string' ? JSON.parse(js) : JSON.parse(JSON.stringify(js));
-    const { fields, object, ...rest } = data;
+    const { fields, object, relatedObjects, ...rest } = data;
 
     return new ObjectView({
       object: SFObject.instance(object),
       fields: fields.map(SFObjectField.instance),
+      relatedObjects: (relatedObjects || []).map(RelatedObject.instance),
       ...rest
     });
   }
@@ -21,11 +22,12 @@ export default class ObjectView
   /**
    * @param {SFObject} object
    * @param {Array<SFObjectField>} fields
+   * @param {Array<RelatedObject>} relatedObjects
    * @param {...*} [props]
    */
-  constructor({object, fields, ...props })
+  constructor({object, fields, relatedObjects, ...props })
   {
-    this.props = {object, fields, ...props };
+    this.props = {object, fields, relatedObjects, ...props };
   }
 
   toJSON = () => {
@@ -49,4 +51,9 @@ export default class ObjectView
    * @return {Array<SFObjectField>}
    */
   get fields() { return this.props.fields }
+
+  /**
+   * @return {Array<RelatedObject>}
+   */
+  get relatedObjects() { return this.props.relatedObjects }
 }

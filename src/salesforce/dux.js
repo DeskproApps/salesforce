@@ -1,9 +1,10 @@
 import { clientFactory } from './http';
 import { getDescribeGlobal, getSObjectDescribe, getUserInfo, getQuery } from './api';
-import { SFObjectField, SFObject } from './apiObjects';
+import { SFObjectField, SFObjectDescription, SFObject } from './apiObjects';
 import { SObjectDescription } from './responseObjects';
 import {
   fields as selFields,
+  relations as selRelations,
   apiVersionUrl as selApiVersionUrl,
   instanceUrl as selInstanceUrl,
   objectsLoaded as selObjectsLoaded,
@@ -14,8 +15,9 @@ import {
 import { logAndReject } from '../common/logging'
 import ObjectView from "../mapping/ObjectView";
 import {ContextMapping} from "../mapping";
+import { RecordSet } from "./records";
 
-const LOAD_FIELDS   = 'LOAD_FIELDS';
+const LOAD_DESCRIPTION   = 'LOAD_DESCRIPTION';
 const LOAD_OBJECTS  = 'LOAD_OBJECT';
 const LOAD_USER     = 'LOAD_USER';
 const LOAD_SETTINGS = 'LOAD_SETTINGS';
@@ -35,11 +37,12 @@ export default function reducer(state = {}, action={})
       const { objects } = action;
       return { ...state, objects , objectsLoaded: true };
 
-    case LOAD_FIELDS:
+    case LOAD_DESCRIPTION:
       const { object } = action;
-      const { fields } = state;
-      fields[ object.name ] = [].concat(action.fields);
-      return {...state, fields};
+      const { fields, relations } = state;
+      fields[ object.name ] = [].concat(action.description.fields);
+      relations[ object.name ] = [].concat(action.description.relations);
+      return {...state, fields, relations};
 
     default: return state;
   }
@@ -118,13 +121,13 @@ export function loadObjects(fetchClientFactory)
  * @param {Function} [fetchClientFactory] a custom salesforce http fetch function
  * @return {function}
  */
-export function loadFields(object, fetchClientFactory)
+export function loadDescription(object, fetchClientFactory)
 {
   /**
    * @param {SObjectDescription} response
-   * @return {Array<SFObjectField>}
+   * @return {SFObjectDescription}
    */
-  const toFields = response => response.fields;
+  const toDescription = response => new SFObjectDescription({fields: response.fields, relations: response.childRelationships});
 
   /**
    * @type {function(AppClient, String, String)}
@@ -140,19 +143,22 @@ export function loadFields(object, fetchClientFactory)
 
     const state = getState();
     const objectFields = selFields(state)[object.name];
+    const objectRelations = selRelations(state)[object.name];
 
     if (objectFields) {
-      return Promise.resolve([].concat(objectFields));
+      return Promise.resolve(
+        new SFObjectDescription({fields: objectFields, relations: objectRelations || []})
+      );
     }
 
     const client = httpClientFactory(dpapp, selInstanceUrl(state), selApiVersionUrl(state));
 
     return getSObjectDescribe(client, object)
-      .then(toFields)
-      .catch(logAndReject('loadFields error'))
-      .then(fields => {
-        dispatch({ type:LOAD_FIELDS, object, fields });
-        return fields;
+      .then(toDescription)
+      .catch(logAndReject('loadDescription error'))
+      .then(description => {
+        dispatch({ type:LOAD_DESCRIPTION, object, description });
+        return description;
       });
   }
 
@@ -221,7 +227,33 @@ export function selectRecords(queryBuilder, fetchClientFactory)
       return getQuery(client, query);
     }
 
-    return queryBuilder.asPromise(connection).catch(logAndReject('loadUserInfo error'))
+    function loadRelatedObjects(relatedQueries, record) {
+      return new Promise(resolve => {
+        if (relatedQueries.length) {
+          Promise.all(relatedQueries.map(query => {
+            query.setWhere(query.where[0].props.field, record.id);
+            return query.asPromise(connection);
+          })).then(relatedResults => {
+            record.relatedResults = relatedResults;
+            resolve(record);
+          });
+        } else {
+          resolve(record);
+        }
+      });
+    }
+
+    return queryBuilder.asPromise(connection)
+      .then(results => {
+        return new Promise(resolve => {
+          Promise.all(results.records.map(record => {
+            return loadRelatedObjects(queryBuilder.relatedQueries, record);
+          })).then(records => {
+            resolve(new RecordSet({object: results.object, records}));
+          });
+        });
+      })
+      .catch(logAndReject('loadUserInfo error'))
   }
 
   return thunk;

@@ -15,6 +15,6 @@ test('connected component is exported as default', () => {
   expect(wrapper.isEmptyRender()).toBe(false);
 
   // check a property to be sure
-  const loadFields = wrapper.find('Component').prop('loadFields');
+  const loadFields = wrapper.find('Component').prop('loadDescription');
   expect(typeof loadFields).toBe('function');
 });

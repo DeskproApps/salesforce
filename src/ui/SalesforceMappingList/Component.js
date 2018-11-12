@@ -7,7 +7,7 @@ import { DefaultUI } from './DefaultUI';
 import {SFObject, SFObjectField} from "../../salesforce/apiObjects";
 
 import {
-  loadFields,
+  loadDescription,
   removeMappings,
   replaceMappings,
   loadContexts,
@@ -51,7 +51,7 @@ class Component extends React.Component
 
     persistMappings : PropTypes.func.isRequired,
 
-    loadFields : PropTypes.func.isRequired
+    loadDescription: PropTypes.func.isRequired
 
   };
 
@@ -61,7 +61,11 @@ class Component extends React.Component
 
     objectFields: [],
 
+    objectRelations: [],
+
     objectViewableFields: [],
+
+    objectsRelated: [],
 
     objectMappings: []
 
@@ -70,11 +74,12 @@ class Component extends React.Component
   /**
    * @param {SFObject} object
    * @param {Array<SFObjectField>} fields
+   * @param {Array<RelatedObject>} relatedObjects
    * @param {Array<ContextMapping>} mappings
    */
-  onChange = ({ object, fields, mappings }) =>
+  onChange = ({ object, fields, relatedObjects, mappings }) =>
   {
-    this.setState({ object, objectViewableFields: fields, objectMappings: mappings })
+    this.setState({ object, objectViewableFields: fields, objectMappings: mappings, objectsRelated: relatedObjects })
   };
 
   onRemove = (object) =>
@@ -87,10 +92,20 @@ class Component extends React.Component
     /** @type {ObjectView} **/
     const objectView = this.props.objectViews.filter(view => hasView(object, view)).pop();
     const objectViewableFields = objectView ? objectView.fields : [];
+    const objectsRelated = objectView ? objectView.relatedObjects : [];
     const objectMappings = this.props.contextMappings.filter(mapping => hasMapping(object, mapping));
 
-    this.props.loadFields(object).then(fields => {
-      this.setState({object, objectFields: fields, objectViewableFields,  objectMappings})
+    this.props.loadDescription(object).then(description => {
+      this.setState(
+        {
+          object,
+          objectFields: description.fields,
+          objectRelations: description.relations,
+          objectViewableFields,
+          objectsRelated,
+          objectMappings
+        }
+      );
     });
   };
 
@@ -101,10 +116,10 @@ class Component extends React.Component
 
   onSave = () =>
   {
-    const { object, objectViewableFields: fields, objectMappings: mappings} = this.state;
+    const { object, objectViewableFields: fields, objectsRelated: relatedObjects, objectMappings: mappings} = this.state;
 
     if (object && fields && fields.length && mappings && mappings.length) {
-      this.props.replaceMappings(object, new ObjectView({object, fields}), mappings)
+      this.props.replaceMappings(object, new ObjectView({object, fields, relatedObjects}), mappings)
         .then(() => this.props.persistMappings())
       ;
     }
@@ -119,7 +134,9 @@ class Component extends React.Component
 
       object                = {this.state.object}
       objectFields          = {this.state.objectFields}
+      objectRelations       = {this.state.objectRelations}
       objectViewableFields  = {this.state.objectViewableFields}
+      objectsRelated        = {this.state.objectsRelated}
       objectMappings        = {this.state.objectMappings}
 
       loadContexts          = { this.props.loadContexts }
@@ -139,7 +156,7 @@ export { Component }
 export default reduxConnector(
   Component,
   {
-    loadFields, persistMappings, removeMappings, replaceMappings, loadContexts, loadContextProperties
+    loadDescription, persistMappings, removeMappings, replaceMappings, loadContexts, loadContextProperties
   },
   {
     contexts: contextList,
