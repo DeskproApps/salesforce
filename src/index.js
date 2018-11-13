@@ -12,13 +12,14 @@ import React from 'react';
 import App from './agent';
 import configureStore from './app/store';
 import { Provider } from "react-redux";
+import AppPlaceholder from './agent/AppPlaceholder';
 
 
 createApp(dpapp => props =>
   configureStore(dpapp).then(store => ReactDOM.render(
     <AppFrame {...props}>
       <Provider store={store}>
-        <App dpapp={dpapp} />
+        {dpapp.getProperty('isPreRender') ? <AppPlaceholder /> : <App dpapp={dpapp} />}
       </Provider>
     </AppFrame>,
     document.getElementById('root')
