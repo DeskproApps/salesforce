@@ -6,6 +6,7 @@ import {SalesforceObjectDropdown} from '../Lists'
 import { SFObjectField, SFObject, SFObjectRelation, RelatedObject } from '../../salesforce/apiObjects';
 import {default as SalesforceMappingInput} from '../SalesforceMappingInput';
 import {ContextMapping} from "../../mapping";
+import {LoadingButton} from "../LoadingButton";
 
 export class DefaultUI extends React.PureComponent
 {
@@ -24,6 +25,7 @@ export class DefaultUI extends React.PureComponent
     loadContexts          : PropTypes.func.isRequired,
     onChange              : PropTypes.func.isRequired,
     onAdd                 : PropTypes.func.isRequired,
+    reset                 : PropTypes.func.isRequired
   };
 
   render()
@@ -52,9 +54,7 @@ export class DefaultUI extends React.PureComponent
           />
         }
 
-        {this.props.object &&
-          <Button onClick={this.props.onAdd}>Add Object</Button>
-        }
+        { this.props.object && <LoadingButton onClick={this.props.onAdd} label={"Add Object"} labelSuccess={"Object added. Click again to add another"} onClickSuccess={this.props.reset}/> }
       </Panel>
     )
   }

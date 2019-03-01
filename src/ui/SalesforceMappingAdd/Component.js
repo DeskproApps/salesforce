@@ -64,6 +64,23 @@ class Component extends React.Component
     mappings: [],
   };
 
+  reset = () => {
+    this.setState({
+
+      object: null,
+
+      objectFields: [],
+
+      objectRelations: [],
+
+      fields: [],
+
+      relatedObjects: [],
+
+      mappings: [],
+    });
+  };
+
   /**
    * @param {SFObject} object
    * @param {Array<SFObjectField>} fields
@@ -75,15 +92,19 @@ class Component extends React.Component
     this.setState({ object, fields, relatedObjects, mappings })
   };
 
+  /**
+   * @return {Promise}
+   */
   addMappings = () =>
   {
     const {object, fields, relatedObjects, mappings} = this.state;
 
     if (object && fields && fields.length && mappings && mappings.length) {
-      this.props.addMappings(object, new ObjectView({object, fields, relatedObjects}), mappings)
-        .then(() => this.props.persistMappings())
-      ;
+      const objectView = new ObjectView({object, fields, relatedObjects});
+      return this.props.addMappings(object, objectView, mappings).then(() => this.props.persistMappings());
     }
+
+    return Promise.resolve();
   };
 
   /**
@@ -112,7 +133,7 @@ class Component extends React.Component
   loadObjects = () =>
   {
     return this.props.loadObjects().catch(e => {
-      console.error(e, ' mabon');
+      console.error(e);
       return [];
     });
   };
@@ -138,6 +159,7 @@ class Component extends React.Component
       loadContextProperties = { this.props.loadContextProperties }
       onChange = { this.onChange }
       onAdd = { this.addMappings }
+      reset = { this.reset }
     />);
   }
 }

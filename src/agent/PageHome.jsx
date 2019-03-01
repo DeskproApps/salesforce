@@ -58,18 +58,16 @@ class PageHome extends React.Component
   }
 
   render() {
-
-    const { user, records, ready } = this.state;
+    const { records, ready } = this.state;
     if (ready) {
-      return (
-        <div>
-          <div>Logged in as {user.name}</div>
-
-          {records.map(this.renderRecordSet)}
-        </div>
-      )
+      return records.length ? this.renderNormal() : this.renderEmpty();
     }
 
+    return this.renderLoading();
+  }
+
+  renderLoading()
+  {
     return(
       <div className="dp-text-center">
         <Loader />
@@ -77,11 +75,18 @@ class PageHome extends React.Component
     )
   }
 
-  /**
-   * @param {RecordSet} recordSet
-   */
-  renderRecordSet = (recordSet) =>
-    recordSet.records.map(record => this.renderRecord(record));
+  renderEmpty()
+  {
+    <div>
+      <p>No matching records found.</p>
+    </div>
+  }
+
+  renderNormal()
+  {
+    const { records } = this.state;
+    return records.map((recordSet) => recordSet.records.map(record => this.renderRecord(record)));
+  }
 
   /**
    * @param {Record} record
