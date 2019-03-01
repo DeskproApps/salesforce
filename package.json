@@ -40,7 +40,7 @@
     "format:check": "react-scripts prettier --list-different \"{src,test}/**/*.js\"",
     "version": "version-changelog CHANGELOG.md && changelog-verify CHANGELOG.md && git add CHANGELOG.md"
   },
-  "description": "Deskpro integration with Salesforce",
+  "description": "Display Salesforce data directly within a Deskpro ticket, user profile or organization profile.",
   "author": {
     "name": "Deskpro Apps",
     "email": "apps@deskpro.com",
@@ -48,7 +48,7 @@
   },
   "deskpro": {
     "version": "2.3.0",
-    "title": "Salesforce",
+    "title": "Salesforce v2",
     "isSingle": true,
     "scope": "agent",
     "targets": [
