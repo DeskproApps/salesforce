@@ -31,7 +31,7 @@ export class DefaultUI extends React.PureComponent
   render()
   {
     return (
-      <Panel title={"Select a Salesforce object to display"} border={"none"}>
+      <Panel title={"Select a Salesforce object to display"} border={"none"} style={{ minHeight: '300px' }}>
         <SalesforceObjectDropdown
           name        = "objects"
           value      = {this.props.object}
