@@ -15,19 +15,19 @@
     "react-dom": "^16.5.0",
     "react-redux": "^5.0.7",
     "react-router": "^4.3.1",
-    "react-select": "2.1.1",
+    "react-select": "^2.4.0",
     "react-textarea-autosize": "^7.0.4",
     "redux": "^4.0.0",
     "redux-form": "^7.4.2",
     "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
-    "changelog-verify": "^1.1.0",
+    "changelog-verify": "^1.1.2",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
     "jest-fetch-mock": "1.6.4",
     "react-test-renderer": "^16.4.2",
-    "version-changelog": "^3.1.0"
+    "version-changelog": "^3.1.1"
   },
   "homepage": ".",
   "scripts": {
