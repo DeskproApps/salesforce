@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Action, DataList, Loader, Panel } from '@deskpro/apps-components';
+import { Action, DataList, Panel, Icon, Separator } from '@deskpro/apps-components';
 
 import { readUserInfo, readRecords } from '../app/actions'
 import { reduxConnector } from '../app/connectors'
@@ -70,7 +70,7 @@ class PageHome extends React.Component
   {
     return(
       <div className="dp-text-center">
-        <Loader />
+        <Icon name={"refreshing"} />
       </div>
     )
   }
@@ -94,15 +94,18 @@ class PageHome extends React.Component
   renderRecord = (record) =>
   {
     const { user } = this.state;
-    return (
+    return [
       <Panel key={record.id} title={record.type.label} border={"none"}>
         <Action key="open" icon={"open"} onClick={() => window.open(user.objectUrl(record.id), "_blank")} />
         <DataList
           data={record.values.map(this.renderFieldValue)}
         />
-        {record.relatedResults && this.renderRelatedRecords(record.relatedResults)}
-      </Panel>
-    );
+      </Panel>,
+
+      record.relatedResults && <Separator title="Related records" />,
+
+      record.relatedResults && this.renderRelatedRecords(record.relatedResults)
+    ];
   };
 
   renderRelatedRecords = (recordSets) =>
