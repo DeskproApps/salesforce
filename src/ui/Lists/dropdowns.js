@@ -72,8 +72,9 @@ class ObjectAsyncDropdown extends React.PureComponent
    * @returns {Promise<Array<Object>, Error>}
    */
   loadOptions = () => this.props.loadOptions()
-    .then(objects => objects.map(this.toOption))
-
+    .then(
+      objects => objects.map(this.toOption).sort((a, b) => a.label.toLocaleLowerCase().localeCompare(b.label.toLocaleLowerCase()))
+    )
   ;
 
   /**
@@ -90,7 +91,7 @@ class ObjectAsyncDropdown extends React.PureComponent
    */
   fireOnChange = (option) =>
   {
-    if (option.object) {
+    if (option && option.object) {
       this.props.onChange(option.object)
     }
   };
@@ -101,7 +102,11 @@ class ObjectAsyncDropdown extends React.PureComponent
 
     const props = {
       ...rest,
+      filterOption: ({ label, value, data}, input) => {
+        return label.toLocaleLowerCase().startsWith(input.toLocaleLowerCase())
+      },
       isSearchable  : true,
+      isClearable  : true,
       cacheOptions:true,
       defaultOptions: true,
       loadOptions : this.loadOptions,

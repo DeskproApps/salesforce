@@ -5,6 +5,7 @@ import  '../../setup';
 import { createMockStore } from '../../mocks';
 
 import { default as getInitialState } from '../../../src/salesforce/dux.state';
+import { default as mappingGetInitialState } from '../../../src/mapping/dux.state';
 import { default as Component } from '../../../src/ui/SalesforceMappingAdd';
 
 test('connected component is mounted', () => {
@@ -17,11 +18,12 @@ test('connected component is mounted', () => {
   const store = createMockStore({
       dpapp,
       additionalState: {
-        salesforce: {  ...getInitialState(), apiVersion: "v37.0", instanceUrl: "https://eu8.salesforce.com" }
+        salesforce: {  ...getInitialState(), apiVersion: "v37.0", instanceUrl: "https://eu8.salesforce.com" },
+        mapping: { ...mappingGetInitialState() }
       }
     }
   );
-  const wrapper = mount(<Provider store={store}><Component /></Provider>);
+  const wrapper = mount(<Provider store={store}><Component history={{}} /></Provider>);
 
   expect(wrapper.isEmptyRender()).toBe(false);
 

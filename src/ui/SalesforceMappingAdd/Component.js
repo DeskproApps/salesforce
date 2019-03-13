@@ -11,10 +11,12 @@ import {
   loadObjects,
   loadDescription,
   loadContexts,
-  loadContextProperties
+  loadContextProperties,
+  startEditObjectView
 } from "../../app/actions";
 
 import {reduxConnector} from "../../app/connectors";
+import {contextMappings, objectViews} from "../../app/state";
 
 /**
  * @param {Object} props
@@ -46,7 +48,15 @@ class Component extends React.Component
 
     addMappings     : PropTypes.func.isRequired,
 
-    persistMappings : PropTypes.func.isRequired
+    persistMappings : PropTypes.func.isRequired,
+
+    startEditObjectView : PropTypes.func.isRequired,
+
+    contextMappings   : PropTypes.arrayOf(ContextMapping),
+
+    objectViews       : PropTypes.arrayOf(ObjectView),
+
+    history   : PropTypes.object.isRequired,
   };
 
   state = {
@@ -62,6 +72,48 @@ class Component extends React.Component
     relatedObjects: [],
 
     mappings: [],
+
+    objectHasBeenMapped: false
+  };
+
+  reset = () => {
+    this.setState({
+
+      object: null,
+
+      objectHasBeenMapped: false,
+
+      objectFields: [],
+
+      objectRelations: [],
+
+      fields: [],
+
+      relatedObjects: [],
+
+      mappings: []
+    });
+  };
+
+  startEditObjectView = () => {
+    const {object} = this.state;
+    if (! object) {
+      return;
+    }
+
+    let index = 0;
+    this.props.objectViews.map((objectView, idx) => {
+      if (objectView.object.name === object.name ) {
+        index = idx;
+      }
+      return objectView
+    });
+
+    this.props.startEditObjectView(index).then(() => {
+      console.log("navigating to view objects");
+      this.props.history.push("viewObjects");
+      this.props.history.goForward();
+    });
   };
 
   /**
@@ -75,15 +127,19 @@ class Component extends React.Component
     this.setState({ object, fields, relatedObjects, mappings })
   };
 
+  /**
+   * @return {Promise}
+   */
   addMappings = () =>
   {
     const {object, fields, relatedObjects, mappings} = this.state;
 
     if (object && fields && fields.length && mappings && mappings.length) {
-      this.props.addMappings(object, new ObjectView({object, fields, relatedObjects}), mappings)
-        .then(() => this.props.persistMappings())
-      ;
+      const objectView = new ObjectView({object, fields, relatedObjects});
+      return this.props.addMappings(object, objectView, mappings).then(() => this.props.persistMappings());
     }
+
+    return Promise.resolve();
   };
 
   /**
@@ -96,9 +152,12 @@ class Component extends React.Component
       throw new Error('showObjectFields object is null')
     }
 
+    const objectHasBeenMapped = this.props.contextMappings.filter(mapping => object.name === mapping.object.name).length > 0;
+
     return this.props.loadDescription(object).then(description => {
       this.setState({
         object,
+        objectHasBeenMapped,
         objectFields: description.fields,
         objectRelations: description.relations
       });
@@ -112,19 +171,20 @@ class Component extends React.Component
   loadObjects = () =>
   {
     return this.props.loadObjects().catch(e => {
-      console.error(e, ' mabon');
+      console.error(e);
       return [];
     });
   };
 
   render()
   {
-    const { /** @type {SFObject} */ object, objectFields, objectRelations, fields, relatedObjects, mappings } = this.state;
+    const { /** @type {SFObject} */ object, objectHasBeenMapped, objectFields, objectRelations, fields, relatedObjects, mappings } = this.state;
 
     const UI = chooseUI(this.props);
 
     return (<UI
       object                = { object }
+      objectHasBeenMapped   = { objectHasBeenMapped }
       objectFields          = { objectFields || [] }
       objectRelations       = { objectRelations || [] }
       objectFieldsViewable  = { fields }
@@ -138,6 +198,8 @@ class Component extends React.Component
       loadContextProperties = { this.props.loadContextProperties }
       onChange = { this.onChange }
       onAdd = { this.addMappings }
+      reset = { this.reset }
+      editObjectView = { this.startEditObjectView }
     />);
   }
 }
@@ -152,6 +214,11 @@ export default reduxConnector(
     loadObjects,
     loadDescription,
     loadContexts,
-    loadContextProperties
+    loadContextProperties,
+    startEditObjectView
+  },
+  {
+    objectViews,
+    contextMappings
   }
 );

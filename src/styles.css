@@ -69,6 +69,10 @@ input.dp-datepicker,
   margin-bottom: 1em
 }
 
+.dp-Panel .dp-Panel {
+  margin-top: 1em;
+}
+
 .dp-Panel + .dp-Panel {
   margin-top: 1em;
 }
@@ -78,4 +82,8 @@ input.dp-datepicker,
 .dp-Button--wide {
   text-align: center;
   width: 100%;
+}
+
+.dp-text-center {
+  text-align: center;
 }

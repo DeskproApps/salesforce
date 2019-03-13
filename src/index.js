@@ -13,7 +13,7 @@ import App from './agent';
 import configureStore from './app/store';
 import { Provider } from "react-redux";
 import AppPlaceholder from './agent/AppPlaceholder';
-
+import './styles.css';
 
 createApp(dpapp => props =>
   configureStore(dpapp).then(store => ReactDOM.render(
