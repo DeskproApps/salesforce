@@ -4,6 +4,15 @@ This project is following [Semantic Versioning](http://semver.org)
 
 ## [Unreleased][]
 
+## [0.1.2][] - 2019-03-13
+
+### Fixed
+
+- Allow search in large dropdown fields in the admin app
+- Show confirmation after adding an object mapping in the admin app
+- Title of the application in deskpro reflects this app's version
+- improve display of related records in agent app
+
 ## [0.1.1][] - 2018-11-14
 
 ### Added
@@ -39,7 +48,8 @@ This project is following [Semantic Versioning](http://semver.org)
 
  - authenticating, mapping salesforce objects onto deskpro objects, display salesforce objects
 
-[Unreleased]: https://github.com/DeskproApps/salesforce/compare/v0.1.1...HEAD
+[Unreleased]: https://github.com/DeskproApps/salesforce/compare/v0.1.2...HEAD
+[0.1.2]: https://github.com/DeskproApps/salesforce/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/DeskproApps/salesforce/compare/v0.1.1-beta.2...v0.1.1
 [0.1.1-beta.2]: https://github.com/DeskproApps/salesforce/compare/v0.1.1-beta.1...v0.1.1-beta.2
 [0.1.1]: https://github.com/DeskproApps/salesforce/compare/v0.1.0...v0.1.1-beta.1
