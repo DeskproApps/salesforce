@@ -1,4 +1,4 @@
-export { replaceMappings, removeMappings, addMappings, persistMappings, loadMappings } from '../mapping/dux'
+export { replaceMappings, removeMappings, addMappings, persistMappings, loadMappings, startEditObjectView, stopEditObjectView } from '../mapping/dux'
 export { loadDescription, loadObjects, loadUserInfo, unloadUserInfo, selectRecords, loadSettings } from '../salesforce/dux'
 export { loadContextProperties, loadContexts } from '../deskpro/dux'
 

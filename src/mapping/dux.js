@@ -16,8 +16,8 @@ export default function reducer(state = {}, action={})
       return {...state, objectViews, contextMappings, loaded: true};
     }
     case CHANGED: {
-      const { objectViews, contextMappings } = action;
-      return {...state, objectViews, contextMappings};
+      const {type, ...rest}  = action;
+      return {...state, ...rest};
     }
 
     default: return state;
@@ -140,6 +140,45 @@ export function addMappings(object, newObjectView, newContextMappings)
 
     dispatch({ type: CHANGED, ...mappings });
     return Promise.resolve(mappings);
+  }
+
+  return thunk;
+}
+
+/**
+ * @return {function(Function, Function, AppClient): Promise<any>}
+ */
+export function stopEditObjectView()
+{
+  /**
+   * @param {Function} dispatch
+   * @param {Function} getState
+   * @param {AppClient} dpapp
+   */
+  function thunk (dispatch, getState, dpapp)
+  {
+    dispatch({ type: CHANGED, editObjectView: null });
+    return Promise.resolve(null);
+  }
+
+  return thunk;
+}
+
+/**
+ * @param {Number} mappingId
+ * @return {function(Function, Function, AppClient): Promise<any>}
+ */
+export function startEditObjectView(mappingId)
+{
+  /**
+   * @param {Function} dispatch
+   * @param {Function} getState
+   * @param {AppClient} dpapp
+   */
+  function thunk (dispatch, getState, dpapp)
+  {
+    dispatch({ type: CHANGED, editObjectView: mappingId });
+    return Promise.resolve(mappingId);
   }
 
   return thunk;

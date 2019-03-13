@@ -9,10 +9,20 @@ export default function initialState(additionalState)
   const state = {
     loaded: false,
     objectViews: [],
-    contextMappings: []
+    contextMappings: [],
+    editObjectView: null
   };
 
   return additionalState && typeof additionalState === 'object' ? { ...state, ...additionalState } : state;
+}
+
+/**
+ * @param {Object} state
+ * @return {Array<ContextDetails>}
+ */
+export function editObjectView(state)
+{
+  return state.mapping.editObjectView;
 }
 
 /**
@@ -27,7 +37,7 @@ export function objectViews(state)
 
 /**
  * @param {Object} state
- * @return {Array<ContextPropertyList>}
+ * @return {Array<ContextMapping>}
  */
 export function contextMappings(state)
 {

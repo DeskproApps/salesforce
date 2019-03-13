@@ -36,6 +36,11 @@ class MappingListItem extends React.PureComponent
 {
   static propTypes = {
 
+    objectViewId: PropTypes.oneOf([
+      PropTypes.number,
+      PropTypes.string
+    ]).isRequired,
+
     object: PropTypes.instanceOf(SFObject),
 
     viewableFieldsCount: PropTypes.arrayOf(ObjectView),
@@ -49,7 +54,7 @@ class MappingListItem extends React.PureComponent
 
   onRemove = () => this.props.onRemove(this.props.object);
 
-  onEdit = () => this.props.onEdit(this.props.object);
+  onEdit = () => this.props.onEdit(this.props.objectViewId);
 
   render()
   {
@@ -115,13 +120,15 @@ export default class DefaultListUI extends React.PureComponent
 
   /**
    * @param {ObjectView}  objectView
+   * @param {Number} index
    */
-  renderListItem = (objectView) =>
+  renderListItem = (objectView, index) =>
   {
     const contextMappings = this.props.contextMappings.filter(mapping => isContextMappingForObject(mapping, objectView.object));
     const contextMappingLabels = uniqueList(contextMappings.map(mapping => mapping.context.label));
 
     return (<MappingListItem
+      objectViewId        = {index}
       object              = {objectView.object}
       contextMappings     = {contextMappingLabels}
       viewableFieldsCount = {objectView.fields.length}

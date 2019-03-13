@@ -1,4 +1,4 @@
-import { default as mapping, objectViews, contextMappings } from '../mapping/dux.state'
+import { default as mapping, objectViews, contextMappings, editObjectView } from '../mapping/dux.state'
 import { default as salesforce } from '../salesforce/dux.state'
 import { default as deskpro, contextList, propertyList } from '../deskpro/dux.state'
 
@@ -15,4 +15,4 @@ export function getInitialState()
 }
 
 export { contextList, propertyList }
-export { objectViews, contextMappings }
+export { objectViews, contextMappings, editObjectView }

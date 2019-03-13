@@ -50,7 +50,7 @@ class AdminApp extends React.Component
     return (
       <div>
         <TabNavigation items={nav} match={match} location={location} history={history} />
-        <SalesforceMappingAdd />
+        <SalesforceMappingAdd history={history} />
       </div>
     );
   };

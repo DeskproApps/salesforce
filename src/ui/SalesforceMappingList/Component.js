@@ -12,10 +12,12 @@ import {
   replaceMappings,
   loadContexts,
   loadContextProperties,
-  persistMappings
+  persistMappings,
+  stopEditObjectView,
+  startEditObjectView
 } from "../../app/actions";
 
-import { propertyList,contextList, objectViews, contextMappings } from "../../app/state";
+import { propertyList,contextList, objectViews, contextMappings, editObjectView } from "../../app/state";
 
 import {reduxConnector} from "../../app/connectors";
 
@@ -33,9 +35,27 @@ function chooseUI(props)
   return DefaultUI;
 }
 
+const getInitialState = () => ({
+
+  object: null,
+
+  objectFields: [],
+
+  objectRelations: [],
+
+  objectViewableFields: [],
+
+  objectsRelated: [],
+
+  objectMappings: []
+
+});
+
 class Component extends React.Component
 {
   static propTypes = {
+
+    editObjectView: PropTypes.number,
 
     objectViews       : PropTypes.arrayOf(ObjectView),
 
@@ -51,25 +71,55 @@ class Component extends React.Component
 
     persistMappings : PropTypes.func.isRequired,
 
-    loadDescription: PropTypes.func.isRequired
+    loadDescription: PropTypes.func.isRequired,
+
+    startEditObjectView: PropTypes.func.isRequired,
+
+    stopEditObjectView: PropTypes.func.isRequired,
 
   };
 
-  state = {
+  state = getInitialState();
 
-    object: null,
+  updateEditState()
+  {
+    const { editObjectView } = this.props;
+    /** @type {ObjectView} **/
+    const objectView = this.props.objectViews[editObjectView];
+    const {object} = objectView;
+    const objectViewableFields = objectView.fields;
+    const objectsRelated = objectView.relatedObjects;
+    const objectMappings = this.props.contextMappings.filter(mapping => hasMapping(object, mapping));
 
-    objectFields: [],
+    this.props.loadDescription(object).then(description => {
+      const state = {
+        object,
+        objectViewableFields,
+        objectsRelated,
+        objectMappings,
 
-    objectRelations: [],
+        objectFields: description.fields,
+        objectRelations: description.relations
+      };
+      this.setState(state);
+    });
+  }
 
-    objectViewableFields: [],
+  componentDidMount() {
+    const { editObjectView } = this.props;
 
-    objectsRelated: [],
+    if (typeof editObjectView === "number") {
+      this.updateEditState()
+    }
+  }
 
-    objectMappings: []
+  componentDidUpdate(prevProps) {
+    const { editObjectView } = this.props;
 
-  };
+    if (typeof editObjectView === "number" && prevProps.editObjectView !== editObjectView) {
+      this.updateEditState()
+    }
+  }
 
   /**
    * @param {SFObject} object
@@ -87,31 +137,11 @@ class Component extends React.Component
     this.props.removeMappings(object).then(() => this.props.persistMappings());
   };
 
-  onEdit = (object) =>
-  {
-    /** @type {ObjectView} **/
-    const objectView = this.props.objectViews.filter(view => hasView(object, view)).pop();
-    const objectViewableFields = objectView ? objectView.fields : [];
-    const objectsRelated = objectView ? objectView.relatedObjects : [];
-    const objectMappings = this.props.contextMappings.filter(mapping => hasMapping(object, mapping));
-
-    this.props.loadDescription(object).then(description => {
-      this.setState(
-        {
-          object,
-          objectFields: description.fields,
-          objectRelations: description.relations,
-          objectViewableFields,
-          objectsRelated,
-          objectMappings
-        }
-      );
-    });
-  };
-
   onCancelEdit = (object) =>
   {
-    this.setState({ object : null, objectViewableFields: [], objectMappings: [] })
+    this.props.stopEditObjectView().then(() => {
+      this.setState(getInitialState())
+    });
   };
 
   onSave = () =>
@@ -144,7 +174,7 @@ class Component extends React.Component
 
       onChange      = { this.onChange }
       onRemove      = { this.onRemove }
-      onEdit        = { this.onEdit }
+      onEdit        = { this.props.startEditObjectView }
       onCancelEdit  = { this.onCancelEdit }
       onSave        = { this.onSave }
     />);
@@ -156,12 +186,13 @@ export { Component }
 export default reduxConnector(
   Component,
   {
-    loadDescription, persistMappings, removeMappings, replaceMappings, loadContexts, loadContextProperties
+    loadDescription, persistMappings, removeMappings, replaceMappings, loadContexts, loadContextProperties, stopEditObjectView, startEditObjectView
   },
   {
     contexts: contextList,
     contextProperties: propertyList,
     objectViews,
-    contextMappings
+    contextMappings,
+    editObjectView
   }
 );
