@@ -72,6 +72,8 @@ class Component extends React.Component
     relatedObjects: [],
 
     mappings: [],
+
+    objectHasBeenMapped: false
   };
 
   reset = () => {
@@ -108,7 +110,7 @@ class Component extends React.Component
     });
 
     this.props.startEditObjectView(index).then(() => {
-      console.log("navigating to view objects")
+      console.log("navigating to view objects");
       this.props.history.push("viewObjects");
       this.props.history.goForward();
     });
