@@ -2,7 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { Button } from '@deskpro/apps-components';
-import { SFObjectField, SFObject, SFObjectRelation, RelatedObject } from '../../salesforce/apiObjects';
+import {
+  SFObjectField,
+  SFObject,
+  SFObjectRelation,
+  RelatedObject,
+  ReferencedObject
+} from '../../salesforce/apiObjects';
 
 import {default as SalesforceMappingInput} from '../SalesforceMappingInput';
 import {ContextMapping, ObjectView} from "../../mapping";
@@ -19,6 +25,7 @@ export class DefaultUI extends React.PureComponent
     objectViewableFields  : PropTypes.arrayOf(SFObjectField),
     objectRelations       : PropTypes.arrayOf(SFObjectRelation),
     objectsRelated        : PropTypes.arrayOf(RelatedObject),
+    objectsReferenced     : PropTypes.arrayOf(ReferencedObject),
     objectMappings        : PropTypes.arrayOf(ContextMapping),
 
 
@@ -40,15 +47,16 @@ export class DefaultUI extends React.PureComponent
       <div>
         {this.props.object &&
           <SalesforceMappingInput
-            object            = {this.props.object}
-            fields            = {this.props.objectFields}
-            fieldsViewable    = {this.props.objectViewableFields}
-            relations         = {this.props.objectRelations}
-            relatedObjects    = {this.props.objectsRelated}
-            mappings          = {this.props.objectMappings}
-            loadContexts            = {this.props.loadContexts}
-            loadContextProperties   = {this.props.loadContextProperties}
-            onChange          = {this.props.onChange}
+            object                = {this.props.object}
+            fields                = {this.props.objectFields}
+            fieldsViewable        = {this.props.objectViewableFields}
+            relations             = {this.props.objectRelations}
+            relatedObjects        = {this.props.objectsRelated}
+            referencedObjects     = {this.props.objectsReferenced}
+            mappings              = {this.props.objectMappings}
+            loadContexts          = {this.props.loadContexts}
+            loadContextProperties = {this.props.loadContextProperties}
+            onChange              = {this.props.onChange}
           />
         }
 

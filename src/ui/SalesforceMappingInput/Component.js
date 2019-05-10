@@ -6,6 +6,7 @@ import {
   diff,
   equalFields,
   indexOf,
+  ReferencedObject,
   RelatedObject,
   SFObject,
   SFObjectField,
@@ -79,6 +80,7 @@ export class Component extends React.Component
     fieldsViewable    : PropTypes.arrayOf(SFObjectField),
     relations         : PropTypes.arrayOf(SFObjectRelation),
     relatedObjects    : PropTypes.arrayOf(RelatedObject),
+    referencedObjects : PropTypes.arrayOf(ReferencedObject),
     mappings          : PropTypes.arrayOf(ContextMapping),
 
     loadContexts          : PropTypes.func,
@@ -141,6 +143,12 @@ export class Component extends React.Component
     }
   };
 
+  getObjectValues = () => {
+    const { object, fieldsViewable, relatedObjects, referencedObjects, mappings } = this.props;
+
+    return { object, fields: fieldsViewable, relatedObjects, referencedObjects, mappings };
+  };
+
   /**
    * @param {SFObjectField} item
    */
@@ -148,7 +156,7 @@ export class Component extends React.Component
   {
     const fieldsViewable = addListItem(item, this.props.fieldsViewable, equalFields);
     if (fieldsViewable) {
-      this.props.onChange({ object: this.props.object, fields: fieldsViewable, relatedObjects: this.props.relatedObjects, mappings: this.props.mappings });
+      this.props.onChange({ ...this.getObjectValues(), fields: fieldsViewable });
     }
   };
 
@@ -159,7 +167,7 @@ export class Component extends React.Component
   {
     const fieldsViewable = removeListItem(item, this.props.fieldsViewable, equalFields);
     if (fieldsViewable) {
-      this.props.onChange({ object: this.props.object, fields: fieldsViewable, relatedObjects: this.props.relatedObjects, mappings: this.props.mappings });
+      this.props.onChange({ ...this.getObjectValues(), fields: fieldsViewable });
     }
   };
 
@@ -171,7 +179,7 @@ export class Component extends React.Component
   {
     const mappings = addListItem(item, this.props.mappings, equalMappings);
     if (mappings) {
-      this.props.onChange({ object: this.props.object, fields: this.props.fieldsViewable, relatedObjects: this.props.relatedObjects, mappings });
+      this.props.onChange({ ...this.getObjectValues(), mappings });
     }
   };
 
@@ -182,14 +190,21 @@ export class Component extends React.Component
   {
     const mappings = removeListItem(item, this.props.mappings, equalMappings);
     if (mappings) {
-      this.props.onChange({ object: this.props.object, fields: this.props.fieldsViewable, relatedObjects: this.props.relatedObjects, mappings });
+      this.props.onChange({ ...this.getObjectValues(), mappings });
     }
   };
 
   onRelationChange = (relatedObjects) =>
   {
     if (relatedObjects) {
-      this.props.onChange({ object: this.props.object, fields: this.props.fieldsViewable, relatedObjects, mappings: this.props.mappings });
+      this.props.onChange({ ...this.getObjectValues(), relatedObjects });
+    }
+  };
+
+  onReferenceChange = (referencedObjects) =>
+  {
+    if (referencedObjects) {
+      this.props.onChange({ ...this.getObjectValues(), referencedObjects });
     }
   };
 
@@ -201,6 +216,7 @@ export class Component extends React.Component
       fields                  = {this.props.fields}
       fieldsViewable          = {this.props.fieldsViewable}
       relations               = {this.props.relations}
+      referencedObjects       = {this.props.referencedObjects}
       relatedObjects          = {this.props.relatedObjects}
       changeViewableStatus    = {this.changeViewableStatus}
 
@@ -209,10 +225,11 @@ export class Component extends React.Component
       contexts          = { this.state.contexts}
       onContextChanged  = {this.showContextProperties}
 
-      mappings        = { this.props.mappings }
-      onMappingAdd    = {this.addContextMapping}
-      onMappingRemove = {this.removeContextMapping}
-      onRelationChange = {this.onRelationChange}
+      mappings          = { this.props.mappings }
+      onMappingAdd      = {this.addContextMapping}
+      onMappingRemove   = {this.removeContextMapping}
+      onRelationChange  = {this.onRelationChange}
+      onReferenceChange = {this.onReferenceChange}
     />);
   }
 }

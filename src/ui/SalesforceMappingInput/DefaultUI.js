@@ -4,7 +4,7 @@ import { Panel } from '@deskpro/apps-components';
 
 import { DeskproContextDropdown } from '../Lists'
 import { default as ContextMappingInput } from '../ContextMappingInput'
-import { SFObjectField, SFObject, SFObjectRelation, RelatedObject } from '../../salesforce/apiObjects';
+import { SFObjectField, SFObject, SFObjectRelation, RelatedObject, ReferencedObject } from '../../salesforce/apiObjects';
 import { ContextDetails, ContextPropertyList } from '../../deskpro';
 import { ContextMapping } from '../../mapping'
 
@@ -12,6 +12,7 @@ import { TabsContext } from '../TabsContext';
 import { default as ContextMappingList } from '../ContextMappingList';
 import { ViewableStatusToggle } from '../ViewableStatusToggle';
 import RelatedObjectInput from '../RelatedObjectInput';
+import ReferencedObjectInput from '../ReferencedObjectInput';
 
 export class DefaultUI extends React.PureComponent
 {
@@ -21,6 +22,7 @@ export class DefaultUI extends React.PureComponent
     fieldsViewable          : PropTypes.arrayOf(SFObjectField),
     relations               : PropTypes.arrayOf(SFObjectRelation),
     relatedObjects          : PropTypes.arrayOf(RelatedObject),
+    referencedObjects       : PropTypes.arrayOf(ReferencedObject),
     changeViewableStatus    : PropTypes.func.isRequired,
 
     context           : PropTypes.instanceOf(ContextDetails),
@@ -32,6 +34,7 @@ export class DefaultUI extends React.PureComponent
     onMappingAdd      : PropTypes.func.isRequired,
     onMappingRemove   : PropTypes.func.isRequired,
     onRelationChange  : PropTypes.func.isRequired,
+    onReferenceChange : PropTypes.func.isRequired,
   };
 
   render()
@@ -46,11 +49,13 @@ export class DefaultUI extends React.PureComponent
       flexGrow: 1
     };
 
+    const references = this.props.fields.filter(f => f.props.referenceTo.length > 0);
+
     return (
       <Panel title={"Select the object's fields to display"} border={"none"}>
         <ViewableStatusToggle
           changeViewableStatus    = {this.props.changeViewableStatus}
-          fields                  = {this.props.fields}
+          fields                  = {this.props.fields.filter(f => f.props.referenceTo.length === 0)}
           fieldsViewable          = {this.props.fieldsViewable}
           object                  = {this.props.object}
         />
@@ -65,6 +70,19 @@ export class DefaultUI extends React.PureComponent
               relations = {this.props.relations}
               relatedObjects = {this.props.relatedObjects}
               onRelationChange = {this.props.onRelationChange}
+            />
+          </div>
+        }
+
+        {references.length > 0 &&
+          <div>
+            Select referenced objects to display
+
+            <ReferencedObjectInput
+              object    = {this.props.object}
+              references = {references}
+              referencedObjects = {this.props.referencedObjects}
+              onReferenceChange = {this.props.onReferenceChange}
             />
           </div>
         }

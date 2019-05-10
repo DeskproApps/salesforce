@@ -19,6 +19,7 @@ function buildQueries(context, {objectViews, contextMappings})
    */
   const reducer = function (acc, view) {
     acc[view.object.name] = selectQuery(view.object).select(view.fields);
+    acc[view.object.name].relatedQueries = [];
     if (view.relatedObjects) {
       acc[view.object.name].relatedQueries = view.relatedObjects.map(relatedObject => {
         const object = SFObject.instance({label: relatedObject.name, name: relatedObject.name});
@@ -26,6 +27,15 @@ function buildQueries(context, {objectViews, contextMappings})
         const foreignField = SFObjectField.instance({label: relatedObject.foreignField, name: relatedObject.foreignField});
         return query.andWhere(foreignField, '%%ID%%')
       });
+    }
+    if (view.referencedObjects) {
+      const referenceQueries = view.referencedObjects.map(referencedObject => {
+        referencedObject.fields.forEach(field => field.name = `${referencedObject.relationshipName}.${field.name}`);
+        const query = selectQuery(view.object).select(referencedObject.fields);
+        const foreignField = SFObjectField.instance({label: "ID", name: "ID"});
+        return query.andWhere(foreignField, '%%ID%%')
+      });
+      acc[view.object.name].relatedQueries = acc[view.object.name].relatedQueries.concat(referenceQueries);
     }
     return acc;
   };
