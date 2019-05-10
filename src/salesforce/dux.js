@@ -232,7 +232,6 @@ export function selectRecords(queryBuilder, fetchClientFactory)
         if (relatedQueries.length) {
           Promise.all(relatedQueries.map(query => {
             query.setWhere(query.where[0].props.field, record.id);
-            console.warn(query.asString());
             return query.asPromise(connection);
           })).then(relatedResults => {
             record.relatedResults = relatedResults;

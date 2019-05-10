@@ -39,7 +39,6 @@ export class DefaultUI extends React.Component
       flexGrow: 1
     };
 
-    console.log(this.props.referencedObjects);
     return (
       <div style={containerStyleFields}>
         <div style={styleFieldList} className="dp-column">

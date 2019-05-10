@@ -31,7 +31,7 @@ function chooseUI(props)
   return DefaultUI;
 }
 
-const equalObject = (left, right) => left.props.childSObject === right.props.childSObject;
+const equalObject = (left, right) => left.props.relationshipName === right.props.relationshipName;
 
 /**
  *

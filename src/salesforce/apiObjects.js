@@ -43,9 +43,10 @@ export function indexOf(item, list, equals)
     if (equals(item, listItem)) {
       return index + 1
     }
+    index += 1;
   }
 
-  return index;
+  return -1;
 }
 
 /**

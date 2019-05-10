@@ -30,7 +30,10 @@ function buildQueries(context, {objectViews, contextMappings})
     }
     if (view.referencedObjects) {
       const referenceQueries = view.referencedObjects.map(referencedObject => {
+        console.warn(referencedObject);
         referencedObject.fields.forEach(field => field.name = `${referencedObject.relationshipName}.${field.name}`);
+        const foreignId = `${referencedObject.relationshipName}.Id`;
+        referencedObject.fields.push(SFObjectField.instance({label: foreignId, name: foreignId}));
         const query = selectQuery(view.object).select(referencedObject.fields);
         const foreignField = SFObjectField.instance({label: "ID", name: "ID"});
         return query.andWhere(foreignField, '%%ID%%')
