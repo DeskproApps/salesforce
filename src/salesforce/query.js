@@ -18,7 +18,11 @@ function toRecord(queryProjection, type, fields)
 {
   if (fields[0].name.match(/\./)) {
     const object = fields[0].name.split('.')[0];
+    if (!queryProjection.fields[object]) {
+      return null;
+    }
     const values = fields
+      .filter(field => !!field.type)
       .filter(field => !!field.type)
       .map(field => {
         const [ object, fieldName ] = field.name.split('.');
@@ -47,7 +51,7 @@ function toRecord(queryProjection, type, fields)
  */
 function toRecordSet(query, object, fields)
 {
-  const records = query.records.map(projection => toRecord(projection, object, fields));
+  const records = query.records.map(projection => toRecord(projection, object, fields)).filter(record => record);
   return new RecordSet({ object, records });
 }
 

@@ -113,15 +113,17 @@ class PageHome extends React.Component
     const { user } = this.state;
     return recordSets.map(
       recordSet => (
-        recordSet.records.map(
-          record => (
-            <Panel key={record.id} title={record.type.label} border={"none"}>
-              <Action key="open" icon={"open"} onClick={() => window.open(user.objectUrl(record.id), "_blank")} />
-              <DataList
-                data={record.values.map(this.renderFieldValue)}
-              />
-            </Panel>
-          ))
+        recordSet.records
+          .map(
+            record => (
+              <Panel key={record.id} title={record.type.label} border={"none"}>
+                <Action key="open" icon={"open"} onClick={() => window.open(user.objectUrl(record.id), "_blank")} />
+                <DataList
+                  data={record.values.map(this.renderFieldValue)}
+                />
+              </Panel>
+            )
+          )
         )
     );
   };
