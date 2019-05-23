@@ -4,6 +4,14 @@ This project is following [Semantic Versioning](http://semver.org)
 
 ## [Unreleased][]
 
+## [0.1.3][] - 2019-05-23
+
+### Added
+- Allow to show referenced objects
+
+### Fixed
+- Fix error when no mapping exist 
+
 ## [0.1.2][] - 2019-03-13
 
 ### Fixed
@@ -48,7 +56,8 @@ This project is following [Semantic Versioning](http://semver.org)
 
  - authenticating, mapping salesforce objects onto deskpro objects, display salesforce objects
 
-[Unreleased]: https://github.com/DeskproApps/salesforce/compare/v0.1.2...HEAD
+[Unreleased]: https://github.com/DeskproApps/salesforce/compare/v0.1.3...HEAD
+[0.1.3]: https://github.com/DeskproApps/salesforce/compare/v0.1.2...v0.1.3
 [0.1.2]: https://github.com/DeskproApps/salesforce/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/DeskproApps/salesforce/compare/v0.1.1-beta.2...v0.1.1
 [0.1.1-beta.2]: https://github.com/DeskproApps/salesforce/compare/v0.1.1-beta.1...v0.1.1-beta.2
