@@ -85,7 +85,6 @@ function filterMappingsByContextObject (objectType)
     const mappings = contextMappings.filter(filterMappings);
     const views = [];
 
-
     if (mappings.length) {
       for(const objectView of objectViews) {
         for (const mapping of mappings) {
