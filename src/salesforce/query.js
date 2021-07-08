@@ -3,7 +3,7 @@ import { getQuery } from './api'
 import { Record, RecordSet} from "./records";
 import { Value } from "./Value";
 
-import {SFObjectField} from "./apiObjects";
+import { SFObject, SFObjectField } from "./apiObjects";
 import {FieldValue} from "./FieldValue";
 
 const ID = 'Id';
@@ -16,6 +16,25 @@ const ID = 'Id';
  */
 function toRecord(queryProjection, type, fields)
 {
+  if (fields[0].name.match(/\./)) {
+    const object = fields[0].name.split('.')[0];
+    if (!queryProjection.fields[object]) {
+      return null;
+    }
+    const values = fields
+      .filter(field => !!field.type)
+      .filter(field => !!field.type)
+      .map(field => {
+        const [ object, fieldName ] = field.name.split('.');
+        return new FieldValue({ field, value: queryProjection.fields[object][fieldName] })
+      });
+    const id = queryProjection.fields[object][ID];
+    const referencedType = new SFObject({name: object, label: object});
+    /**
+     * @type {string}
+     */
+    return new Record({ id, type: referencedType, values, relatedResults: [] })
+  }
   const values = fields.map(field => new FieldValue({ field, value: queryProjection.fields[field.name] }));
   /**
    * @type {string}
@@ -32,7 +51,7 @@ function toRecord(queryProjection, type, fields)
  */
 function toRecordSet(query, object, fields)
 {
-  const records = query.records.map(projection => toRecord(projection, object, fields));
+  const records = query.records.map(projection => toRecord(projection, object, fields)).filter(record => record);
   return new RecordSet({ object, records });
 }
 

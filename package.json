@@ -1,6 +1,6 @@
 {
   "name": "@deskpro/app-salesforce",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "private": true,
   "dependencies": {
     "@deskpro/apps-components": "0.11.0",
@@ -92,7 +92,7 @@
         "name": "mappings",
         "isBackendOnly": false,
         "permRead": "EVERYBODY",
-        "permWrite": "OWNER"
+        "permWrite": "EVERYBODY"
       },
       {
         "name": "salesforce",

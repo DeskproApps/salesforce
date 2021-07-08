@@ -17,7 +17,7 @@ import {
   startEditObjectView
 } from "../../app/actions";
 
-import { propertyList,contextList, objectViews, contextMappings, editObjectView } from "../../app/state";
+import { propertyList, contextList, objectViews, contextMappings, editObjectView } from "../../app/state";
 
 import {reduxConnector} from "../../app/connectors";
 
@@ -46,6 +46,8 @@ const getInitialState = () => ({
   objectViewableFields: [],
 
   objectsRelated: [],
+
+  objectReferenced: [],
 
   objectMappings: []
 
@@ -89,6 +91,7 @@ class Component extends React.Component
     const {object} = objectView;
     const objectViewableFields = objectView.fields;
     const objectsRelated = objectView.relatedObjects;
+    const objectsReferenced = objectView.referencedObjects;
     const objectMappings = this.props.contextMappings.filter(mapping => hasMapping(object, mapping));
 
     this.props.loadDescription(object).then(description => {
@@ -96,6 +99,7 @@ class Component extends React.Component
         object,
         objectViewableFields,
         objectsRelated,
+        objectsReferenced,
         objectMappings,
 
         objectFields: description.fields,
@@ -125,11 +129,12 @@ class Component extends React.Component
    * @param {SFObject} object
    * @param {Array<SFObjectField>} fields
    * @param {Array<RelatedObject>} relatedObjects
+   * @param {Array<ReferencedObject>} referencedObjects
    * @param {Array<ContextMapping>} mappings
    */
-  onChange = ({ object, fields, relatedObjects, mappings }) =>
+  onChange = ({ object, fields, relatedObjects, referencedObjects, mappings }) =>
   {
-    this.setState({ object, objectViewableFields: fields, objectMappings: mappings, objectsRelated: relatedObjects })
+    this.setState({ object, objectViewableFields: fields, objectMappings: mappings, objectsRelated: relatedObjects, objectsReferenced: referencedObjects })
   };
 
   onRemove = (object) =>
@@ -146,10 +151,10 @@ class Component extends React.Component
 
   onSave = () =>
   {
-    const { object, objectViewableFields: fields, objectsRelated: relatedObjects, objectMappings: mappings} = this.state;
+    const { object, objectViewableFields: fields, objectsRelated: relatedObjects, objectsReferenced: referencedObjects ,objectMappings: mappings} = this.state;
 
     if (object && fields && fields.length && mappings && mappings.length) {
-      this.props.replaceMappings(object, new ObjectView({object, fields, relatedObjects}), mappings)
+      this.props.replaceMappings(object, new ObjectView({object, fields, relatedObjects, referencedObjects}), mappings)
         .then(() => this.props.persistMappings())
       ;
     }
@@ -167,6 +172,7 @@ class Component extends React.Component
       objectRelations       = {this.state.objectRelations}
       objectViewableFields  = {this.state.objectViewableFields}
       objectsRelated        = {this.state.objectsRelated}
+      objectsReferenced     = {this.state.objectsReferenced}
       objectMappings        = {this.state.objectMappings}
 
       loadContexts          = { this.props.loadContexts }

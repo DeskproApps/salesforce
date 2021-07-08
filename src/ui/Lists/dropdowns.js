@@ -225,3 +225,19 @@ export class RelatedObjectDropdown extends React.PureComponent
     return <ObjectDropdown  {...this.props} optionMapper={RelatedObjectDropdown.toOption} />
   }
 }
+
+export class ReferencedObjectDropdown extends React.PureComponent
+{
+  static toOption(object)
+  {
+    if (object && object.props) {
+      return { value: object.props.name, label: object.props.relationshipName}
+    }
+    return {value: '', label: ''};
+  }
+
+  render()
+  {
+    return <ObjectDropdown  {...this.props} optionMapper={ReferencedObjectDropdown.toOption} />
+  }
+}

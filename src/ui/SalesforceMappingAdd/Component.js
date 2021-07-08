@@ -71,6 +71,8 @@ class Component extends React.Component
 
     relatedObjects: [],
 
+    referencedObjects: [],
+
     mappings: [],
 
     objectHasBeenMapped: false
@@ -90,6 +92,8 @@ class Component extends React.Component
       fields: [],
 
       relatedObjects: [],
+
+      referencedObjects: [],
 
       mappings: []
     });
@@ -120,11 +124,12 @@ class Component extends React.Component
    * @param {SFObject} object
    * @param {Array<SFObjectField>} fields
    * @param {Array<RelatedObject>} relatedObjects
+   * @param {Array<ReferencedObject>} referencedObjects
    * @param {Array<ContextMapping>} mappings
    */
-  onChange = ({ object, fields, relatedObjects, mappings }) =>
+  onChange = ({ object, fields, relatedObjects, referencedObjects, mappings }) =>
   {
-    this.setState({ object, fields, relatedObjects, mappings })
+    this.setState({ object, fields, relatedObjects, referencedObjects, mappings })
   };
 
   /**
@@ -132,10 +137,10 @@ class Component extends React.Component
    */
   addMappings = () =>
   {
-    const {object, fields, relatedObjects, mappings} = this.state;
+    const {object, fields, relatedObjects, referencedObjects, mappings} = this.state;
 
     if (object && fields && fields.length && mappings && mappings.length) {
-      const objectView = new ObjectView({object, fields, relatedObjects});
+      const objectView = new ObjectView({object, fields, relatedObjects, referencedObjects});
       return this.props.addMappings(object, objectView, mappings).then(() => this.props.persistMappings());
     }
 
@@ -178,18 +183,19 @@ class Component extends React.Component
 
   render()
   {
-    const { /** @type {SFObject} */ object, objectHasBeenMapped, objectFields, objectRelations, fields, relatedObjects, mappings } = this.state;
+    const { /** @type {SFObject} */ object, objectHasBeenMapped, objectFields, objectRelations, fields, relatedObjects, referencedObjects, mappings } = this.state;
 
     const UI = chooseUI(this.props);
 
     return (<UI
-      object                = { object }
-      objectHasBeenMapped   = { objectHasBeenMapped }
-      objectFields          = { objectFields || [] }
-      objectRelations       = { objectRelations || [] }
-      objectFieldsViewable  = { fields }
-      objectRelatedObjects  = { relatedObjects }
-      contextMappings       = { mappings }
+      object                  = { object }
+      objectHasBeenMapped     = { objectHasBeenMapped }
+      objectFields            = { objectFields || [] }
+      objectRelations         = { objectRelations || [] }
+      objectFieldsViewable    = { fields }
+      objectRelatedObjects    = { relatedObjects }
+      objectReferencedObjects = { referencedObjects }
+      contextMappings         = { mappings }
 
       loadObjects       = { this.loadObjects }
       onObjectSelected  = { this.showObjectFields }

@@ -60,7 +60,7 @@ class PageHome extends React.Component
   render() {
     const { records, ready } = this.state;
     if (ready) {
-      return records.length ? this.renderNormal() : this.renderEmpty();
+      return records.length && records[0].records.length ? this.renderNormal() : this.renderEmpty();
     }
 
     return this.renderLoading();
@@ -77,9 +77,11 @@ class PageHome extends React.Component
 
   renderEmpty()
   {
-    <div>
-      <p>No matching records found.</p>
-    </div>
+    return (
+      <div>
+        <p>No matching records found.</p>
+      </div>
+    );
   }
 
   renderNormal()
@@ -113,15 +115,17 @@ class PageHome extends React.Component
     const { user } = this.state;
     return recordSets.map(
       recordSet => (
-        recordSet.records.map(
-          record => (
-            <Panel key={record.id} title={record.type.label} border={"none"}>
-              <Action key="open" icon={"open"} onClick={() => window.open(user.objectUrl(record.id), "_blank")} />
-              <DataList
-                data={record.values.map(this.renderFieldValue)}
-              />
-            </Panel>
-          ))
+        recordSet.records
+          .map(
+            record => (
+              <Panel key={record.id} title={record.type.label} border={"none"}>
+                <Action key="open" icon={"open"} onClick={() => window.open(user.objectUrl(record.id), "_blank")} />
+                <DataList
+                  data={record.values.map(this.renderFieldValue)}
+                />
+              </Panel>
+            )
+          )
         )
     );
   };

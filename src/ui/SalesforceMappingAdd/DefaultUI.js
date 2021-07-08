@@ -3,7 +3,13 @@ import PropTypes from 'prop-types';
 import {Panel, Notification, Button} from '@deskpro/apps-components';
 
 import {SalesforceObjectDropdown} from '../Lists'
-import { SFObjectField, SFObject, SFObjectRelation, RelatedObject } from '../../salesforce/apiObjects';
+import {
+  SFObjectField,
+  SFObject,
+  SFObjectRelation,
+  RelatedObject,
+  ReferencedObject
+} from '../../salesforce/apiObjects';
 import {default as SalesforceMappingInput} from '../SalesforceMappingInput';
 import {ContextMapping} from "../../mapping";
 import {LoadingButton} from "../LoadingButton";
@@ -11,13 +17,14 @@ import {LoadingButton} from "../LoadingButton";
 export class DefaultUI extends React.PureComponent
 {
   static propTypes = {
-    object                : PropTypes.instanceOf(SFObject),
-    objectHasBeenMapped   : PropTypes.bool.isRequired,
-    objectFields          : PropTypes.arrayOf(SFObjectField),
-    objectFieldsViewable  : PropTypes.arrayOf(SFObjectField),
-    objectRelations       : PropTypes.arrayOf(SFObjectRelation),
-    objectRelatedObjects  : PropTypes.arrayOf(RelatedObject),
-    contextMappings       : PropTypes.arrayOf(ContextMapping),
+    object                  : PropTypes.instanceOf(SFObject),
+    objectHasBeenMapped     : PropTypes.bool.isRequired,
+    objectFields            : PropTypes.arrayOf(SFObjectField),
+    objectFieldsViewable    : PropTypes.arrayOf(SFObjectField),
+    objectRelations         : PropTypes.arrayOf(SFObjectRelation),
+    objectRelatedObjects    : PropTypes.arrayOf(RelatedObject),
+    objectReferencedObjects : PropTypes.arrayOf(ReferencedObject),
+    contextMappings         : PropTypes.arrayOf(ContextMapping),
 
     loadObjects           : PropTypes.func,
     onObjectSelected      : PropTypes.func,
@@ -58,11 +65,12 @@ export class DefaultUI extends React.PureComponent
               fieldsViewable      = {this.props.objectFieldsViewable}
               relations           = {this.props.objectRelations}
               relatedObjects      = {this.props.objectRelatedObjects}
+              referencedObjects   = {this.props.objectReferencedObjects}
               mappings            = {this.props.contextMappings}
 
               loadContexts            = {this.props.loadContexts}
               loadContextProperties   = {this.props.loadContextProperties}
-              onChange            = {this.props.onChange}
+              onChange                = {this.props.onChange}
             />
 
             <LoadingButton onClick={this.props.onAdd} label={"Add Object"} labelSuccess={"Object added. Click again to add another"} onClickSuccess={this.props.reset}/>

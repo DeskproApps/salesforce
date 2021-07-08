@@ -43,9 +43,10 @@ export function indexOf(item, list, equals)
     if (equals(item, listItem)) {
       return index + 1
     }
+    index += 1;
   }
 
-  return index;
+  return -1;
 }
 
 /**
@@ -187,6 +188,14 @@ export class SFObjectField extends ApiObject
   /**
    * @type {string}
    */
+  set name(name) {
+    this.props.name = name;
+    return this;
+  }
+
+  /**
+   * @type {string}
+   */
   get type() {
     return this.props.type;
   }
@@ -276,6 +285,53 @@ export class RelatedObject extends ApiObject
 
   get foreignField() {
     return this.props.field;
+  }
+}
+
+export class ReferencedObject extends ApiObject
+{
+  /**
+   * @param {String | Object} js
+   * @returns {ReferencedObject}
+   */
+  static instance(js)
+  {
+    const data = ApiObject.parse(js);
+    return new ReferencedObject(data)
+  }
+
+  /**
+   * @param {array} fields
+   * @param {...*} props
+   */
+  constructor({fields, ...props}) {
+    super(props);
+
+    this.props.fields = fields || [];
+  }
+
+  addField(field) {
+    let objectIndex = indexOf(field, this.props.fields, equalFields);
+    if (objectIndex === -1) {
+      this.props.fields.push(field);
+    }
+  }
+
+  get fields() {
+    return this.props.fields;
+  }
+
+  set fields(fields) {
+    this.props.fields = fields;
+    return this;
+  }
+
+  get name() {
+    return this.props.referenceTo[0];
+  }
+
+  get relationshipName() {
+    return this.props.relationshipName;
   }
 }
 
