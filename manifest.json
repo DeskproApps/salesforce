@@ -1,28 +1,46 @@
 {
-  "name": "@deskpro-apps/my_app",
-  "title": "My App",
-  "description": "My Deskpro app",
+  "name": "@deskpro-apps/salesforce",
+  "title": "Salesforce",
+  "description": "View and manage associated Salesforce Contacts, Leads, Accounts and Opportunities",
   "version": "1.0.0",
   "scope": "agent",
   "isSingleInstall": false,
   "targets": [{
     "target": "ticket_sidebar",
     "entrypoint": "index.html"
+  }, {
+    "target": "user_sidebar",
+    "entrypoint": "index.html"
+  }, {
+    "target": "organisation_sidebar",
+    "entrypoint": "index.html"
   }],
   "settings": {
-    "example": {
-      "title": "Example Setting",
-      "description": "Example backend only setting",
+    "client_id": {
+      "title": "Client ID",
       "type": "string",
-      "isRequired": false,
+      "isRequired": true,
+      "isBackendOnly": false
+    },
+    "client_secret": {
+      "title": "Client Secret",
+      "type": "string",
+      "isRequired": true,
       "isBackendOnly": true
+    },
+    "salesforce_instance_url": {
+      "title": "Salesforce Instance URL",
+      "description": "E.g. https://MyDomainName.my.salesforce.com",
+      "type": "string",
+      "isRequired": true,
+      "isBackendOnly": false
     }
   },
   "proxy": {
     "whitelist": [{
-      "url": "https://example.com/.*",
-      "methods": ["GET", "POST", "PUT"],
-      "timeout": 10
+      "url": "https://(.*).my.salesforce.com/services/data/.*",
+      "methods": ["GET", "POST", "PUT", "DELETE"],
+      "timeout": 30
     }]
   }
 }

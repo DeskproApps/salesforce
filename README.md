@@ -1,7 +1,7 @@
-My App
+Salesforce
 ===
 
-TODO: Include a summary of app functionality and a screenshot
+View and manage associated Salesforce Contacts, Leads, Accounts and Opportunities 
 
 Basic Usage
 ---
