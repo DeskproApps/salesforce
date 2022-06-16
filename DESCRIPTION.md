@@ -1,4 +1,4 @@
-My App
-======
+Salesforce
+===
 
-todo: add a description that will appear alongside your app in Deskpro admin
+TODO: add a description that will appear alongside your app in Deskpro admin
