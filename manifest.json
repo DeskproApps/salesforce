@@ -4,7 +4,7 @@
   "description": "View and manage associated Salesforce Contacts, Leads, Accounts and Opportunities",
   "version": "1.0.0",
   "scope": "agent",
-  "isSingleInstall": false,
+  "isSingleInstall": true,
   "targets": [{
     "target": "ticket_sidebar",
     "entrypoint": "index.html"
@@ -20,20 +20,33 @@
       "title": "Client ID",
       "type": "string",
       "isRequired": true,
-      "isBackendOnly": false
+      "isBackendOnly": false,
+      "order": 10
     },
     "client_secret": {
       "title": "Client Secret",
       "type": "string",
       "isRequired": true,
-      "isBackendOnly": true
+      "isBackendOnly": true,
+      "order": 20
     },
     "salesforce_instance_url": {
       "title": "Salesforce Instance URL",
       "description": "E.g. https://MyDomainName.my.salesforce.com",
       "type": "string",
       "isRequired": true,
-      "isBackendOnly": false
+      "isBackendOnly": false,
+      "order": 30
+    },
+    "global_auth_token": {
+      "title": "Sign-In",
+      "type": "app_embedded",
+      "options": {
+        "entrypoint": "index.html?__p=global_sign_in"
+      },
+      "isRequired": true,
+      "isBackendOnly": true,
+      "order": 40
     }
   },
   "proxy": {
