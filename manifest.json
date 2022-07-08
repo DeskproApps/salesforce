@@ -5,15 +5,16 @@
   "version": "1.0.0",
   "scope": "agent",
   "isSingleInstall": true,
+  "hasDevMode": true,
   "targets": [{
     "target": "ticket_sidebar",
-    "entrypoint": "index.html"
+    "entrypoint": "#/ticket"
   }, {
     "target": "user_sidebar",
-    "entrypoint": "index.html"
+    "entrypoint": "#/user"
   }, {
     "target": "organisation_sidebar",
-    "entrypoint": "index.html"
+    "entrypoint": "#/organization"
   }],
   "settings": {
     "client_key": {
@@ -44,7 +45,7 @@
       "title": "",
       "type": "app_embedded",
       "options": {
-        "entrypoint": "index.html?__p=global_sign_in"
+        "entrypoint": "#/admin/global-sign-in"
       },
       "isRequired": true,
       "isBackendOnly": true,
@@ -54,7 +55,7 @@
   "proxy": {
     "whitelist": [{
       "url": "https://(.*).salesforce.com/services/.*",
-      "methods": ["GET", "POST", "PUT", "DELETE"],
+      "methods": ["GET", "POST", "PUT", "DELETE", "PATCH"],
       "timeout": 30
     }]
   }
