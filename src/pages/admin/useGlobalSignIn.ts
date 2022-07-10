@@ -120,11 +120,15 @@ export const useGlobalSignIn = () => {
     // Get current Salesforce user
     useInitialisedDeskproAppClient((client) => {
         (async () => {
-            if (!isEmpty(settings?.global_access_token)) {
-                setUser(await getMePreInstalled(client, JSON.parse(settings?.global_access_token as string)));
+            if (!isEmpty(settings?.global_access_token) && settings?.salesforce_instance_url) {
+                setUser(await getMePreInstalled(
+                    client,
+                    settings,
+                    JSON.parse(settings?.global_access_token as string)
+                ));
             }
         })();
-    }, [settings?.global_access_token]);
+    }, [settings?.global_access_token, settings?.salesforce_instance_url]);
 
 
     // Set blocking flag

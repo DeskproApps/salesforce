@@ -1,4 +1,12 @@
-import {Button, H2, P1, Spinner, Stack, useDeskproAppClient, useDeskproAppTheme} from "@deskpro/app-sdk";
+import {
+    Button,
+    H2,
+    P1,
+    Spinner,
+    Stack,
+    useDeskproAppClient,
+    useDeskproAppTheme
+} from "@deskpro/app-sdk";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { faCopy, faSignIn, faSignOut } from "@fortawesome/free-solid-svg-icons";
 import { AnchorButton } from "@deskpro/deskpro-ui";
