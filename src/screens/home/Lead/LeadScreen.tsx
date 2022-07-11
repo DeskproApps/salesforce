@@ -27,7 +27,7 @@ export const LeadScreen = ({ lead }: LeadScreenProps) => {
         <Container>
             <Stack gap={14} vertical>
                 <Stack justify="space-between" align="center" style={{ width: "100%" }}>
-                    <H1 style={{ color: theme.colors.cyan100 }}>Details</H1>
+                    <H1 style={{ color: theme.colors.cyan100 }}>Lead</H1>
                     <ExternalLink url={getObjectPermalink(context?.settings, `/lightning/r/Lead/${lead.Id}/view`)} />
                 </Stack>
                 <Property title="Name">

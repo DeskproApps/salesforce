@@ -42,10 +42,13 @@ export const AccountScreen = ({ account }: AccountScreenProps) => {
         <Container>
             <Stack gap={14} vertical>
                 <Stack justify="space-between" align="center" style={{ width: "100%" }}>
-                    <H1 style={{ color: theme.colors.cyan100 }}>Details</H1>
+                    <H1 style={{ color: theme.colors.cyan100 }}>Account</H1>
                     <ExternalLink url={getObjectPermalink(context?.settings, `/lightning/r/Account/${account.Id}/view`)} />
                 </Stack>
-                {account.Phone && <Property title="Title">
+                {account.Name && <Property title="Name">
+                    {account.Name}
+                </Property>}
+                {account.Phone && <Property title="Phone">
                     {account.Phone}
                 </Property>}
                 {account.BillingAddress && <Property title="Billing Address">
@@ -54,7 +57,7 @@ export const AccountScreen = ({ account }: AccountScreenProps) => {
                 {account.ShippingAddress && <Property title="Shipping Address">
                     <Address address={account.ShippingAddress} />
                 </Property>}
-                {account.Website && <Property title="Title">
+                {account.Website && <Property title="Website">
                     <a href={account.Website} target="_blank" style={{ textDecoration: "none", color: theme.colors.cyan100 }}>{account.Website}</a>
                 </Property>}
                 {(owner.isSuccess && owner.data) && <Property title="Owner">

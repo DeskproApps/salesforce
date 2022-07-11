@@ -3,7 +3,7 @@ import {
     useDeskproLatestAppContext,
     LoadingSpinner,
     useDeskproAppClient,
-    useDeskproAppTheme, useInitialisedDeskproAppClient
+    useDeskproAppTheme, useInitialisedDeskproAppClient, Dropdown, Input, DropdownItemType
 } from "@deskpro/app-sdk";
 import { useQueryWithClient } from "../hooks";
 import { getContactsByEmails, getLeadsByEmails } from "../api/api";
@@ -11,11 +11,17 @@ import { QueryKey } from "../query";
 import { ContactScreen } from "../screens/home/Contact/ContactScreen";
 import { LeadScreen } from "../screens/home/Lead/LeadScreen";
 import { Container } from "../components/Container/Container";
+import { faCheck, faExternalLinkAlt, faCaretDown } from "@fortawesome/free-solid-svg-icons";
+import { useState } from "react";
+import { Contact, Lead } from "../api/types";
+import { match } from "ts-pattern";
 
 export const User = () => {
     const { client } = useDeskproAppClient();
     const { context } = useDeskproLatestAppContext();
     const { theme } = useDeskproAppTheme();
+
+    const [selectedObjectId, setSelectedObjectId] = useState<string>("");
 
     useDeskproElements(({ registerElement }) => {
         registerElement("refresh", { type: "refresh_button" });
@@ -49,7 +55,9 @@ export const User = () => {
     if (!leadsAndContacts.length) {
         return (
             <Container>
-                <em style={{ color: theme.colors.grey40, fontSize: "12px" }}>No Matching Salesforce Records Found</em>
+                <em style={{ color: theme.colors.grey40, fontSize: "12px" }}>
+                    No Matching Salesforce Records Found
+                </em>
             </Container>
         );
     }
@@ -64,7 +72,47 @@ export const User = () => {
         }
     }
 
-    // todo: if we only have one contact OR lead then just render it's view
+    const options: DropdownItemType<string>[] = leadsAndContacts.map((object) => ({
+        key: object.Id,
+        label: `${object.FirstName} ${object.LastName} (${object.attributes.type})`,
+        type: "value" as const,
+        value: object.Id,
+    } as DropdownItemType<string>));
 
-    return <>User Page</>;
+    const selectedObject: Lead|Contact = leadsAndContacts.filter((object) => object.Id === selectedObjectId)[0] ?? (
+        contacts.data[0] ?? leads.data[0]
+    );
+
+    client?.setTitle(selectedObject.attributes.type);
+
+    return (
+        <>
+            <Container>
+                <Dropdown
+                    fetchMoreText={"Fetch more"}
+                    autoscrollText={"Autoscroll"}
+                    selectedIcon={faCheck}
+                    externalLinkIcon={faExternalLinkAlt}
+                    placement="bottom-start"
+                    inputValue={selectedObject ? `${selectedObject.FirstName} ${selectedObject.LastName} (${selectedObject.attributes.type})` : ""}
+                    onInputChange={setSelectedObjectId}
+                    options={options}
+                    onSelectOption={(option) => {
+                        option.value && setSelectedObjectId(option.value);
+                    }}
+                    hideIcons
+                >
+                    {({ inputProps, inputRef }) => (
+                        <Input ref={inputRef} {...inputProps} rightIcon={faCaretDown} variant="inline" />
+                    )}
+                </Dropdown>
+            </Container>
+            {
+                match(selectedObject.attributes.type)
+                    .with("Lead", () => <LeadScreen lead={selectedObject as Lead} />)
+                    .with("Contact", () => <ContactScreen contact={selectedObject as Contact} />)
+                    .otherwise(() => null)
+            }
+        </>
+    );
 };

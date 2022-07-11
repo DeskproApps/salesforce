@@ -1,5 +1,5 @@
 import {
-    H1,
+    H1, HorizontalDivider,
     Property,
     Stack,
     useDeskproAppTheme,
@@ -13,8 +13,9 @@ import { Container } from "../../../components/Container/Container";
 import { ExternalLink } from "../../../components/ExternalLink/ExternalLink";
 import { getObjectPermalink } from "../../../utils";
 import { Contact } from "../../../api/types";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faExternalLink} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faExternalLink } from "@fortawesome/free-solid-svg-icons";
+import {AccountScreen} from "../Account/AccountScreen";
 
 type ContactScreenProps = {
     contact: Contact;
@@ -41,45 +42,45 @@ export const ContactScreen = ({ contact }: ContactScreenProps) => {
     }, [account, owner, context]);
 
     return (
-        <Container>
-            <Stack gap={14} vertical>
-                <Stack justify="space-between" align="center" style={{ width: "100%" }}>
-                    <H1 style={{ color: theme.colors.cyan100 }}>Details</H1>
-                    <ExternalLink url={getObjectPermalink(context?.settings, `/lightning/r/Contact/${contact.Id}/view`)} />
+        <>
+            <Container>
+                <Stack gap={14} vertical>
+                    <Stack justify="space-between" align="center" style={{ width: "100%" }}>
+                        <H1 style={{ color: theme.colors.cyan100 }}>Contact</H1>
+                        <ExternalLink url={getObjectPermalink(context?.settings, `/lightning/r/Contact/${contact.Id}/view`)} />
+                    </Stack>
+                    <Property title="Name">
+                        {contact.Salutation} {contact.FirstName} {contact.LastName}
+                    </Property>
+                    {contact.Title && <Property title="Title">
+                        {contact.Title}
+                    </Property>}
+                    {contact.Phone && <Property title="Phone">
+                        {contact.Phone}
+                    </Property>}
+                    {contact.MobilePhone && <Property title="Mobile">
+                        {contact.MobilePhone}
+                    </Property>}
+                    {contact.Email && <Property title="Email">
+                        {contact.Email}
+                    </Property>}
+                    {(owner.isSuccess && owner.data) && <Property title="Owner">
+                        <Stack gap={8} align="center">
+                            <img src={owner.data.SmallPhotoUrl} style={{ width: "16px", borderRadius: "100%" }} />
+                            {owner.data.FirstName} {owner.data.LastName}
+                            <a href={getObjectPermalink(context?.settings, `/lightning/r/User/${owner.data.Id}/view`)} target="_blank">
+                                <FontAwesomeIcon icon={faExternalLink} color={theme.colors.grey40} size="sm" />
+                            </a>
+                        </Stack>
+                    </Property>}
                 </Stack>
-                <Property title="Name">
-                    {contact.Salutation} {contact.FirstName} {contact.LastName}
-                </Property>
-                {contact.Title && <Property title="Title">
-                    {contact.Title}
-                </Property>}
-                {(account.isSuccess && account.data) && <Property title="Account">
-                    <Stack gap={8}>
-                        {account.data.Name}
-                        <a href={getObjectPermalink(context?.settings, `/lightning/r/Account/${account.data.Id}/view`)} target="_blank">
-                            <FontAwesomeIcon icon={faExternalLink} color={theme.colors.grey40} size="sm" />
-                        </a>
-                    </Stack>
-                </Property>}
-                {contact.Phone && <Property title="Phone">
-                    {contact.Phone}
-                </Property>}
-                {contact.MobilePhone && <Property title="Mobile">
-                    {contact.MobilePhone}
-                </Property>}
-                {contact.Email && <Property title="Email">
-                    {contact.Email}
-                </Property>}
-                {(owner.isSuccess && owner.data) && <Property title="Owner">
-                    <Stack gap={8} align="center">
-                        <img src={owner.data.SmallPhotoUrl} style={{ width: "16px", borderRadius: "100%" }} />
-                        {owner.data.FirstName} {owner.data.LastName}
-                        <a href={getObjectPermalink(context?.settings, `/lightning/r/User/${owner.data.Id}/view`)} target="_blank">
-                            <FontAwesomeIcon icon={faExternalLink} color={theme.colors.grey40} size="sm" />
-                        </a>
-                    </Stack>
-                </Property>}
-            </Stack>
-        </Container>
+            </Container>
+            {(account.isSuccess && account.data) && (
+                <>
+                    <HorizontalDivider />
+                    <AccountScreen account={account.data} />
+                </>
+            )}
+        </>
     );
 };
