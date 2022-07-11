@@ -1,12 +1,18 @@
 import { Suspense } from "react";
-import {Button, LoadingSpinner, Stack, useDeskproElements} from "@deskpro/app-sdk";
-import { Routes, Route } from "react-router-dom";
+import {
+    Button,
+    LoadingSpinner,
+    Stack, useDeskproAppClient, useDeskproAppEvents,
+    useDeskproLatestAppContext,
+    useInitialisedDeskproAppClient
+} from "@deskpro/app-sdk";
+import {Routes, Route, useLocation} from "react-router-dom";
 import { Ticket } from "./pages/Ticket";
 import { User } from "./pages/User";
 import { Organization } from "./pages/Organization";
 import { QueryClientProvider, QueryErrorResetBoundary } from "react-query";
 import { GlobalSignIn } from "./pages/admin/GlobalSignIn";
-import { queryClient } from "./queryClient";
+import { query } from "./query";
 import { ErrorBoundary } from "react-error-boundary";
 import { faRefresh } from "@fortawesome/free-solid-svg-icons";
 
@@ -20,15 +26,28 @@ import "@deskpro/deskpro-ui/dist/deskpro-ui.css";
 import "@deskpro/deskpro-ui/dist/deskpro-custom-icons.css";
 
 function App() {
+    const { context } = useDeskproLatestAppContext();
+    const { client } = useDeskproAppClient();
+    const { pathname } = useLocation();
+
+    useDeskproAppEvents({
+        onChange: () => setTimeout(() => client?.resize(), 300),
+    });
+
+    // We don't have a context in admin that we care about, so just load the page straight away
+    if (!["/admin/global-sign-in"].includes(pathname) && !context) {
+        return <LoadingSpinner />;
+    }
+
     return (
-        <QueryClientProvider client={queryClient}>
+        <QueryClientProvider client={query}>
             <Suspense fallback={<LoadingSpinner />}>
                 <QueryErrorResetBoundary>
                     {({ reset }) => (
                         <ErrorBoundary onReset={reset} fallbackRender={({ resetErrorBoundary }) => (
                             <Stack gap={6} style={{ padding: "8px" }} vertical>
                                 There was an error!
-                                <Button text="Reload" onClick={() => resetErrorBoundary()} icon={faRefresh} />
+                                <Button text="Reload" onClick={() => resetErrorBoundary()} icon={faRefresh} intent="secondary" />
                             </Stack>
                         )}>
                             <Routes>

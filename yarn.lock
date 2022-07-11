@@ -644,10 +644,10 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@deskpro/app-sdk@^1.1.6":
-  version "1.1.6"
-  resolved "https://registry.yarnpkg.com/@deskpro/app-sdk/-/app-sdk-1.1.6.tgz#292d80200cb52620fe0017110c9e0b9d6bd02dbf"
-  integrity sha512-KQf5N325P3pafAW9wHWhnWCUB5Y0JcCsecUOuHrm00DeyEZPZcbRx7vGaItuYgDGQHJQD2ez+tiUng+KXlIhVA==
+"@deskpro/app-sdk@^1.1.7":
+  version "1.1.7"
+  resolved "https://registry.yarnpkg.com/@deskpro/app-sdk/-/app-sdk-1.1.7.tgz#205a92935412c539472d1b7fa73194c7ece05e4d"
+  integrity sha512-IUFjsnTTNuoWZuelIAy7dL556UlvO8oSpCNe81vJb+UHpKLgvjTfoJ8rZj8lNOXVMugDG0E8Ys5jYIqSfhTBdg==
   dependencies:
     "@deskpro/deskpro-ui" "^2.5.1"
     "@fortawesome/fontawesome-svg-core" "^6.1.0"

@@ -15,7 +15,7 @@ export function useQueryWithClient<TQueryFnData = unknown>(
 
     const key = Array.isArray(queryKey) ? queryKey : [queryKey];
 
-    return useQuery(
+    const result = useQuery(
         [...key, !!client],
         () => (client && queryFn(client)) as Promise<TQueryFnData>,
         {
@@ -23,4 +23,10 @@ export function useQueryWithClient<TQueryFnData = unknown>(
             enabled: options?.enabled === undefined ? !! client : (client && options?.enabled),
         } as Omit<UseQueryOptions<TQueryFnData, unknown, TQueryFnData, string | readonly unknown[]>, 'queryKey' | 'queryFn'>
     );
+
+    if (result.isSuccess) {
+        client?.resize();
+    }
+
+    return result;
 }
