@@ -1,4 +1,8 @@
-Salesforce
+Description
 ===
 
-TODO: add a description that will appear alongside your app in Deskpro admin
+This app streamlines the process of viewing information from Salesforce
+
+**View contact/lead details:** View information from Salesforce about the people you are interacting with in Deskpro to make your communication more efficient and effective
+
+**View account details:** When viewing a user or organisation you can view the details of the account associated with them
