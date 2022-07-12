@@ -7,9 +7,6 @@
   "isSingleInstall": true,
   "hasDevMode": true,
   "targets": [{
-    "target": "ticket_sidebar",
-    "entrypoint": "#/ticket"
-  }, {
     "target": "user_sidebar",
     "entrypoint": "#/user"
   }, {
