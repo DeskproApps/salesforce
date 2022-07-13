@@ -12,7 +12,7 @@ import { Settings } from "../types";
  * Get a list of Salesforce "Contact" sObjects by email
  */
 export const getContactsByEmails = async (client: IDeskproClient, emails: string[]): Promise<Contact[]> => {
-    const result: { searchRecords: {Id: string}[] } = await SOSLSearch(
+    const result: { searchRecords: { Id: string }[] } = await SOSLSearch(
         client,
         `FIND {${emails.map((e) => `"${e}"`).join(" OR ")}} RETURNING Contact`
     );
@@ -26,7 +26,7 @@ export const getContactsByEmails = async (client: IDeskproClient, emails: string
  * Get a list of Salesforce "Lead" sObjects by email
  */
 export const getLeadsByEmails = async (client: IDeskproClient, emails: string[]): Promise<Lead[]> => {
-    const result: { searchRecords: {Id: string}[] } = await SOSLSearch(
+    const result: { searchRecords: { Id: string }[] } = await SOSLSearch(
         client,
         `FIND {${emails.map((e) => `"${e}"`).join(" OR ")}} RETURNING Lead`
     );
@@ -40,7 +40,7 @@ export const getLeadsByEmails = async (client: IDeskproClient, emails: string[])
  * Get a list of Salesforce "Account" sObjects by name
  */
 export const getAccountsByName = async (client: IDeskproClient, name: string): Promise<Account[]> => {
-    const result: { searchRecords: {Id: string}[] } = await SOSLSearch(
+    const result: { searchRecords: { Id: string }[] } = await SOSLSearch(
         client,
         `FIND {${name.replace("'", "\\'")}} RETURNING Account`
     );

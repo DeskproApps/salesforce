@@ -29,6 +29,8 @@ export const GlobalSignIn = () => {
         isLoading,
         isDisabled,
         isBlocking,
+        isInstanceUrlInvalid,
+        cancelLoading,
         signIn,
         signOut,
     } = useGlobalSignIn();
@@ -43,6 +45,13 @@ export const GlobalSignIn = () => {
 
     return (
         <>
+            {isInstanceUrlInvalid && (
+                <div style={{ color: theme.colors.red100, fontSize: "12px", marginBottom: "16px", marginTop: "-4px" }}>
+                    Salesforce instance URL is invalid, please make sure that it's in the following format:
+                    https://MyDomainName.my.salesforce.com
+                </div>
+            )}
+
             {callbackUrl && (
                 <>
                     <H2 style={{ marginBottom: "5px" }}>Callback URL</H2>
@@ -56,7 +65,7 @@ export const GlobalSignIn = () => {
                             {callbackUrl}
                         </div>
                         <CopyToClipboard text={callbackUrl}>
-                            <Button text="Copy" icon={faCopy} intent="secondary" style={{ width: "70px" }} />
+                            <Button text="Copy" icon={faCopy} intent="secondary" style={{ width: "72px" }} />
                         </CopyToClipboard>
                     </Stack>
                     <P1 style={{ marginBottom: "16px", marginTop: "8px", color: theme.colors.grey80 }}>
@@ -90,6 +99,9 @@ export const GlobalSignIn = () => {
                             loading={isLoading}
                             onClick={signIn}
                         />
+                        {isLoading && (
+                            <Button onClick={() => cancelLoading()} text="Cancel" intent="secondary" style={{ marginLeft: "6px" }} />
+                        )}
                     </>
                 )}
             </div>

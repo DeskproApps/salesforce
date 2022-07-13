@@ -130,7 +130,6 @@ export const useGlobalSignIn = () => {
         })();
     }, [settings?.global_access_token, settings?.salesforce_instance_url]);
 
-
     // Set blocking flag
     useEffect(() => {
         if (!(callbackUrl && client && poll)) {
@@ -162,11 +161,22 @@ export const useGlobalSignIn = () => {
     };
 
     // Only enable the sign-in button once we have all necessary settings
-    const isDisabled = ! every([
+    let isDisabled = ! every([
         settings?.client_key,
         settings?.client_secret,
         settings?.salesforce_instance_url,
     ]);
+
+    const isInstanceUrlInvalid = settings?.salesforce_instance_url
+        ? !/https:\/\/[a-zA-Z0-9\-]+\.my\.salesforce\.com$/.test(settings.salesforce_instance_url)
+        : false
+    ;
+
+    if (settings?.salesforce_instance_url && isInstanceUrlInvalid) {
+        isDisabled = true;
+    }
+
+    const cancelLoading = () => setIsLoading(false);
 
     return {
         callbackUrl,
@@ -175,6 +185,8 @@ export const useGlobalSignIn = () => {
         isLoading,
         isBlocking,
         isDisabled,
+        isInstanceUrlInvalid,
+        cancelLoading,
         signIn,
         signOut,
     };
