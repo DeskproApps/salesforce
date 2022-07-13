@@ -1,0 +1,50 @@
+.sf-field-mapping {
+    width: 100%;
+    margin-bottom: 6px;
+}
+
+.sf-field-mapping .sf-field-mapping-list {
+    border: 1px solid transparent;
+    width: 100%;
+    border-radius: 4px;
+}
+
+.sf-field-mapping .sf-field-mapping-list .sf-field-mapping-list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 8px;
+    background-color: #fff;
+    font-size: 13px;
+    border-radius: 4px;
+}
+
+.sf-field-mapping-list-item-empty {
+    padding: 5px 8px;
+    font-size: 13px;
+    color: #A9B0B0;
+    border-radius: 4px;
+}
+
+.sf-field-mapping .sf-field-mapping-list .sf-field-mapping-list-item:hover {
+    background-color: #F7F7F7;
+}
+
+.sf-field-mapping .sf-field-mapping-list .sf-field-mapping-list-item.sortable-chosen {
+    background-color: #E8EBEE;
+}
+
+.sf-field-mapping .sf-field-mapping-list .sf-field-mapping-list-item .sf-field-mapping-list-item-grip {
+    cursor: grab;
+    margin-right: 8px;
+}
+
+.sf-field-mapping .sf-field-mapping-list .sf-field-mapping-list-item .sf-field-mapping-list-item-trash {
+    color: #A9B0B0;
+    display: none;
+    cursor: pointer;
+}
+
+.sf-field-mapping .sf-field-mapping-list .sf-field-mapping-list-item:hover .sf-field-mapping-list-item-trash {
+    display: block;
+}

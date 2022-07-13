@@ -1,20 +1,24 @@
 import {
-    useDeskproElements,
-    useDeskproLatestAppContext,
+    Dropdown,
+    DropdownItemType,
+    Input,
     LoadingSpinner,
     useDeskproAppClient,
-    useDeskproAppTheme, useInitialisedDeskproAppClient, Dropdown, Input, DropdownItemType
+    useDeskproAppTheme,
+    useDeskproElements,
+    useDeskproLatestAppContext,
+    useInitialisedDeskproAppClient
 } from "@deskpro/app-sdk";
-import { useQueryWithClient } from "../hooks";
-import { getContactsByEmails, getLeadsByEmails } from "../api/api";
-import { QueryKey } from "../query";
-import { ContactScreen } from "../screens/home/Contact/ContactScreen";
-import { LeadScreen } from "../screens/home/Lead/LeadScreen";
-import { Container } from "../components/Container/Container";
-import { faCheck, faExternalLinkAlt, faCaretDown } from "@fortawesome/free-solid-svg-icons";
-import { useState } from "react";
-import { Contact, Lead } from "../api/types";
-import { match } from "ts-pattern";
+import {useQueryWithClient} from "../hooks";
+import {getContactsByEmails, getLeadsByEmails} from "../api/api";
+import {QueryKey} from "../query";
+import {ContactScreen} from "../screens/home/Contact/ContactScreen";
+import {LeadScreen} from "../screens/home/Lead/LeadScreen";
+import {Container} from "../components/Container/Container";
+import {faCaretDown, faCheck, faExternalLinkAlt} from "@fortawesome/free-solid-svg-icons";
+import {useState} from "react";
+import {Contact, Lead, ObjectType} from "../api/types";
+import {match} from "ts-pattern";
 
 export const User = () => {
     const { client } = useDeskproAppClient();
@@ -108,7 +112,7 @@ export const User = () => {
                 </Dropdown>
             </Container>
             {
-                match(selectedObject.attributes.type)
+                match<ObjectType>(selectedObject.attributes.type)
                     .with("Lead", () => <LeadScreen lead={selectedObject as Lead} />)
                     .with("Contact", () => <ContactScreen contact={selectedObject as Contact} />)
                     .otherwise(() => null)

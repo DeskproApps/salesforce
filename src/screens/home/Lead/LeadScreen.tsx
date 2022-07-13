@@ -3,8 +3,7 @@ import {
     Property,
     Stack,
     useDeskproAppTheme,
-    useDeskproLatestAppContext,
-    useInitialisedDeskproAppClient
+    useDeskproLatestAppContext
 } from "@deskpro/app-sdk";
 import { Container } from "../../../components/Container/Container";
 import { ExternalLink } from "../../../components/ExternalLink/ExternalLink";
@@ -18,10 +17,6 @@ type LeadScreenProps = {
 export const LeadScreen = ({ lead }: LeadScreenProps) => {
     const { theme } = useDeskproAppTheme();
     const { context } = useDeskproLatestAppContext();
-
-    useInitialisedDeskproAppClient((client) => {
-        client.resize();
-    }, [context]);
 
     return (
         <Container>

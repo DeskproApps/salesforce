@@ -24,9 +24,5 @@ export function useQueryWithClient<TQueryFnData = unknown>(
         } as Omit<UseQueryOptions<TQueryFnData, unknown, TQueryFnData, string | readonly unknown[]>, 'queryKey' | 'queryFn'>
     );
 
-    if (result.isSuccess) {
-        client?.resize();
-    }
-
     return result;
 }

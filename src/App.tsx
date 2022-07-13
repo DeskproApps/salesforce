@@ -2,11 +2,10 @@ import { Suspense } from "react";
 import {
     Button,
     LoadingSpinner,
-    Stack, useDeskproAppClient, useDeskproAppEvents,
-    useDeskproLatestAppContext,
-    useInitialisedDeskproAppClient
+    Stack,
+    useDeskproLatestAppContext
 } from "@deskpro/app-sdk";
-import {Routes, Route, useLocation} from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import { Ticket } from "./pages/Ticket";
 import { User } from "./pages/User";
 import { Organization } from "./pages/Organization";
@@ -15,6 +14,9 @@ import { GlobalSignIn } from "./pages/admin/GlobalSignIn";
 import { query } from "./query";
 import { ErrorBoundary } from "react-error-boundary";
 import { faRefresh } from "@fortawesome/free-solid-svg-icons";
+import { Contact } from "./pages/admin/mapping/Contact";
+import { Lead } from "./pages/admin/mapping/Lead";
+import { Account } from "./pages/admin/mapping/Account";
 
 import "./App.css";
 
@@ -27,12 +29,7 @@ import "@deskpro/deskpro-ui/dist/deskpro-custom-icons.css";
 
 function App() {
     const { context } = useDeskproLatestAppContext();
-    const { client } = useDeskproAppClient();
     const { pathname } = useLocation();
-
-    useDeskproAppEvents({
-        onChange: () => setTimeout(() => client?.resize(), 300),
-    });
 
     // We don't have a context in admin that we care about, so just load the page straight away
     if (!["/admin/global-sign-in"].includes(pathname) && !context) {
@@ -63,6 +60,11 @@ function App() {
                                     </Route>
                                     <Route path="admin">
                                         <Route path="global-sign-in" element={<GlobalSignIn />} />
+                                        <Route path="mapping">
+                                            <Route path="contact" element={<Contact />} />
+                                            <Route path="lead" element={<Lead />} />
+                                            <Route path="account" element={<Account />} />
+                                        </Route>
                                     </Route>
                                 </Route>
                             </Routes>

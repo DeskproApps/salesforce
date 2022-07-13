@@ -24,19 +24,11 @@ export const AccountScreen = ({ account }: AccountScreenProps) => {
     const { theme } = useDeskproAppTheme();
     const { context } = useDeskproLatestAppContext();
 
-    useInitialisedDeskproAppClient((client) => {
-        client.resize();
-    }, []);
-
     const owner = useQueryWithClient(
         [QueryKey.ORG_ACCOUNT_OWNER_BY_ID, account.OwnerId],
         (client) => getUserById(client, account.OwnerId as string),
         { enabled: !! account.OwnerId }
     );
-
-    useInitialisedDeskproAppClient((client) => {
-        client.resize();
-    }, [owner, context]);
 
     return (
         <Container>

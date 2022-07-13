@@ -3,8 +3,7 @@ import {
     Property,
     Stack,
     useDeskproAppTheme,
-    useDeskproLatestAppContext,
-    useInitialisedDeskproAppClient
+    useDeskproLatestAppContext
 } from "@deskpro/app-sdk";
 import { useQueryWithClient } from "../../../hooks";
 import { QueryKey } from "../../../query";
@@ -36,10 +35,6 @@ export const ContactScreen = ({ contact }: ContactScreenProps) => {
         (client) => getUserById(client, contact.OwnerId as string),
         { enabled: !! contact.OwnerId }
     );
-
-    useInitialisedDeskproAppClient((client) => {
-        client.resize();
-    }, [account, owner, context]);
 
     return (
         <>
