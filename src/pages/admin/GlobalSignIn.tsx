@@ -68,7 +68,7 @@ export const GlobalSignIn = () => {
             )}
 
             <H2 style={{ marginBottom: "5px" }}>Global Salesforce User*</H2>
-            <div className="global-sign-in container" style={{ borderColor: theme.colors.brandShade40 }}>
+            <div className="global-sign-in container" style={{ borderColor: theme.colors.brandShade40, marginBottom: "5px" }}>
                 {user ? (
                     <>
                         <P1 style={{ marginBottom: "6px" }}>

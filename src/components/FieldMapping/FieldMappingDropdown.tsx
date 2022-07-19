@@ -7,16 +7,16 @@ import { DropdownValueType } from "@deskpro/deskpro-ui";
 type FieldMappingDropdownProps = {
     fields: Field[],
     onSelect: (field: Field) => void;
-    fieldFilter: (field: Field) => boolean;
+    allowedFieldFilter: (field: Field) => boolean;
     selectedNames?: string[];
 };
 
-export const FieldMappingDropdown = ({ fields, fieldFilter, onSelect, selectedNames = [] }: FieldMappingDropdownProps) => {
+export const FieldMappingDropdown = ({ fields, allowedFieldFilter, onSelect, selectedNames = [] }: FieldMappingDropdownProps) => {
     const [input, setInput] = useState<string>("");
 
     const options = fields
         .filter((field) => selectedNames.length === 0 || !selectedNames.includes(field.name))
-        .filter(fieldFilter)
+        .filter(allowedFieldFilter)
         .filter((field) => field.name.toLowerCase().includes(input.toLowerCase()))
         .map<DropdownItemType<string>>((field) => ({
             key: field.name,

@@ -7,8 +7,7 @@ export const ListScreen = () => {
 
     return (
         <Stack gap={20} style={{ padding: "16px" }} vertical>
-            <FieldMapping type="Contact" allowedFieldFilter={allowedFieldFilter} columns />
-            <FieldMapping type="Opportunity" allowedFieldFilter={allowedFieldFilter} columns />
+            <FieldMapping type="Lead" allowedFieldFilter={allowedFieldFilter} columns />
             <FieldMapping type="Note" allowedFieldFilter={allowedFieldFilter} columns />
         </Stack>
     );

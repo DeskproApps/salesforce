@@ -18,6 +18,9 @@ import { Contact } from "./pages/admin/mapping/Contact";
 import { Lead } from "./pages/admin/mapping/Lead";
 import { Account } from "./pages/admin/mapping/Account";
 
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+
 import "./App.css";
 
 import "flatpickr/dist/themes/light.css";
@@ -37,42 +40,44 @@ function App() {
     }
 
     return (
-        <QueryClientProvider client={query}>
-            <Suspense fallback={<LoadingSpinner />}>
-                <QueryErrorResetBoundary>
-                    {({ reset }) => (
-                        <ErrorBoundary onReset={reset} fallbackRender={({ resetErrorBoundary }) => (
-                            <Stack gap={6} style={{ padding: "8px" }} vertical>
-                                There was an error!
-                                <Button text="Reload" onClick={() => resetErrorBoundary()} icon={faRefresh} intent="secondary" />
-                            </Stack>
-                        )}>
-                            <Routes>
-                                <Route path="/">
-                                    <Route path="ticket">
-                                        <Route index element={<Ticket />} />
-                                    </Route>
-                                    <Route path="user">
-                                        <Route index element={<User />} />
-                                    </Route>
-                                    <Route path="organization">
-                                        <Route index element={<Organization />} />
-                                    </Route>
-                                    <Route path="admin">
-                                        <Route path="global-sign-in" element={<GlobalSignIn />} />
-                                        <Route path="mapping">
-                                            <Route path="contact" element={<Contact />} />
-                                            <Route path="lead" element={<Lead />} />
-                                            <Route path="account" element={<Account />} />
+        <DndProvider backend={HTML5Backend}>
+            <QueryClientProvider client={query}>
+                <Suspense fallback={<LoadingSpinner />}>
+                    <QueryErrorResetBoundary>
+                        {({ reset }) => (
+                            <ErrorBoundary onReset={reset} fallbackRender={({ resetErrorBoundary }) => (
+                                <Stack gap={6} style={{ padding: "8px" }} vertical>
+                                    There was an error!
+                                    <Button text="Reload" onClick={() => resetErrorBoundary()} icon={faRefresh} intent="secondary" />
+                                </Stack>
+                            )}>
+                                <Routes>
+                                    <Route path="/">
+                                        <Route path="ticket">
+                                            <Route index element={<Ticket />} />
+                                        </Route>
+                                        <Route path="user">
+                                            <Route index element={<User />} />
+                                        </Route>
+                                        <Route path="organization">
+                                            <Route index element={<Organization />} />
+                                        </Route>
+                                        <Route path="admin">
+                                            <Route path="global-sign-in" element={<GlobalSignIn />} />
+                                            <Route path="mapping">
+                                                <Route path="contact" element={<Contact />} />
+                                                <Route path="lead" element={<Lead />} />
+                                                <Route path="account" element={<Account />} />
+                                            </Route>
                                         </Route>
                                     </Route>
-                                </Route>
-                            </Routes>
-                        </ErrorBoundary>
-                    )}
-                </QueryErrorResetBoundary>
-            </Suspense>
-        </QueryClientProvider>
+                                </Routes>
+                            </ErrorBoundary>
+                        )}
+                    </QueryErrorResetBoundary>
+                </Suspense>
+            </QueryClientProvider>
+        </DndProvider>
     );
 }
 

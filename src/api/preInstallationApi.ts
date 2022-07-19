@@ -1,6 +1,6 @@
 import { adminGenericProxyFetch, IDeskproClient } from "@deskpro/app-sdk";
 import { Settings } from "../types";
-import { AuthTokens, ObjectMeta, RequestMethod } from "./types";
+import {AuthTokens, ObjectMeta, ObjectType, RequestMethod} from "./types";
 import { every, trimEnd } from "lodash";
 import { isResponseError } from "./api";
 
@@ -14,7 +14,7 @@ export const getMePreInstalled = (client: IDeskproClient, settings: Settings) =>
 /**
  * Get an sObject's metadata (whilst app is not installed)
  */
-export const getObjectMetaPreInstalled = (client: IDeskproClient, settings: Settings, object: string): Promise<ObjectMeta> =>
+export const getObjectMetaPreInstalled = (client: IDeskproClient, settings: Settings, object: ObjectType): Promise<ObjectMeta> =>
     preInstalledRequest(client, settings,`/services/data/v55.0/sobjects/${object}/describe`, "GET")
 ;
 

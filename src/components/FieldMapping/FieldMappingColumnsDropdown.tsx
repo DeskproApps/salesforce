@@ -46,7 +46,6 @@ export const FieldMappingColumnsDropdown = ({ value, onSelect }: FieldMappingCol
                         {...targetProps}
                         value={currentSelection}
                         inputsize="small"
-                        type="text"
                         rightIcon={faCaretDown}
                     />
                 </div>
