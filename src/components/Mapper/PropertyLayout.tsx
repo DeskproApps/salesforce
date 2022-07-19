@@ -445,8 +445,6 @@ const Placeholder = ({ rowIdx, columnIdx, moveItem }: PlaceholderProps) => {
     });
 
     return (
-        <S.ItemPlaceholder ref={dropRef} isOver={isOver}>
-            &nbsp;
-        </S.ItemPlaceholder>
+        <S.ItemPlaceholder ref={dropRef} isOver={isOver} />
     );
 };
