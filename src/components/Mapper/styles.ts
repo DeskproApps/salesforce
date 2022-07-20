@@ -15,7 +15,7 @@ export const Layout = styled.div`
 export const Row = styled.div`
     display: flex;
     width: 100%;
-    gap: 6px;
+    gap: 5px;
     padding: 0 5px;
     box-sizing: border-box;
 `;

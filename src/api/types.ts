@@ -5,7 +5,7 @@ export type AuthTokens = {
     refreshToken: string;
 };
 
-export type ObjectType = "Contact" | "Lead" | "Account" | "User" | "Opportunity" | "Note";
+export type ObjectType = "Contact" | "Lead" | "Account" | "User" | "Opportunity" | "Note" | "ActivityHistory";
 
 export interface Address {
     city?: string;

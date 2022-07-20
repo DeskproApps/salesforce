@@ -29,8 +29,8 @@ type PropertyLayoutProps<T extends object> = {
     options: T[];
     propertyId: (option: T) => string;
     propertyLabel: (option: T) => string;
+    onChange: (properties: Properties<T>) => void;
     maxColumns?: number;
-    onChange?: (properties: Properties<T>) => void;
     emptyMessage?: string;
     value?: Properties<T>;
 };
@@ -47,7 +47,7 @@ export function PropertyLayout<T extends object>({ options, propertyId, property
     ;
 
     useEffect(() => {
-        onChange && onChange(rows);
+        onChange(rows);
     }, [rows, onChange]);
 
     const dropdownOptions = options
