@@ -1,31 +1,24 @@
-import { ObjectType } from "./api/types";
+import {HomeLayout, ListLayout, ViewLayout} from "./screens/admin/types";
 
 export interface Settings {
     client_key?: string;
     client_secret?: string;
     salesforce_instance_url?: string;
     global_access_token?: string;
+    mapping_contact?: string;
 }
 
-export type ViewType = "Home" | "List" | "View";
+export type ContactLayout = {
+    type: "Contact";
+    home: HomeLayout;
+    view: ViewLayout;
+};
 
-export interface FieldMap {
-    sections: Record<ObjectType, FieldMapViews>;
-}
+export type OpportunityLayout = {
+    type: "Opportunity";
+    home: HomeLayout;
+    list: ListLayout;
+    view: ViewLayout;
+};
 
-export interface FieldMapViews {
-    views: Record<ViewType, FieldMapObjects>;
-}
-
-export interface FieldMapObjects {
-    objects: Record<ObjectType, FieldMapFields>;
-}
-
-export interface FieldMapFields {
-    fields: Record<string, FieldMapField>;
-    columns: number;
-}
-
-export interface FieldMapField {
-    order: number;
-}
+export type Layout = ContactLayout | OpportunityLayout; // todo: write others

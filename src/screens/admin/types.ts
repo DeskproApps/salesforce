@@ -1,4 +1,3 @@
-import {ObjectType} from "../../api/types";
 import {Properties} from "../../components/Mapper/PropertyLayout";
 
 export type FieldProperty = {
@@ -7,11 +6,12 @@ export type FieldProperty = {
 };
 
 export type ObjectProperty = {
-    name: ObjectType;
+    name: string;
     label: string;
+    object: string;
 };
 
-export type LinkedObjects = Record<string, string>;
+export type LinkedObjects = Record<string, [string, string]>;
 
 export type HomeLayout = {
     root: Properties<FieldProperty>;
@@ -19,6 +19,12 @@ export type HomeLayout = {
     [object: string]: Properties<FieldProperty>;
 };
 
+export type ListLayout = {
+    root: Properties<FieldProperty>;
+};
+
 export type ViewLayout = {
     root: Properties<FieldProperty>;
 };
+
+export type LayoutType = HomeLayout | ListLayout | ViewLayout;

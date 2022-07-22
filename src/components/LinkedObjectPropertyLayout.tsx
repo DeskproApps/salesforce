@@ -4,26 +4,28 @@ import {FieldProperty} from "../screens/admin/types";
 import {useAdminQuery} from "../screens/admin/hooks";
 import {QueryKey} from "../query";
 import {getObjectMetaPreInstalled} from "../api/preInstallationApi";
-import {ObjectType} from "../api/types";
 import {fieldToPropertyMapper} from "../screens/admin/utils";
 import {useCallback} from "react";
 
 type LinkedObjectPropertyLayoutProps = {
     label: string;
-    object: ObjectType;
-    onChange: (properties: Properties<FieldProperty>, object: string) => void;
+    name: string;
+    object: string;
+    onChange: (properties: Properties<FieldProperty>, name: string, object: string) => void;
     value?: Properties<FieldProperty>;
 };
 
-export const LinkedObjectPropertyLayout = ({ object, label, onChange, value }: LinkedObjectPropertyLayoutProps) => {
+export const LinkedObjectPropertyLayout = ({ object, name, label, onChange, value }: LinkedObjectPropertyLayoutProps) => {
+    console.log("object", object);
+
     const meta = useAdminQuery(
-        [QueryKey.ADMIN_OBJECT_META, object],
+        [QueryKey.OBJECT_META, object],
         (client, context) => getObjectMetaPreInstalled(client, context?.settings, object),
     );
 
     const onPropsChange = useCallback(
-        (props: Properties<FieldProperty>) => onChange(props, object),
-        [object, onChange]
+        (props: Properties<FieldProperty>) => onChange(props, name, object),
+        [name, object, onChange]
     );
 
     if (!meta.isSuccess) {

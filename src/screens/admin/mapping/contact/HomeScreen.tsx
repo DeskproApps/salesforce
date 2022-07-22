@@ -1,7 +1,7 @@
 import {Stack, H1, P1, useDeskproAppTheme, Spinner} from "@deskpro/app-sdk";
 import {QueryKey} from "../../../../query";
 import {getObjectMetaPreInstalled} from "../../../../api/preInstallationApi";
-import {PropertyLayout} from "../../../../components/Mapper/PropertyLayout";
+import {Properties, PropertyLayout} from "../../../../components/Mapper/PropertyLayout";
 import {FieldProperty, HomeLayout, LinkedObjects, ObjectProperty} from "../../types";
 import {useAdminQuery} from "../../hooks";
 import {fieldToPropertyMapper, linkedObjectsToProperties} from "../../utils";
@@ -9,11 +9,10 @@ import {useState, Suspense, useCallback, useEffect} from "react";
 import {LinkedObjectPropertyLayout} from "../../../../components/LinkedObjectPropertyLayout";
 
 const linkedObjectOptions: LinkedObjects = {
-    Account: "Account",
-    Opportunity: "Opportunity",
-    User: "Owner",
-    Note: "Notes",
-    ActivityHistory: "Activities",
+    AccountID: ["Account", "Account"],
+    Opportunity: ["Opportunities", "Opportunity"],
+    OwnerID: ["Owner", "User"],
+    Note: ["Notes", "Note"],
 };
 
 type HomeScreenProps = {
@@ -26,12 +25,14 @@ export const HomeScreen = ({ onChange, value = { root: [], objects: [] } }: Home
 
     const [layout, setLayout] = useState<HomeLayout>(value);
 
+    const [isChanging, setIsChanging] = useState(false);
+
     useEffect(() => {
         onChange(layout);
     }, [layout, onChange]);
 
     const meta = useAdminQuery(
-        [QueryKey.ADMIN_OBJECT_META, "Contact"],
+        [QueryKey.OBJECT_META, "Contact"],
         (client, context) => getObjectMetaPreInstalled(client, context?.settings, "Contact"),
     );
 
@@ -40,18 +41,35 @@ export const HomeScreen = ({ onChange, value = { root: [], objects: [] } }: Home
         []
     );
 
-    const setObjectsLayout = useCallback(
-        (properties) => setLayout((layout) => ({ ...layout, objects: properties })),
+
+
+
+
+    const setObjectLayout = useCallback(
+        (properties: Properties<FieldProperty>, name :string) => {
+            setLayout((layout) => ({
+                ...layout,
+                [name]: properties,
+            }));
+        },
         []
     );
 
-    const setObjectLayout = useCallback(
-        (properties, object: string) => setLayout((layout) => ({
-            ...layout,
-            [object]: properties,
-        })),
+    // fixme: there's a race happening here when reordering objects
+
+    const setObjectsLayout = useCallback(
+        (properties) => {
+            setLayout((layout) => {
+                return { ...layout, objects: properties };
+            });
+        },
         []
     );
+
+
+
+
+
 
     if (!meta.isSuccess) {
         return null;
@@ -60,6 +78,10 @@ export const HomeScreen = ({ onChange, value = { root: [], objects: [] } }: Home
     const contactFieldOptions = meta.data.fields.map(fieldToPropertyMapper);
 
     const objectOptions = linkedObjectsToProperties(linkedObjectOptions);
+
+
+    console.log("layout", layout);
+
 
     return (
         <Stack gap={22} vertical>
@@ -87,18 +109,19 @@ export const HomeScreen = ({ onChange, value = { root: [], objects: [] } }: Home
                     propertyLabel={(option) => option.label}
                     onChange={setObjectsLayout}
                     maxColumns={1}
+                    labelFormat={(label, idx) => `${idx + 1}. ${label}`}
                     value={layout.objects}
                 />
             </Stack>
-            {(layout.objects ?? []).map((linkedObject, idx) => (
-                linkedObject[0]?.property && (
-                    <Suspense fallback={<Spinner size="small" />}>
+            {(layout.objects ?? []).map(([linkedObject], idx) => (
+                linkedObject?.property && (
+                    <Suspense fallback={<Spinner size="small" />} key={idx}>
                         <LinkedObjectPropertyLayout
-                            object={linkedObject[0].property.name}
-                            label={`${linkedObject[0].property.label} Details`}
+                            object={linkedObject.property.object}
+                            name={linkedObject.property.name}
+                            label={`${idx + 1}. ${linkedObject.property.label} Details`}
+                            value={layout[linkedObject.property.name]}
                             onChange={setObjectLayout}
-                            value={layout[linkedObject[0].property.name]}
-                            key={idx}
                         />
                     </Suspense>
                 )

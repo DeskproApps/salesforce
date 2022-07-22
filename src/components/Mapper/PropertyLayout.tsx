@@ -33,9 +33,10 @@ type PropertyLayoutProps<T extends object> = {
     maxColumns?: number;
     emptyMessage?: string;
     value?: Properties<T>;
+    labelFormat?: (label: string, idx: number) => string;
 };
 
-export function PropertyLayout<T extends object>({ options, propertyId, propertyLabel, onChange, value = [], emptyMessage = "Empty", maxColumns = 2 }: PropertyLayoutProps<T>) {
+export function PropertyLayout<T extends object>({ options, propertyId, propertyLabel, onChange, value = [], emptyMessage = "Empty", maxColumns = 2, labelFormat = (v) => v }: PropertyLayoutProps<T>) {
     const [optionSearch, setOptionSearch] = useState("");
     const [rows, setRows] = useState<Properties<T>>(value);
 
@@ -50,12 +51,14 @@ export function PropertyLayout<T extends object>({ options, propertyId, property
         onChange(rows);
     }, [rows, onChange]);
 
+    const getLabel = (option: T, idx: number) => labelFormat(propertyLabel(option), idx);
+
     const dropdownOptions = options
         .filter((option) => !flatten(rows.map((column) => column)).filter((p) => p).map((p) => propertyId(p?.property as T)).includes(propertyId(option)))
-        .filter((option) => propertyLabel(option).toLowerCase().includes(optionSearch.toLowerCase()))
-        .map<DropdownItemType<string>>((option) => ({
+        .filter((option, idx) => getLabel(option, idx).toLowerCase().includes(optionSearch.toLowerCase()))
+        .map<DropdownItemType<string>>((option, idx) => ({
             key: propertyId(option),
-            label: propertyLabel(option),
+            label: getLabel(option, idx),
             type: "value",
             value: propertyId(option),
         }))
@@ -250,6 +253,8 @@ export function PropertyLayout<T extends object>({ options, propertyId, property
         }
     };
 
+    let itemIdx = -1;
+
     return (
         <S.Container>
             <S.Layout>
@@ -257,6 +262,7 @@ export function PropertyLayout<T extends object>({ options, propertyId, property
                     <S.Row key={rowIdx}>
                         {range(getColumnsMax()).map((columnIdx) => {
                             const property = row[columnIdx] ?? null;
+                            itemIdx ++;
 
                             if (property && property.property) {
                                 return (
@@ -264,7 +270,7 @@ export function PropertyLayout<T extends object>({ options, propertyId, property
                                         key={columnIdx}
                                         columnIdx={columnIdx}
                                         id={propertyId(property.property)}
-                                        label={propertyLabel(property.property)}
+                                        label={getLabel(property.property, itemIdx)}
                                         orderItem={orderItem}
                                         onDelete={() => deleteProperty(rowIdx, columnIdx)}
                                     />

@@ -88,6 +88,27 @@ export interface Contact {
     Languages__c?: string;
 }
 
+export interface NoteAttributes {
+    type: "Note";
+    url: string;
+}
+
+export interface Note {
+    attributes: NoteAttributes;
+    Id: string;
+    IsDeleted: boolean;
+    ParentId: string;
+    Title: string;
+    IsPrivate: boolean;
+    Body: string;
+    OwnerId: string;
+    CreatedDate: string;
+    CreatedById: string;
+    LastModifiedDate: string;
+    LastModifiedById: string;
+    SystemModstamp: string;
+}
+
 export interface LeadAttributes {
     type: "Lead";
     url: string;
@@ -154,6 +175,61 @@ export interface Lead {
     Primary__c?: string;
     CurrentGenerators__c?: string;
     NumberofLocations__c?: string;
+}
+
+export interface OpportunityAttributes {
+    type: "Opportunity";
+    url: string;
+}
+
+export interface Opportunity {
+    attributes: OpportunityAttributes;
+    Id: string;
+    IsDeleted: boolean;
+    AccountId: string;
+    IsPrivate: boolean;
+    Name: string;
+    Description?: string;
+    StageName: string;
+    Amount: number;
+    Probability: number;
+    ExpectedRevenue: number;
+    TotalOpportunityQuantity?: string;
+    CloseDate: string;
+    Type: string;
+    NextStep?: string;
+    LeadSource: string;
+    IsClosed: boolean;
+    IsWon: boolean;
+    ForecastCategory: string;
+    ForecastCategoryName: string;
+    CampaignId?: string;
+    HasOpportunityLineItem: boolean;
+    Pricebook2Id?: string;
+    OwnerId: string;
+    CreatedDate: string;
+    CreatedById: string;
+    LastModifiedDate: string;
+    LastModifiedById: string;
+    SystemModstamp: string;
+    LastActivityDate?: string;
+    PushCount: number;
+    LastStageChangeDate?: string;
+    FiscalQuarter: number;
+    FiscalYear: number;
+    Fiscal: string;
+    ContactId: string;
+    LastViewedDate: string;
+    LastReferencedDate: string;
+    HasOpenActivity: boolean;
+    HasOverdueTask: boolean;
+    LastAmountChangedHistoryId?: string;
+    LastCloseDateChangedHistoryId?: string;
+    DeliveryInstallationStatus__c?: string;
+    TrackingNumber__c?: string;
+    OrderNumber__c?: string;
+    CurrentGenerators__c?: string;
+    MainCompetitors__c?: string;
 }
 
 export interface AccountAttributes {
@@ -434,6 +510,30 @@ export interface PicklistValue {
     value: string;
 }
 
+export type FieldType = "address"
+    | "anyType"
+    | "calculated"
+    | "combobox"
+    | "currency"
+    | "DataCategoryGroupReference"
+    | "email"
+    | "encryptedstring"
+    | "ID"
+    | "JunctionIdList"
+    | "location"
+    | "masterrecord"
+    | "multipicklist"
+    | "percent"
+    | "phone"
+    | "picklist"
+    | "reference"
+    | "textarea"
+    | "url"
+    | "boolean"
+    | "datetime"
+    | "date"
+;
+
 export interface Field {
     aggregatable: boolean;
     aiPredictionField: boolean;
@@ -488,7 +588,7 @@ export interface Field {
     searchPrefilterable: boolean;
     soapType: string;
     sortable: boolean;
-    type: string;
+    type: FieldType;
     unique: boolean;
     updateable: boolean;
     writeRequiresMasterRead: boolean;

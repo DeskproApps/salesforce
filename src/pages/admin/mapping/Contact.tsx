@@ -1,14 +1,37 @@
-import { useState, Suspense } from "react";
+import {useState, Suspense, useCallback} from "react";
 import { TabBar, TabBarItemType } from "@deskpro/deskpro-ui";
 import { HomeScreen } from "../../../screens/admin/mapping/contact/HomeScreen";
 import { ViewScreen } from "../../../screens/admin/mapping/contact/ViewScreen";
-import { LoadingSpinner, useDeskproLatestAppContext } from "@deskpro/app-sdk";
+import {LoadingSpinner, useDeskproLatestAppContext, useInitialisedDeskproAppClient} from "@deskpro/app-sdk";
 import { Reveal } from "../../../components/Reveal/Reveal";
+import {ContactLayout} from "../../../types";
+import {HomeLayout, ViewLayout} from "../../../screens/admin/types";
+import defaultContactLayout from "../../../resources/default_layout/contact.json";
 
 export const Contact = () => {
     const { context } = useDeskproLatestAppContext();
 
     const [activeTab, setActiveTab] = useState(0);
+
+    const [layout, setLayout] = useState<ContactLayout>(
+        context?.settings.mapping_contact
+            ? JSON.parse(context?.settings.mapping_contact)
+            : defaultContactLayout
+    );
+
+    useInitialisedDeskproAppClient((client) => {
+        client.setAdminSetting(JSON.stringify(layout));
+    }, [layout]);
+
+    const setHomeLayout = useCallback((home: HomeLayout) => setLayout((layout) => ({
+        ...layout,
+        home,
+    })), []);
+
+    const setViewLayout = useCallback((view: ViewLayout) => setLayout((layout) => ({
+        ...layout,
+        view,
+    })), []);
 
     const tabs: TabBarItemType[] = [
         {
@@ -19,6 +42,10 @@ export const Contact = () => {
         },
     ];
 
+    if (!context?.settings) {
+        return null;
+    }
+
     if (!context?.settings?.global_access_token) {
         return (
             <div style={{ padding: "12px" }}>
@@ -26,151 +53,6 @@ export const Contact = () => {
             </div>
         );
     }
-
-    const homeLayout = {
-        "root": [
-            [
-                {
-                    "id": "Id",
-                    "property": {
-                        "name": "Id",
-                        "label": "Contact ID"
-                    }
-                }
-            ],
-            [
-                {
-                    "id": "IsDeleted",
-                    "property": {
-                        "name": "IsDeleted",
-                        "label": "Deleted"
-                    }
-                }
-            ],
-            [
-                {
-                    "id": "AccountId",
-                    "property": {
-                        "name": "AccountId",
-                        "label": "Account ID"
-                    }
-                }
-            ]
-        ],
-        "objects": [
-            [
-                {
-                    "id": "Opportunity",
-                    "property": {
-                        "name": "Opportunity",
-                        "label": "2. Opportunity"
-                    }
-                }
-            ],
-            [
-                {
-                    "id": "Account",
-                    "property": {
-                        "name": "Account",
-                        "label": "1. Account"
-                    }
-                }
-            ]
-        ],
-        "Account": [
-            [
-                {
-                    "id": "AccountId",
-                    "property": {
-                        "name": "AccountId",
-                        "label": "Account ID"
-                    }
-                },
-                {
-                    "id": "IsClosed",
-                    "property": {
-                        "name": "IsClosed",
-                        "label": "Closed"
-                    }
-                }
-            ]
-        ],
-        "Opportunity": [
-            [
-                {
-                    "id": "Id",
-                    "property": {
-                        "name": "Id",
-                        "label": "Account ID"
-                    }
-                },
-                null
-            ],
-            [
-                {
-                    "id": "BillingCountry",
-                    "property": {
-                        "name": "BillingCountry",
-                        "label": "Billing Country"
-                    }
-                },
-                {
-                    "id": "IsDeleted",
-                    "property": {
-                        "name": "IsDeleted",
-                        "label": "Deleted"
-                    }
-                }
-            ]
-        ]
-    };
-
-    const viewLayout = {
-        "root": [
-            [
-                {
-                    "id": "Name",
-                    "property": {
-                        "name": "Name",
-                        "label": "Full Name"
-                    }
-                },
-                null
-            ],
-            [
-                {
-                    "id": "AccountId",
-                    "property": {
-                        "name": "AccountId",
-                        "label": "Account ID"
-                    }
-                },
-                {
-                    "id": "Id",
-                    "property": {
-                        "name": "Id",
-                        "label": "Contact ID"
-                    }
-                }
-            ],
-            [
-                {
-                    "id": "IsDeleted",
-                    "property": {
-                        "name": "IsDeleted",
-                        "label": "Deleted"
-                    }
-                },
-                {
-                    "id": "MasterRecordId",
-                    "property": {
-                        "name": "MasterRecordId",
-                        "label": "Master Record ID"
-                    }
-                }
-            ]
-        ]
-    };
 
     return (
         <>
@@ -184,10 +66,10 @@ export const Contact = () => {
             <Suspense fallback={<LoadingSpinner />}>
                 <div style={{ padding: "16px" }}>
                     <Reveal show={activeTab === 0}>
-                        <HomeScreen onChange={(layout) => console.log("HOME", layout)} value={homeLayout} />
+                        <HomeScreen onChange={setHomeLayout} value={layout.home} />
                     </Reveal>
                     <Reveal show={activeTab === 1}>
-                        <ViewScreen onChange={(layout) => console.log("VIEW", layout)} value={viewLayout} />
+                        <ViewScreen onChange={setViewLayout} value={layout.view} />
                     </Reveal>
                 </div>
             </Suspense>

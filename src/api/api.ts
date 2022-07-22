@@ -1,7 +1,38 @@
 import { IDeskproClient, proxyFetch } from "@deskpro/app-sdk";
-import {ObjectMeta, RequestMethod} from "./types";
 import { trimStart } from "lodash";
-import { Account, Contact, Lead, User } from "./types";
+import {Account, Contact, Lead, User, ObjectMeta, Opportunity, RequestMethod, Note} from "./types";
+
+/**
+ * Get a list of opportunities by ContactID
+ */
+export const getOpportunitiesByContactId = async (client: IDeskproClient, contactId: string, limit?: number): Promise<Opportunity[]> => {
+    const limitClause = limit === undefined ? "" : `LIMIT ${limit} OFFSET 0`;
+
+    const result: { records: { Id: string }[] } = await SOQLSearch(
+        client,
+        `SELECT Id FROM Opportunity WHERE ContactID = '${contactId}' ${limitClause}`
+    );
+
+    return Promise.all(
+        result.records.map(({ Id }) => getOpportunityById(client, Id))
+    );
+}
+
+/**
+ * Get a list of notes by ParentID
+ */
+export const getNotesByParentId = async (client: IDeskproClient, parentId: string, limit?: number): Promise<Note[]> => {
+    const limitClause = limit === undefined ? "" : `LIMIT ${limit} OFFSET 0`;
+
+    const result: { records: { Id: string }[] } = await SOQLSearch(
+        client,
+        `SELECT Id FROM Note WHERE ParentID = '${parentId}' ${limitClause}`
+    );
+
+    return Promise.all(
+        result.records.map(({ Id }) => getNoteById(client, Id))
+    );
+}
 
 /**
  * Get a list of Salesforce "Contact" sObjects by email
@@ -53,6 +84,20 @@ export const SOSLSearch = (client: IDeskproClient, sosl: string) =>
 ;
 
 /**
+ * Perform a SOQL search
+ */
+export const SOQLSearch = (client: IDeskproClient, soql: string) =>
+    installedRequest(client, `/services/data/v55.0/query/?q=${encodeURIComponent(soql)}`, "GET")
+;
+
+/**
+ * Get "Account" by ID
+ */
+export const getNoteById = (client: IDeskproClient, id: string): Promise<Note> =>
+    installedRequest(client, `/services/data/v55.0/sobjects/Note/${id}`, "GET")
+;
+
+/**
  * Get "Account" by ID
  */
 export const getAccountById = (client: IDeskproClient, id: string): Promise<Account> =>
@@ -71,6 +116,13 @@ export const getLeadById = (client: IDeskproClient, id: string): Promise<Lead> =
  */
 export const getContactById = (client: IDeskproClient, id: string): Promise<Contact> =>
     installedRequest(client, `/services/data/v55.0/sobjects/Contact/${id}`, "GET")
+;
+
+/**
+ * Get "Opportunity" by ID
+ */
+export const getOpportunityById = (client: IDeskproClient, id: string): Promise<Opportunity> =>
+    installedRequest(client, `/services/data/v55.0/sobjects/Opportunity/${id}`, "GET")
 ;
 
 /**

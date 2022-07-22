@@ -1,4 +1,4 @@
-import { Address as AddressType } from "../../api/types";
+import { Address as AddressType } from "../../../../api/types";
 import "./Address.css";
 
 type AddressProps = {
