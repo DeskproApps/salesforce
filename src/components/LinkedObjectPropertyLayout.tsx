@@ -16,8 +16,6 @@ type LinkedObjectPropertyLayoutProps = {
 };
 
 export const LinkedObjectPropertyLayout = ({ object, name, label, onChange, value }: LinkedObjectPropertyLayoutProps) => {
-    console.log("object", object);
-
     const meta = useAdminQuery(
         [QueryKey.OBJECT_META, object],
         (client, context) => getObjectMetaPreInstalled(client, context?.settings, object),
