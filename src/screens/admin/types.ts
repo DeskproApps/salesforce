@@ -15,8 +15,8 @@ export type LinkedObjects = Record<string, [string, string]>;
 
 export type HomeLayout = {
     root: Properties<FieldProperty>;
-    objects: Properties<ObjectProperty>;
-    [object: string]: Properties<FieldProperty>;
+    objects: Record<string, Properties<FieldProperty>>;
+    objects_order: Properties<ObjectProperty>;
 };
 
 export type ListLayout = {

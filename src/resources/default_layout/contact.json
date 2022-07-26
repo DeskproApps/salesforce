@@ -68,7 +68,7 @@
         null
       ]
     ],
-    "objects": [
+    "objects_order": [
       [{
         "id": "Opportunity",
         "property": {
@@ -86,64 +86,66 @@
         }
       }]
     ],
-    "Opportunity": [
-      [{
-        "id": "StageName",
-        "property": {
-          "name": "StageName",
-          "label": "Stage"
-        }
-      },
-        {
-          "id": "Amount",
+    "objects": {
+      "Opportunity": [
+        [{
+          "id": "StageName",
           "property": {
-            "name": "Amount",
-            "label": "Amount"
+            "name": "StageName",
+            "label": "Stage"
           }
-        }
+        },
+          {
+            "id": "Amount",
+            "property": {
+              "name": "Amount",
+              "label": "Amount"
+            }
+          }
+        ],
+        [{
+          "id": "OwnerId",
+          "property": {
+            "name": "OwnerId",
+            "label": "Owner ID"
+          }
+        },
+          {
+            "id": "CloseDate",
+            "property": {
+              "name": "CloseDate",
+              "label": "Close Date"
+            }
+          }
+        ]
       ],
-      [{
-        "id": "OwnerId",
-        "property": {
-          "name": "OwnerId",
-          "label": "Owner ID"
-        }
-      },
-        {
-          "id": "CloseDate",
+      "Note": [
+        [{
+          "id": "Title",
           "property": {
-            "name": "CloseDate",
-            "label": "Close Date"
+            "name": "Title",
+            "label": "Title"
           }
-        }
-      ]
-    ],
-    "Note": [
-      [{
-        "id": "Title",
-        "property": {
-          "name": "Title",
-          "label": "Title"
-        }
-      },
-        null
-      ],
-      [{
-        "id": "CreatedDate",
-        "property": {
-          "name": "CreatedDate",
-          "label": "Created Date"
-        }
-      },
-        {
-          "id": "Body",
+        },
+          null
+        ],
+        [{
+          "id": "CreatedDate",
           "property": {
-            "name": "Body",
-            "label": "Body"
+            "name": "CreatedDate",
+            "label": "Created Date"
           }
-        }
+        },
+          {
+            "id": "Body",
+            "property": {
+              "name": "Body",
+              "label": "Body"
+            }
+          }
+        ]
       ]
-    ]
+    }
   },
   "view": {
     "root": [

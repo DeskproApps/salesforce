@@ -20,12 +20,10 @@ type HomeScreenProps = {
     value?: HomeLayout;
 };
 
-export const HomeScreen = ({ onChange, value = { root: [], objects: [] } }: HomeScreenProps) => {
+export const HomeScreen = ({ onChange, value = { root: [], objects_order: [], objects: {} } }: HomeScreenProps) => {
     const { theme } = useDeskproAppTheme();
 
     const [layout, setLayout] = useState<HomeLayout>(value);
-
-    const [isChanging, setIsChanging] = useState(false);
 
     useEffect(() => {
         onChange(layout);
@@ -41,35 +39,27 @@ export const HomeScreen = ({ onChange, value = { root: [], objects: [] } }: Home
         []
     );
 
-
-
-
-
-    const setObjectLayout = useCallback(
-        (properties: Properties<FieldProperty>, name :string) => {
-            setLayout((layout) => ({
-                ...layout,
-                [name]: properties,
-            }));
-        },
-        []
-    );
-
-    // fixme: there's a race happening here when reordering objects
-
     const setObjectsLayout = useCallback(
         (properties) => {
             setLayout((layout) => {
-                return { ...layout, objects: properties };
+                return { ...layout, objects_order: properties };
             });
         },
         []
     );
 
-
-
-
-
+    const setObjectLayout = useCallback(
+        (properties: Properties<FieldProperty>, name :string) => {
+            setLayout((layout) => ({
+                ...layout,
+                objects: {
+                    ...layout.objects,
+                    [name]: properties,
+                }
+            }));
+        },
+        []
+    );
 
     if (!meta.isSuccess) {
         return null;
@@ -78,10 +68,6 @@ export const HomeScreen = ({ onChange, value = { root: [], objects: [] } }: Home
     const contactFieldOptions = meta.data.fields.map(fieldToPropertyMapper);
 
     const objectOptions = linkedObjectsToProperties(linkedObjectOptions);
-
-
-    console.log("layout", layout);
-
 
     return (
         <Stack gap={22} vertical>
@@ -110,17 +96,17 @@ export const HomeScreen = ({ onChange, value = { root: [], objects: [] } }: Home
                     onChange={setObjectsLayout}
                     maxColumns={1}
                     labelFormat={(label, idx) => `${idx + 1}. ${label}`}
-                    value={layout.objects}
+                    value={layout.objects_order}
                 />
             </Stack>
-            {(layout.objects ?? []).map(([linkedObject], idx) => (
+            {(layout.objects_order ?? []).map(([linkedObject], idx) => (
                 linkedObject?.property && (
-                    <Suspense fallback={<Spinner size="small" />} key={idx}>
+                    <Suspense fallback={<Spinner size="small" />} key={linkedObject.property.name}>
                         <LinkedObjectPropertyLayout
                             object={linkedObject.property.object}
                             name={linkedObject.property.name}
                             label={`${idx + 1}. ${linkedObject.property.label} Details`}
-                            value={layout[linkedObject.property.name]}
+                            value={layout.objects[linkedObject.property.name]}
                             onChange={setObjectLayout}
                         />
                     </Suspense>
