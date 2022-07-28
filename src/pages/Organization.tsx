@@ -35,6 +35,7 @@ export const Organization = () => {
 
     useInitialisedDeskproAppClient((client) => {
         client.setBadgeCount((accounts?.data ?? []).length);
+        client?.setTitle("Account");
     }, [accounts.data]);
 
     if (!name) {
@@ -56,7 +57,6 @@ export const Organization = () => {
     }
 
     if (accounts.data.length === 1) {
-        client?.setTitle("Account");
         return <AccountScreen account={accounts.data[0]} />
     }
 
