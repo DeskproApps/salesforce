@@ -8,19 +8,26 @@ import {LayoutObject} from "../types";
 type PropertyLayoutProps = {
     properties: Properties<FieldProperty>;
     object: LayoutObject;
+    internalUrl?: string;
+    externalUrl?: string;
 };
 
-export const PropertyLayout = ({ object, properties }: PropertyLayoutProps) => {
+export const PropertyLayout = ({ object, properties, internalUrl, externalUrl }: PropertyLayoutProps) => {
     return (
         <>
-            {properties.map((row, idx) => (
-                <Stack gap={6} justify="space-between" style={{ width: "100%" }} align="stretch" key={idx}>
-                    {row.filter((r) => r !== null).map((column, idx) => (column ?
-                        <Fragment key={idx}>
+            {properties.map((row, rowIdx) => (
+                <Stack gap={6} justify="space-between" style={{ width: "100%" }} align="stretch" key={rowIdx}>
+                    {row.filter((r) => r !== null).map((column, colIdx) => (column ?
+                        <Fragment key={colIdx}>
                             <div style={{ width: "100%" }}>
-                                <PropertyView name={column?.property.name} object={object} />
+                                <PropertyView
+                                    name={column?.property.name}
+                                    object={object}
+                                    internalUrl={internalUrl}
+                                    externalUrl={externalUrl}
+                                    isFirst={rowIdx === 0 && colIdx === 0}
+                                />
                             </div>
-                            {row.filter((r) => r !== null).length !== (idx + 1) && <VerticalDivider width={2} />}
                         </Fragment>
                         : null))}
                 </Stack>

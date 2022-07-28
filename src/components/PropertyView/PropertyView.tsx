@@ -16,13 +16,18 @@ import {Contact} from "./fields/Contact/Contact";
 import {OnlyDate} from "./fields/Date/Date";
 import {LayoutObject} from "../types";
 import {Currency} from "./fields/Currency/Currency";
+import {ExternalLink} from "../ExternalLink/ExternalLink";
+import {Link} from "../Link/Link";
 
 type PropertyViewProps = {
     name: string;
     object: LayoutObject;
+    isFirst: boolean;
+    internalUrl?: string;
+    externalUrl?: string;
 };
 
-export const PropertyView = ({ name, object }: PropertyViewProps) => {
+export const PropertyView = ({ name, object, internalUrl, externalUrl, isFirst }: PropertyViewProps) => {
     const { context } = useDeskproLatestAppContext();
 
     const meta = useQueryWithClient<ObjectMeta>(
@@ -45,58 +50,51 @@ export const PropertyView = ({ name, object }: PropertyViewProps) => {
     // eslint-disable-next-line
     const value: any = object[name];
 
-    return match<[FieldType|undefined, string[]|undefined]>([fieldMeta?.type, fieldMeta?.referenceTo])
+    const property = match<[FieldType|undefined, string[]|undefined]>([fieldMeta?.type, fieldMeta?.referenceTo])
         .with(["address", P._], () => (
-            <Property title={label}>
-                <Address address={value} />
-            </Property>
+            <Address address={value} />
         ))
         .with(["boolean", P._], () => (
-            <Property title={label}>
-                <Boolean value={value} />
-            </Property>
+            <Boolean value={value} />
         ))
         .with(["datetime", P._], () => (
-            <Property title={label}>
-                <DateTime value={value} />
-            </Property>
+            <DateTime value={value} />
         ))
         .with(["date", P._], () => (
-            <Property title={label}>
-                <OnlyDate value={value} />
-            </Property>
+            <OnlyDate value={value} />
         ))
         .with(["currency", P._], () => (
-            <Property title={label}>
-                <Currency value={value} />
-            </Property>
+            <Currency value={value} />
         ))
         .with(["reference", ["User"]], () => (
             <Suspense fallback={<Spinner size="extra-small" />}>
-                <Property title={label}>
-                    <User id={value} settings={context.settings} />
-                </Property>
+                <User id={value} settings={context.settings} />
             </Suspense>
         ))
         .with(["reference", ["Account"]], () => (
             <Suspense fallback={<Spinner size="extra-small" />}>
-                <Property title={label}>
-                    <Account id={value} settings={context.settings} />
-                </Property>
+                <Account id={value} settings={context.settings} />
             </Suspense>
         ))
         .with(["reference", ["Contact"]], () => (
             <Suspense fallback={<Spinner size="extra-small" />}>
-                <Property title={label}>
-                    <Contact id={value} settings={context.settings} />
-                </Property>
+                <Contact id={value} settings={context.settings} />
             </Suspense>
         ))
         .otherwise(() => (
-            <Property title={label}>
+            <>
                 {value ?? <PropertyEmpty />}
-            </Property>
+            </>
         ))
     ;
+
+    return (
+        <>
+            <Property title={label}>
+                {(isFirst && internalUrl) ? <Link to={internalUrl}>{property}</Link> : property}
+                {(isFirst && externalUrl) && <ExternalLink url={externalUrl} style={{ marginLeft: "6px" }} />}
+            </Property>
+        </>
+    );
 };
 

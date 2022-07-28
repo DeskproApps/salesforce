@@ -7,7 +7,6 @@ import {faExternalLink} from "@fortawesome/free-solid-svg-icons";
 import {Stack, useDeskproAppTheme} from "@deskpro/app-sdk";
 import {Settings} from "../../../../types";
 import {Account as AccountType} from "../../../../api/types";
-import {Link} from "../../../Link/Link";
 
 type AccountProps = {
     id: string;
@@ -28,7 +27,7 @@ export const Account = ({ id, settings }: AccountProps) => {
 
     return (
         <Stack gap={8} align="center">
-            <Link to="/foo">{account.data.Name}</Link>
+            {account.data.Name}
             <a href={getObjectPermalink(settings, `/lightning/r/Account/${account.data.Id}/view`)} target="_blank">
                 <FontAwesomeIcon icon={faExternalLink} color={theme.colors.grey40} size="sm" />
             </a>

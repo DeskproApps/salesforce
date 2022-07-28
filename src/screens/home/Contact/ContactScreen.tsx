@@ -4,13 +4,12 @@ import {
     useDeskproAppTheme,
     useDeskproLatestAppContext,
 } from "@deskpro/app-sdk";
-import { useQueryWithClient } from "../../../hooks";
+import {useBasePath, useQueryWithClient} from "../../../hooks";
 import { QueryKey } from "../../../query";
 import {
     getAccountById,
-    getNotesByParentId,
     getObjectMeta,
-    getOpportunitiesByContactId,
+    getObjectsByFk,
     getUserById
 } from "../../../api/api";
 import { Container } from "../../../components/Container/Container";
@@ -21,6 +20,7 @@ import {Fragment, useMemo} from "react";
 import {PropertyLayout} from "../../../components/PropertyLayout/PropertyLayout";
 import {LayoutObject} from "../../../components/types";
 import {match} from "ts-pattern";
+import {Link} from "../../../components/Link/Link";
 
 type ContactScreenProps = {
     contact: Contact;
@@ -30,6 +30,8 @@ export const ContactScreen = ({ contact }: ContactScreenProps) => {
     const { theme } = useDeskproAppTheme();
     const { context } = useDeskproLatestAppContext();
 
+    const basePath = useBasePath();
+
     const opportunitiesMax = 3;
     const notesMax = 3;
 
@@ -38,7 +40,7 @@ export const ContactScreen = ({ contact }: ContactScreenProps) => {
         [context?.settings]
     );
 
-    const objects = layout.objects.map(([object]) => object?.property.name);
+    const objects = layout.objects_order.map(([object]) => object?.property.name);
 
     const meta = useQueryWithClient<ObjectMeta>(
         [QueryKey.OBJECT_META, "Contact"],
@@ -58,14 +60,14 @@ export const ContactScreen = ({ contact }: ContactScreenProps) => {
     );
 
     const opportunities = useQueryWithClient(
-        [QueryKey.OPPORTUNITIES_BY_CONTACT_ID, contact.Id, opportunitiesMax],
-        (client) => getOpportunitiesByContactId(client, contact.Id, opportunitiesMax),
+        [QueryKey.OBJECTS_BY_FK, "Opportunity", "ContactID", contact.Id, opportunitiesMax],
+        (client) => getObjectsByFk(client, "Opportunity", "ContactID", contact.Id, opportunitiesMax),
         { enabled: objects.includes("Opportunity") }
     );
 
     const notes = useQueryWithClient(
-        [QueryKey.NOTES_BY_PARENT_ID, contact.Id, notesMax],
-        (client) => getNotesByParentId(client, contact.Id, notesMax),
+        [QueryKey.NOTES_BY_PARENT_ID, "Note", "ParentID", contact.Id, notesMax],
+        (client) => getObjectsByFk(client, "Note", "ParentID", contact.Id, opportunitiesMax),
         { enabled: objects.includes("Note") }
     );
 
@@ -78,15 +80,12 @@ export const ContactScreen = ({ contact }: ContactScreenProps) => {
             <Container>
                 <Stack gap={14} vertical>
 
-
-
-
-
-
-
-
                     <Stack justify="space-between" align="center" style={{ width: "100%" }}>
-                        <H1 style={{ color: theme.colors.cyan100 }}>Contact</H1>
+                        <H1 style={{ color: theme.colors.cyan100 }}>
+                            <Link to={`${basePath}/objects/Contact/${contact.Id}/view`}>
+                                Contact
+                            </Link>
+                        </H1>
                         <ExternalLink url={getObjectPermalink(context?.settings, `/lightning/r/Contact/${contact.Id}/view`)} />
                     </Stack>
 
@@ -103,11 +102,15 @@ export const ContactScreen = ({ contact }: ContactScreenProps) => {
                                     .with("Opportunity", () => opportunities.data && (
                                         <Fragment key={idx}>
                                             <Stack justify="space-between" align="center" style={{ width: "100%" }}>
-                                                <H1 style={{ color: theme.colors.cyan100 }}>Opportunities</H1>
+                                                <H1 style={{ color: theme.colors.cyan100 }}>
+                                                    <Link to={`${basePath}/objects/Opportunity/ContactID/${contact.Id}/list`}>
+                                                        Opportunities
+                                                    </Link>
+                                                </H1>
                                             </Stack>
                                             <Stack gap={20} style={{ width: "100%" }} vertical>
                                                 {opportunities.data.map((opportunity, idx) => (
-                                                    <PropertyLayout properties={layout.Opportunity} object={(opportunity as unknown) as LayoutObject} key={idx} />
+                                                    <PropertyLayout properties={layout.objects.Opportunity} object={(opportunity as unknown) as LayoutObject} key={idx} />
                                                 ))}
                                             </Stack>
                                         </Fragment>
@@ -115,29 +118,35 @@ export const ContactScreen = ({ contact }: ContactScreenProps) => {
                                     .with("Note", () => notes.data && (
                                         <Fragment key={idx}>
                                             <Stack justify="space-between" align="center" style={{ width: "100%" }}>
-                                                <H1 style={{ color: theme.colors.cyan100 }}>Notes</H1>
+                                                <H1 style={{ color: theme.colors.cyan100 }}>
+                                                    <Link to={`${basePath}/objects/Note/ParentID/${contact.Id}/list`}>
+                                                        Notes
+                                                    </Link>
+                                                </H1>
                                             </Stack>
                                             <Stack gap={20} style={{ width: "100%" }} vertical>
                                                 {notes.data.map((note, idx) => (
-                                                    <PropertyLayout properties={layout.Note} object={(note as unknown) as LayoutObject} key={idx} />
+                                                    <PropertyLayout properties={layout.objects.Note} object={(note as unknown) as LayoutObject} key={idx} />
                                                 ))}
                                             </Stack>
                                         </Fragment>
                                     ))
-                                    .with("User", () => owner.data && (
+                                    .with("OwnerID", () => owner.data && (
                                         <Fragment key={idx}>
                                             <Stack justify="space-between" align="center" style={{ width: "100%" }}>
-                                                <H1 style={{ color: theme.colors.cyan100 }}>Owner</H1>
+                                                <H1>Owner</H1>
+                                                <ExternalLink url={getObjectPermalink(context?.settings, `/lightning/r/User/${contact.OwnerId}/view`)} />
                                             </Stack>
-                                            <PropertyLayout properties={layout.User} object={(owner.data as unknown) as LayoutObject} />
+                                            <PropertyLayout properties={layout.objects.OwnerID} object={(owner.data as unknown) as LayoutObject} />
                                         </Fragment>
                                     ))
-                                    .with("Account", () => account.data && (
+                                    .with("AccountID", () => account.data && (
                                         <Fragment key={idx}>
                                             <Stack justify="space-between" align="center" style={{ width: "100%" }}>
-                                                <H1 style={{ color: theme.colors.cyan100 }}>Account</H1>
+                                                <H1>Account</H1>
+                                                <ExternalLink url={getObjectPermalink(context?.settings, `/lightning/r/Account/${contact.AccountId}/view`)} />
                                             </Stack>
-                                            <PropertyLayout properties={layout.Account} object={(account.data as unknown) as LayoutObject} />
+                                            <PropertyLayout properties={layout.objects.AccountID} object={(account.data as unknown) as LayoutObject} />
                                         </Fragment>
                                     ))
                                     .otherwise(() => null)

@@ -3,36 +3,25 @@ import { trimStart } from "lodash";
 import {Account, Contact, Lead, User, ObjectMeta, Opportunity, RequestMethod, Note} from "./types";
 
 /**
- * Get a list of opportunities by ContactID
+ * Get a list of sObjects by FK
  */
-export const getOpportunitiesByContactId = async (client: IDeskproClient, contactId: string, limit?: number): Promise<Opportunity[]> => {
+export const getObjectsByFk = async (client: IDeskproClient, object: string, field: string, id: string, limit?: number): Promise<Opportunity[]> => {
     const limitClause = limit === undefined ? "" : `LIMIT ${limit} OFFSET 0`;
 
-    const result: { records: { Id: string }[] } = await SOQLSearch(
+    const result: { records: Opportunity[] } = await SOQLSearch(
         client,
-        `SELECT Id FROM Opportunity WHERE ContactID = '${contactId}' ${limitClause}`
+        `SELECT FIELDS(ALL) FROM ${object} WHERE ${field} = '${id}' ${limitClause}`
     );
 
-    return Promise.all(
-        result.records.map(({ Id }) => getOpportunityById(client, Id))
-    );
+    return result.records;
 }
 
 /**
- * Get a list of notes by ParentID
+ * Get an sObject by ID
  */
-export const getNotesByParentId = async (client: IDeskproClient, parentId: string, limit?: number): Promise<Note[]> => {
-    const limitClause = limit === undefined ? "" : `LIMIT ${limit} OFFSET 0`;
-
-    const result: { records: { Id: string }[] } = await SOQLSearch(
-        client,
-        `SELECT Id FROM Note WHERE ParentID = '${parentId}' ${limitClause}`
-    );
-
-    return Promise.all(
-        result.records.map(({ Id }) => getNoteById(client, Id))
-    );
-}
+export const getObjectById = <T = unknown>(client: IDeskproClient, object: string, id: string): Promise<T> =>
+    installedRequest(client, `/services/data/v55.0/sobjects/${object}/${id}`, "GET")
+;
 
 /**
  * Get a list of Salesforce "Contact" sObjects by email
@@ -44,7 +33,7 @@ export const getContactsByEmails = async (client: IDeskproClient, emails: string
     );
 
     return Promise.all(
-        result.searchRecords.map(({ Id }) => getContactById(client, Id))
+        result.searchRecords.map(({ Id }) => getObjectById<Contact>(client, "Contact", Id))
     );
 };
 
@@ -58,7 +47,7 @@ export const getLeadsByEmails = async (client: IDeskproClient, emails: string[])
     );
 
     return Promise.all(
-        result.searchRecords.map(({ Id }) => getLeadById(client, Id))
+        result.searchRecords.map(({ Id }) => getObjectById<Lead>(client, "Lead", Id))
     );
 };
 
@@ -72,7 +61,7 @@ export const getAccountsByName = async (client: IDeskproClient, name: string): P
     );
 
     return Promise.all(
-        result.searchRecords.map(({ Id }) => getAccountById(client, Id))
+        result.searchRecords.map(({ Id }) => getObjectById<Account>(client, "Account", Id))
     );
 };
 
@@ -93,22 +82,8 @@ export const SOQLSearch = (client: IDeskproClient, soql: string) =>
 /**
  * Get "Account" by ID
  */
-export const getNoteById = (client: IDeskproClient, id: string): Promise<Note> =>
-    installedRequest(client, `/services/data/v55.0/sobjects/Note/${id}`, "GET")
-;
-
-/**
- * Get "Account" by ID
- */
 export const getAccountById = (client: IDeskproClient, id: string): Promise<Account> =>
     installedRequest(client, `/services/data/v55.0/sobjects/Account/${id}`, "GET")
-;
-
-/**
- * Get "Lead" by ID
- */
-export const getLeadById = (client: IDeskproClient, id: string): Promise<Lead> =>
-    installedRequest(client, `/services/data/v55.0/sobjects/Lead/${id}`, "GET")
 ;
 
 /**
@@ -116,13 +91,6 @@ export const getLeadById = (client: IDeskproClient, id: string): Promise<Lead> =
  */
 export const getContactById = (client: IDeskproClient, id: string): Promise<Contact> =>
     installedRequest(client, `/services/data/v55.0/sobjects/Contact/${id}`, "GET")
-;
-
-/**
- * Get "Opportunity" by ID
- */
-export const getOpportunityById = (client: IDeskproClient, id: string): Promise<Opportunity> =>
-    installedRequest(client, `/services/data/v55.0/sobjects/Opportunity/${id}`, "GET")
 ;
 
 /**

@@ -59,6 +59,30 @@
       "isRequired": false,
       "isBackendOnly": false,
       "order": 50
+    },
+    "mapping_note": {
+      "title": "Note Field Mapping",
+      "type": "app_modal",
+      "options": {
+        "entrypoint": "#/admin/mapping/note",
+        "label": "Edit Mapping",
+        "icon": "edit"
+      },
+      "isRequired": false,
+      "isBackendOnly": false,
+      "order": 60
+    },
+    "mapping_opportunity": {
+      "title": "Opportunity Field Mapping",
+      "type": "app_modal",
+      "options": {
+        "entrypoint": "#/admin/mapping/opportunity",
+        "label": "Edit Mapping",
+        "icon": "edit"
+      },
+      "isRequired": false,
+      "isBackendOnly": false,
+      "order": 70
     }
   },
   "proxy": {

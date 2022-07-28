@@ -1,0 +1,91 @@
+{
+  "list": {
+    "root": [
+      [
+        {
+          "id": "Title",
+          "property": {
+            "name": "Title",
+            "label": "Title"
+          }
+        }
+      ],
+      [
+        {
+          "id": "Body",
+          "property": {
+            "name": "Body",
+            "label": "Body"
+          }
+        }
+      ],
+      [
+        {
+          "id": "CreatedDate",
+          "property": {
+            "name": "CreatedDate",
+            "label": "Created Date"
+          }
+        }
+      ]
+    ]
+  },
+  "view": {
+    "root": [
+      [
+        {
+          "id": "Title",
+          "property": {
+            "name": "Title",
+            "label": "Title"
+          }
+        }
+      ],
+      [
+        {
+          "id": "Body",
+          "property": {
+            "name": "Body",
+            "label": "Body"
+          }
+        }
+      ],
+      [
+        {
+          "id": "CreatedDate",
+          "property": {
+            "name": "CreatedDate",
+            "label": "Created Date"
+          }
+        }
+      ],
+      [
+        {
+          "id": "CreatedById",
+          "property": {
+            "name": "CreatedById",
+            "label": "Created By ID"
+          }
+        }
+      ],
+      [
+        {
+          "id": "LastModifiedDate",
+          "property": {
+            "name": "LastModifiedDate",
+            "label": "Last Modified Date"
+          }
+        }
+      ],
+      [
+        {
+          "id": "LastModifiedById",
+          "property": {
+            "name": "LastModifiedById",
+            "label": "Last Modified By ID"
+          }
+        }
+      ]
+    ]
+  }
+}

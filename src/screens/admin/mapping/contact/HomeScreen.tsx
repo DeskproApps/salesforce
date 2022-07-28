@@ -39,7 +39,7 @@ export const HomeScreen = ({ onChange, value = { root: [], objects_order: [], ob
         []
     );
 
-    const setObjectsLayout = useCallback(
+    const setObjectsOrderLayout = useCallback(
         (properties) => {
             setLayout((layout) => {
                 return { ...layout, objects_order: properties };
@@ -48,7 +48,7 @@ export const HomeScreen = ({ onChange, value = { root: [], objects_order: [], ob
         []
     );
 
-    const setObjectLayout = useCallback(
+    const setObjectsLayout = useCallback(
         (properties: Properties<FieldProperty>, name :string) => {
             setLayout((layout) => ({
                 ...layout,
@@ -93,7 +93,7 @@ export const HomeScreen = ({ onChange, value = { root: [], objects_order: [], ob
                     options={objectOptions}
                     propertyId={(option) => option.name}
                     propertyLabel={(option) => option.label}
-                    onChange={setObjectsLayout}
+                    onChange={setObjectsOrderLayout}
                     maxColumns={1}
                     labelFormat={(label, idx) => `${idx + 1}. ${label}`}
                     value={layout.objects_order}
@@ -107,7 +107,7 @@ export const HomeScreen = ({ onChange, value = { root: [], objects_order: [], ob
                             name={linkedObject.property.name}
                             label={`${idx + 1}. ${linkedObject.property.label} Details`}
                             value={layout.objects[linkedObject.property.name]}
-                            onChange={setObjectLayout}
+                            onChange={setObjectsLayout}
                         />
                     </Suspense>
                 )

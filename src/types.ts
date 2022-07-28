@@ -6,6 +6,8 @@ export interface Settings {
     salesforce_instance_url?: string;
     global_access_token?: string;
     mapping_contact?: string;
+    mapping_note?: string;
+    mapping_opportunity?: string;
 }
 
 export type ContactLayout = {
@@ -16,9 +18,14 @@ export type ContactLayout = {
 
 export type OpportunityLayout = {
     type: "Opportunity";
-    home: HomeLayout;
     list: ListLayout;
     view: ViewLayout;
 };
 
-export type Layout = ContactLayout | OpportunityLayout; // todo: write others
+export type NoteLayout = {
+    type: "Note";
+    list: ListLayout;
+    view: ViewLayout;
+};
+
+export type Layout = ContactLayout | OpportunityLayout | NoteLayout; // todo: write others

@@ -25,4 +25,7 @@ export enum QueryKey {
     OPPORTUNITIES_BY_CONTACT_ID = "opportunities_by_contact_id",
     NOTES_BY_PARENT_ID = "notes_by_parent_id",
     CONTACT_ACTIVITY_HISTORY_BY_WHO_ID = "activity_history_by_who_id",
+
+    OBJECTS_BY_FK = "objects_by_fk",
+    OBJECT_BY_ID = "objects_by_id",
 }

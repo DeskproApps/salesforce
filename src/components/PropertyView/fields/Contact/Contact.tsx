@@ -1,4 +1,4 @@
-import {useQueryWithClient} from "../../../../hooks";
+import {useBasePath, useQueryWithClient} from "../../../../hooks";
 import {QueryKey} from "../../../../query";
 import {getContactById} from "../../../../api/api";
 import {getObjectPermalink} from "../../../../utils";
@@ -17,6 +17,8 @@ type ContactProps = {
 export const Contact = ({ id, settings }: ContactProps) => {
     const { theme } = useDeskproAppTheme();
 
+    const basePath = useBasePath();
+
     const contact = useQueryWithClient<ContactType>(
         [QueryKey.CONTACT_BY_ID, id],
         (client) => getContactById(client, id),
@@ -28,7 +30,9 @@ export const Contact = ({ id, settings }: ContactProps) => {
 
     return (
         <Stack gap={8} align="center">
-            <Link to="/contact">{contact.data.Name}</Link>
+            <Link to={`${basePath}/objects/Contact/${contact.data.Id}/view`}>
+                {contact.data.Name}
+            </Link>
             <a href={getObjectPermalink(settings, `/lightning/r/Contact/${contact.data.Id}/view`)} target="_blank">
                 <FontAwesomeIcon icon={faExternalLink} color={theme.colors.grey40} size="sm" />
             </a>
