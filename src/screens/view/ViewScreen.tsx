@@ -1,8 +1,8 @@
 import {useQueryWithClient} from "../../hooks";
 import {QueryKey} from "../../query";
 import {getObjectById} from "../../api/api";
-import {useDeskproLatestAppContext, Stack} from "@deskpro/app-sdk";
-import {getScreenLayout} from "../../utils";
+import {useDeskproLatestAppContext, Stack, useInitialisedDeskproAppClient} from "@deskpro/app-sdk";
+import {getObjectPermalink, getScreenLayout} from "../../utils";
 import {LayoutObject} from "../../components/types";
 import {PropertyLayout} from "../../components/PropertyLayout/PropertyLayout";
 import {Container} from "../../components/Container/Container";
@@ -19,6 +19,8 @@ export const ViewScreen = ({ object, id }: ViewScreenProps) => {
         [QueryKey.OBJECT_BY_ID, object, id],
         (client) => getObjectById(client, object, id),
     );
+
+    useInitialisedDeskproAppClient((client) => client.setTitle(object), [object]);
 
     if (!isSuccess) {
         return null;
@@ -38,7 +40,11 @@ export const ViewScreen = ({ object, id }: ViewScreenProps) => {
     return (
         <Container>
             <Stack gap={14} vertical>
-                <PropertyLayout properties={layout.root} object={(data as unknown) as LayoutObject} />
+                <PropertyLayout
+                    properties={layout.root}
+                    object={(data as unknown) as LayoutObject}
+                    externalUrl={getObjectPermalink(context.settings, `/lightning/r/${object}/${id}/view`)}
+                />
             </Stack>
         </Container>
     );

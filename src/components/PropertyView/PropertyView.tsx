@@ -18,6 +18,7 @@ import {LayoutObject} from "../types";
 import {Currency} from "./fields/Currency/Currency";
 import {ExternalLink} from "../ExternalLink/ExternalLink";
 import {Link} from "../Link/Link";
+import {Email} from "./fields/Email/Email";
 
 type PropertyViewProps = {
     name: string;
@@ -50,6 +51,14 @@ export const PropertyView = ({ name, object, internalUrl, externalUrl, isFirst }
     // eslint-disable-next-line
     const value: any = object[name];
 
+    if (!value) {
+        return (
+            <Property title={label}>
+                <PropertyEmpty />
+            </Property>
+        );
+    }
+
     const property = match<[FieldType|undefined, string[]|undefined]>([fieldMeta?.type, fieldMeta?.referenceTo])
         .with(["address", P._], () => (
             <Address address={value} />
@@ -62,6 +71,9 @@ export const PropertyView = ({ name, object, internalUrl, externalUrl, isFirst }
         ))
         .with(["date", P._], () => (
             <OnlyDate value={value} />
+        ))
+        .with(["email", P._], () => (
+            <Email value={value} />
         ))
         .with(["currency", P._], () => (
             <Currency value={value} />
@@ -89,12 +101,10 @@ export const PropertyView = ({ name, object, internalUrl, externalUrl, isFirst }
     ;
 
     return (
-        <>
-            <Property title={label}>
-                {(isFirst && internalUrl) ? <Link to={internalUrl}>{property}</Link> : property}
-                {(isFirst && externalUrl) && <ExternalLink url={externalUrl} style={{ marginLeft: "6px" }} />}
-            </Property>
-        </>
+        <Property title={label}>
+            {(isFirst && internalUrl) ? <Link to={internalUrl}>{property}</Link> : property}
+            {(isFirst && externalUrl) && <ExternalLink url={externalUrl} style={{ marginLeft: "6px" }} />}
+        </Property>
     );
 };
 

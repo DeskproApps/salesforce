@@ -9,13 +9,17 @@
             "label": "Name"
           }
         },
+        null
+      ],
+      [
         {
           "id": "Probability",
           "property": {
             "name": "Probability",
             "label": "Probability (%)"
           }
-        }
+        },
+        null
       ],
       [
         {

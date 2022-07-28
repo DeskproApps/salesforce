@@ -110,13 +110,17 @@
             "label": "Owner ID"
           }
         },
+          null
+        ],
+        [
           {
             "id": "CloseDate",
             "property": {
               "name": "CloseDate",
               "label": "Close Date"
             }
-          }
+          },
+          null
         ]
       ],
       "Note": [
@@ -129,6 +133,16 @@
         },
           null
         ],
+        [
+          {
+            "id": "Body",
+            "property": {
+              "name": "Body",
+              "label": "Body"
+            }
+          },
+          null
+        ],
         [{
           "id": "CreatedDate",
           "property": {
@@ -136,13 +150,7 @@
             "label": "Created Date"
           }
         },
-          {
-            "id": "Body",
-            "property": {
-              "name": "Body",
-              "label": "Body"
-            }
-          }
+          null
         ]
       ]
     }

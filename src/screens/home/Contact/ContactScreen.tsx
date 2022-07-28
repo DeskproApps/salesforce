@@ -110,7 +110,13 @@ export const ContactScreen = ({ contact }: ContactScreenProps) => {
                                             </Stack>
                                             <Stack gap={20} style={{ width: "100%" }} vertical>
                                                 {opportunities.data.map((opportunity, idx) => (
-                                                    <PropertyLayout properties={layout.objects.Opportunity} object={(opportunity as unknown) as LayoutObject} key={idx} />
+                                                    <PropertyLayout
+                                                        properties={layout.objects.Opportunity}
+                                                        object={(opportunity as unknown) as LayoutObject}
+                                                        externalUrl={getObjectPermalink(context?.settings, `/lightning/r/Opportunity/${opportunity.Id}/view`)}
+                                                        internalUrl={`${basePath}/objects/Opportunity/${opportunity.Id}/view`}
+                                                        key={idx}
+                                                    />
                                                 ))}
                                             </Stack>
                                         </Fragment>
@@ -126,7 +132,13 @@ export const ContactScreen = ({ contact }: ContactScreenProps) => {
                                             </Stack>
                                             <Stack gap={20} style={{ width: "100%" }} vertical>
                                                 {notes.data.map((note, idx) => (
-                                                    <PropertyLayout properties={layout.objects.Note} object={(note as unknown) as LayoutObject} key={idx} />
+                                                    <PropertyLayout
+                                                        properties={layout.objects.Note}
+                                                        object={(note as unknown) as LayoutObject}
+                                                        externalUrl={getObjectPermalink(context?.settings, `/lightning/r/Note/${note.Id}/view`)}
+                                                        internalUrl={`${basePath}/objects/Note/${note.Id}/view`}
+                                                        key={idx}
+                                                    />
                                                 ))}
                                             </Stack>
                                         </Fragment>

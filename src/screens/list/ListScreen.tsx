@@ -1,7 +1,7 @@
 import {useQueryWithClient} from "../../hooks";
 import {QueryKey} from "../../query";
 import {getObjectsByFk} from "../../api/api";
-import {useDeskproLatestAppContext, Stack} from "@deskpro/app-sdk";
+import {useDeskproLatestAppContext, Stack, useInitialisedDeskproAppClient} from "@deskpro/app-sdk";
 import {getObjectPermalink, getScreenLayout} from "../../utils";
 import {LayoutObject} from "../../components/types";
 import {PropertyLayout} from "../../components/PropertyLayout/PropertyLayout";
@@ -18,6 +18,8 @@ type ListScreenProps = {
 export const ListScreen = ({ object, field, id }: ListScreenProps) => {
     const { context } = useDeskproLatestAppContext();
     const { pathname } = useLocation();
+
+    useInitialisedDeskproAppClient((client) => client.setTitle(`${object} List`), [object]);
 
     const basePath = useMemo(
         () => `/${pathname.split("/").filter((f) => f)[0]}`,
