@@ -89,19 +89,23 @@
     "objects": {
       "Opportunity": [
         [{
-          "id": "StageName",
+          "id": "Name",
           "property": {
-            "name": "StageName",
-            "label": "Stage"
+            "name": "Name",
+            "label": "Name"
           }
         },
+          null
+        ],
+        [
           {
             "id": "Amount",
             "property": {
               "name": "Amount",
               "label": "Amount"
             }
-          }
+          },
+          null
         ],
         [{
           "id": "OwnerId",

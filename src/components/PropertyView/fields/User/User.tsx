@@ -2,9 +2,7 @@ import {useQueryWithClient} from "../../../../hooks";
 import {QueryKey} from "../../../../query";
 import {getUserById} from "../../../../api/api";
 import {getObjectPermalink} from "../../../../utils";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faExternalLink} from "@fortawesome/free-solid-svg-icons";
-import {Stack, useDeskproAppTheme} from "@deskpro/app-sdk";
+import {Stack} from "@deskpro/app-sdk";
 import {Settings} from "../../../../types";
 import {User as UserType} from "../../../../api/types";
 import {ExternalLink} from "../../../ExternalLink/ExternalLink";
@@ -15,8 +13,6 @@ type UserProps = {
 };
 
 export const User = ({ id, settings }: UserProps) => {
-    const { theme } = useDeskproAppTheme();
-
     const user = useQueryWithClient<UserType>(
         [QueryKey.USER_BY_ID, id],
         (client) => getUserById(client, id),
