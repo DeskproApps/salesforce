@@ -19,6 +19,7 @@ import {Currency} from "./fields/Currency/Currency";
 import {ExternalLink} from "../ExternalLink/ExternalLink";
 import {Link} from "../Link/Link";
 import {Email} from "./fields/Email/Email";
+import {UrlLink} from "./fields/UrlLink/UrlLink";
 
 type PropertyViewProps = {
     name: string;
@@ -77,6 +78,9 @@ export const PropertyView = ({ name, object, internalUrl, externalUrl, isFirst }
         ))
         .with(["currency", P._], () => (
             <Currency value={value} />
+        ))
+        .with(["url", P._], () => (
+            <UrlLink value={value} />
         ))
         .with(["reference", P.when((to) => to?.includes("User"))], () => (
             <Suspense fallback={<Spinner size="extra-small" />}>
