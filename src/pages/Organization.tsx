@@ -25,16 +25,21 @@ export const Organization = () => {
         registerElement("refresh", { type: "refresh_button" });
     });
 
-    const name = context?.data.organisation.name as string;
+    const name = context?.data?.organisation?.name as string;
 
     const accounts = useQueryWithClient(
         [QueryKey.ORG_ACCOUNTS_BY_NAME, name],
-        (client) => getAccountsByName(client, name)
+        (client) => getAccountsByName(client, name),
+        { enabled: !! name }
     );
 
     useInitialisedDeskproAppClient((client) => {
         client.setBadgeCount((accounts?.data ?? []).length);
     }, [accounts.data]);
+
+    if (!name) {
+        return null;
+    }
 
     if (!accounts.isSuccess) {
         return <LoadingSpinner />;

@@ -1,7 +1,7 @@
 import {useQueryWithClient} from "../../hooks";
 import {QueryKey} from "../../query";
 import {getObjectsByFk} from "../../api/api";
-import {useDeskproLatestAppContext, Stack, useInitialisedDeskproAppClient} from "@deskpro/app-sdk";
+import {useDeskproLatestAppContext, Stack, useInitialisedDeskproAppClient, HorizontalDivider} from "@deskpro/app-sdk";
 import {getObjectPermalink, getScreenLayout} from "../../utils";
 import {LayoutObject} from "../../components/types";
 import {PropertyLayout} from "../../components/PropertyLayout/PropertyLayout";
@@ -52,13 +52,16 @@ export const ListScreen = ({ object, field, id }: ListScreenProps) => {
         <Container>
             <Stack gap={14} vertical>
                 {data?.map((item) => (
-                    <Stack gap={14} vertical>
+                    <Stack gap={14} style={{ width: "100%" }} vertical>
                         <PropertyLayout
                             properties={layout.root}
                             object={(item as unknown) as LayoutObject}
                             externalUrl={getObjectPermalink(context?.settings, `/lightning/r/${object}/${(item as LayoutObject).Id}/view`)}
                             internalUrl={`${basePath}/objects/${object}/${(item as LayoutObject).Id}/view`}
                         />
+                        <div style={{ width: "100%" }}>
+                            <HorizontalDivider />
+                        </div>
                     </Stack>
                 ))}
             </Stack>

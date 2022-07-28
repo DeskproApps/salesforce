@@ -60,6 +60,30 @@
       "isBackendOnly": false,
       "order": 50
     },
+    "mapping_lead": {
+      "title": "Lead Field Mapping",
+      "type": "app_modal",
+      "options": {
+        "entrypoint": "#/admin/mapping/lead",
+        "label": "Edit Mapping",
+        "icon": "edit"
+      },
+      "isRequired": false,
+      "isBackendOnly": false,
+      "order": 60
+    },
+    "mapping_account": {
+      "title": "Account Field Mapping",
+      "type": "app_modal",
+      "options": {
+        "entrypoint": "#/admin/mapping/account",
+        "label": "Edit Mapping",
+        "icon": "edit"
+      },
+      "isRequired": false,
+      "isBackendOnly": false,
+      "order": 70
+    },
     "mapping_note": {
       "title": "Note Field Mapping",
       "type": "app_modal",
@@ -70,7 +94,7 @@
       },
       "isRequired": false,
       "isBackendOnly": false,
-      "order": 60
+      "order": 80
     },
     "mapping_opportunity": {
       "title": "Opportunity Field Mapping",
@@ -82,7 +106,7 @@
       },
       "isRequired": false,
       "isBackendOnly": false,
-      "order": 70
+      "order": 90
     }
   },
   "proxy": {

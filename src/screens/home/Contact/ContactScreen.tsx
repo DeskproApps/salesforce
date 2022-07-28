@@ -67,7 +67,7 @@ export const ContactScreen = ({ contact }: ContactScreenProps) => {
 
     const notes = useQueryWithClient(
         [QueryKey.NOTES_BY_PARENT_ID, "Note", "ParentID", contact.Id, notesMax],
-        (client) => getObjectsByFk(client, "Note", "ParentID", contact.Id, opportunitiesMax),
+        (client) => getObjectsByFk(client, "Note", "ParentID", contact.Id, notesMax),
         { enabled: objects.includes("Note") }
     );
 
@@ -99,7 +99,7 @@ export const ContactScreen = ({ contact }: ContactScreenProps) => {
                         <Fragment key={idx}>
                             {
                                 match(object)
-                                    .with("Opportunity", () => opportunities.data && (
+                                    .with("Opportunity", () => (opportunities.data && opportunities.data.length > 0) && (
                                         <Fragment key={idx}>
                                             <Stack justify="space-between" align="center" style={{ width: "100%" }}>
                                                 <H1 style={{ color: theme.colors.cyan100 }}>
@@ -108,20 +108,24 @@ export const ContactScreen = ({ contact }: ContactScreenProps) => {
                                                     </Link>
                                                 </H1>
                                             </Stack>
-                                            <Stack gap={20} style={{ width: "100%" }} vertical>
+                                            <Stack gap={14} style={{ width: "100%" }} vertical>
                                                 {opportunities.data.map((opportunity, idx) => (
-                                                    <PropertyLayout
-                                                        properties={layout.objects.Opportunity}
-                                                        object={(opportunity as unknown) as LayoutObject}
-                                                        externalUrl={getObjectPermalink(context?.settings, `/lightning/r/Opportunity/${opportunity.Id}/view`)}
-                                                        internalUrl={`${basePath}/objects/Opportunity/${opportunity.Id}/view`}
-                                                        key={idx}
-                                                    />
+                                                    <Fragment key={idx}>
+                                                        <PropertyLayout
+                                                            properties={layout.objects.Opportunity}
+                                                            object={(opportunity as unknown) as LayoutObject}
+                                                            externalUrl={getObjectPermalink(context?.settings, `/lightning/r/Opportunity/${opportunity.Id}/view`)}
+                                                            internalUrl={`${basePath}/objects/Opportunity/${opportunity.Id}/view`}
+                                                        />
+                                                        <div style={{ width: "100%" }}>
+                                                            <HorizontalDivider />
+                                                        </div>
+                                                    </Fragment>
                                                 ))}
                                             </Stack>
                                         </Fragment>
                                     ))
-                                    .with("Note", () => notes.data && (
+                                    .with("Note", () => (notes.data && notes.data.length > 0) && (
                                         <Fragment key={idx}>
                                             <Stack justify="space-between" align="center" style={{ width: "100%" }}>
                                                 <H1 style={{ color: theme.colors.cyan100 }}>
@@ -130,15 +134,19 @@ export const ContactScreen = ({ contact }: ContactScreenProps) => {
                                                     </Link>
                                                 </H1>
                                             </Stack>
-                                            <Stack gap={20} style={{ width: "100%" }} vertical>
+                                            <Stack gap={14} style={{ width: "100%" }} vertical>
                                                 {notes.data.map((note, idx) => (
-                                                    <PropertyLayout
-                                                        properties={layout.objects.Note}
-                                                        object={(note as unknown) as LayoutObject}
-                                                        externalUrl={getObjectPermalink(context?.settings, `/lightning/r/Note/${note.Id}/view`)}
-                                                        internalUrl={`${basePath}/objects/Note/${note.Id}/view`}
-                                                        key={idx}
-                                                    />
+                                                    <Fragment key={idx}>
+                                                        <PropertyLayout
+                                                            properties={layout.objects.Note}
+                                                            object={(note as unknown) as LayoutObject}
+                                                            externalUrl={getObjectPermalink(context?.settings, `/lightning/r/Note/${note.Id}/view`)}
+                                                            internalUrl={`${basePath}/objects/Note/${note.Id}/view`}
+                                                        />
+                                                        <div style={{ width: "100%" }}>
+                                                            <HorizontalDivider />
+                                                        </div>
+                                                    </Fragment>
                                                 ))}
                                             </Stack>
                                         </Fragment>
@@ -150,22 +158,29 @@ export const ContactScreen = ({ contact }: ContactScreenProps) => {
                                                 <ExternalLink url={getObjectPermalink(context?.settings, `/lightning/r/User/${contact.OwnerId}/view`)} />
                                             </Stack>
                                             <PropertyLayout properties={layout.objects.OwnerID} object={(owner.data as unknown) as LayoutObject} />
+                                            <div style={{ width: "100%" }}>
+                                                <HorizontalDivider />
+                                            </div>
                                         </Fragment>
                                     ))
                                     .with("AccountID", () => account.data && (
                                         <Fragment key={idx}>
                                             <Stack justify="space-between" align="center" style={{ width: "100%" }}>
-                                                <H1>Account</H1>
+                                                <H1>
+                                                    <Link to={`${basePath}/objects/Account/${contact.AccountId}/view`}>
+                                                        Account
+                                                    </Link>
+                                                </H1>
                                                 <ExternalLink url={getObjectPermalink(context?.settings, `/lightning/r/Account/${contact.AccountId}/view`)} />
                                             </Stack>
                                             <PropertyLayout properties={layout.objects.AccountID} object={(account.data as unknown) as LayoutObject} />
+                                            <div style={{ width: "100%" }}>
+                                                <HorizontalDivider />
+                                            </div>
                                         </Fragment>
                                     ))
                                     .otherwise(() => null)
                             }
-                            <div style={{ width: "100%" }}>
-                                <HorizontalDivider />
-                            </div>
                         </Fragment>
                     ))}
                 </Stack>

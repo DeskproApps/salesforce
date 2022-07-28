@@ -1,0 +1,337 @@
+{
+  "home": {
+    "root": [
+      [
+        {
+          "id": "Name",
+          "property": {
+            "name": "Name",
+            "label": "Account Name"
+          }
+        },
+        null
+      ],
+      [
+        {
+          "id": "Type",
+          "property": {
+            "name": "Type",
+            "label": "Account Type"
+          }
+        },
+        null
+      ],
+      [
+        {
+          "id": "Website",
+          "property": {
+            "name": "Website",
+            "label": "Website"
+          }
+        },
+        null
+      ],
+      [
+        {
+          "id": "Phone",
+          "property": {
+            "name": "Phone",
+            "label": "Account Phone"
+          }
+        },
+        {
+          "id": "Rating",
+          "property": {
+            "name": "Rating",
+            "label": "Account Rating"
+          }
+        }
+      ],
+      [
+        {
+          "id": "AccountNumber",
+          "property": {
+            "name": "AccountNumber",
+            "label": "Account Number"
+          }
+        },
+        null
+      ],
+      [
+        {
+          "id": "OwnerId",
+          "property": {
+            "name": "OwnerId",
+            "label": "Owner ID"
+          }
+        },
+        null
+      ],
+      [
+        {
+          "id": "CreatedDate",
+          "property": {
+            "name": "CreatedDate",
+            "label": "Created Date"
+          }
+        },
+        null
+      ]
+    ],
+    "objects_order": [
+      [
+        {
+          "id": "OwnerID",
+          "property": {
+            "name": "OwnerID",
+            "label": "Owner",
+            "object": "User"
+          }
+        }
+      ],
+      [
+        {
+          "id": "Note",
+          "property": {
+            "name": "Note",
+            "label": "Notes",
+            "object": "Note"
+          }
+        }
+      ],
+      [
+        {
+          "id": "Opportunity",
+          "property": {
+            "name": "Opportunity",
+            "label": "Opportunities",
+            "object": "Opportunity"
+          }
+        }
+      ]
+    ],
+    "objects": {
+      "Opportunity": [
+        [
+          {
+            "id": "Name",
+            "property": {
+              "name": "Name",
+              "label": "Name"
+            }
+          },
+          null
+        ],
+        [
+          {
+            "id": "Probability",
+            "property": {
+              "name": "Probability",
+              "label": "Probability (%)"
+            }
+          },
+          {
+            "id": "Amount",
+            "property": {
+              "name": "Amount",
+              "label": "Amount"
+            }
+          }
+        ],
+        [
+          {
+            "id": "CreatedDate",
+            "property": {
+              "name": "CreatedDate",
+              "label": "Created Date"
+            }
+          },
+          null
+        ]
+      ],
+      "OwnerID": [
+        [
+          {
+            "id": "FirstName",
+            "property": {
+              "name": "FirstName",
+              "label": "First Name"
+            }
+          },
+          {
+            "id": "LastName",
+            "property": {
+              "name": "LastName",
+              "label": "Last Name"
+            }
+          }
+        ]
+      ],
+      "Note": [
+        [
+          {
+            "id": "Title",
+            "property": {
+              "name": "Title",
+              "label": "Title"
+            }
+          }
+        ],
+        [
+          {
+            "id": "Body",
+            "property": {
+              "name": "Body",
+              "label": "Body"
+            }
+          }
+        ],
+        [
+          {
+            "id": "CreatedDate",
+            "property": {
+              "name": "CreatedDate",
+              "label": "Created Date"
+            }
+          }
+        ]
+      ]
+    }
+  },
+  "view": {
+    "root": [
+      [
+        {
+          "id": "Name",
+          "property": {
+            "name": "Name",
+            "label": "Account Name"
+          }
+        },
+        null
+      ],
+      [
+        {
+          "id": "Type",
+          "property": {
+            "name": "Type",
+            "label": "Account Type"
+          }
+        },
+        null
+      ],
+      [
+        {
+          "id": "BillingAddress",
+          "property": {
+            "name": "BillingAddress",
+            "label": "Billing Address"
+          }
+        },
+        null
+      ],
+      [
+        {
+          "id": "ShippingAddress",
+          "property": {
+            "name": "ShippingAddress",
+            "label": "Shipping Address"
+          }
+        },
+        null
+      ],
+      [
+        {
+          "id": "Phone",
+          "property": {
+            "name": "Phone",
+            "label": "Account Phone"
+          }
+        },
+        null
+      ],
+      [
+        {
+          "id": "Website",
+          "property": {
+            "name": "Website",
+            "label": "Website"
+          }
+        },
+        null
+      ],
+      [
+        {
+          "id": "Description",
+          "property": {
+            "name": "Description",
+            "label": "Account Description"
+          }
+        },
+        null
+      ],
+      [
+        {
+          "id": "AccountNumber",
+          "property": {
+            "name": "AccountNumber",
+            "label": "Account Number"
+          }
+        },
+        {
+          "id": "Industry",
+          "property": {
+            "name": "Industry",
+            "label": "Industry"
+          }
+        }
+      ],
+      [
+        {
+          "id": "NumberOfEmployees",
+          "property": {
+            "name": "NumberOfEmployees",
+            "label": "Employees"
+          }
+        },
+        {
+          "id": "AnnualRevenue",
+          "property": {
+            "name": "AnnualRevenue",
+            "label": "Annual Revenue"
+          }
+        }
+      ],
+      [
+        {
+          "id": "OwnerId",
+          "property": {
+            "name": "OwnerId",
+            "label": "Owner ID"
+          }
+        },
+        null
+      ],
+      [
+        {
+          "id": "CreatedDate",
+          "property": {
+            "name": "CreatedDate",
+            "label": "Created Date"
+          }
+        },
+        null
+      ],
+      [
+        {
+          "id": "CreatedById",
+          "property": {
+            "name": "CreatedById",
+            "label": "Created By ID"
+          }
+        },
+        null
+      ]
+    ]
+  }
+}

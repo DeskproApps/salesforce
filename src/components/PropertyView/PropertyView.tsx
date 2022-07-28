@@ -78,17 +78,17 @@ export const PropertyView = ({ name, object, internalUrl, externalUrl, isFirst }
         .with(["currency", P._], () => (
             <Currency value={value} />
         ))
-        .with(["reference", ["User"]], () => (
+        .with(["reference", P.when((to) => to?.includes("User"))], () => (
             <Suspense fallback={<Spinner size="extra-small" />}>
                 <User id={value} settings={context.settings} />
             </Suspense>
         ))
-        .with(["reference", ["Account"]], () => (
+        .with(["reference", P.when((to) => to?.includes("Account"))], () => (
             <Suspense fallback={<Spinner size="extra-small" />}>
                 <Account id={value} settings={context.settings} />
             </Suspense>
         ))
-        .with(["reference", ["Contact"]], () => (
+        .with(["reference", P.when((to) => to?.includes("Contact"))], () => (
             <Suspense fallback={<Spinner size="extra-small" />}>
                 <Contact id={value} settings={context.settings} />
             </Suspense>

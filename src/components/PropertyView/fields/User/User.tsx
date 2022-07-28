@@ -7,6 +7,7 @@ import {faExternalLink} from "@fortawesome/free-solid-svg-icons";
 import {Stack, useDeskproAppTheme} from "@deskpro/app-sdk";
 import {Settings} from "../../../../types";
 import {User as UserType} from "../../../../api/types";
+import {ExternalLink} from "../../../ExternalLink/ExternalLink";
 
 type UserProps = {
     id: string;
@@ -29,9 +30,7 @@ export const User = ({ id, settings }: UserProps) => {
         <Stack gap={8} align="center">
             <img src={user.data.SmallPhotoUrl} style={{ width: "16px", borderRadius: "100%" }} />
             {user.data.FirstName} {user.data.LastName}
-            <a href={getObjectPermalink(settings, `/lightning/r/User/${user.data.Id}/view`)} target="_blank">
-                <FontAwesomeIcon icon={faExternalLink} color={theme.colors.grey40} size="sm" />
-            </a>
+            <ExternalLink url={getObjectPermalink(settings, `/lightning/r/User/${user.data.Id}/view`)} />
         </Stack>
     );
 };

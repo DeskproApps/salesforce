@@ -31,7 +31,7 @@ export const User = () => {
         registerElement("refresh", { type: "refresh_button" });
     });
 
-    const emails: string[] = context?.data.user.emails ?? [];
+    const emails: string[] = context?.data?.user?.emails ?? [];
 
     const contacts = useQueryWithClient(
         [QueryKey.USER_CONTACTS_BY_EMAIL, ...emails],

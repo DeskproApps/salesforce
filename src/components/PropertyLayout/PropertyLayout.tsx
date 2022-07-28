@@ -1,4 +1,4 @@
-import {Stack, VerticalDivider} from "@deskpro/app-sdk";
+import {HorizontalDivider, Stack, VerticalDivider} from "@deskpro/app-sdk";
 import {Fragment} from "react";
 import {PropertyView} from "../PropertyView/PropertyView";
 import {Properties} from "../Mapper/PropertyLayout";
@@ -28,6 +28,7 @@ export const PropertyLayout = ({ object, properties, internalUrl, externalUrl }:
                                     isFirst={rowIdx === 0 && colIdx === 0}
                                 />
                             </div>
+                            {row.filter((r) => r !== null).length !== (colIdx + 1) && <VerticalDivider />}
                         </Fragment>
                         : null))}
                 </Stack>

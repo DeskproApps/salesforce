@@ -1,27 +1,50 @@
-import { useState, Suspense } from "react";
+import {useState, Suspense, useCallback} from "react";
 import { TabBar, TabBarItemType } from "@deskpro/deskpro-ui";
 import { HomeScreen } from "../../../screens/admin/mapping/account/HomeScreen";
-import { ListScreen } from "../../../screens/admin/mapping/account/ListScreen";
 import { ViewScreen } from "../../../screens/admin/mapping/account/ViewScreen";
-import { LoadingSpinner, useDeskproLatestAppContext } from "@deskpro/app-sdk";
+import {LoadingSpinner, useDeskproLatestAppContext, useInitialisedDeskproAppClient} from "@deskpro/app-sdk";
 import { Reveal } from "../../../components/Reveal/Reveal";
+import {AccountLayout} from "../../../types";
+import {HomeLayout, ViewLayout} from "../../../screens/admin/types";
+import defaultLayout from "../../../resources/default_layout/account.json";
 
 export const Account = () => {
     const { context } = useDeskproLatestAppContext();
 
     const [activeTab, setActiveTab] = useState(0);
 
+    const [layout, setLayout] = useState<AccountLayout>(
+        context?.settings.mapping_account
+            ? JSON.parse(context?.settings.mapping_account)
+            : defaultLayout
+    );
+
+    useInitialisedDeskproAppClient((client) => {
+        client.setAdminSetting(JSON.stringify(layout));
+    }, [layout]);
+
+    const setHomeLayout = useCallback((home: HomeLayout) => setLayout((layout) => ({
+        ...layout,
+        home,
+    })), []);
+
+    const setViewLayout = useCallback((view: ViewLayout) => setLayout((layout) => ({
+        ...layout,
+        view,
+    })), []);
+
     const tabs: TabBarItemType[] = [
         {
-            label: "Home Screen",
+            label: "Account Home Screen",
         },
         {
-            label: "List Screen",
-        },
-        {
-            label: "View Screen",
+            label: "Account View Screen",
         },
     ];
+
+    if (!context?.settings) {
+        return null;
+    }
 
     if (!context?.settings?.global_access_token) {
         return (
@@ -41,15 +64,14 @@ export const Account = () => {
                 containerStyles={{ padding: "0 12px", justifyContent: "flex-start", marginTop: "18px", gap: "10px" }}
             />
             <Suspense fallback={<LoadingSpinner />}>
-                <Reveal show={activeTab === 0}>
-                    <HomeScreen />
-                </Reveal>
-                <Reveal show={activeTab === 1}>
-                    <ListScreen />
-                </Reveal>
-                <Reveal show={activeTab === 2}>
-                    <ViewScreen />
-                </Reveal>
+                <div style={{ padding: "16px" }}>
+                    <Reveal show={activeTab === 0}>
+                        <HomeScreen onChange={setHomeLayout} value={layout.home} />
+                    </Reveal>
+                    <Reveal show={activeTab === 1}>
+                        <ViewScreen onChange={setViewLayout} value={layout.view} />
+                    </Reveal>
+                </div>
             </Suspense>
         </>
     );

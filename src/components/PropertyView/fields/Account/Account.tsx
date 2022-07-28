@@ -1,4 +1,4 @@
-import {useQueryWithClient} from "../../../../hooks";
+import {useBasePath, useQueryWithClient} from "../../../../hooks";
 import {QueryKey} from "../../../../query";
 import {getAccountById} from "../../../../api/api";
 import {getObjectPermalink} from "../../../../utils";
@@ -7,6 +7,8 @@ import {faExternalLink} from "@fortawesome/free-solid-svg-icons";
 import {Stack, useDeskproAppTheme} from "@deskpro/app-sdk";
 import {Settings} from "../../../../types";
 import {Account as AccountType} from "../../../../api/types";
+import {Link} from "../../../Link/Link";
+import {ExternalLink} from "../../../ExternalLink/ExternalLink";
 
 type AccountProps = {
     id: string;
@@ -15,6 +17,8 @@ type AccountProps = {
 
 export const Account = ({ id, settings }: AccountProps) => {
     const { theme } = useDeskproAppTheme();
+
+    const basePath = useBasePath();
 
     const account = useQueryWithClient<AccountType>(
         [QueryKey.ACCOUNT_BY_ID, id],
@@ -27,10 +31,10 @@ export const Account = ({ id, settings }: AccountProps) => {
 
     return (
         <Stack gap={8} align="center">
-            {account.data.Name}
-            <a href={getObjectPermalink(settings, `/lightning/r/Account/${account.data.Id}/view`)} target="_blank">
-                <FontAwesomeIcon icon={faExternalLink} color={theme.colors.grey40} size="sm" />
-            </a>
+            <Link to={`${basePath}/objects/Account/${id}/view`}>
+                {account.data.Name}
+            </Link>
+            <ExternalLink url={getObjectPermalink(settings, `/lightning/r/Account/${account.data.Id}/view`)} />
         </Stack>
     );
 };

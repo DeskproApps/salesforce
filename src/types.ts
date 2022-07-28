@@ -8,6 +8,8 @@ export interface Settings {
     mapping_contact?: string;
     mapping_note?: string;
     mapping_opportunity?: string;
+    mapping_lead?: string;
+    mapping_account?: string;
 }
 
 export type ContactLayout = {
@@ -28,4 +30,16 @@ export type NoteLayout = {
     view: ViewLayout;
 };
 
-export type Layout = ContactLayout | OpportunityLayout | NoteLayout; // todo: write others
+export type LeadLayout = {
+    type: "Lead";
+    home: HomeLayout;
+    view: ViewLayout;
+};
+
+export type AccountLayout = {
+    type: "Account";
+    home: HomeLayout;
+    view: ViewLayout;
+};
+
+export type Layout = ContactLayout | OpportunityLayout | NoteLayout | LeadLayout | AccountLayout;
