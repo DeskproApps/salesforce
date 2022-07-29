@@ -2,7 +2,7 @@
   "name": "@deskpro-apps/salesforce",
   "title": "Salesforce",
   "description": "View and manage associated Salesforce Contacts, Leads, Accounts and Opportunities",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "scope": "agent",
   "isSingleInstall": true,
   "hasDevMode": true,
@@ -47,6 +47,66 @@
       "isRequired": true,
       "isBackendOnly": true,
       "order": 40
+    },
+    "mapping_contact": {
+      "title": "Contact Field Mapping",
+      "type": "app_modal",
+      "options": {
+        "entrypoint": "#/admin/mapping/contact",
+        "label": "Edit Mapping",
+        "icon": "edit"
+      },
+      "isRequired": false,
+      "isBackendOnly": false,
+      "order": 50
+    },
+    "mapping_lead": {
+      "title": "Lead Field Mapping",
+      "type": "app_modal",
+      "options": {
+        "entrypoint": "#/admin/mapping/lead",
+        "label": "Edit Mapping",
+        "icon": "edit"
+      },
+      "isRequired": false,
+      "isBackendOnly": false,
+      "order": 60
+    },
+    "mapping_account": {
+      "title": "Account Field Mapping",
+      "type": "app_modal",
+      "options": {
+        "entrypoint": "#/admin/mapping/account",
+        "label": "Edit Mapping",
+        "icon": "edit"
+      },
+      "isRequired": false,
+      "isBackendOnly": false,
+      "order": 70
+    },
+    "mapping_note": {
+      "title": "Note Field Mapping",
+      "type": "app_modal",
+      "options": {
+        "entrypoint": "#/admin/mapping/note",
+        "label": "Edit Mapping",
+        "icon": "edit"
+      },
+      "isRequired": false,
+      "isBackendOnly": false,
+      "order": 80
+    },
+    "mapping_opportunity": {
+      "title": "Opportunity Field Mapping",
+      "type": "app_modal",
+      "options": {
+        "entrypoint": "#/admin/mapping/opportunity",
+        "label": "Edit Mapping",
+        "icon": "edit"
+      },
+      "isRequired": false,
+      "isBackendOnly": false,
+      "order": 90
     }
   },
   "proxy": {

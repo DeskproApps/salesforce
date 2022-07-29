@@ -25,16 +25,22 @@ export const Organization = () => {
         registerElement("refresh", { type: "refresh_button" });
     });
 
-    const name = context?.data.organisation.name as string;
+    const name = context?.data?.organisation?.name as string;
 
     const accounts = useQueryWithClient(
         [QueryKey.ORG_ACCOUNTS_BY_NAME, name],
-        (client) => getAccountsByName(client, name)
+        (client) => getAccountsByName(client, name),
+        { enabled: !! name }
     );
 
     useInitialisedDeskproAppClient((client) => {
         client.setBadgeCount((accounts?.data ?? []).length);
+        client?.setTitle("Account");
     }, [accounts.data]);
+
+    if (!name) {
+        return null;
+    }
 
     if (!accounts.isSuccess) {
         return <LoadingSpinner />;
@@ -51,7 +57,6 @@ export const Organization = () => {
     }
 
     if (accounts.data.length === 1) {
-        client?.setTitle("Account");
         return <AccountScreen account={accounts.data[0]} />
     }
 

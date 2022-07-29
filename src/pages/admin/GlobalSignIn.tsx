@@ -4,23 +4,16 @@ import {
     P1,
     Spinner,
     Stack,
-    useDeskproAppClient,
     useDeskproAppTheme
 } from "@deskpro/app-sdk";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { faCopy, faSignIn, faSignOut } from "@fortawesome/free-solid-svg-icons";
 import { AnchorButton } from "@deskpro/deskpro-ui";
 import { useGlobalSignIn } from "./useGlobalSignIn";
-import { useEffect } from "react";
 import "./style.css";
 
 export const GlobalSignIn = () => {
-    const { client } = useDeskproAppClient();
     const { theme } = useDeskproAppTheme();
-
-    useEffect(() => {
-        client?.resize();
-    });
 
     const {
         callbackUrl,
@@ -75,7 +68,7 @@ export const GlobalSignIn = () => {
             )}
 
             <H2 style={{ marginBottom: "5px" }}>Global Salesforce User*</H2>
-            <div className="global-sign-in container" style={{ borderColor: theme.colors.brandShade40 }}>
+            <div className="global-sign-in container" style={{ borderColor: theme.colors.brandShade40, marginBottom: "5px" }}>
                 {user ? (
                     <>
                         <P1 style={{ marginBottom: "6px" }}>

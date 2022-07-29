@@ -5,6 +5,8 @@ export type AuthTokens = {
     refreshToken: string;
 };
 
+export type ObjectType = "Contact" | "Lead" | "Account" | "User" | "Opportunity" | "Note" | "ActivityHistory";
+
 export interface Address {
     city?: string;
     country?: string;
@@ -86,6 +88,27 @@ export interface Contact {
     Languages__c?: string;
 }
 
+export interface NoteAttributes {
+    type: "Note";
+    url: string;
+}
+
+export interface Note {
+    attributes: NoteAttributes;
+    Id: string;
+    IsDeleted: boolean;
+    ParentId: string;
+    Title: string;
+    IsPrivate: boolean;
+    Body: string;
+    OwnerId: string;
+    CreatedDate: string;
+    CreatedById: string;
+    LastModifiedDate: string;
+    LastModifiedById: string;
+    SystemModstamp: string;
+}
+
 export interface LeadAttributes {
     type: "Lead";
     url: string;
@@ -152,6 +175,61 @@ export interface Lead {
     Primary__c?: string;
     CurrentGenerators__c?: string;
     NumberofLocations__c?: string;
+}
+
+export interface OpportunityAttributes {
+    type: "Opportunity";
+    url: string;
+}
+
+export interface Opportunity {
+    attributes: OpportunityAttributes;
+    Id: string;
+    IsDeleted: boolean;
+    AccountId: string;
+    IsPrivate: boolean;
+    Name: string;
+    Description?: string;
+    StageName: string;
+    Amount: number;
+    Probability: number;
+    ExpectedRevenue: number;
+    TotalOpportunityQuantity?: string;
+    CloseDate: string;
+    Type: string;
+    NextStep?: string;
+    LeadSource: string;
+    IsClosed: boolean;
+    IsWon: boolean;
+    ForecastCategory: string;
+    ForecastCategoryName: string;
+    CampaignId?: string;
+    HasOpportunityLineItem: boolean;
+    Pricebook2Id?: string;
+    OwnerId: string;
+    CreatedDate: string;
+    CreatedById: string;
+    LastModifiedDate: string;
+    LastModifiedById: string;
+    SystemModstamp: string;
+    LastActivityDate?: string;
+    PushCount: number;
+    LastStageChangeDate?: string;
+    FiscalQuarter: number;
+    FiscalYear: number;
+    Fiscal: string;
+    ContactId: string;
+    LastViewedDate: string;
+    LastReferencedDate: string;
+    HasOpenActivity: boolean;
+    HasOverdueTask: boolean;
+    LastAmountChangedHistoryId?: string;
+    LastCloseDateChangedHistoryId?: string;
+    DeliveryInstallationStatus__c?: string;
+    TrackingNumber__c?: string;
+    OrderNumber__c?: string;
+    CurrentGenerators__c?: string;
+    MainCompetitors__c?: string;
 }
 
 export interface AccountAttributes {
@@ -411,4 +489,189 @@ export interface User {
     MediumBannerPhotoUrl: string;
     IsProfilePhotoActive: boolean;
     IndividualId?: string;
+}
+
+export interface ChildRelationship {
+    cascadeDelete: boolean;
+    childSObject: string;
+    deprecatedAndHidden: boolean;
+    field: string;
+    junctionIdListNames: unknown[];
+    junctionReferenceTo: unknown[];
+    relationshipName: string;
+    restrictedDelete: boolean;
+}
+
+export interface PicklistValue {
+    active: boolean;
+    defaultValue: boolean;
+    label: string;
+    validFor?: unknown;
+    value: string;
+}
+
+export type FieldType = "address"
+    | "anyType"
+    | "calculated"
+    | "combobox"
+    | "currency"
+    | "DataCategoryGroupReference"
+    | "email"
+    | "encryptedstring"
+    | "ID"
+    | "JunctionIdList"
+    | "location"
+    | "masterrecord"
+    | "multipicklist"
+    | "percent"
+    | "phone"
+    | "picklist"
+    | "reference"
+    | "textarea"
+    | "url"
+    | "boolean"
+    | "datetime"
+    | "date"
+;
+
+export interface Field {
+    aggregatable: boolean;
+    aiPredictionField: boolean;
+    autoNumber: boolean;
+    byteLength: number;
+    calculated: boolean;
+    calculatedFormula?: unknown;
+    cascadeDelete: boolean;
+    caseSensitive: boolean;
+    compoundFieldName: string;
+    controllerName?: unknown;
+    createable: boolean;
+    custom: boolean;
+    defaultValue?: boolean;
+    defaultValueFormula?: unknown;
+    defaultedOnCreate: boolean;
+    dependentPicklist: boolean;
+    deprecatedAndHidden: boolean;
+    digits: number;
+    displayLocationInDecimal: boolean;
+    encrypted: boolean;
+    externalId: boolean;
+    extraTypeInfo: string;
+    filterable: boolean;
+    filteredLookupInfo?: unknown;
+    formulaTreatNullNumberAsZero: boolean;
+    groupable: boolean;
+    highScaleNumber: boolean;
+    htmlFormatted: boolean;
+    idLookup: boolean;
+    inlineHelpText?: unknown;
+    label: string;
+    length: number;
+    mask?: unknown;
+    maskType?: unknown;
+    name: string;
+    nameField: boolean;
+    namePointing: boolean;
+    nillable: boolean;
+    permissionable: boolean;
+    picklistValues: PicklistValue[];
+    polymorphicForeignKey: boolean;
+    precision: number;
+    queryByDistance: boolean;
+    referenceTargetField?: unknown;
+    referenceTo: string[];
+    relationshipName: string;
+    relationshipOrder?: unknown;
+    restrictedDelete: boolean;
+    restrictedPicklist: boolean;
+    scale: number;
+    searchPrefilterable: boolean;
+    soapType: string;
+    sortable: boolean;
+    type: FieldType;
+    unique: boolean;
+    updateable: boolean;
+    writeRequiresMasterRead: boolean;
+}
+
+export interface RecordTypeUrls {
+    layout: string;
+}
+
+export interface RecordTypeInfo {
+    active: boolean;
+    available: boolean;
+    defaultRecordTypeMapping: boolean;
+    developerName: string;
+    master: boolean;
+    name: string;
+    recordTypeId: string;
+    urls: RecordTypeUrls;
+}
+
+export interface SupportedScope {
+    label: string;
+    name: string;
+}
+
+export interface ObjectMetaUrls {
+    compactLayouts: string;
+    rowTemplate: string;
+    approvalLayouts: string;
+    uiDetailTemplate: string;
+    uiEditTemplate: string;
+    listviews: string;
+    describe: string;
+    uiNewRecord: string;
+    quickActions: string;
+    layouts: string;
+    sobject: string;
+}
+
+export interface ObjectMeta {
+    actionOverrides: unknown[];
+    activateable: boolean;
+    associateEntityType?: unknown;
+    associateParentEntity?: unknown;
+    childRelationships: ChildRelationship[];
+    compactLayoutable: boolean;
+    createable: boolean;
+    custom: boolean;
+    customSetting: boolean;
+    deepCloneable: boolean;
+    defaultImplementation?: unknown;
+    deletable: boolean;
+    deprecatedAndHidden: boolean;
+    extendedBy?: unknown;
+    extendsInterfaces?: unknown;
+    feedEnabled: boolean;
+    fields: Field[];
+    hasSubtypes: boolean;
+    implementedBy?: unknown;
+    implementsInterfaces?: unknown;
+    isInterface: boolean;
+    isSubtype: boolean;
+    keyPrefix: string;
+    label: string;
+    labelPlural: string;
+    layoutable: boolean;
+    listviewable?: unknown;
+    lookupLayoutable?: unknown;
+    mergeable: boolean;
+    mruEnabled: boolean;
+    name: string;
+    namedLayoutInfos: unknown[];
+    networkScopeFieldName?: unknown;
+    queryable: boolean;
+    recordTypeInfos: RecordTypeInfo[];
+    replicateable: boolean;
+    retrieveable: boolean;
+    searchLayoutable: boolean;
+    searchable: boolean;
+    sobjectDescribeOption: string;
+    supportedScopes: SupportedScope[];
+    triggerable: boolean;
+    undeletable: boolean;
+    updateable: boolean;
+    urls: ObjectMetaUrls;
 }

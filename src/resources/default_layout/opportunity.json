@@ -1,0 +1,144 @@
+{
+  "list": {
+    "root": [
+      [
+        {
+          "id": "Name",
+          "property": {
+            "name": "Name",
+            "label": "Name"
+          }
+        },
+        null
+      ],
+      [
+        {
+          "id": "Probability",
+          "property": {
+            "name": "Probability",
+            "label": "Probability (%)"
+          }
+        },
+        null
+      ],
+      [
+        {
+          "id": "StageName",
+          "property": {
+            "name": "StageName",
+            "label": "Stage"
+          }
+        },
+        {
+          "id": "Amount",
+          "property": {
+            "name": "Amount",
+            "label": "Amount"
+          }
+        }
+      ]
+    ]
+  },
+  "view": {
+    "root": [
+      [
+        {
+          "id": "Name",
+          "property": {
+            "name": "Name",
+            "label": "Name"
+          }
+        },
+        null
+      ],
+      [
+        {
+          "id": "Description",
+          "property": {
+            "name": "Description",
+            "label": "Description"
+          }
+        },
+        null
+      ],
+      [
+        {
+          "id": "Type",
+          "property": {
+            "name": "Type",
+            "label": "Opportunity Type"
+          }
+        },
+        {
+          "id": "StageName",
+          "property": {
+            "name": "StageName",
+            "label": "Stage"
+          }
+        }
+      ],
+      [
+        {
+          "id": "OrderNumber__c",
+          "property": {
+            "name": "OrderNumber__c",
+            "label": "Order Number"
+          }
+        },
+        {
+          "id": "CloseDate",
+          "property": {
+            "name": "CloseDate",
+            "label": "Close Date"
+          }
+        }
+      ],
+      [
+        {
+          "id": "Amount",
+          "property": {
+            "name": "Amount",
+            "label": "Amount"
+          }
+        },
+        {
+          "id": "Probability",
+          "property": {
+            "name": "Probability",
+            "label": "Probability (%)"
+          }
+        }
+      ],
+      [
+        {
+          "id": "AccountId",
+          "property": {
+            "name": "AccountId",
+            "label": "Account ID"
+          }
+        },
+        null
+      ],
+      [
+        {
+          "id": "CreatedDate",
+          "property": {
+            "name": "CreatedDate",
+            "label": "Created Date"
+          }
+        },
+        null
+      ],
+      [
+        {
+          "id": "CreatedById",
+          "property": {
+            "name": "CreatedById",
+            "label": "Created By ID"
+          }
+        },
+        null
+      ]
+    ]
+  }
+}

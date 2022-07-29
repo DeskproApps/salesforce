@@ -7,9 +7,9 @@ import {
 import { useEffect, useMemo, useState } from "react";
 import { Settings } from "../../types";
 import { v4 as uuidv4 } from "uuid";
-import {every, isEmpty} from "lodash";
+import { every, isEmpty } from "lodash";
 import { AuthTokens } from "../../api/types";
-import { getMePreInstalled } from "../../api/api";
+import { getMePreInstalled } from "../../api/preInstallationApi";
 
 export const useGlobalSignIn = () => {
     const { client } = useDeskproAppClient();
@@ -121,11 +121,7 @@ export const useGlobalSignIn = () => {
     useInitialisedDeskproAppClient((client) => {
         (async () => {
             if (!isEmpty(settings?.global_access_token) && settings?.salesforce_instance_url) {
-                setUser(await getMePreInstalled(
-                    client,
-                    settings,
-                    JSON.parse(settings?.global_access_token as string)
-                ));
+                setUser(await getMePreInstalled(client, settings));
             }
         })();
     }, [settings?.global_access_token, settings?.salesforce_instance_url]);
