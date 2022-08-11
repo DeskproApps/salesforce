@@ -24,7 +24,6 @@ export const User = ({ id, settings }: UserProps) => {
 
     return (
         <Stack gap={8} align="center">
-            <img src={user.data.SmallPhotoUrl} style={{ width: "16px", borderRadius: "100%" }} />
             {user.data.FirstName} {user.data.LastName}
             <ExternalLink url={getObjectPermalink(settings, `/lightning/r/User/${user.data.Id}/view`)} />
         </Stack>
