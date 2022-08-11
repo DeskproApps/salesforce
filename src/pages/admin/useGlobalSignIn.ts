@@ -89,7 +89,7 @@ export const useGlobalSignIn = () => {
                 client_id: settings?.client_key as string,
                 client_secret: settings?.client_secret as string,
                 redirect_uri: callbackUrl as string,
-            }).toString(),
+            }),
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded",
             },
@@ -164,7 +164,7 @@ export const useGlobalSignIn = () => {
     ]);
 
     const isInstanceUrlInvalid = settings?.salesforce_instance_url
-        ? !/https:\/\/[a-zA-Z0-9\-]+\.my\.salesforce\.com$/.test(settings.salesforce_instance_url)
+        ? !/https:\/\/[a-zA-Z0-9\-]+\.(sandbox\.)?my\.salesforce\.com$/.test(settings.salesforce_instance_url)
         : false
     ;
 
