@@ -2,7 +2,7 @@
   "name": "@deskpro-apps/salesforce",
   "title": "Salesforce",
   "description": "View and manage associated Salesforce Contacts, Leads, Accounts and Opportunities",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "scope": "agent",
   "isSingleInstall": true,
   "hasDevMode": true,

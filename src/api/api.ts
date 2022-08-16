@@ -1,6 +1,7 @@
 import { IDeskproClient, proxyFetch } from "@deskpro/app-sdk";
 import { trimStart } from "lodash";
-import {Account, Contact, Lead, User, ObjectMeta, Opportunity, RequestMethod, Note} from "./types";
+import { Account, Contact, Lead, User, ObjectMeta, Opportunity, RequestMethod } from "./types";
+import {escapeSOSLTerm} from "./utils";
 
 /**
  * Get a list of sObjects by FK
@@ -29,7 +30,7 @@ export const getObjectById = <T = unknown>(client: IDeskproClient, object: strin
 export const getContactsByEmails = async (client: IDeskproClient, emails: string[]): Promise<Contact[]> => {
     const result: { searchRecords: { Id: string }[] } = await SOSLSearch(
         client,
-        `FIND {${emails.map((e) => `"${e}"`).join(" OR ")}} RETURNING Contact`
+        `FIND {${emails.map((e) => `"${escapeSOSLTerm(e)}"`).join(" OR ")}} RETURNING Contact`
     );
 
     return Promise.all(
@@ -43,7 +44,7 @@ export const getContactsByEmails = async (client: IDeskproClient, emails: string
 export const getLeadsByEmails = async (client: IDeskproClient, emails: string[]): Promise<Lead[]> => {
     const result: { searchRecords: { Id: string }[] } = await SOSLSearch(
         client,
-        `FIND {${emails.map((e) => `"${e}"`).join(" OR ")}} RETURNING Lead`
+        `FIND {${emails.map((e) => `"${escapeSOSLTerm(e)}"`).join(" OR ")}} RETURNING Lead`
     );
 
     return Promise.all(
@@ -57,7 +58,7 @@ export const getLeadsByEmails = async (client: IDeskproClient, emails: string[])
 export const getAccountsByName = async (client: IDeskproClient, name: string): Promise<Account[]> => {
     const result: { searchRecords: { Id: string }[] } = await SOSLSearch(
         client,
-        `FIND {${name.replace("'", "\\'")}} RETURNING Account`
+        `FIND {"${escapeSOSLTerm(name)}"} RETURNING Account`
     );
 
     return Promise.all(
