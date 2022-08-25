@@ -56,14 +56,12 @@ export const getLeadsByEmails = async (client: IDeskproClient, emails: string[])
  * Get a list of Salesforce "Account" sObjects by name
  */
 export const getAccountsByName = async (client: IDeskproClient, name: string): Promise<Account[]> => {
-    const result: { searchRecords: { Id: string }[] } = await SOSLSearch(
+    const result: { records: Account[] } = await SOQLSearch(
         client,
-        `FIND {"${escapeSOSLTerm(name)}"} RETURNING Account`
+        `SELECT FIELDS(ALL) FROM Account WHERE Name = '${escapeSOSLTerm(name)}' LIMIT 200`
     );
 
-    return Promise.all(
-        result.searchRecords.map(({ Id }) => getObjectById<Account>(client, "Account", Id))
-    );
+    return result.records;
 };
 
 /**
