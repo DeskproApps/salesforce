@@ -1,7 +1,7 @@
 import { IDeskproClient, proxyFetch } from "@deskpro/app-sdk";
 import { trimStart } from "lodash";
 import { Account, Contact, Lead, User, ObjectMeta, Opportunity, RequestMethod } from "./types";
-import {escapeSOSLTerm} from "./utils";
+import { escapeSOQLTerm, escapeSOSLTerm } from "./utils";
 
 /**
  * Get a list of sObjects by FK
@@ -58,7 +58,7 @@ export const getLeadsByEmails = async (client: IDeskproClient, emails: string[])
 export const getAccountsByName = async (client: IDeskproClient, name: string): Promise<Account[]> => {
     const result: { records: Account[] } = await SOQLSearch(
         client,
-        `SELECT FIELDS(ALL) FROM Account WHERE Name = '${escapeSOSLTerm(name)}' LIMIT 200`
+        `SELECT FIELDS(ALL) FROM Account WHERE Name = '${escapeSOQLTerm(name)}' LIMIT 200`
     );
 
     return result.records;
