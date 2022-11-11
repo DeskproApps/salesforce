@@ -1,4 +1,4 @@
-import {Field, ObjectMeta, ObjectType} from "../../api/types";
+import {Field, ObjectMeta} from "../../api/types";
 import {FieldProperty, LinkedObjects, ObjectProperty} from "./types";
 
 export const getFieldByName = (meta: ObjectMeta, name: string): Field|null => meta.fields.filter((f) => f.name === name)[0] ?? null;
