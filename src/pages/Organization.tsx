@@ -1,7 +1,7 @@
 import {
     Dropdown,
     DropdownItemType, Input,
-    LoadingSpinner, useDeskproAppClient, useDeskproAppTheme,
+    LoadingSpinner, useDeskproAppTheme,
     useDeskproElements,
     useDeskproLatestAppContext, useInitialisedDeskproAppClient
 } from "@deskpro/app-sdk";

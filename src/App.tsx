@@ -44,6 +44,7 @@ function App() {
     useDeskproAppEvents({
         onElementEvent: (id, type, payload) => match([id, type])
             .with(["home", "home_button"], () => {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
                 const basePath = payload?.basePath;
                 payload && navigate(basePath);
