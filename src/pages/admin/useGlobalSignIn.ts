@@ -152,6 +152,7 @@ export const useGlobalSignIn = () => {
     const signIn = () => {
         poll && (async () => {
             setIsLoading(true);
+            
             setAccessCode((await poll()).token)
         })();
     };
