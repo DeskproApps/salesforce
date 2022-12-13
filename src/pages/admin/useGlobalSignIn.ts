@@ -165,6 +165,7 @@ export const useGlobalSignIn = () => {
     ]);
 
     const isInstanceUrlInvalid = settings?.salesforce_instance_url
+        // eslint-disable-next-line no-useless-escape
         ? !/https:\/\/[a-zA-Z0-9\-]+\.(sandbox\.)?my\.salesforce\.com$/.test(settings.salesforce_instance_url)
         : false
     ;

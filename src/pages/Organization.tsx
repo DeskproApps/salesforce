@@ -17,7 +17,6 @@ import {orderBy} from "lodash";
 export const Organization = () => {
     const { context } = useDeskproLatestAppContext();
     const { theme } = useDeskproAppTheme();
-    const { client } = useDeskproAppClient();
 
     const [selectedObjectId, setSelectedObjectId] = useState<string>("");
 
