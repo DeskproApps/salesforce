@@ -1,11 +1,37 @@
 import { IDeskproClient, proxyFetch } from "@deskpro/app-sdk";
 import { trimStart } from "lodash";
+import { IActivity } from "../types";
 import { Account, Contact, Lead, User, ObjectMeta, Opportunity, RequestMethod } from "./types";
 import { escapeSOQLTerm, escapeSOSLTerm } from "./utils";
 
 /**
  * Get a list of sObjects by FK
  */
+
+export const getAllActivities = async (client: IDeskproClient,id:string, field:string, limit?: number): Promise<IActivity[]> => {
+    const tasks = getObjectsByFk(client, "Task", field, id, limit) as unknown as Promise<IActivity>;
+
+    const events = getObjectsByFk(client, "Event", field, id, limit) as unknown as Promise<IActivity>;
+
+    const joined = (await Promise.all([tasks, events])).flat().map(e => ({
+        ...e,
+        Type: e.EventSubtype ? "Event" : "Task"
+    }));
+
+    return joined.flat().sort((a,b) => new Date(b.CreatedDate).getTime() - new Date(a.CreatedDate).getTime());
+}
+
+export const getObjectsByQuery = async (client: IDeskproClient, query:string, limit?: number): Promise<Opportunity[]> => {
+    const limitClause = limit === undefined ? "" : `LIMIT ${limit} OFFSET 0`;
+
+    const result: { records: Opportunity[] } = await SOQLSearch(
+        client,
+        `${query} ${limitClause}`
+    );
+
+    return result.records;
+}
+
 export const getObjectsByFk = async (client: IDeskproClient, object: string, field: string, id: string, limit?: number): Promise<Opportunity[]> => {
     const limitClause = limit === undefined ? "" : `LIMIT ${limit} OFFSET 0`;
 

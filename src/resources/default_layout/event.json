@@ -1,0 +1,132 @@
+{
+    "list": {
+        "root": [
+            [
+                {
+                  "id": "Subject",
+                  "property": {
+                    "name": "Subject",
+                    "label": "Subject"
+                  }
+                },
+                null
+              ],
+              [
+                {
+                  "id": "Type",
+                  "property": {
+                    "name": "EventSubtype",
+                    "label": "Type"
+                  }
+                },
+                null
+              ],
+              [
+                {
+                  "id": "Description",
+                  "property": {
+                    "name": "Description",
+                    "label": "Description"
+                  }
+                },
+                null
+              ],
+              [
+                {
+                  "id": "Location",
+                  "property": {
+                    "name": "Location",
+                    "label": "Location"
+                  }
+                },
+                null
+              ],
+              [
+                {
+                  "id": "Start Date",
+                  "property": {
+                    "name": "ActivityDateTime",
+                    "label": "Start"
+                  }
+                },
+                null
+              ],
+              [
+                {
+                  "id": "End Date",
+                  "property": {
+                    "name": "EndDateTime",
+                    "label": "End Date"
+                  }
+                },
+                null
+              ]
+        ]
+      },
+      "view":{
+        "list": {
+            "root": [
+                [
+                    {
+                      "id": "Subject",
+                      "property": {
+                        "name": "Subject",
+                        "label": "Subject"
+                      }
+                    },
+                    null
+                  ],
+                  [
+                    {
+                      "id": "Type",
+                      "property": {
+                        "name": "EventSubtype",
+                        "label": "Type"
+                      }
+                    },
+                    null
+                  ],
+                  [
+                    {
+                      "id": "Description",
+                      "property": {
+                        "name": "Description",
+                        "label": "Description"
+                      }
+                    },
+                    null
+                  ],
+                  [
+                    {
+                      "id": "Location",
+                      "property": {
+                        "name": "Location",
+                        "label": "Location"
+                      }
+                    },
+                    null
+                  ],
+                  [
+                    {
+                      "id": "Start Date",
+                      "property": {
+                        "name": "ActivityDateTime",
+                        "label": "Start"
+                      }
+                    },
+                    null
+                  ],
+                  [
+                    {
+                      "id": "End Date",
+                      "property": {
+                        "name": "EndDateTime",
+                        "label": "End Date"
+                      }
+                    },
+                    null
+                  ]
+            ]
+          }
+      }
+}

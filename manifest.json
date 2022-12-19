@@ -3,7 +3,7 @@
   "title": "Salesforce",
   "description": "View and manage associated Salesforce Contacts, Leads, Accounts and Opportunities",
   "appStoreUrl": "https://www.deskpro.com/product-embed/apps/salesforce",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "scope": "agent",
   "isSingleInstall": true,
   "hasDevMode": true,
@@ -102,6 +102,30 @@
       "type": "app_modal",
       "options": {
         "entrypoint": "#/admin/mapping/opportunity",
+        "label": "Edit Mapping",
+        "icon": "edit"
+      },
+      "isRequired": false,
+      "isBackendOnly": false,
+      "order": 90
+    },
+    "mapping_task": {
+      "title": "Task Field Mapping",
+      "type": "app_modal",
+      "options": {
+        "entrypoint": "#/admin/mapping/task",
+        "label": "Edit Mapping",
+        "icon": "edit"
+      },
+      "isRequired": false,
+      "isBackendOnly": false,
+      "order": 90
+    },
+    "mapping_event": {
+      "title": "Event Field Mapping",
+      "type": "app_modal",
+      "options": {
+        "entrypoint": "#/admin/event/opportunity",
         "label": "Edit Mapping",
         "icon": "edit"
       },
