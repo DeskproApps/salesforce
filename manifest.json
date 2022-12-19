@@ -119,7 +119,7 @@
       },
       "isRequired": false,
       "isBackendOnly": false,
-      "order": 90
+      "order": 100
     },
     "mapping_event": {
       "title": "Event Field Mapping",
@@ -131,7 +131,7 @@
       },
       "isRequired": false,
       "isBackendOnly": false,
-      "order": 90
+      "order": 110
     }
   },
   "proxy": {
