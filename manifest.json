@@ -125,7 +125,7 @@
       "title": "Event Field Mapping",
       "type": "app_modal",
       "options": {
-        "entrypoint": "#/admin/event/opportunity",
+        "entrypoint": "#/admin/mapping/event",
         "label": "Edit Mapping",
         "icon": "edit"
       },
