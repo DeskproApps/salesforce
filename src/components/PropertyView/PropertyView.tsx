@@ -64,6 +64,9 @@ export const PropertyView = ({ name, object, internalUrl, externalUrl, isFirst }
         .with(["address", P._], () => (
             <Address address={value} />
         ))
+        .with(["textarea", P._], () => (
+            <div dangerouslySetInnerHTML={{__html:value?.replaceAll("\n","<br>")}} style={{wordBreak:"break-word"}}></div>
+        ))
         .with(["boolean", P._], () => (
             <Boolean value={value} />
         ))
