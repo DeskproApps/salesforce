@@ -6,7 +6,7 @@ export const OnlyDate = ({ value }: DateProps) => {
 
     return (
         <time dateTime={value}>
-            {new Date(value).toLocaleDateString()}
+            {new Date(value).toLocaleDateString("en-GB")}
         </time>
     );
 };
