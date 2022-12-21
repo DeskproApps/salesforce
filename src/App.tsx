@@ -22,7 +22,6 @@ import { Event } from "./pages/admin/mapping/Event";
 import {View} from "./pages/view/View";
 import {List} from "./pages/list/List";
 import {match} from "ts-pattern";
-import {Note} from "./pages/admin/mapping/Note";
 import {Opportunity} from "./pages/admin/mapping/Opportunity";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -106,7 +105,6 @@ function App() {
                                                 <Route path="contact" element={<Contact />} />
                                                 <Route path="lead" element={<Lead />} />
                                                 <Route path="account" element={<Account />} />
-                                                <Route path="note" element={<Note />} />
                                                 <Route path="opportunity" element={<Opportunity />} />
                                                 <Route path="task" element={<Task />} />
                                                 <Route path="event" element={<Event />} />
