@@ -101,11 +101,21 @@
       ],
       [
         {
-          "id": "Activity",
+          "id": "Task",
           "property": {
-            "name": "Activity",
-            "label": "Activities",
-            "object": "Activity"
+            "name": "Task",
+            "label": "Tasks",
+            "object": "Task"
+          }
+        }
+      ],
+      [
+        {
+          "id": "Event",
+          "property": {
+            "name": "Event",
+            "label": "Events",
+            "object": "Event"
           }
         }
       ]

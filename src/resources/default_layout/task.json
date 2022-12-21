@@ -1,112 +1,110 @@
 {
-    "list": {
-        "root": [
-            [
-                {
-                  "id": "Subject",
-                  "property": {
-                    "name": "Subject",
-                    "label": "Subject"
-                  }
-                },
-                null
-              ],
-              [
-                {
-                  "id": "Type",
-                  "property": {
-                    "name": "TaskSubtype",
-                    "label": "Type"
-                  }
-                },
-                null
-              ],
-              [
-                {
-                  "id": "Priority",
-                  "property": {
-                    "name": "Priority",
-                    "label": "Priority"
-                  }
-                },
-                null
-              ],
-              [
-                {
-                  "id": "Due Date",
-                  "property": {
-                    "name": "ActivityDate",
-                    "label": "Due Date"
-                  }
-                },
-                null
-              ],
-              [
-                {
-                  "id": "Comments",
-                  "property": {
-                    "name": "Description",
-                    "label": "Comments"
-                  }
-                },
-                null
-              ]
-        ]
-      },
-      "view":{
-        "list": {
-            "root": [
-                [
-                    {
-                      "id": "Subject",
-                      "property": {
-                        "name": "Subject",
-                        "label": "Subject"
-                      }
-                    },
-                    null
-                  ],
-                  [
-                    {
-                      "id": "Type",
-                      "property": {
-                        "name": "TaskSubtype",
-                        "label": "Type"
-                      }
-                    },
-                    null
-                  ],
-                  [
-                    {
-                      "id": "Priority",
-                      "property": {
-                        "name": "Priority",
-                        "label": "Priority"
-                      }
-                    },
-                    null
-                  ],
-                  [
-                    {
-                      "id": "Due Date",
-                      "property": {
-                        "name": "ActivityDate",
-                        "label": "Due Date"
-                      }
-                    },
-                    null
-                  ],
-                  [
-                    {
-                      "id": "Comments",
-                      "property": {
-                        "name": "Description",
-                        "label": "Comments"
-                      }
-                    },
-                    null
-                  ]
-            ]
+  "list": {
+    "root": [
+      [
+        {
+          "id": "Subject",
+          "property": {
+            "name": "Subject",
+            "label": "Subject"
           }
-      }
+        },
+        null
+      ],
+      [
+        {
+          "id": "Type",
+          "property": {
+            "name": "TaskSubtype",
+            "label": "Type"
+          }
+        },
+        null
+      ],
+      [
+        {
+          "id": "Priority",
+          "property": {
+            "name": "Priority",
+            "label": "Priority"
+          }
+        },
+        null
+      ],
+      [
+        {
+          "id": "Due Date",
+          "property": {
+            "name": "ActivityDate",
+            "label": "Due Date"
+          }
+        },
+        null
+      ],
+      [
+        {
+          "id": "Comments",
+          "property": {
+            "name": "Description",
+            "label": "Comments"
+          }
+        },
+        null
+      ]
+    ]
+  },
+  "view": {
+    "root": [
+      [
+        {
+          "id": "Subject",
+          "property": {
+            "name": "Subject",
+            "label": "Subject"
+          }
+        },
+        null
+      ],
+      [
+        {
+          "id": "Type",
+          "property": {
+            "name": "TaskSubtype",
+            "label": "Type"
+          }
+        },
+        null
+      ],
+      [
+        {
+          "id": "Priority",
+          "property": {
+            "name": "Priority",
+            "label": "Priority"
+          }
+        },
+        null
+      ],
+      [
+        {
+          "id": "Due Date",
+          "property": {
+            "name": "ActivityDate",
+            "label": "Due Date"
+          }
+        },
+        null
+      ],
+      [
+        {
+          "id": "Comments",
+          "property": {
+            "name": "Description",
+            "label": "Comments"
+          }
+        },
+        null
+      ]
+    ]
+  }
 }
