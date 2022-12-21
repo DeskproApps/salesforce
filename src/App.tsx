@@ -22,6 +22,7 @@ import { Event } from "./pages/admin/mapping/Event";
 import {View} from "./pages/view/View";
 import {List} from "./pages/list/List";
 import {match} from "ts-pattern";
+import {Note} from "./pages/admin/mapping/Note";
 import {Opportunity} from "./pages/admin/mapping/Opportunity";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -35,7 +36,6 @@ import "simplebar/dist/simplebar.min.css";
 import "@deskpro/deskpro-ui/dist/deskpro-ui.css";
 import "@deskpro/deskpro-ui/dist/deskpro-custom-icons.css";
 import {ScrollTop} from "./components/ScrollTop";
-import { CreateNote } from "./pages/create/Note";
 
 function App() {
     const { context } = useDeskproLatestAppContext();
@@ -88,9 +88,6 @@ function App() {
                                                 <Route path=":object/:field/:id/list" element={<List />} />
                                                 <Route path=":object/:id/view" element={<View />} />
                                             </Route>
-                                            <Route path="add">
-                                                    <Route path="note/:id" element={<CreateNote />} />
-                                            </Route>
                                         </Route>
                                         <Route path="organization">
                                             <Route index element={<Organization />} />
@@ -105,6 +102,7 @@ function App() {
                                                 <Route path="contact" element={<Contact />} />
                                                 <Route path="lead" element={<Lead />} />
                                                 <Route path="account" element={<Account />} />
+                                                <Route path="note" element={<Note />} />
                                                 <Route path="opportunity" element={<Opportunity />} />
                                                 <Route path="task" element={<Task />} />
                                                 <Route path="event" element={<Event />} />
