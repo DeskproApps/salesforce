@@ -12,7 +12,7 @@
       ],
       [
         {
-          "id": "Type",
+          "id": "TaskSubtype",
           "property": {
             "name": "TaskSubtype",
             "label": "Type"
@@ -30,7 +30,7 @@
       ],
       [
         {
-          "id": "Due Date",
+          "id": "ActivityDate",
           "property": {
             "name": "ActivityDate",
             "label": "Due Date"
@@ -39,7 +39,7 @@
       ],
       [
         {
-          "id": "Comments",
+          "id": "Description",
           "property": {
             "name": "Description",
             "label": "Comments"
@@ -61,7 +61,7 @@
       ],
       [
         {
-          "id": "Type",
+          "id": "TaskSubtype",
           "property": {
             "name": "TaskSubtype",
             "label": "Type"
@@ -79,7 +79,7 @@
       ],
       [
         {
-          "id": "Due Date",
+          "id": "ActivityDate",
           "property": {
             "name": "ActivityDate",
             "label": "Due Date"
@@ -88,7 +88,7 @@
       ],
       [
         {
-          "id": "Comments",
+          "id": "Description",
           "property": {
             "name": "Description",
             "label": "Comments"

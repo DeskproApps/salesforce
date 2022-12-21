@@ -13,7 +13,7 @@
       ],
       [
         {
-          "id": "Type",
+          "id": "EventSubtype",
           "property": {
             "name": "EventSubtype",
             "label": "Type"
@@ -43,7 +43,7 @@
       ],
       [
         {
-          "id": "Start Date",
+          "id": "ActivityDateTime",
           "property": {
             "name": "ActivityDateTime",
             "label": "Start"
@@ -53,7 +53,7 @@
       ],
       [
         {
-          "id": "End Date",
+          "id": "EndDateTime",
           "property": {
             "name": "EndDateTime",
             "label": "End Date"
@@ -76,7 +76,7 @@
       ],
       [
         {
-          "id": "Type",
+          "id": "EventSubtype",
           "property": {
             "name": "EventSubtype",
             "label": "Type"
@@ -103,7 +103,7 @@
       ],
       [
         {
-          "id": "Start Date",
+          "id": "ActivityDateTime",
           "property": {
             "name": "ActivityDateTime",
             "label": "Start"
@@ -112,7 +112,7 @@
       ],
       [
         {
-          "id": "End Date",
+          "id": "EndDateTime",
           "property": {
             "name": "EndDateTime",
             "label": "End Date"
