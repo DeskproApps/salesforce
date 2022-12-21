@@ -91,6 +91,16 @@
       ],
       [
         {
+          "id": "Activity",
+          "property": {
+            "name": "Activity",
+            "label": "Activities",
+            "object": "Activity"
+          }
+        }
+      ],
+      [
+        {
           "id": "Task",
           "property": {
             "name": "Task",
