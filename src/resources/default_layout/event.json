@@ -72,8 +72,7 @@
             "name": "Subject",
             "label": "Subject"
           }
-        },
-        null
+        }
       ],
       [
         {
@@ -82,8 +81,7 @@
             "name": "EventSubtype",
             "label": "Type"
           }
-        },
-        null
+        }
       ],
       [
         {
@@ -92,8 +90,7 @@
             "name": "Description",
             "label": "Description"
           }
-        },
-        null
+        }
       ],
       [
         {
@@ -102,8 +99,7 @@
             "name": "Location",
             "label": "Location"
           }
-        },
-        null
+        }
       ],
       [
         {
@@ -112,8 +108,7 @@
             "name": "ActivityDateTime",
             "label": "Start"
           }
-        },
-        null
+        }
       ],
       [
         {
@@ -122,8 +117,7 @@
             "name": "EndDateTime",
             "label": "End Date"
           }
-        },
-        null
+        }
       ]
     ]
   }

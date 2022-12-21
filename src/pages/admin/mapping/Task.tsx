@@ -6,7 +6,7 @@ import {
   useInitialisedDeskproAppClient,
 } from "@deskpro/app-sdk";
 import { Reveal } from "../../../components/Reveal/Reveal";
-import { EventLayout } from "../../../types";
+import { TaskLayout } from "../../../types";
 import { ListLayout, ViewLayout } from "../../../screens/admin/types";
 import defaultContactLayout from "../../../resources/default_layout/task.json";
 import { ListScreen } from "../../../screens/admin/mapping/task/ListScreen";
@@ -17,9 +17,9 @@ export const Task = () => {
 
   const [activeTab, setActiveTab] = useState(0);
 
-  const [layout, setLayout] = useState<EventLayout>(
-    context?.settings.mapping_event
-      ? JSON.parse(context?.settings.mapping_event)
+  const [layout, setLayout] = useState<TaskLayout>(
+    context?.settings.mapping_task
+      ? JSON.parse(context?.settings.mapping_task)
       : defaultContactLayout
   );
 
