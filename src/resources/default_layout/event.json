@@ -1,0 +1,124 @@
+{
+  "list": {
+    "root": [
+      [
+        {
+          "id": "Subject",
+          "property": {
+            "name": "Subject",
+            "label": "Subject"
+          }
+        },
+        null
+      ],
+      [
+        {
+          "id": "EventSubtype",
+          "property": {
+            "name": "EventSubtype",
+            "label": "Type"
+          }
+        },
+        null
+      ],
+      [
+        {
+          "id": "Description",
+          "property": {
+            "name": "Description",
+            "label": "Description"
+          }
+        },
+        null
+      ],
+      [
+        {
+          "id": "Location",
+          "property": {
+            "name": "Location",
+            "label": "Location"
+          }
+        },
+        null
+      ],
+      [
+        {
+          "id": "ActivityDateTime",
+          "property": {
+            "name": "ActivityDateTime",
+            "label": "Start"
+          }
+        },
+        null
+      ],
+      [
+        {
+          "id": "EndDateTime",
+          "property": {
+            "name": "EndDateTime",
+            "label": "End Date"
+          }
+        },
+        null
+      ]
+    ]
+  },
+  "view": {
+    "root": [
+      [
+        {
+          "id": "Subject",
+          "property": {
+            "name": "Subject",
+            "label": "Subject"
+          }
+        }
+      ],
+      [
+        {
+          "id": "EventSubtype",
+          "property": {
+            "name": "EventSubtype",
+            "label": "Type"
+          }
+        }
+      ],
+      [
+        {
+          "id": "Description",
+          "property": {
+            "name": "Description",
+            "label": "Description"
+          }
+        }
+      ],
+      [
+        {
+          "id": "Location",
+          "property": {
+            "name": "Location",
+            "label": "Location"
+          }
+        }
+      ],
+      [
+        {
+          "id": "ActivityDateTime",
+          "property": {
+            "name": "ActivityDateTime",
+            "label": "Start"
+          }
+        }
+      ],
+      [
+        {
+          "id": "EndDateTime",
+          "property": {
+            "name": "EndDateTime",
+            "label": "End Date"
+          }
+        }
+      ]
+    ]
+  }
+}

@@ -20,6 +20,7 @@ import {ExternalLink} from "../ExternalLink/ExternalLink";
 import {Link} from "../Link/Link";
 import {Email} from "./fields/Email/Email";
 import {UrlLink} from "./fields/UrlLink/UrlLink";
+import { TextArea } from "./fields/TextArea/TextArea";
 
 type PropertyViewProps = {
     name: string;
@@ -63,6 +64,9 @@ export const PropertyView = ({ name, object, internalUrl, externalUrl, isFirst }
     const property = match<[FieldType|undefined, string[]|undefined]>([fieldMeta?.type, fieldMeta?.referenceTo])
         .with(["address", P._], () => (
             <Address address={value} />
+        ))
+        .with(["textarea", P._], () => (
+            <TextArea value={value} />
         ))
         .with(["boolean", P._], () => (
             <Boolean value={value} />

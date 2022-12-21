@@ -17,6 +17,8 @@ import { faRefresh } from "@fortawesome/free-solid-svg-icons";
 import { Contact } from "./pages/admin/mapping/Contact";
 import { Lead } from "./pages/admin/mapping/Lead";
 import { Account } from "./pages/admin/mapping/Account";
+import { Task } from "./pages/admin/mapping/Task";
+import { Event } from "./pages/admin/mapping/Event";
 import {View} from "./pages/view/View";
 import {List} from "./pages/list/List";
 import {match} from "ts-pattern";
@@ -44,6 +46,7 @@ function App() {
     useDeskproAppEvents({
         onElementEvent: (id, type, payload) => match([id, type])
             .with(["home", "home_button"], () => {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
                 const basePath = payload?.basePath;
                 payload && navigate(basePath);
@@ -101,6 +104,8 @@ function App() {
                                                 <Route path="account" element={<Account />} />
                                                 <Route path="note" element={<Note />} />
                                                 <Route path="opportunity" element={<Opportunity />} />
+                                                <Route path="task" element={<Task />} />
+                                                <Route path="event" element={<Event />} />
                                             </Route>
                                         </Route>
                                     </Route>

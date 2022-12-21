@@ -1,0 +1,100 @@
+{
+  "list": {
+    "root": [
+      [
+        {
+          "id": "Subject",
+          "property": {
+            "name": "Subject",
+            "label": "Subject"
+          }
+        }
+      ],
+      [
+        {
+          "id": "TaskSubtype",
+          "property": {
+            "name": "TaskSubtype",
+            "label": "Type"
+          }
+        }
+      ],
+      [
+        {
+          "id": "Priority",
+          "property": {
+            "name": "Priority",
+            "label": "Priority"
+          }
+        }
+      ],
+      [
+        {
+          "id": "ActivityDate",
+          "property": {
+            "name": "ActivityDate",
+            "label": "Due Date"
+          }
+        }
+      ],
+      [
+        {
+          "id": "Description",
+          "property": {
+            "name": "Description",
+            "label": "Comments"
+          }
+        }
+      ]
+    ]
+  },
+  "view": {
+    "root": [
+      [
+        {
+          "id": "Subject",
+          "property": {
+            "name": "Subject",
+            "label": "Subject"
+          }
+        }
+      ],
+      [
+        {
+          "id": "TaskSubtype",
+          "property": {
+            "name": "TaskSubtype",
+            "label": "Type"
+          }
+        }
+      ],
+      [
+        {
+          "id": "Priority",
+          "property": {
+            "name": "Priority",
+            "label": "Priority"
+          }
+        }
+      ],
+      [
+        {
+          "id": "ActivityDate",
+          "property": {
+            "name": "ActivityDate",
+            "label": "Due Date"
+          }
+        }
+      ],
+      [
+        {
+          "id": "Description",
+          "property": {
+            "name": "Description",
+            "label": "Comments"
+          }
+        }
+      ]
+    ]
+  }
+}

@@ -1,22 +1,24 @@
 {
   "home": {
     "root": [
-      [{
-        "id": "Name",
-        "property": {
-          "name": "Name",
-          "label": "Full Name"
-        }
-      },
+      [
+        {
+          "id": "Name",
+          "property": {
+            "name": "Name",
+            "label": "Full Name"
+          }
+        },
         null
       ],
-      [{
-        "id": "Title",
-        "property": {
-          "name": "Title",
-          "label": "Title"
-        }
-      },
+      [
+        {
+          "id": "Title",
+          "property": {
+            "name": "Title",
+            "label": "Title"
+          }
+        },
         {
           "id": "Department",
           "property": {
@@ -25,31 +27,34 @@
           }
         }
       ],
-      [{
-        "id": "AccountId",
-        "property": {
-          "name": "AccountId",
-          "label": "Account ID"
-        }
-      },
+      [
+        {
+          "id": "AccountId",
+          "property": {
+            "name": "AccountId",
+            "label": "Account ID"
+          }
+        },
         null
       ],
-      [{
-        "id": "Email",
-        "property": {
-          "name": "Email",
-          "label": "Email"
-        }
-      },
+      [
+        {
+          "id": "Email",
+          "property": {
+            "name": "Email",
+            "label": "Email"
+          }
+        },
         null
       ],
-      [{
-        "id": "MobilePhone",
-        "property": {
-          "name": "MobilePhone",
-          "label": "Mobile Phone"
-        }
-      },
+      [
+        {
+          "id": "MobilePhone",
+          "property": {
+            "name": "MobilePhone",
+            "label": "Mobile Phone"
+          }
+        },
         {
           "id": "Phone",
           "property": {
@@ -58,43 +63,79 @@
           }
         }
       ],
-      [{
-        "id": "OwnerId",
-        "property": {
-          "name": "OwnerId",
-          "label": "Owner ID"
-        }
-      },
+      [
+        {
+          "id": "OwnerId",
+          "property": {
+            "name": "OwnerId",
+            "label": "Owner ID"
+          }
+        },
         null
       ]
     ],
     "objects_order": [
-      [{
-        "id": "Opportunity",
-        "property": {
-          "name": "Opportunity",
-          "label": "Opportunities",
-          "object": "Opportunity"
+      [
+        {
+          "id": "Opportunity",
+          "property": {
+            "name": "Opportunity",
+            "label": "Opportunities",
+            "object": "Opportunity"
+          }
         }
-      }],
-      [{
-        "id": "Note",
-        "property": {
-          "name": "Note",
-          "label": "Notes",
-          "object": "Note"
+      ],
+      [
+        {
+          "id": "Note",
+          "property": {
+            "name": "Note",
+            "label": "Notes",
+            "object": "Note"
+          }
         }
-      }]
+      ],
+      [
+        {
+          "id": "Activity",
+          "property": {
+            "name": "Activity",
+            "label": "Activities",
+            "object": "Activity"
+          }
+        }
+      ],
+      [
+        {
+          "id": "Task",
+          "property": {
+            "name": "Task",
+            "label": "Tasks",
+            "object": "Task"
+          }
+        }
+      ],
+      [
+        {
+          "id": "Event",
+          "property": {
+            "name": "Event",
+            "label": "Events",
+            "object": "Event"
+          }
+        }
+      ]
     ],
     "objects": {
       "Opportunity": [
-        [{
-          "id": "Name",
-          "property": {
-            "name": "Name",
-            "label": "Name"
-          }
-        },
+        [
+          {
+            "id": "Name",
+            "property": {
+              "name": "Name",
+              "label": "Name"
+            }
+          },
           null
         ],
         [
@@ -107,13 +148,14 @@
           },
           null
         ],
-        [{
-          "id": "OwnerId",
-          "property": {
-            "name": "OwnerId",
-            "label": "Owner ID"
-          }
-        },
+        [
+          {
+            "id": "OwnerId",
+            "property": {
+              "name": "OwnerId",
+              "label": "Owner ID"
+            }
+          },
           null
         ],
         [
@@ -128,13 +170,14 @@
         ]
       ],
       "Note": [
-        [{
-          "id": "Title",
-          "property": {
-            "name": "Title",
-            "label": "Title"
-          }
-        },
+        [
+          {
+            "id": "Title",
+            "property": {
+              "name": "Title",
+              "label": "Title"
+            }
+          },
           null
         ],
         [
@@ -147,13 +190,128 @@
           },
           null
         ],
-        [{
-          "id": "CreatedDate",
-          "property": {
-            "name": "CreatedDate",
-            "label": "Created Date"
-          }
-        },
+        [
+          {
+            "id": "CreatedDate",
+            "property": {
+              "name": "CreatedDate",
+              "label": "Created Date"
+            }
+          },
+          null
+        ]
+      ],
+      "Task": [
+        [
+          {
+            "id": "Subject",
+            "property": {
+              "name": "Subject",
+              "label": "Subject"
+            }
+          },
+          null
+        ],
+        [
+          {
+            "id": "TaskSubtype",
+            "property": {
+              "name": "TaskSubtype",
+              "label": "Type"
+            }
+          },
+          null
+        ],
+        [
+          {
+            "id": "Priority",
+            "property": {
+              "name": "Priority",
+              "label": "Priority"
+            }
+          },
+          null
+        ],
+        [
+          {
+            "id": "ActivityDate",
+            "property": {
+              "name": "ActivityDate",
+              "label": "Due Date"
+            }
+          },
+          null
+        ],
+        [
+          {
+            "id": "Description",
+            "property": {
+              "name": "Description",
+              "label": "Comments"
+            }
+          },
+          null
+        ]
+      ],
+      "Event": [
+        [
+          {
+            "id": "Subject",
+            "property": {
+              "name": "Subject",
+              "label": "Subject"
+            }
+          },
+          null
+        ],
+        [
+          {
+            "id": "EventSubtype",
+            "property": {
+              "name": "EventSubtype",
+              "label": "Type"
+            }
+          },
+          null
+        ],
+        [
+          {
+            "id": "Description",
+            "property": {
+              "name": "Description",
+              "label": "Description"
+            }
+          },
+          null
+        ],
+        [
+          {
+            "id": "Location",
+            "property": {
+              "name": "Location",
+              "label": "Location"
+            }
+          },
+          null
+        ],
+        [
+          {
+            "id": "ActivityDateTime",
+            "property": {
+              "name": "ActivityDateTime",
+              "label": "Start"
+            }
+          },
+          null
+        ],
+        [
+          {
+            "id": "EndDateTime",
+            "property": {
+              "name": "EndDateTime",
+              "label": "End Date"
+            }
+          },
           null
         ]
       ]
@@ -161,22 +319,24 @@
   },
   "view": {
     "root": [
-      [{
-        "id": "Name",
-        "property": {
-          "name": "Name",
-          "label": "Full Name"
-        }
-      },
+      [
+        {
+          "id": "Name",
+          "property": {
+            "name": "Name",
+            "label": "Full Name"
+          }
+        },
         null
       ],
-      [{
-        "id": "Title",
-        "property": {
-          "name": "Title",
-          "label": "Title"
-        }
-      },
+      [
+        {
+          "id": "Title",
+          "property": {
+            "name": "Title",
+            "label": "Title"
+          }
+        },
         {
           "id": "Department",
           "property": {
@@ -185,22 +345,24 @@
           }
         }
       ],
-      [{
-        "id": "Email",
-        "property": {
-          "name": "Email",
-          "label": "Email"
-        }
-      },
+      [
+        {
+          "id": "Email",
+          "property": {
+            "name": "Email",
+            "label": "Email"
+          }
+        },
         null
       ],
-      [{
-        "id": "Phone",
-        "property": {
-          "name": "Phone",
-          "label": "Business Phone"
-        }
-      },
+      [
+        {
+          "id": "Phone",
+          "property": {
+            "name": "Phone",
+            "label": "Business Phone"
+          }
+        },
         {
           "id": "MobilePhone",
           "property": {
@@ -209,13 +371,14 @@
           }
         }
       ],
-      [{
-        "id": "HomePhone",
-        "property": {
-          "name": "HomePhone",
-          "label": "Home Phone"
-        }
-      },
+      [
+        {
+          "id": "HomePhone",
+          "property": {
+            "name": "HomePhone",
+            "label": "Home Phone"
+          }
+        },
         {
           "id": "OtherPhone",
           "property": {
@@ -224,49 +387,54 @@
           }
         }
       ],
-      [{
-        "id": "MailingAddress",
-        "property": {
-          "name": "MailingAddress",
-          "label": "Mailing Address"
-        }
-      },
+      [
+        {
+          "id": "MailingAddress",
+          "property": {
+            "name": "MailingAddress",
+            "label": "Mailing Address"
+          }
+        },
         null
       ],
-      [{
-        "id": "AccountId",
-        "property": {
-          "name": "AccountId",
-          "label": "Account ID"
-        }
-      },
+      [
+        {
+          "id": "AccountId",
+          "property": {
+            "name": "AccountId",
+            "label": "Account ID"
+          }
+        },
         null
       ],
-      [{
-        "id": "ReportsToId",
-        "property": {
-          "name": "ReportsToId",
-          "label": "Reports To ID"
-        }
-      },
+      [
+        {
+          "id": "ReportsToId",
+          "property": {
+            "name": "ReportsToId",
+            "label": "Reports To ID"
+          }
+        },
         null
       ],
-      [{
-        "id": "OwnerId",
-        "property": {
-          "name": "OwnerId",
-          "label": "Owner ID"
-        }
-      },
+      [
+        {
+          "id": "OwnerId",
+          "property": {
+            "name": "OwnerId",
+            "label": "Owner ID"
+          }
+        },
         null
       ],
-      [{
-        "id": "CreatedById",
-        "property": {
-          "name": "CreatedById",
-          "label": "Created By ID"
-        }
-      },
+      [
+        {
+          "id": "CreatedById",
+          "property": {
+            "name": "CreatedById",
+            "label": "Created By ID"
+          }
+        },
         null
       ]
     ]

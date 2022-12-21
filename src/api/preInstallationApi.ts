@@ -1,6 +1,6 @@
 import { adminGenericProxyFetch, IDeskproClient } from "@deskpro/app-sdk";
 import { Settings } from "../types";
-import {AuthTokens, ObjectMeta, ObjectType, RequestMethod} from "./types";
+import {AuthTokens, ObjectMeta, RequestMethod} from "./types";
 import { every, trimEnd } from "lodash";
 import { isResponseError } from "./api";
 

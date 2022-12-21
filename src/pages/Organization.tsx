@@ -1,7 +1,7 @@
 import {
     Dropdown,
     DropdownItemType, Input,
-    LoadingSpinner, useDeskproAppClient, useDeskproAppTheme,
+    LoadingSpinner, useDeskproAppTheme,
     useDeskproElements,
     useDeskproLatestAppContext, useInitialisedDeskproAppClient
 } from "@deskpro/app-sdk";
@@ -17,7 +17,6 @@ import {orderBy} from "lodash";
 export const Organization = () => {
     const { context } = useDeskproLatestAppContext();
     const { theme } = useDeskproAppTheme();
-    const { client } = useDeskproAppClient();
 
     const [selectedObjectId, setSelectedObjectId] = useState<string>("");
 

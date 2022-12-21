@@ -1,25 +1,25 @@
 import { useState, Suspense, useCallback } from "react";
 import { TabBar, TabBarItemType } from "@deskpro/deskpro-ui";
-import { ViewScreen } from "../../../screens/admin/mapping/note/ViewScreen";
 import {
   LoadingSpinner,
   useDeskproLatestAppContext,
   useInitialisedDeskproAppClient,
 } from "@deskpro/app-sdk";
 import { Reveal } from "../../../components/Reveal/Reveal";
-import { NoteLayout } from "../../../types";
+import { TaskLayout } from "../../../types";
 import { ListLayout, ViewLayout } from "../../../screens/admin/types";
-import defaultContactLayout from "../../../resources/default_layout/note.json";
-import { ListScreen } from "../../../screens/admin/mapping/note/ListScreen";
+import defaultContactLayout from "../../../resources/default_layout/task.json";
+import { ListScreen } from "../../../screens/admin/mapping/task/ListScreen";
+import { ViewScreen } from "../../../screens/admin/mapping/task/ViewScreen";
 
-export const Note = () => {
+export const Task = () => {
   const { context } = useDeskproLatestAppContext();
 
   const [activeTab, setActiveTab] = useState(0);
 
-  const [layout, setLayout] = useState<NoteLayout>(
-    context?.settings.mapping_note
-      ? JSON.parse(context?.settings.mapping_note)
+  const [layout, setLayout] = useState<TaskLayout>(
+    context?.settings.mapping_task
+      ? JSON.parse(context?.settings.mapping_task)
       : defaultContactLayout
   );
 
@@ -50,10 +50,10 @@ export const Note = () => {
 
   const tabs: TabBarItemType[] = [
     {
-      label: "Note List Screen",
+      label: "Task List Screen",
     },
     {
-      label: "Note View Screen",
+      label: "Task View Screen",
     },
   ];
 

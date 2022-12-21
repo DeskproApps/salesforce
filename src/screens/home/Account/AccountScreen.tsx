@@ -7,6 +7,7 @@ import {
 import {useBasePath, useQueryWithClient} from "../../../hooks";
 import { QueryKey } from "../../../query";
 import {
+    getAllActivities,
     getObjectMeta,
     getObjectsByFk,
     getUserById
@@ -33,6 +34,7 @@ export const AccountScreen = ({ account }: AccountScreenProps) => {
 
     const opportunitiesMax = 3;
     const notesMax = 3;
+    const activitiesMax = 3;
 
     const layout = useMemo(
         () => getScreenLayout(context?.settings, "Account", "home"),
@@ -62,6 +64,12 @@ export const AccountScreen = ({ account }: AccountScreenProps) => {
         [QueryKey.NOTES_BY_PARENT_ID, "Note", "ParentID", account.Id, notesMax],
         (client) => getObjectsByFk(client, "Note", "ParentID", account.Id, notesMax),
         { enabled: objects.includes("Note") }
+    );
+
+    const activities = useQueryWithClient(
+        [QueryKey.ACTIVITIES_BY_ACCOUNT_ID, "Activities", "AccountId", account.Id, activitiesMax],
+        (client) => getAllActivities(client, account.Id, "AccountId", activitiesMax),
+        { enabled: objects.includes("Activity") }
     );
 
     if (!meta.isSuccess) {
@@ -115,6 +123,35 @@ export const AccountScreen = ({ account }: AccountScreenProps) => {
                                                         </div>
                                                     </Fragment>
                                                 ))}
+                                            </Stack>
+                                        </Fragment>
+                                    ))
+                                    .with("Activity", () => (activities.data && activities.data.length > 0) && (
+                                        <Fragment key={idx}>
+                                            <Stack justify="space-between" align="center" style={{ width: "100%" }}>
+                                                <H1>
+                                                <Link to={`${basePath}/objects/activity/AccountId/${account.Id}/list`}>
+                                                        Activity
+                                                    </Link>
+                                                </H1>
+                                            </Stack>
+                                            <Stack gap={14} style={{ width: "100%" }} vertical>
+                                                {activities.data?.map((activity, idx) => {
+                                                    const usedLayout = activity.Type === "Task" ? layout.objects.Task : layout.objects.Event;
+
+                                                    return (
+                                                    <Fragment key={idx}>
+                                                        <PropertyLayout
+                                                            properties={usedLayout}
+                                                            object={(activity as unknown) as LayoutObject}
+                                                            externalUrl={getObjectPermalink(context?.settings, `/lightning/r/${activity.Type}/${activity.Id}/view`)}
+                                                            internalUrl={`${basePath}/objects/${activity.Type}/${activity.Id}/view`}
+                                                        />
+                                                        <div style={{ width: "100%" }}>
+                                                            <HorizontalDivider />
+                                                        </div>
+                                                    </Fragment>
+                                                )})}
                                             </Stack>
                                         </Fragment>
                                     ))

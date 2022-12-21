@@ -98,6 +98,36 @@
             "object": "Note"
           }
         }
+      ],
+      [
+        {
+          "id": "Activity",
+          "property": {
+            "name": "Activity",
+            "label": "Activities",
+            "object": "Activity"
+          }
+        }
+      ],
+      [
+        {
+          "id": "Task",
+          "property": {
+            "name": "Task",
+            "label": "Tasks",
+            "object": "Task"
+          }
+        }
+      ],
+      [
+        {
+          "id": "Event",
+          "property": {
+            "name": "Event",
+            "label": "Events",
+            "object": "Event"
+          }
+        }
       ]
     ],
     "objects": {
@@ -193,6 +223,120 @@
               "label": "Created Date"
             }
           }
+        ]
+      ],
+      "Task": [
+        [
+          {
+            "id": "Subject",
+            "property": {
+              "name": "Subject",
+              "label": "Subject"
+            }
+          },
+          null
+        ],
+        [
+          {
+            "id": "TaskSubtype",
+            "property": {
+              "name": "TaskSubtype",
+              "label": "Type"
+            }
+          },
+          null
+        ],
+        [
+          {
+            "id": "Priority",
+            "property": {
+              "name": "Priority",
+              "label": "Priority"
+            }
+          },
+          null
+        ],
+        [
+          {
+            "id": "ActivityDate",
+            "property": {
+              "name": "ActivityDate",
+              "label": "Due Date"
+            }
+          },
+          null
+        ],
+        [
+          {
+            "id": "Description",
+            "property": {
+              "name": "Description",
+              "label": "Comments"
+            }
+          },
+          null
+        ]
+      ],
+      "Event": [
+        [
+          {
+            "id": "Subject",
+            "property": {
+              "name": "Subject",
+              "label": "Subject"
+            }
+          },
+          null
+        ],
+        [
+          {
+            "id": "EventSubtype",
+            "property": {
+              "name": "EventSubtype",
+              "label": "Type"
+            }
+          },
+          null
+        ],
+        [
+          {
+            "id": "Description",
+            "property": {
+              "name": "Description",
+              "label": "Description"
+            }
+          },
+          null
+        ],
+        [
+          {
+            "id": "Location",
+            "property": {
+              "name": "Location",
+              "label": "Location"
+            }
+          },
+          null
+        ],
+        [
+          {
+            "id": "ActivityDateTime",
+            "property": {
+              "name": "ActivityDateTime",
+              "label": "Start"
+            }
+          },
+          null
+        ],
+        [
+          {
+            "id": "EndDateTime",
+            "property": {
+              "name": "EndDateTime",
+              "label": "End Date"
+            }
+          },
+          null
         ]
       ]
     }

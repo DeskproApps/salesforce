@@ -152,6 +152,7 @@ export const useGlobalSignIn = () => {
     const signIn = () => {
         poll && (async () => {
             setIsLoading(true);
+            
             setAccessCode((await poll()).token)
         })();
     };
@@ -164,7 +165,8 @@ export const useGlobalSignIn = () => {
     ]);
 
     const isInstanceUrlInvalid = settings?.salesforce_instance_url
-        ? !/https:\/\/[a-zA-Z0-9\-]+\.(sandbox\.)?my\.salesforce\.com$/.test(settings.salesforce_instance_url)
+        // eslint-disable-next-line no-useless-escape
+        ? !/https:\/\/[a-zA-Z0-9\-]+\.(sandbox|develop\.)?my\.salesforce\.com$/.test(settings.salesforce_instance_url)
         : false
     ;
 
