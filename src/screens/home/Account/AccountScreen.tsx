@@ -168,7 +168,7 @@ export const AccountScreen = ({ account }: AccountScreenProps) => {
                                             </Stack>
                                         </Fragment>
                                     ))
-                                    .with("Note", () => (notes.data && notes.data.length > 0) && (
+                                    .with("Note", () => (
                                         <Fragment key={idx}>
                                            <Stack justify="space-between" align="center" style={{ width: "100%" }}>
                                                 <Stack gap={5} style={{
@@ -180,20 +180,22 @@ export const AccountScreen = ({ account }: AccountScreenProps) => {
                                                         <H1>Notes</H1>
                                                     </Link>
                                                     <Link to={`/add/note/${account.Id}`}>
-                                                        <FontAwesomeIcon
-                                                        icon={faPlus as IconProp}
-                                                        size="sm"
-                                                        style={{
-                                                            alignSelf: "center",
-                                                            cursor: "pointer",
-                                                            marginBottom: "2px",
-                                                        }}
-                                                        ></FontAwesomeIcon>
+                                                        <Stack style={{color:theme.colors.grey500}}>
+                                                            <FontAwesomeIcon
+                                                            icon={faPlus as IconProp}
+                                                            size="sm"
+                                                            style={{
+                                                                alignSelf: "center",
+                                                                cursor: "pointer",
+                                                                marginBottom: "2px",
+                                                            }}
+                                                            ></FontAwesomeIcon>
+                                                        </Stack>
                                                     </Link>
                                                 </Stack>
                                             </Stack>
                                             <Stack gap={14} style={{ width: "100%" }} vertical>
-                                                {notes.data.map((note, idx) => (
+                                                {notes.data?.map((note, idx) => (
                                                     <Fragment key={idx}>
                                                         <PropertyLayout
                                                             properties={layout.objects.Note}

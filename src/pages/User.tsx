@@ -27,8 +27,9 @@ export const User = () => {
 
     const [selectedObjectId, setSelectedObjectId] = useState<string>("");
 
-    useDeskproElements(({ registerElement }) => {
+    useDeskproElements(({ registerElement,deRegisterElement }) => {
         registerElement("refresh", { type: "refresh_button" });
+        deRegisterElement("salesforcePlusButton");
     });
 
     const emails: string[] = context?.data?.user?.emails ?? [];

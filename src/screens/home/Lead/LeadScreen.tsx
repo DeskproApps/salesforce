@@ -187,15 +187,17 @@ export const LeadScreen = ({ lead }: LeadScreenProps) => {
                                                         <H1>Notes</H1>
                                                     </Link>
                                                     <Link to={`/add/note/${lead.Id}`}>
-                                                        <FontAwesomeIcon
-                                                        icon={faPlus as IconProp}
-                                                        size="sm"
-                                                        style={{
-                                                            alignSelf: "center",
-                                                            cursor: "pointer",
-                                                            marginBottom: "2px",
-                                                        }}
-                                                        ></FontAwesomeIcon>
+                                                        <Stack style={{color:theme.colors.grey500}}>
+                                                            <FontAwesomeIcon
+                                                            icon={faPlus as IconProp}
+                                                            size="sm"
+                                                            style={{
+                                                                alignSelf: "center",
+                                                                cursor: "pointer",
+                                                                marginBottom: "2px",
+                                                            }}
+                                                            ></FontAwesomeIcon>
+                                                        </Stack>
                                                     </Link>
                                                 </Stack>
                                             </Stack>
