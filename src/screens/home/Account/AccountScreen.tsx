@@ -4,9 +4,6 @@ import {
     useDeskproAppTheme,
     useDeskproLatestAppContext,
 } from "@deskpro/app-sdk";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import {useBasePath, useQueryWithClient} from "../../../hooks";
 import { QueryKey } from "../../../query";
 import {
@@ -126,11 +123,6 @@ export const AccountScreen = ({ account }: AccountScreenProps) => {
                                                         </div>
                                                     </Fragment>
                                                 ))}
-                                                {(!opportunities.data ||opportunities.data?.length === 0) && (
-                                                    <div style={{ width: "100%" }}>
-                                                       <HorizontalDivider />
-                                                    </div>
-                                                )}
                                             </Stack>
                                         </Fragment>
                                     ))
@@ -160,37 +152,17 @@ export const AccountScreen = ({ account }: AccountScreenProps) => {
                                                         </div>
                                                     </Fragment>
                                                 )})}
-                                                {(!activities.data ||activities.data?.length === 0) && (
-                                                    <div style={{ width: "100%" }}>
-                                                       <HorizontalDivider />
-                                                    </div>
-                                                )}
                                             </Stack>
                                         </Fragment>
                                     ))
                                     .with("Note", () => (notes.data && notes.data.length > 0) && (
                                         <Fragment key={idx}>
-                                           <Stack justify="space-between" align="center" style={{ width: "100%" }}>
-                                                <Stack gap={5} style={{
-                                                    verticalAlign: "baseline",
-                                                    justifyContent: "center",
-                                                    alignItems: "center",
-                                                }}>
+                                            <Stack justify="space-between" align="center" style={{ width: "100%" }}>
+                                                <H1 style={{ color: theme.colors.cyan100 }}>
                                                     <Link to={`${basePath}/objects/Note/ParentID/${account.Id}/list`}>
-                                                        <H1>Notes</H1>
+                                                        Notes
                                                     </Link>
-                                                    <Link to={`/add/note/${account.Id}`}>
-                                                        <FontAwesomeIcon
-                                                        icon={faPlus as IconProp}
-                                                        size="sm"
-                                                        style={{
-                                                            alignSelf: "center",
-                                                            cursor: "pointer",
-                                                            marginBottom: "2px",
-                                                        }}
-                                                        ></FontAwesomeIcon>
-                                                    </Link>
-                                                </Stack>
+                                                </H1>
                                             </Stack>
                                             <Stack gap={14} style={{ width: "100%" }} vertical>
                                                 {notes.data.map((note, idx) => (
@@ -206,11 +178,6 @@ export const AccountScreen = ({ account }: AccountScreenProps) => {
                                                         </div>
                                                     </Fragment>
                                                 ))}
-                                                {(!notes.data ||notes.data?.length === 0) && (
-                                                    <div style={{ width: "100%" }}>
-                                                       <HorizontalDivider />
-                                                    </div>
-                                                )}
                                             </Stack>
                                         </Fragment>
                                     ))
