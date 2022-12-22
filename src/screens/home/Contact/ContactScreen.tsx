@@ -4,6 +4,9 @@ import {
     useDeskproAppTheme,
     useDeskproLatestAppContext,
 } from "@deskpro/app-sdk";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import {useBasePath, useQueryWithClient} from "../../../hooks";
 import { QueryKey } from "../../../query";
 import {
@@ -107,7 +110,7 @@ export const ContactScreen = ({ contact }: ContactScreenProps) => {
                         <Fragment key={idx}>
                             {
                                 match(object)
-                                    .with("Opportunity", () => (opportunities.data && opportunities.data.length > 0) && (
+                                    .with("Opportunity", () => (
                                         <Fragment key={idx}>
                                             <Stack justify="space-between" align="center" style={{ width: "100%" }}>
                                                 <H1 style={{ color: theme.colors.cyan100 }}>
@@ -117,7 +120,7 @@ export const ContactScreen = ({ contact }: ContactScreenProps) => {
                                                 </H1>
                                             </Stack>
                                             <Stack gap={14} style={{ width: "100%" }} vertical>
-                                                {opportunities.data.map((opportunity, idx) => (
+                                                {opportunities.data?.map((opportunity, idx) => (
                                                     <Fragment key={idx}>
                                                         <PropertyLayout
                                                             properties={layout.objects.Opportunity}
@@ -130,17 +133,22 @@ export const ContactScreen = ({ contact }: ContactScreenProps) => {
                                                         </div>
                                                     </Fragment>
                                                 ))}
+                                                {(!opportunities.data ||opportunities.data?.length === 0) && (
+                                                    <div style={{ width: "100%" }}>
+                                                       <HorizontalDivider />
+                                                    </div>
+                                                )}
                                             </Stack>
                                         </Fragment>
                                     ))
-                                    .with("Activity", () => (activities.data && activities.data.length > 0) && (
+                                    .with("Activity", () => (
                                         <Fragment key={idx}>
                                             <Stack justify="space-between" align="center" style={{ width: "100%" }}>
-                                                <H1>
+                                            <H1 style={{ color: theme.colors.cyan100 }}>
                                                 <Link to={`${basePath}/objects/activity/WhoId/${contact.Id}/list`}>
-                                                        Activity
-                                                    </Link>
-                                                </H1>
+                                                    Activities
+                                                </Link>
+                                            </H1>
                                             </Stack>
                                             <Stack gap={14} style={{ width: "100%" }} vertical>
                                                 {activities.data?.map((activity, idx) => {
@@ -159,20 +167,40 @@ export const ContactScreen = ({ contact }: ContactScreenProps) => {
                                                         </div>
                                                     </Fragment>
                                                 )})}
+                                                {(!activities.data ||activities.data?.length === 0) && (
+                                                    <div style={{ width: "100%" }}>
+                                                       <HorizontalDivider />
+                                                    </div>
+                                                )}
                                             </Stack>
                                         </Fragment>
                                     ))
-                                    .with("Note", () => (notes.data && notes.data.length > 0) && (
+                                    .with("Note", () => (
                                         <Fragment key={idx}>
                                             <Stack justify="space-between" align="center" style={{ width: "100%" }}>
-                                                <H1 style={{ color: theme.colors.cyan100 }}>
+                                                <Stack gap={5} style={{
+                                                    verticalAlign: "baseline",
+                                                    justifyContent: "center",
+                                                    alignItems: "center",
+                                                }}>
                                                     <Link to={`${basePath}/objects/Note/ParentID/${contact.Id}/list`}>
-                                                        Notes
+                                                        <H1>Notes</H1>
                                                     </Link>
-                                                </H1>
+                                                    <Link to={`/add/note/${contact.Id}`}>
+                                                        <FontAwesomeIcon
+                                                        icon={faPlus as IconProp}
+                                                        size="sm"
+                                                        style={{
+                                                            alignSelf: "center",
+                                                            cursor: "pointer",
+                                                            marginBottom: "2px",
+                                                        }}
+                                                        ></FontAwesomeIcon>
+                                                    </Link>
+                                                </Stack>
                                             </Stack>
                                             <Stack gap={14} style={{ width: "100%" }} vertical>
-                                                {notes.data.map((note, idx) => (
+                                                {notes.data?.map((note, idx) => (
                                                     <Fragment key={idx}>
                                                         <PropertyLayout
                                                             properties={layout.objects.Note}
@@ -185,6 +213,11 @@ export const ContactScreen = ({ contact }: ContactScreenProps) => {
                                                         </div>
                                                     </Fragment>
                                                 ))}
+                                                {(!notes.data ||notes.data?.length === 0) && (
+                                                    <div style={{ width: "100%" }}>
+                                                       <HorizontalDivider />
+                                                    </div>
+                                                )}
                                             </Stack>
                                         </Fragment>
                                     ))

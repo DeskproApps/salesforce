@@ -36,6 +36,7 @@ import "simplebar/dist/simplebar.min.css";
 import "@deskpro/deskpro-ui/dist/deskpro-ui.css";
 import "@deskpro/deskpro-ui/dist/deskpro-custom-icons.css";
 import {ScrollTop} from "./components/ScrollTop";
+import { CreateNote } from "./pages/create/Note";
 
 function App() {
     const { context } = useDeskproLatestAppContext();
@@ -81,6 +82,9 @@ function App() {
                                                 <Route path=":object/:field/:id/list" element={<List />} />
                                                 <Route path=":object/:id/view" element={<View />} />
                                             </Route>
+                                        </Route>
+                                        <Route path="add">
+                                            <Route path="note/:parentId" element={<CreateNote />} />
                                         </Route>
                                         <Route path="user">
                                             <Route index element={<User />} />
