@@ -4,6 +4,7 @@
   "description": "View and manage associated Salesforce Contacts, Leads, Accounts and Opportunities",
   "appStoreUrl": "https://www.deskpro.com/product-embed/apps/salesforce",
   "version": "1.0.11",
+  "version": "1.0.9",
   "scope": "agent",
   "isSingleInstall": true,
   "hasDevMode": true,
