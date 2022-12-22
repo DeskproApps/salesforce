@@ -7,13 +7,16 @@
   "scope": "agent",
   "isSingleInstall": true,
   "hasDevMode": true,
-  "targets": [{
-    "target": "user_sidebar",
-    "entrypoint": "#/user"
-  }, {
-    "target": "organisation_sidebar",
-    "entrypoint": "#/organization"
-  }],
+  "targets": [
+    {
+      "target": "user_sidebar",
+      "entrypoint": "#/user"
+    },
+    {
+      "target": "organisation_sidebar",
+      "entrypoint": "#/organization"
+    }
+  ],
   "settings": {
     "client_key": {
       "title": "Client Key",
@@ -135,10 +138,18 @@
     }
   },
   "proxy": {
-    "whitelist": [{
-      "url": "https://(.*).salesforce.com/services/.*",
-      "methods": ["GET", "POST", "PUT", "DELETE", "PATCH"],
-      "timeout": 30
-    }]
+    "whitelist": [
+      {
+        "url": "https://(.*).salesforce.com/services/.*",
+        "methods": [
+          "GET",
+          "POST",
+          "PUT",
+          "DELETE",
+          "PATCH"
+        ],
+        "timeout": 30
+      }
+    ]
   }
 }
