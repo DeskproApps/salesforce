@@ -22,7 +22,7 @@ export const getAllActivities = async (client: IDeskproClient,id:string, field:s
 }
 
 export const getObjectsByQuery = async (client: IDeskproClient, query:string, limit?: number): Promise<Opportunity[]> => {
-    const limitClause = limit === undefined ? "" : `LIMIT ${limit} OFFSET 0`;
+    const limitClause = limit === undefined ? "" : `ORDER BY createddate DESC LIMIT ${limit} OFFSET 0`;
 
     const result: { records: Opportunity[] } = await SOQLSearch(
         client,
@@ -33,7 +33,7 @@ export const getObjectsByQuery = async (client: IDeskproClient, query:string, li
 }
 
 export const getObjectsByFk = async (client: IDeskproClient, object: string, field: string, id: string, limit?: number): Promise<Opportunity[]> => {
-    const limitClause = limit === undefined ? "" : `LIMIT ${limit} OFFSET 0`;
+    const limitClause = limit === undefined ? "" : `ORDER BY createddate DESC LIMIT ${limit} OFFSET 0`;
 
     const result: { records: Opportunity[] } = await SOQLSearch(
         client,
