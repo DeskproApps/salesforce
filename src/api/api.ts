@@ -43,6 +43,12 @@ export const getObjectsByFk = async (client: IDeskproClient, object: string, fie
     return result.records;
 }
 
+export const postData = async (client: IDeskproClient, object: string, data: unknown): Promise<unknown> => {
+    const result = await installedRequest(client, `/services/data/v55.0/sobjects/${object}`, "POST", data);
+
+    return result;
+}
+
 /**
  * Get an sObject by ID
  */
