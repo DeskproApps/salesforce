@@ -1,4 +1,4 @@
-import { Button, Stack, useDeskproAppClient } from "@deskpro/app-sdk";
+import { Button, Stack, useDeskproAppClient, useDeskproElements } from "@deskpro/app-sdk";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -25,6 +25,10 @@ export const CreateNote = () => {
   } = useForm<NoteSubmit>({
     resolver: zodResolver(noteSchema),
   });
+
+  useDeskproElements(({ deRegisterElement }) => {
+    deRegisterElement("salesforcePlusButton")
+});
 
   useEffect(() => {
     if (parentId) {

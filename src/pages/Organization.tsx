@@ -20,8 +20,9 @@ export const Organization = () => {
 
     const [selectedObjectId, setSelectedObjectId] = useState<string>("");
 
-    useDeskproElements(({ registerElement }) => {
+    useDeskproElements(({ registerElement, deRegisterElement }) => {
         registerElement("refresh", { type: "refresh_button" });
+        deRegisterElement("salesforcePlusButton")
     });
 
     const name = context?.data?.organisation?.name as string;
