@@ -144,11 +144,28 @@ export const LeadScreen = ({ lead }: LeadScreenProps) => {
                                     .with("Activity", () => (
                                         <Fragment key={idx}>
                                             <Stack justify="space-between" align="center" style={{ width: "100%" }}>
-                                                <H1>
-                                                    <Link to={`${basePath}/objects/activity/WhoId/${lead.Id}/list`}>
-                                                        Activity
+                                                <Stack gap={5} style={{
+                                                        verticalAlign: "baseline",
+                                                        justifyContent: "center",
+                                                        alignItems: "center",
+                                                    }}>
+                                                    <Link to={`${basePath}/objects/activity/AccountId/${lead.Id}/list`}>
+                                                        <H1>Activity</H1>
                                                     </Link>
-                                                </H1>
+                                                    <Link to={`/add/activity/WhoId/${lead.Id}`}>
+                                                        <Stack style={{color:theme.colors.grey500}}>
+                                                            <FontAwesomeIcon
+                                                            icon={faPlus as IconProp}
+                                                            size="sm"
+                                                            style={{
+                                                                alignSelf: "center",
+                                                                cursor: "pointer",
+                                                                marginBottom: "2px",
+                                                            }}
+                                                            ></FontAwesomeIcon>
+                                                        </Stack>
+                                                    </Link>
+                                                </Stack>
                                             </Stack>
                                             <Stack gap={14} style={{ width: "100%" }} vertical>
                                                 {activities.data?.map((activity, idx) => {

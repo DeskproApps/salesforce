@@ -28,7 +28,7 @@ type Props = {
   onChange: (key: string) => void;
   title: string;
   value: string;
-  error?: boolean;
+  error: boolean;
   keyName: string;
   valueName: string;
   required?: boolean;
