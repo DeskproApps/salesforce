@@ -13,7 +13,7 @@ import {
 } from "@deskpro/app-sdk";
 import "./DateField.css";
 
-const Label = styled(UILabel)`
+const LabelDate = styled(UILabel)`
   margin-top: 5px;
 `;
 
@@ -24,10 +24,6 @@ export type MappedFieldProps = DatePickerProps & {
   value?: string;
   onChange: (date: [Date]) => void;
 };
-
-const LabelDate = styled(Label)`
-  //width: calc(100% - 25px);
-`;
 
 const DateInput = styled(Input)`
   :read-only {
