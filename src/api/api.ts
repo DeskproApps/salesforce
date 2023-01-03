@@ -15,10 +15,9 @@ export const getAllActivities = async (client: IDeskproClient,id:string, field:s
 
     const joined = (await Promise.all([tasks, events])).flat().map(e => ({
         ...e,
-        Type: e.EventSubtype ? "Event" : "Task"
     }));
 
-    return joined.flat().sort((a,b) => new Date(b.CreatedDate).getTime() - new Date(a.CreatedDate).getTime());
+    return joined.flat().sort((a,b) => new Date(a.CreatedDate).getTime() - new Date(b.CreatedDate).getTime()).reverse();
 }
 
 export const getObjectsByQuery = async (client: IDeskproClient, query:string, limit?: number): Promise<Opportunity[]> => {
