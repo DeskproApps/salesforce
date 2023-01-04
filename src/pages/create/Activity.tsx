@@ -18,27 +18,13 @@ import { QueryKey } from "../../query";
 import { InputWithTitle } from "../../components/InputWithTitle/InputWithTitle";
 import { DateField } from "../../components/DateField/DateField";
 
-const SubjectOptions = [
-  {
-    key: "Call",
-    value: "Call",
-  },
-  {
-    key: "Email",
-    value: "Email",
-  },
-  {
-    key: "Send Quote",
-    value: "Send Quote",
-  },
-  {
-    key: "Send Letter",
-    value: "Send Letter",
-  },
-  {
-    key: "Other",
-    value: "Other",
-  },
+const unusableNames = [
+  "Security User",
+  "Chatter Expert",
+  "Data.com Clean",
+  "Platform Integration User",
+  "Automated Process",
+  "Integration User",
 ];
 
 const StatusOptions = [
@@ -76,7 +62,7 @@ const activityTypes = [
       {
         name: "Subject",
         label: "Subject",
-        type: "Dropdown",
+        type: "text",
       },
       {
         name: "Status",
@@ -106,7 +92,7 @@ const activityTypes = [
       {
         name: "Subject",
         label: "Subject",
-        type: "Dropdown",
+        type: "text",
       },
       {
         name: "Location",
@@ -127,6 +113,7 @@ const activityTypes = [
         name: "ToAddress",
         label: "To",
         type: "text",
+        required: true,
       },
       {
         name: "Subject",
@@ -151,7 +138,7 @@ const activityTypes = [
       {
         name: "Subject",
         label: "Subject",
-        type: "Dropdown",
+        type: "text",
       },
       {
         name: "Description",
@@ -270,17 +257,16 @@ export const CreateActivity = () => {
 
               if (field.type === "Dropdown") {
                 switch (field.name) {
-                  case "Subject":
-                    values = SubjectOptions;
-                    break;
                   case "Status":
                     values = StatusOptions;
                     break;
                   case "OwnerId":
-                    values = people.data?.map((e) => ({
-                      key: e.Id,
-                      value: e.Name,
-                    })) as { value: string }[];
+                    values = people.data
+                      ?.filter((e) => !unusableNames.includes(e.Name))
+                      .map((e) => ({
+                        key: e.Id,
+                        value: e.Name,
+                      })) as { value: string }[];
                 }
               }
               switch (field.type) {
@@ -291,6 +277,7 @@ export const CreateActivity = () => {
                       register={register(field.name as keyof ActivitySubmit)}
                       title={field.label}
                       error={!!errors[field.name as keyof ActivitySubmit]}
+                      required={field.required}
                     ></InputWithTitle>
                   );
                 case "textarea":
