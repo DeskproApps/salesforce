@@ -221,10 +221,9 @@ export const ContactScreen = ({ contact }: ContactScreenProps) => {
                     </Stack>
                     <Stack gap={14} style={{ width: "100%" }} vertical>
                       {activities.data?.map((activity, idx) => {
-                        const usedLayout =
-                          activity.TaskSubtype
-                            ? layout.objects.Task
-                            : layout.objects.Event;
+                        const usedLayout = activity.TaskSubtype
+                          ? layout.objects.Task
+                          : layout.objects.Event;
 
                         return (
                           <Fragment key={idx}>
@@ -235,7 +234,9 @@ export const ContactScreen = ({ contact }: ContactScreenProps) => {
                                 context?.settings,
                                 `/lightning/r/${activity.Type}/${activity.Id}/view`
                               )}
-                              internalUrl={`${basePath}/objects/${activity.Type}/${activity.Id}/view`}
+                              internalUrl={`${basePath}/objects/${
+                                activity.TaskSubtype ? "Task" : "Event"
+                              }/${activity.Id}/view`}
                             />
                             <div style={{ width: "100%" }}>
                               <HorizontalDivider />

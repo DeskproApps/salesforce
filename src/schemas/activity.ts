@@ -70,7 +70,7 @@ export const EmailSchema = z
   .object({
     Type: z.string().optional(),
     ToAddress: z.string().min(1),
-    BccAddress: z.string().min(1),
+    BccAddress: z.string().optional(),
     Subject: z.string().min(1),
     HtmlBody: z.string().min(1),
   })
