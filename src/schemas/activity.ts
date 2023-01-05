@@ -34,14 +34,14 @@ export const TaskSchema = z
     Subject: z.string().min(1),
     Status: z.string().min(1),
     OwnerId: z.string(),
+    WhoId: z.string().optional(),
+    AccountId: z.string().optional(),
   })
   .transform((obj) => {
     const newObj = {
       ...obj,
-      ["TaskSubtype"]: obj.Type,
+      TaskSubtype: "Task",
     };
-
-    delete newObj.Type;
 
     return newObj;
   });
@@ -54,14 +54,14 @@ export const EventSchema = z
     Subject: z.string().min(1),
     Location: z.string().min(1),
     OwnerId: z.string(),
+    WhoId: z.string().optional(),
+    AccountId: z.string().optional(),
   })
   .transform((obj) => {
     const newObj = {
       ...obj,
-      ["EventSubtype"]: obj.Type,
+      EventSubtype: "Event",
     };
-
-    delete newObj.Type;
 
     return newObj;
   });
@@ -73,15 +73,17 @@ export const EmailSchema = z
     BccAddress: z.string().optional(),
     Subject: z.string().min(1),
     HtmlBody: z.string().min(1),
+    WhoId: z.string().optional(),
+    ToIds: z.string().optional(),
+    AccountId: z.string().optional(),
   })
   .transform((obj) => {
     const newObj = {
       ...obj,
-      ["TaskSubtype"]: obj.Type,
+      [obj.Type === "Event" ? "EventSubtype" : "TaskSubtype"]: obj.Type,
     };
 
     delete newObj.Type;
-
     return newObj;
   });
 
@@ -90,14 +92,15 @@ export const CallSchema = z
     Type: z.string().optional(),
     Subject: z.string().min(1),
     Description: z.string().min(1),
+    WhoId: z.string().optional(),
+    AccountId: z.string().optional(),
   })
   .transform((obj) => {
+
     const newObj = {
       ...obj,
-      ["TaskSubtype"]: obj.Type,
+      TaskSubtype: "Call",
     };
-
-    delete newObj.Type;
 
     return newObj;
   });

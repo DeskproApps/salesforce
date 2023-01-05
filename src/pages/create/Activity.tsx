@@ -53,6 +53,7 @@ const StatusOptions = [
 const activityTypes = [
   {
     value: "Task",
+    label: "Task",
     fields: [
       {
         name: "ActivityDate",
@@ -78,6 +79,7 @@ const activityTypes = [
   },
   {
     value: "Event",
+    label: "Event",
     fields: [
       {
         name: "ActivityDateTime",
@@ -106,39 +108,42 @@ const activityTypes = [
       },
     ],
   },
+  // {
+  //   value: "Task",
+  //   label: "Email",
+  //   fields: [
+  //     {
+  //       name: "ToAddress",
+  //       label: "To",
+  //       type: "text",
+  //       required: true,
+  //     },
+  //     {
+  //       name: "Subject",
+  //       label: "Subject",
+  //       type: "text",
+  //     },
+  //     {
+  //       name: "BccAddress",
+  //       label: "Bcc",
+  //       type: "text",
+  //     },
+  //     {
+  //       name: "HtmlBody",
+  //       label: "Body",
+  //       type: "textarea",
+  //     },
+  //   ],
+  // },
   {
-    value: "Email",
+    value: "Task",
+    label: "Call",
     fields: [
-      {
-        name: "ToAddress",
-        label: "To",
-        type: "text",
-        required: true,
-      },
       {
         name: "Subject",
         label: "Subject",
         type: "text",
-      },
-      {
-        name: "BccAddress",
-        label: "Bcc",
-        type: "text",
-      },
-      {
-        name: "HtmlBody",
-        label: "Body",
-        type: "textarea",
-      },
-    ],
-  },
-  {
-    value: "Call",
-    fields: [
-      {
-        name: "Subject",
-        label: "Subject",
-        type: "text",
+        required: false,
       },
       {
         name: "Description",
@@ -219,9 +224,9 @@ export const CreateActivity = () => {
 
     setIsSubmitting(true);
 
-    (data[object as keyof ActivitySubmit] as string) = parentId as string;
+    delete data.Type;
 
-    if (data.EventSubtype === "Event") {
+    if (data.EventSubtype) {
       data.DurationInMinutes =
         (new Date(data.EndDateTime as string).getTime() -
           new Date(data.ActivityDateTime as string).getTime()) /
@@ -229,7 +234,11 @@ export const CreateActivity = () => {
         60;
     }
 
-    await postData(client, data.EventSubtype ? "event" : "task", data);
+    await postData(
+      client,
+      activityTypes.find((e) => e.label === type)?.value as string,
+      data
+    );
 
     navigate(-1);
   };
@@ -245,13 +254,13 @@ export const CreateActivity = () => {
         }}
         error={!!errors.Type}
         data={activityTypes}
-        keyName={"value"}
-        valueName={"value"}
+        keyName={"label"}
+        valueName={"label"}
       />
       {type && (
         <Stack vertical gap={12}>
           {activityTypes
-            .find((e) => e.value === type)
+            .find((e) => e.label === type)
             ?.fields.map((field, i) => {
               let values: { value: string }[] = [];
 
@@ -277,7 +286,7 @@ export const CreateActivity = () => {
                       register={register(field.name as keyof ActivitySubmit)}
                       title={field.label}
                       error={!!errors[field.name as keyof ActivitySubmit]}
-                      required={field.required}
+                      required={field?.required}
                     ></InputWithTitle>
                   );
                 case "textarea":
