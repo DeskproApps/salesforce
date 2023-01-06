@@ -6,7 +6,8 @@
           "id": "Subject",
           "property": {
             "name": "Subject",
-            "label": "Subject"
+            "label": "Subject",
+            "type": "text"
           }
         }
       ],
@@ -15,16 +16,18 @@
           "id": "TaskSubtype",
           "property": {
             "name": "TaskSubtype",
-            "label": "Type"
+            "label": "Type",
+            "type": "text"
           }
         }
       ],
       [
         {
-          "id": "Priority",
+          "id": "Status",
           "property": {
-            "name": "Priority",
-            "label": "Priority"
+            "name": "Status",
+            "label": "Status",
+            "type": "dropdown"
           }
         }
       ],
@@ -33,7 +36,8 @@
           "id": "ActivityDate",
           "property": {
             "name": "ActivityDate",
-            "label": "Due Date"
+            "label": "Due Date",
+            "type": "date"
           }
         }
       ],
@@ -42,7 +46,8 @@
           "id": "Description",
           "property": {
             "name": "Description",
-            "label": "Comments"
+            "label": "Comments",
+            "type": "text"
           }
         }
       ]
@@ -55,7 +60,8 @@
           "id": "Subject",
           "property": {
             "name": "Subject",
-            "label": "Subject"
+            "label": "Subject",
+            "type": "text"
           }
         }
       ],
@@ -64,16 +70,18 @@
           "id": "TaskSubtype",
           "property": {
             "name": "TaskSubtype",
-            "label": "Type"
+            "label": "Type",
+            "type": "text"
           }
         }
       ],
       [
         {
-          "id": "Priority",
+          "id": "Status",
           "property": {
-            "name": "Priority",
-            "label": "Priority"
+            "name": "Status",
+            "label": "Status",
+            "type": "dropdown"
           }
         }
       ],
@@ -82,7 +90,8 @@
           "id": "ActivityDate",
           "property": {
             "name": "ActivityDate",
-            "label": "Due Date"
+            "label": "Due Date",
+            "type": "date"
           }
         }
       ],
@@ -91,7 +100,18 @@
           "id": "Description",
           "property": {
             "name": "Description",
-            "label": "Comments"
+            "label": "Comments",
+            "type": "text"
+          }
+        }
+      ],
+      [
+        {
+          "id": "OwnerId",
+          "property": {
+            "name": "OwnerId",
+            "label": "Owner",
+            "type": "dropdown"
           }
         }
       ]

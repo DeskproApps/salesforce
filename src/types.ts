@@ -14,6 +14,13 @@ export interface Settings {
   mapping_account?: string;
 }
 
+export interface ITaskMetadata {
+  fields: {
+    label: string;
+    name: string;
+    picklistValues: { label: string; value: string; active: boolean }[];
+  }[];
+}
 export interface IActivity {
   Type: string;
   attributes: Attributes;
