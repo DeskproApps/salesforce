@@ -93,6 +93,18 @@ export const CreateActivity = () => {
     }
   }, [parentId, setValue, object]);
 
+  const ActivityMetadata = useQueryWithClient(
+    [QueryKey.ACTIVITY_METADATA, type],
+    (client) =>
+      getObjectMeta(
+        client,
+        activityTypes.find((e) => e.label === type)?.value as string
+      ),
+    {
+      enabled: !!type,
+    }
+  );
+
   const people = useQueryWithClient(
     [QueryKey.ACCOUNT_BY_ID],
     (client) =>
@@ -105,18 +117,6 @@ export const CreateActivity = () => {
       enabled: !!activityTypes
         .find((e) => e.value === type)
         ?.fields.findIndex((e) => e.name === "OwnerId"),
-    }
-  );
-
-  const ActivityMetadata = useQueryWithClient(
-    [QueryKey.ACTIVITY_METADATA, type],
-    (client) =>
-      getObjectMeta(
-        client,
-        activityTypes.find((e) => e.label === type)?.value as string
-      ),
-    {
-      enabled: !!type,
     }
   );
 
@@ -180,26 +180,11 @@ export const CreateActivity = () => {
             ?.fields.map((field, i) => {
               let values: { value: string; key: string }[] = [];
 
-              if (field.label === "Type") return;
+              const fieldMeta = ActivityMetadata.data?.fields?.find(
+                (e) => e.name === field.name
+              );
 
-              if (field.type === "dropdown") {
-                switch (field.name) {
-                  case "Status":
-                    values = ActivityMetadata.data?.fields
-                      ?.find((e) => e.label === "Status")
-                      ?.picklistValues.filter((e) => e.active)
-                      .map((e) => ({ key: e.label, value: e.value })) as {
-                      value: string;
-                      key: string;
-                    }[];
-                    break;
-                  case "OwnerId":
-                    values = people.data?.map((e) => ({
-                      key: e.Id,
-                      value: e.Name,
-                    })) as { value: string; key: string }[];
-                }
-              }
+              if (field.label === "Type") return;
               switch (field.type) {
                 case "text":
                   return (
@@ -247,6 +232,23 @@ export const CreateActivity = () => {
                     />
                   );
                 case "dropdown":
+                  if (
+                    fieldMeta?.picklistValues &&
+                    fieldMeta.picklistValues.length > 0
+                  ) {
+                    values = ActivityMetadata.data?.fields
+                      ?.find((e) => e.name === field.name)
+                      ?.picklistValues.filter((e) => e.active)
+                      .map((e) => ({ key: e.label, value: e.value })) as {
+                      value: string;
+                      key: string;
+                    }[];
+                  } else if (fieldMeta?.referenceTo.includes("User")) {
+                    values = people.data?.map((e) => ({
+                      key: e.Id,
+                      value: e.Name,
+                    })) as { value: string; key: string }[];
+                  }
                   return (
                     <DropdownSelect
                       key={i}
