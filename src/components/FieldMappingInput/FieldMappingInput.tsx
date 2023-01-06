@@ -2,7 +2,7 @@
 import { TextArea } from "@deskpro/app-sdk";
 import { FieldErrorsImpl } from "react-hook-form";
 import { DateField } from "../DateField/DateField";
-import { Field, Opportunity } from "../../api/types";
+import { Field } from "../../api/types";
 import { DropdownSelect } from "../DropdownSelect/DropdownSelect";
 import { InputWithTitle } from "../InputWithTitle/InputWithTitle";
 import {
@@ -10,6 +10,9 @@ import {
   UseFormSetValue,
   UseFormWatch,
 } from "react-hook-form/dist/types";
+import { useQueryWithClient } from "../../hooks";
+import { QueryKey } from "../../query";
+import { getObjectsByQuery } from "../../api/api";
 
 type Props = {
   fieldsMeta: Field[];
@@ -19,21 +22,46 @@ type Props = {
     label: string;
     type: string;
   };
-  people: Opportunity[];
+  type: string;
   watch: UseFormWatch<any>;
   setValue: UseFormSetValue<any>;
   register: UseFormRegister<any>;
+  activityTypes: {
+    value: string;
+    label: string;
+    fields: {
+      name: string;
+      label: string;
+      type: string;
+    }[];
+  }[];
 };
 
 export const FieldMappingInput = ({
+  activityTypes,
+  type,
   fieldsMeta,
   field,
   errors,
-  people,
   watch,
   setValue,
   register,
 }: Props) => {
+  const people = useQueryWithClient(
+    [QueryKey.ACCOUNT_BY_ID],
+    (client) =>
+      getObjectsByQuery(
+        client,
+        "SELECT Id, Name FROM User WHERE UserPermissionsSFContentUser=true",
+        200
+      ),
+    {
+      enabled: !!activityTypes
+        .find((e) => e.value === type)
+        ?.fields.findIndex((e) => e.name === "OwnerId"),
+    }
+  );
+
   let values: { value: string; key: string }[] = [];
 
   const fieldMeta = fieldsMeta?.find((e) => e.name === field.name);
@@ -90,7 +118,7 @@ export const FieldMappingInput = ({
           key: string;
         }[];
       } else if (fieldMeta?.referenceTo.includes("User")) {
-        values = people.map((e) => ({
+        values = people.data?.map((e) => ({
           key: e.Id,
           value: e.Name,
         })) as { value: string; key: string }[];
