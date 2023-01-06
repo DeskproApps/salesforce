@@ -104,21 +104,6 @@ export const CreateActivity = () => {
     }
   );
 
-  const people = useQueryWithClient(
-    [QueryKey.ACCOUNT_BY_ID],
-    (client) =>
-      getObjectsByQuery(
-        client,
-        "SELECT Id, Name FROM User WHERE UserPermissionsSFContentUser=true",
-        200
-      ),
-    {
-      enabled: !!activityTypes
-        .find((e) => e.value === type)
-        ?.fields.findIndex((e) => e.name === "OwnerId"),
-    }
-  );
-
   useEffect(() => {
     if (!type || !ActivityMetadata.data) return;
 
@@ -180,11 +165,12 @@ export const CreateActivity = () => {
               <FieldMappingInput
                 field={field}
                 key={i}
+                type={type}
+                activityTypes={activityTypes}
                 register={register}
                 errors={errors}
                 setValue={setValue}
                 watch={watch}
-                people={people.data as Opportunity[]}
                 fieldsMeta={ActivityMetadata.data?.fields as Field[]}
               />
             ))}
