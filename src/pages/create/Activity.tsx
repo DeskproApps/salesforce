@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Button, Stack, TextArea, useDeskproAppClient } from "@deskpro/app-sdk";
+import { Button, Stack, useDeskproAppClient } from "@deskpro/app-sdk";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -9,13 +9,12 @@ import { getObjectsByQuery } from "../../api/api";
 import { DropdownSelect } from "../../components/DropdownSelect/DropdownSelect";
 import { useQueryWithClient } from "../../hooks";
 import { QueryKey } from "../../query";
-import { InputWithTitle } from "../../components/InputWithTitle/InputWithTitle";
-import { DateField } from "../../components/DateField/DateField";
 import { z, ZodObject } from "zod";
 import { getActivitySchema } from "../../schemas/activity";
-import { Field } from "../../api/types";
+import { Field, Opportunity } from "../../api/types";
 import taskJson from "../../resources/default_layout/task.json";
 import eventJson from "../../resources/default_layout/event.json";
+import { FieldMappingInput } from "../../components/FieldMappingInput/FieldMappingInput";
 
 const activityTypes = [
   {
@@ -177,92 +176,18 @@ export const CreateActivity = () => {
         <Stack vertical gap={12}>
           {activityTypes
             .find((e) => e.label === type)
-            ?.fields.map((field, i) => {
-              let values: { value: string; key: string }[] = [];
-
-              const fieldMeta = ActivityMetadata.data?.fields?.find(
-                (e) => e.name === field.name
-              );
-
-              if (field.label === "Type") return;
-              switch (field.type) {
-                case "text":
-                  return (
-                    <InputWithTitle
-                      key={i}
-                      register={register(field.name)}
-                      title={field.label}
-                      error={!!errors[field.name]}
-                    ></InputWithTitle>
-                  );
-                case "textarea":
-                  return (
-                    <TextArea
-                      key={i}
-                      variant="inline"
-                      value={watch(field.name)}
-                      error={!!errors[field.name]}
-                      onChange={(e) => setValue(field.name, e.target.value)}
-                      placeholder="Enter text here..."
-                      style={{
-                        resize: "none",
-                        minHeight: "5em",
-                        maxHeight: "100%",
-                        height: "auto",
-                        width: "100%",
-                        overflow: "hidden",
-                      }}
-                    />
-                  );
-                case "date":
-                  return (
-                    <DateField
-                      key={i}
-                      style={
-                        !!errors?.[field.name] && {
-                          borderBottomColor: "red",
-                        }
-                      }
-                      label={field.label}
-                      error={!!errors?.[field.name]}
-                      {...register(field.name)}
-                      onChange={(e: [Date]) =>
-                        setValue(field.name, e[0].toISOString())
-                      }
-                    />
-                  );
-                case "dropdown":
-                  if (
-                    fieldMeta?.picklistValues &&
-                    fieldMeta.picklistValues.length > 0
-                  ) {
-                    values = ActivityMetadata.data?.fields
-                      ?.find((e) => e.name === field.name)
-                      ?.picklistValues.filter((e) => e.active)
-                      .map((e) => ({ key: e.label, value: e.value })) as {
-                      value: string;
-                      key: string;
-                    }[];
-                  } else if (fieldMeta?.referenceTo.includes("User")) {
-                    values = people.data?.map((e) => ({
-                      key: e.Id,
-                      value: e.Name,
-                    })) as { value: string; key: string }[];
-                  }
-                  return (
-                    <DropdownSelect
-                      key={i}
-                      title={field.label}
-                      value={(watch(field.name) as string) || ""}
-                      error={!!errors[field.name]}
-                      onChange={(e) => setValue(field.name, e)}
-                      data={values}
-                      keyName={"key"}
-                      valueName={"value"}
-                    />
-                  );
-              }
-            })}
+            ?.fields.map((field, i) => (
+              <FieldMappingInput
+                field={field}
+                key={i}
+                register={register}
+                errors={errors}
+                setValue={setValue}
+                watch={watch}
+                people={people.data as Opportunity[]}
+                fieldsMeta={ActivityMetadata.data?.fields as Field[]}
+              />
+            ))}
           <Stack
             style={{ justifyContent: "space-between", width: "100%" }}
             gap={5}
