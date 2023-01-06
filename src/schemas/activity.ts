@@ -8,7 +8,7 @@ export const getActivitySchema = (fields: Field[], type: string) => {
   for (const field of fields) {
     newObj[field.name] = z.string().min(1);
   }
-  console.log(`${type}Subtype`);
+
   const schema = z.object({
     ...newObj,
     WhoId: z.string().min(1).optional(),

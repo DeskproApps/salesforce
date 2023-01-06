@@ -133,7 +133,7 @@ export const getUserById = (client: IDeskproClient, id: string): Promise<User> =
 /**
  * Get an sObject's metadata
  */
-export const getObjectMeta = (client: IDeskproClient, object: string): Promise<ObjectMeta> =>
+export const getObjectMeta = (client: IDeskproClient, object: string): Promise<ObjectMeta> => 
     installedRequest(client, `/services/data/v55.0/sobjects/${object}/describe`, "GET")
 ;
 
@@ -167,7 +167,7 @@ const installedRequest = async (
         headers: {
             "Content-Type": "application/json",
             "Accept": "application/json",
-            "Authorization": `Bearer __global_access_token.json("[accessToken]")__`,
+            "Authorization": `Bearer [[oauth/global/accesstoken]]`,
         }
     };
 
@@ -178,41 +178,29 @@ const installedRequest = async (
     let response = await fetch(`__salesforce_instance_url__/${trimStart(url, "")}`, options);
 
     if ([400, 401].includes(response.status)) {
+        const refreshRequestOptions: RequestInit = {
+            method: "POST",
+            body: `grant_type=refresh_token&client_id=__client_key__&client_secret=__client_secret__&refresh_token=__global_access_token.json("[refreshToken]")__`,
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+        };
+        
+        const refreshRes = await fetch(`__salesforce_instance_url__/services/oauth2/token`, refreshRequestOptions);
+        const refreshData = await refreshRes.json();
 
-        // todo: we need a better way of merge saving JSON encoded settings as this try/re-auth process will ALWAYS cause an
-        //  unnecessary extra request after the first access token has expired.
+        await client.setState<string>("oauth/global/accesstoken", refreshData.access_token, {
+            backend: true,
+        });
+
         options.headers = {
             ...options.headers,
             "Authorization": `Bearer [[oauth/global/accesstoken]]`,
         };
 
         response = await fetch(`__salesforce_instance_url__/${trimStart(url, "")}`, options);
-
-        if ([400, 401].includes(response.status)) {
-            const refreshRequestOptions: RequestInit = {
-                method: "POST",
-                body: `grant_type=refresh_token&client_id=__client_key__&client_secret=__client_secret__&refresh_token=__global_access_token.json("[refreshToken]")__`,
-                headers: {
-                    "Content-Type": "application/x-www-form-urlencoded",
-                },
-            };
-
-            const refreshRes = await fetch(`__salesforce_instance_url__/services/oauth2/token`, refreshRequestOptions);
-            const refreshData = await refreshRes.json();
-
-            await client.setState<string>("oauth/global/accesstoken", refreshData.access_token, {
-                backend: true,
-            });
-
-            options.headers = {
-                ...options.headers,
-                "Authorization": `Bearer [[oauth/global/accesstoken]]`,
-            };
-
-            response = await fetch(`__salesforce_instance_url__/${trimStart(url, "")}`, options);
-        }
     }
-
+    
     if (isResponseError(response)) {
         throw new Error(`Request failed: [${response.status}] ${await response.text()}`);
     }
