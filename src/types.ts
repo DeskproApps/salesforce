@@ -1,9 +1,3 @@
-import {
-  CallSchema,
-  EmailSchema,
-  EventSchema,
-  TaskSchema,
-} from "./schemas/activity";
 import { HomeLayout, ListLayout, ViewLayout } from "./screens/admin/types";
 
 export interface Settings {
@@ -20,6 +14,13 @@ export interface Settings {
   mapping_account?: string;
 }
 
+export interface ITaskMetadata {
+  fields: {
+    label: string;
+    name: string;
+    picklistValues: { label: string; value: string; active: boolean }[];
+  }[];
+}
 export interface IActivity {
   Type: string;
   attributes: Attributes;
@@ -197,33 +198,6 @@ export type NoteSubmit = {
   Body: string;
   ParentId: string;
 };
-
-export type ActivitySubmit = {
-  Type?: string;
-  CompletedDateTime?: string;
-  Subject?: string;
-  Status?: string;
-  OwnerId?: string;
-  ActivityDate?: string;
-  EndDate?: string;
-  Location?: string;
-  ToAddress?: string;
-  BccAddress?: string;
-  Body?: string;
-  Comments?: string;
-  EventSubtype?: string;
-  TaskSubtype?: string;
-  DurationInMinutes?: number;
-  ActivityDateTime?: string;
-  EndDateTime?: string;
-  Description?: string;
-};
-
-export type ActivitySchema =
-  | typeof CallSchema
-  | typeof EmailSchema
-  | typeof EventSchema
-  | typeof TaskSchema;
 
 export type Layout =
   | ContactLayout

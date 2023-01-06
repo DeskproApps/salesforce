@@ -1,106 +1,20 @@
 import { z } from "zod";
+import { Field } from "../api/types";
 
-export const activitySchema = z
-  .object({
-    Type: z.string().optional(),
-    DueDate: z.string(),
-    Subject: z.string(),
-    Status: z.string(),
-    AssignedTo: z.string(),
-    ActivityDateTime: z.string(),
-    EndDateTime: z.string(),
-    EndDate: z.string(),
-    Location: z.string(),
-    To: z.string(),
-    Bcc: z.string(),
-    Body: z.string(),
-    Comments: z.string(),
-    Description: z.string(),
-  })
-  .transform((obj) => {
-    const newObj = {
-      ...obj,
-      [obj.Type === "Event" ? "EventSubtype" : "TaskSubtype"]: obj.Type,
-    };
+export const getActivitySchema = (fields: Field[], type: string) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const newObj: any = {};
 
-    delete newObj.Type;
-    return newObj;
+  for (const field of fields) {
+    newObj[field.name] = z.string().min(1);
+  }
+  console.log(`${type}Subtype`);
+  const schema = z.object({
+    ...newObj,
+    WhoId: z.string().min(1).optional(),
+    ParentID: z.string().min(1).optional(),
+    [`${type}Subtype`]: z.string().min(1).optional(),
   });
 
-export const TaskSchema = z
-  .object({
-    Type: z.string().optional(),
-    ActivityDate: z.string(),
-    Subject: z.string().min(1),
-    Status: z.string().min(1),
-    OwnerId: z.string(),
-    WhoId: z.string().optional(),
-    AccountId: z.string().optional(),
-  })
-  .transform((obj) => {
-    const newObj = {
-      ...obj,
-      TaskSubtype: "Task",
-    };
-
-    return newObj;
-  });
-
-export const EventSchema = z
-  .object({
-    Type: z.string().optional(),
-    ActivityDateTime: z.string(),
-    EndDateTime: z.string().min(1),
-    Subject: z.string().min(1),
-    Location: z.string().min(1),
-    OwnerId: z.string(),
-    WhoId: z.string().optional(),
-    AccountId: z.string().optional(),
-  })
-  .transform((obj) => {
-    const newObj = {
-      ...obj,
-      EventSubtype: "Event",
-    };
-
-    return newObj;
-  });
-
-export const EmailSchema = z
-  .object({
-    Type: z.string().optional(),
-    ToAddress: z.string().min(1),
-    BccAddress: z.string().optional(),
-    Subject: z.string().min(1),
-    HtmlBody: z.string().min(1),
-    WhoId: z.string().optional(),
-    ToIds: z.string().optional(),
-    AccountId: z.string().optional(),
-  })
-  .transform((obj) => {
-    const newObj = {
-      ...obj,
-      [obj.Type === "Event" ? "EventSubtype" : "TaskSubtype"]: obj.Type,
-    };
-
-    delete newObj.Type;
-    return newObj;
-  });
-
-export const CallSchema = z
-  .object({
-    Type: z.string().optional(),
-    Subject: z.string().min(1),
-    Description: z.string().min(1),
-    WhoId: z.string().optional(),
-    AccountId: z.string().optional(),
-  })
-  .transform((obj) => {
-
-    const newObj = {
-      ...obj,
-      TaskSubtype: "Call",
-    };
-
-    return newObj;
-  });
+  return schema;
+};

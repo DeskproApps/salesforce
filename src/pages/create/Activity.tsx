@@ -1,112 +1,32 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button, Stack, TextArea, useDeskproAppClient } from "@deskpro/app-sdk";
-import { useState, useEffect, useReducer } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate, useParams } from "react-router-dom";
-import { postData } from "../../api/api";
+import { getObjectMeta, postData } from "../../api/api";
 import { getObjectsByQuery } from "../../api/api";
-import { ActivitySchema, ActivitySubmit } from "../../types";
 import { DropdownSelect } from "../../components/DropdownSelect/DropdownSelect";
-import {
-  CallSchema,
-  EmailSchema,
-  EventSchema,
-  TaskSchema,
-} from "../../schemas/activity";
 import { useQueryWithClient } from "../../hooks";
 import { QueryKey } from "../../query";
 import { InputWithTitle } from "../../components/InputWithTitle/InputWithTitle";
 import { DateField } from "../../components/DateField/DateField";
-
-const unusableNames = [
-  "Security User",
-  "Chatter Expert",
-  "Data.com Clean",
-  "Platform Integration User",
-  "Automated Process",
-  "Integration User",
-];
-
-const StatusOptions = [
-  {
-    key: "Not Started",
-    value: "Not Started",
-  },
-  {
-    key: "In Progress",
-    value: "In Progress",
-  },
-  {
-    key: "Completed",
-    value: "Completed",
-  },
-  {
-    key: "Deferred",
-    value: "Deferred",
-  },
-  {
-    key: "Waiting on someone else",
-    value: "Waiting on someone else",
-  },
-];
+import { z, ZodObject } from "zod";
+import { getActivitySchema } from "../../schemas/activity";
+import { Field } from "../../api/types";
+import taskJson from "../../resources/default_layout/task.json";
+import eventJson from "../../resources/default_layout/event.json";
 
 const activityTypes = [
   {
     value: "Task",
     label: "Task",
-    fields: [
-      {
-        name: "ActivityDate",
-        label: "Due Date",
-        type: "date",
-      },
-      {
-        name: "Subject",
-        label: "Subject",
-        type: "text",
-      },
-      {
-        name: "Status",
-        label: "Status",
-        type: "Dropdown",
-      },
-      {
-        name: "OwnerId",
-        label: "Assigned To",
-        type: "Dropdown",
-      },
-    ],
+    fields: [...taskJson.view.root.map((e) => e[0].property)],
   },
   {
     value: "Event",
     label: "Event",
-    fields: [
-      {
-        name: "ActivityDateTime",
-        label: "Start Date",
-        type: "date",
-      },
-      {
-        name: "EndDateTime",
-        label: "End Date",
-        type: "date",
-      },
-      {
-        name: "Subject",
-        label: "Subject",
-        type: "text",
-      },
-      {
-        name: "Location",
-        label: "Location",
-        type: "text",
-      },
-      {
-        name: "OwnerId",
-        label: "Assigned To",
-        type: "Dropdown",
-      },
-    ],
+    fields: eventJson.view.root.map((e) => e[0].property),
   },
   // {
   //   value: "Task",
@@ -138,19 +58,9 @@ const activityTypes = [
   {
     value: "Task",
     label: "Call",
-    fields: [
-      {
-        name: "Subject",
-        label: "Subject",
-        type: "text",
-        required: false,
-      },
-      {
-        name: "Description",
-        label: "Comments",
-        type: "textarea",
-      },
-    ],
+    fields: taskJson.view.root
+      .map((e) => e[0].property)
+      .filter((e) => e.name === "Subject" || e.name === "Description"),
   },
 ];
 
@@ -163,33 +73,7 @@ export const CreateActivity = () => {
 
   const navigate = useNavigate();
 
-  const schemaReducer = (
-    state: {
-      schema: ActivitySchema;
-    },
-    action: {
-      Type: string;
-    }
-  ): {
-    schema: ActivitySchema;
-  } => {
-    switch (action.Type) {
-      case "Task":
-        return { schema: TaskSchema };
-      case "Event":
-        return { schema: EventSchema };
-      case "Email":
-        return { schema: EmailSchema };
-      case "Call":
-        return { schema: CallSchema };
-      default:
-        return { schema: TaskSchema };
-    }
-  };
-
-  const [schemaState, dispatchSchema] = useReducer(schemaReducer, {
-    schema: TaskSchema,
-  });
+  const [schema, setSchema] = useState<ZodObject<any>>(z.object({}));
 
   const {
     register,
@@ -197,21 +81,26 @@ export const CreateActivity = () => {
     handleSubmit,
     setValue,
     watch,
-  } = useForm<ActivitySubmit>({
-    resolver: zodResolver(schemaState?.schema as typeof CallSchema),
+  } = useForm<any>({
+    resolver: zodResolver(schema as ZodObject<any>),
   });
 
-  const [type] = watch(["Type"]);
+  const type = watch("Type");
 
   useEffect(() => {
     if (parentId) {
-      setValue(object as keyof ActivitySubmit, parentId);
+      setValue(object as string, parentId);
     }
   }, [parentId, setValue, object]);
 
   const people = useQueryWithClient(
     [QueryKey.ACCOUNT_BY_ID],
-    (client) => getObjectsByQuery(client, "SELECT Id, Name FROM User", 200),
+    (client) =>
+      getObjectsByQuery(
+        client,
+        "SELECT Id, Name FROM User WHERE UserPermissionsSFContentUser=true",
+        200
+      ),
     {
       enabled: !!activityTypes
         .find((e) => e.value === type)
@@ -219,7 +108,34 @@ export const CreateActivity = () => {
     }
   );
 
-  const submit = async (data: ActivitySubmit) => {
+  const ActivityMetadata = useQueryWithClient(
+    [QueryKey.ACTIVITY_METADATA, type],
+    (client) =>
+      getObjectMeta(
+        client,
+        activityTypes.find((e) => e.label === type)?.value as string
+      ),
+    {
+      enabled: !!type,
+    }
+  );
+
+  useEffect(() => {
+    if (!type || !ActivityMetadata.data) return;
+
+    const activityType = activityTypes.find((e) => e.label === type);
+
+    setSchema(
+      getActivitySchema(
+        activityType?.fields as Field[],
+        activityType?.value as string
+      )
+    );
+    setValue(`${activityType?.value}Subtype`, activityType?.label);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ActivityMetadata.data, watch, type]);
+
+  const submit = async (data: any) => {
     if (!client) return;
 
     setIsSubmitting(true);
@@ -227,11 +143,12 @@ export const CreateActivity = () => {
     delete data.Type;
 
     if (data.EventSubtype) {
-      data.DurationInMinutes =
+      data.DurationInMinutes = Math.abs(
         (new Date(data.EndDateTime as string).getTime() -
           new Date(data.ActivityDateTime as string).getTime()) /
-        1000 /
-        60;
+          1000 /
+          60
+      );
     }
 
     await postData(
@@ -250,7 +167,6 @@ export const CreateActivity = () => {
         value={type || ""}
         onChange={(e) => {
           setValue("Type", e);
-          dispatchSchema({ Type: e });
         }}
         error={!!errors.Type}
         data={activityTypes}
@@ -262,20 +178,26 @@ export const CreateActivity = () => {
           {activityTypes
             .find((e) => e.label === type)
             ?.fields.map((field, i) => {
-              let values: { value: string }[] = [];
+              let values: { value: string; key: string }[] = [];
 
-              if (field.type === "Dropdown") {
+              if (field.label === "Type") return;
+
+              if (field.type === "dropdown") {
                 switch (field.name) {
                   case "Status":
-                    values = StatusOptions;
+                    values = ActivityMetadata.data?.fields
+                      ?.find((e) => e.label === "Status")
+                      ?.picklistValues.filter((e) => e.active)
+                      .map((e) => ({ key: e.label, value: e.value })) as {
+                      value: string;
+                      key: string;
+                    }[];
                     break;
                   case "OwnerId":
-                    values = people.data
-                      ?.filter((e) => !unusableNames.includes(e.Name))
-                      .map((e) => ({
-                        key: e.Id,
-                        value: e.Name,
-                      })) as { value: string }[];
+                    values = people.data?.map((e) => ({
+                      key: e.Id,
+                      value: e.Name,
+                    })) as { value: string; key: string }[];
                 }
               }
               switch (field.type) {
@@ -283,10 +205,9 @@ export const CreateActivity = () => {
                   return (
                     <InputWithTitle
                       key={i}
-                      register={register(field.name as keyof ActivitySubmit)}
+                      register={register(field.name)}
                       title={field.label}
-                      error={!!errors[field.name as keyof ActivitySubmit]}
-                      required={field?.required}
+                      error={!!errors[field.name]}
                     ></InputWithTitle>
                   );
                 case "textarea":
@@ -294,14 +215,9 @@ export const CreateActivity = () => {
                     <TextArea
                       key={i}
                       variant="inline"
-                      value={watch(field.name as keyof ActivitySubmit)}
-                      error={!!errors[field.name as keyof ActivitySubmit]}
-                      onChange={(e) =>
-                        setValue(
-                          field.name as keyof ActivitySubmit,
-                          e.target.value
-                        )
-                      }
+                      value={watch(field.name)}
+                      error={!!errors[field.name]}
+                      onChange={(e) => setValue(field.name, e.target.value)}
                       placeholder="Enter text here..."
                       style={{
                         resize: "none",
@@ -318,34 +234,26 @@ export const CreateActivity = () => {
                     <DateField
                       key={i}
                       style={
-                        !!errors?.[field.name as keyof ActivitySubmit] && {
+                        !!errors?.[field.name] && {
                           borderBottomColor: "red",
                         }
                       }
                       label={field.label}
-                      error={!!errors?.[field.name as keyof ActivitySubmit]}
-                      {...register(field.name as keyof ActivitySubmit)}
+                      error={!!errors?.[field.name]}
+                      {...register(field.name)}
                       onChange={(e: [Date]) =>
-                        setValue(
-                          field.name as keyof ActivitySubmit,
-                          e[0].toISOString()
-                        )
+                        setValue(field.name, e[0].toISOString())
                       }
                     />
                   );
-                case "Dropdown":
+                case "dropdown":
                   return (
                     <DropdownSelect
                       key={i}
                       title={field.label}
-                      value={
-                        (watch(field.name as keyof ActivitySubmit) as string) ||
-                        ""
-                      }
-                      error={!!errors[field.name as keyof ActivitySubmit]}
-                      onChange={(e) =>
-                        setValue(field.name as keyof ActivitySubmit, e)
-                      }
+                      value={(watch(field.name) as string) || ""}
+                      error={!!errors[field.name]}
+                      onChange={(e) => setValue(field.name, e)}
                       data={values}
                       keyName={"key"}
                       valueName={"value"}
