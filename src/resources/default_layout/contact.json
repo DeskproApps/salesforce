@@ -266,26 +266,6 @@
         ],
         [
           {
-            "id": "EventSubtype",
-            "property": {
-              "name": "EventSubtype",
-              "label": "Type"
-            }
-          },
-          null
-        ],
-        [
-          {
-            "id": "Description",
-            "property": {
-              "name": "Description",
-              "label": "Description"
-            }
-          },
-          null
-        ],
-        [
-          {
             "id": "Location",
             "property": {
               "name": "Location",
