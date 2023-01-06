@@ -6,27 +6,8 @@
           "id": "Subject",
           "property": {
             "name": "Subject",
-            "label": "Subject"
-          }
-        },
-        null
-      ],
-      [
-        {
-          "id": "EventSubtype",
-          "property": {
-            "name": "EventSubtype",
-            "label": "Type"
-          }
-        },
-        null
-      ],
-      [
-        {
-          "id": "Description",
-          "property": {
-            "name": "Description",
-            "label": "Description"
+            "label": "Subject",
+            "type": "text"
           }
         },
         null
@@ -36,7 +17,8 @@
           "id": "Location",
           "property": {
             "name": "Location",
-            "label": "Location"
+            "label": "Location",
+            "type": "text"
           }
         },
         null
@@ -46,7 +28,8 @@
           "id": "ActivityDateTime",
           "property": {
             "name": "ActivityDateTime",
-            "label": "Start"
+            "label": "Start",
+            "type": "date"
           }
         },
         null
@@ -56,7 +39,8 @@
           "id": "EndDateTime",
           "property": {
             "name": "EndDateTime",
-            "label": "End Date"
+            "label": "End Date",
+            "type": "date"
           }
         },
         null
@@ -70,25 +54,8 @@
           "id": "Subject",
           "property": {
             "name": "Subject",
-            "label": "Subject"
-          }
-        }
-      ],
-      [
-        {
-          "id": "EventSubtype",
-          "property": {
-            "name": "EventSubtype",
-            "label": "Type"
-          }
-        }
-      ],
-      [
-        {
-          "id": "Description",
-          "property": {
-            "name": "Description",
-            "label": "Description"
+            "label": "Subject",
+            "type": "text"
           }
         }
       ],
@@ -97,7 +64,8 @@
           "id": "Location",
           "property": {
             "name": "Location",
-            "label": "Location"
+            "label": "Location",
+            "type": "text"
           }
         }
       ],
@@ -106,7 +74,8 @@
           "id": "ActivityDateTime",
           "property": {
             "name": "ActivityDateTime",
-            "label": "Start"
+            "label": "Start Date",
+            "type": "date"
           }
         }
       ],
@@ -115,7 +84,18 @@
           "id": "EndDateTime",
           "property": {
             "name": "EndDateTime",
-            "label": "End Date"
+            "label": "End Date",
+            "type": "date"
+          }
+        }
+      ],
+      [
+        {
+          "id": "OwnerId",
+          "property": {
+            "name": "OwnerId",
+            "label": "Owner",
+            "type": "dropdown"
           }
         }
       ]
