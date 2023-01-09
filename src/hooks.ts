@@ -11,21 +11,38 @@ import {useMemo} from "react";
 export function useQueryWithClient<TQueryFnData = unknown>(
     queryKey: string | readonly unknown[],
     queryFn: (client: IDeskproClient) => Promise<TQueryFnData>,
-    options?: Omit<UseQueryOptions<TQueryFnData, unknown, TQueryFnData, string | readonly unknown[]>, 'queryKey' | 'queryFn'>
-): UseQueryResult<TQueryFnData> {
+    options?: Omit<
+      UseQueryOptions<
+        TQueryFnData,
+        unknown,
+        TQueryFnData,
+        string | readonly unknown[]
+      >,
+      "queryKey" | "queryFn"
+    >
+  ): UseQueryResult<TQueryFnData> {
     const { client } = useDeskproAppClient();
-
+  
     const key = Array.isArray(queryKey) ? queryKey : [queryKey];
-
+  
     return useQuery(
-        key,
-        () => (client && queryFn(client)) as Promise<TQueryFnData>,
-        {
-            ...(options ?? {}),
-            enabled: options?.enabled === undefined ? !! client : (client && options?.enabled),
-        } as Omit<UseQueryOptions<TQueryFnData, unknown, TQueryFnData, string | readonly unknown[]>, 'queryKey' | 'queryFn'>
+      key,
+      () => (client && queryFn(client)) as Promise<TQueryFnData>,
+      {
+        ...(options ?? {}),
+        enabled: options?.enabled ? !!client : !!client && options?.enabled,
+        suspense: false,
+      } as Omit<
+        UseQueryOptions<
+          TQueryFnData,
+          unknown,
+          TQueryFnData,
+          string | readonly unknown[]
+        >,
+        "queryKey" | "queryFn"
+      >
     );
-}
+  }
 
 /**
  * Get the base path from the current location pathname
