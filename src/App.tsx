@@ -38,6 +38,7 @@ import "@deskpro/deskpro-ui/dist/deskpro-custom-icons.css";
 import {ScrollTop} from "./components/ScrollTop";
 import { CreateNote } from "./pages/create/Note";
 import { CreateActivity } from "./pages/create/Activity";
+import { CreateOpportunity } from "./pages/create/Opportunity";
 
 function App() {
     const { context } = useDeskproLatestAppContext();
@@ -87,6 +88,7 @@ function App() {
                                         <Route path="add">
                                             <Route path="note/:parentId" element={<CreateNote />} />
                                             <Route path="activity/:object/:parentId" element={<CreateActivity />} />
+                                            <Route path="opportunity/:object/:parentId" element={<CreateOpportunity />} />
                                         </Route>
                                         <Route path="user">
                                             <Route index element={<User />} />
