@@ -18,6 +18,7 @@ export enum QueryKey {
   ORG_ACCOUNT_OWNER_BY_ID = "org_account_owner_by_id",
   ADMIN_OBJECT_META = "admin_object_meta",
 
+  OPPORTUNITY_METADATA = "opportunity_metadata",
   ACTIVITY_METADATA = "activity_metadata",
   OBJECT_META = "object_meta",
   USER_BY_ID = "user_by_id",
