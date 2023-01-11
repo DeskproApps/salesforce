@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { TextArea } from "@deskpro/app-sdk";
+import { H1, Stack, TextArea, useDeskproAppTheme } from "@deskpro/app-sdk";
 import { FieldErrorsImpl } from "react-hook-form";
 import { DateField } from "../DateField/DateField";
 import { Field } from "../../api/types";
@@ -39,6 +39,8 @@ export const FieldMappingInput = ({
   setValue,
   register,
 }: Props) => {
+  const { theme } = useDeskproAppTheme();
+
   const people = useQueryWithClient(
     [QueryKey.ACCOUNT_BY_ID],
     (client) =>
@@ -71,22 +73,30 @@ export const FieldMappingInput = ({
       );
     case "textarea":
       return (
-        <TextArea
-          variant="inline"
-          value={watch(field.name)}
-          error={!!errors[field.name]}
-          onChange={(e) => setValue(field.name, e.target.value)}
-          placeholder="Enter text here..."
-          required={required}
-          style={{
-            resize: "none",
-            minHeight: "5em",
-            maxHeight: "100%",
-            height: "auto",
-            width: "100%",
-            overflow: "hidden",
-          }}
-        />
+        <Stack
+          vertical
+          gap={4}
+          style={{ width: "100%", color: theme.colors.grey80 }}
+        >
+          <H1>{field.label}</H1>
+          <TextArea
+            variant="inline"
+            value={watch(field.name)}
+            error={!!errors[field.name]}
+            onChange={(e) => setValue(field.name, e.target.value)}
+            placeholder="Enter text here..."
+            required={required}
+            title={field.label}
+            style={{
+              resize: "none",
+              minHeight: "5em",
+              maxHeight: "100%",
+              height: "auto",
+              width: "100%",
+              overflow: "hidden",
+            }}
+          />
+        </Stack>
       );
     case "date":
       return (
