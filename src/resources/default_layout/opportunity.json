@@ -58,7 +58,7 @@
           "property": {
             "name": "Description",
             "label": "Description",
-            "type": "text"
+            "type": "textarea"
           }
         },
         null
