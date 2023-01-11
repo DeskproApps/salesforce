@@ -164,8 +164,11 @@ export const CreateActivity = () => {
               <FieldMappingInput
                 field={field}
                 key={i}
-                type={type}
-                activityTypes={activityTypes}
+                usersEnabled={
+                  !!activityTypes
+                    .find((e) => e.value === type)
+                    ?.fields.findIndex((e) => e.name === "OwnerId")
+                }
                 register={register}
                 errors={errors}
                 setValue={setValue}

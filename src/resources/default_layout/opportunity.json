@@ -46,7 +46,8 @@
           "id": "Name",
           "property": {
             "name": "Name",
-            "label": "Name"
+            "label": "Opportunity Name",
+            "type": "text"
           }
         },
         null
@@ -56,24 +57,29 @@
           "id": "Description",
           "property": {
             "name": "Description",
-            "label": "Description"
+            "label": "Description",
+            "type": "text"
           }
         },
         null
       ],
       [
         {
-          "id": "Type",
+          "id": "LeadSource",
           "property": {
-            "name": "Type",
-            "label": "Opportunity Type"
+            "name": "LeadSource",
+            "label": "Opportunity Type",
+            "type": "dropdown"
           }
-        },
+        }
+      ],
+      [
         {
           "id": "StageName",
           "property": {
             "name": "StageName",
-            "label": "Stage"
+            "label": "Stage",
+            "type": "dropdown"
           }
         }
       ],
@@ -82,14 +88,18 @@
           "id": "OrderNumber__c",
           "property": {
             "name": "OrderNumber__c",
-            "label": "Order Number"
+            "label": "Order Number",
+            "type": "text"
           }
-        },
+        }
+      ],
+      [
         {
           "id": "CloseDate",
           "property": {
             "name": "CloseDate",
-            "label": "Close Date"
+            "label": "Close Date",
+            "type": "date"
           }
         }
       ],
@@ -98,14 +108,18 @@
           "id": "Amount",
           "property": {
             "name": "Amount",
-            "label": "Amount"
+            "label": "Amount",
+            "type": "number"
           }
-        },
+        }
+      ],
+      [
         {
           "id": "Probability",
           "property": {
             "name": "Probability",
-            "label": "Probability (%)"
+            "label": "Probability (%)",
+            "type": "number"
           }
         }
       ],
@@ -114,7 +128,19 @@
           "id": "AccountId",
           "property": {
             "name": "AccountId",
-            "label": "Account ID"
+            "label": "Account ID",
+            "type": "text"
+          }
+        },
+        null
+      ],
+      [
+        {
+          "id": "NextStep",
+          "property": {
+            "name": "NextStep",
+            "label": "Next Step",
+            "type": "text"
           }
         },
         null
@@ -124,7 +150,8 @@
           "id": "CreatedDate",
           "property": {
             "name": "CreatedDate",
-            "label": "Created Date"
+            "label": "Created Date",
+            "type": "text"
           }
         },
         null
@@ -134,7 +161,52 @@
           "id": "CreatedById",
           "property": {
             "name": "CreatedById",
-            "label": "Created By ID"
+            "label": "Created By ID",
+            "type": "text"
+          }
+        },
+        null
+      ],
+      [
+        {
+          "id": "DeliveryInstallationStatus__c",
+          "property": {
+            "name": "DeliveryInstallationStatus__c",
+            "label": "Delivery/Installation Status",
+            "type": "text"
+          }
+        },
+        null
+      ],
+      [
+        {
+          "id": "TrackingNumber__c",
+          "property": {
+            "name": "TrackingNumber__c",
+            "label": "Tracking Number",
+            "type": "text"
+          }
+        },
+        null
+      ],
+      [
+        {
+          "id": "MainCompetitors__c",
+          "property": {
+            "name": "MainCompetitors__c",
+            "label": "Main Competitors",
+            "type": "text"
+          }
+        },
+        null
+      ],
+      [
+        {
+          "id": "CurrentGenerators__c",
+          "property": {
+            "name": "CurrentGenerators__c",
+            "label": "Current Generators",
+            "type": "text"
           }
         },
         null

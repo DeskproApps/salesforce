@@ -22,26 +22,18 @@ type Props = {
     label: string;
     type: string;
   };
-  type: string;
+  required?: boolean;
   watch: UseFormWatch<any>;
   setValue: UseFormSetValue<any>;
   register: UseFormRegister<any>;
-  activityTypes: {
-    value: string;
-    label: string;
-    fields: {
-      name: string;
-      label: string;
-      type: string;
-    }[];
-  }[];
+  usersEnabled?: boolean;
 };
 
 export const FieldMappingInput = ({
-  activityTypes,
-  type,
   fieldsMeta,
+  usersEnabled,
   field,
+  required,
   errors,
   watch,
   setValue,
@@ -56,9 +48,7 @@ export const FieldMappingInput = ({
         200
       ),
     {
-      enabled: !!activityTypes
-        .find((e) => e.value === type)
-        ?.fields.findIndex((e) => e.name === "OwnerId"),
+      enabled: !usersEnabled,
     }
   );
 
@@ -69,11 +59,14 @@ export const FieldMappingInput = ({
   if (field.label === "Type") return null;
   switch (field.type) {
     case "text":
+    case "number":
       return (
         <InputWithTitle
           register={register(field.name)}
           title={field.label}
           error={!!errors[field.name]}
+          type={field.type}
+          required={required}
         ></InputWithTitle>
       );
     case "textarea":
@@ -84,6 +77,7 @@ export const FieldMappingInput = ({
           error={!!errors[field.name]}
           onChange={(e) => setValue(field.name, e.target.value)}
           placeholder="Enter text here..."
+          required={required}
           style={{
             resize: "none",
             minHeight: "5em",
@@ -97,6 +91,7 @@ export const FieldMappingInput = ({
     case "date":
       return (
         <DateField
+          required={required}
           style={
             !!errors?.[field.name] && {
               borderBottomColor: "red",
@@ -125,6 +120,7 @@ export const FieldMappingInput = ({
       }
       return (
         <DropdownSelect
+          required={required}
           title={field.label}
           value={(watch(field.name) as string) || ""}
           error={!!errors[field.name]}
