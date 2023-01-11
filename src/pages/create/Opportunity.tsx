@@ -107,7 +107,7 @@ export const CreateOpportunity = () => {
 
   return (
     <form style={{ margin: "5px" }} onSubmit={handleSubmit(submit)}>
-      <Stack vertical gap={12} style={{ width: "100%" }}>
+      <Stack vertical gap={12}>
         <Stack vertical gap={12} style={{ width: "100%" }}>
           {fields.map((field, i) => (
             <Stack vertical gap={8} style={{ width: "100%" }}>
@@ -137,10 +137,9 @@ export const CreateOpportunity = () => {
           ))}
         </Stack>
         <Stack
-          style={{ justifyContent: "space-around", width: "100%" }}
+          style={{ justifyContent: "space-between", width: "100%" }}
           gap={5}
         >
-          {}
           <Button
             loading={submitting}
             disabled={submitting}
@@ -153,10 +152,10 @@ export const CreateOpportunity = () => {
             onClick={() => navigate(-1)}
             intent="secondary"
           ></Button>
-          <H2 style={{ color: "red" }}>
-            {errors.submit && errors.submit.message}
-          </H2>
         </Stack>
+        <H2 style={{ color: "red" }}>
+          {errors.submit && errors.submit.message}
+        </H2>
       </Stack>
     </form>
   );
