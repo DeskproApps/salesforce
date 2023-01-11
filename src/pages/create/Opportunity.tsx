@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Button,
+  H0,
   H2,
   Stack,
   useDeskproAppClient,
@@ -63,23 +64,29 @@ export const CreateOpportunity = () => {
 
   const opportunityMetadata = useQueryWithClient(
     [QueryKey.OPPORTUNITY_METADATA, "Opportunity"],
-    (client) => getObjectMeta(client, "opportunity"),
-    {
-      onSuccess(data) {
-        setSchema(
-          getMetadataBasedSchema(data.fields, {
-            Name: z.string().min(1),
-            StageName: z.string().min(1),
-            CloseDate: z.string().min(1),
-            Probability: z.preprocess(
-              (val) => Number(val),
-              z.number().min(0).max(100)
-            ),
-          })
-        );
-      },
-    }
+    (client) => getObjectMeta(client, "opportunity")
   );
+
+  useEffect(() => {
+    if (!opportunityMetadata.data) return;
+
+    setSchema(
+      getMetadataBasedSchema(opportunityMetadata.data.fields, {
+        Name: z.string().min(1),
+        StageName: z.string().min(1),
+        Probability: z.preprocess(
+          (val) => Number(val),
+          z.number().min(0).max(100)
+        ),
+        CloseDate: z
+          .string()
+          .min(1)
+          .refine((val) => new Date(val).getTime() - new Date().getTime() > 0, {
+            message: "Close date must be in the future",
+          }),
+      })
+    );
+  }, [opportunityMetadata.data]);
 
   const fields = opportunityJson.view.root
     .map((e) => e[0]?.property)
@@ -97,12 +104,16 @@ export const CreateOpportunity = () => {
       setSubmitting(false);
     });
   };
+
   return (
     <form style={{ margin: "5px" }} onSubmit={handleSubmit(submit)}>
       <Stack vertical gap={12} style={{ width: "100%" }}>
         <Stack vertical gap={12} style={{ width: "100%" }}>
           {fields.map((field, i) => (
             <Stack vertical gap={8} style={{ width: "100%" }}>
+              {field && field.name === "DeliveryInstallationStatus__c" && (
+                <H0>Additional Fields</H0>
+              )}
               <FieldMappingInput
                 field={
                   field as {
@@ -119,11 +130,8 @@ export const CreateOpportunity = () => {
                 watch={watch}
                 fieldsMeta={opportunityMetadata.data?.fields as Field[]}
               />
-              {field?.name === "Probability" && (
-                <H2 style={{ color: "red" }}>
-                  {errors.Probability &&
-                    "Probability must be between 0 and 100"}
-                </H2>
+              {field && errors[field.name] && (
+                <H2 style={{ color: "red" }}>{errors[field.name]?.message}</H2>
               )}
             </Stack>
           ))}
