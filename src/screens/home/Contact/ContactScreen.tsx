@@ -69,7 +69,7 @@ export const ContactScreen = ({ contact }: ContactScreenProps) => {
     [
       QueryKey.OBJECTS_BY_FK,
       "Opportunity",
-      "ContactID",
+      "ContactId",
       contact.Id,
       opportunitiesMax,
     ],
@@ -77,7 +77,7 @@ export const ContactScreen = ({ contact }: ContactScreenProps) => {
       getObjectsByFk(
         client,
         "Opportunity",
-        "ContactID",
+        "ContactId",
         contact.Id,
         opportunitiesMax
       ),
@@ -154,13 +154,13 @@ export const ContactScreen = ({ contact }: ContactScreenProps) => {
                       }}
                     >
                       <Link
-                        to={`${basePath}/objects/Opportunity/ContactID/${contact.Id}/list`}
+                        to={`${basePath}/objects/Opportunity/ContactId/${contact.Id}/list`}
                       >
                         <H1 style={{ color: theme.colors.cyan100 }}>
                           Opportunities
                         </H1>
                       </Link>
-                      <Link to={`/add/opportunity/ContactID/${contact.Id}`}>
+                      <Link to={`/add/opportunity/ContactId/${contact.Id}`}>
                         <Stack style={{ color: theme.colors.grey500 }}>
                           <FontAwesomeIcon
                             icon={faPlus as IconProp}

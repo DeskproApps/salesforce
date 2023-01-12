@@ -23,10 +23,6 @@ export const getMetadataBasedSchema = (
   const schema = z
     .object({
       ...newObj,
-      WhoId: z.string().min(1).optional(),
-      ParentID: z.string().min(1).optional(),
-      ContactID: z.string().min(1).optional(),
-      AccountID: z.string().min(1).optional(),
     })
     .transform((obj) => {
       for (const key of Object.keys(obj)) {

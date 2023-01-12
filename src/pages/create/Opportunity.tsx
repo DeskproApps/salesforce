@@ -70,21 +70,41 @@ export const CreateOpportunity = () => {
   useEffect(() => {
     if (!opportunityMetadata.data) return;
 
-    setSchema(
-      getMetadataBasedSchema(opportunityMetadata.data.fields, {
-        Name: z.string().min(1),
-        StageName: z.string().min(1),
-        Probability: z.preprocess(
+    const customFields: { [key: string]: ZodTypeAny } = {};
+
+    for (const field of opportunityMetadata.data.fields) {
+      if (field.type === "reference") {
+        customFields[field.name] = z.string().min(1).optional();
+      }
+
+      if (field.type === "percent") {
+        customFields[field.name] = z.preprocess(
           (val) => Number(val),
           z.number().min(0).max(100)
-        ),
-        CloseDate: z
+        );
+        continue;
+      }
+
+      if (
+        (field.type === "date" || field.type === "datetime") &&
+        !field.nillable &&
+        !field.defaultedOnCreate
+      ) {
+        customFields[field.name] = z
           .string()
           .min(1)
           .refine((val) => new Date(val).getTime() - new Date().getTime() > 0, {
             message: "Close date must be in the future",
-          }),
-      })
+          });
+        continue;
+      }
+
+      if (!field.defaultedOnCreate && !field.nillable && field.createable) {
+        customFields[field.name] = z.string().min(1);
+      }
+    }
+    setSchema(
+      getMetadataBasedSchema(opportunityMetadata.data.fields, customFields)
     );
   }, [opportunityMetadata.data]);
 
