@@ -23,8 +23,6 @@ import { Field } from "../../api/types";
 
 const nonUsableFields = ["AccountId", "CreatedDate", "CreatedById"];
 
-const requiredFields = ["Name", "StageName", "CloseDate"];
-
 export const CreateOpportunity = () => {
   const navigate = useNavigate();
 
@@ -52,15 +50,6 @@ export const CreateOpportunity = () => {
       setValue(object as string, parentId);
     }
   }, [parentId, setValue, object]);
-
-  useEffect(() => {
-    register("StageName", {
-      required: true,
-    });
-    register("CloseDate", {
-      required: true,
-    });
-  });
 
   const opportunityMetadata = useQueryWithClient(
     [QueryKey.OPPORTUNITY_METADATA, "Opportunity"],
@@ -129,32 +118,43 @@ export const CreateOpportunity = () => {
     <form style={{ margin: "5px" }} onSubmit={handleSubmit(submit)}>
       <Stack vertical gap={12}>
         <Stack vertical gap={12} style={{ width: "100%" }}>
-          {fields.map((field, i) => (
-            <Stack vertical gap={8} style={{ width: "100%" }}>
-              {field && field.name === "DeliveryInstallationStatus__c" && (
-                <H0>Additional Fields</H0>
-              )}
-              <FieldMappingInput
-                field={
-                  field as {
-                    name: string;
-                    label: string;
-                    type: string;
+          {fields.map((field, i) => {
+            const fieldMeta = opportunityMetadata.data?.fields.find(
+              (e) => e.name === field?.name
+            ) as Field;
+            return (
+              <Stack vertical gap={8} style={{ width: "100%" }}>
+                {field && field.name === "DeliveryInstallationStatus__c" && (
+                  <H0>Additional Fields</H0>
+                )}
+                <FieldMappingInput
+                  field={
+                    field as {
+                      name: string;
+                      label: string;
+                      type: string;
+                    }
                   }
-                }
-                required={requiredFields.includes(field?.name as string)}
-                key={i}
-                register={register}
-                errors={errors}
-                setValue={setValue}
-                watch={watch}
-                fieldsMeta={opportunityMetadata.data?.fields as Field[]}
-              />
-              {field && errors[field.name] && (
-                <H2 style={{ color: "red" }}>{errors[field.name]?.message}</H2>
-              )}
-            </Stack>
-          ))}
+                  required={
+                    !fieldMeta.defaultedOnCreate &&
+                    !fieldMeta.nillable &&
+                    fieldMeta.createable
+                  }
+                  key={i}
+                  register={register}
+                  errors={errors}
+                  setValue={setValue}
+                  watch={watch}
+                  fieldsMeta={opportunityMetadata.data?.fields as Field[]}
+                />
+                {field && errors[field.name] && (
+                  <H2 style={{ color: "red" }}>
+                    {errors[field.name]?.message}
+                  </H2>
+                )}
+              </Stack>
+            );
+          })}
         </Stack>
         <Stack
           style={{ justifyContent: "space-between", width: "100%" }}
