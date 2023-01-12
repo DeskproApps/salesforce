@@ -100,8 +100,7 @@ export const ContactScreen = ({ contact }: ContactScreenProps) => {
       activitiesMax,
     ],
     (client) => getAllActivities(client, contact.Id, "WhoId", activitiesMax),
-    { enabled: objects.includes("Activity") }
-  );
+    { enabled: objects.includes("Task") || objects.includes("Event") }  );
 
   if (!meta.isSuccess) {
     return null;
@@ -200,7 +199,7 @@ export const ContactScreen = ({ contact }: ContactScreenProps) => {
                     </Stack>
                   </Fragment>
                 ))
-                .with("Activity", () => (
+                .with("Task", () => (
                   <Fragment key={idx}>
                     <Stack
                       justify="space-between"

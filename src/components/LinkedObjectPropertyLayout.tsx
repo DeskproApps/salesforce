@@ -19,7 +19,6 @@ export const LinkedObjectPropertyLayout = ({ object, name, label, onChange, valu
     const meta = useAdminQuery(
         [QueryKey.OBJECT_META, object],
         (client, context) => getObjectMetaPreInstalled(client, context?.settings, object),
-        {enabled: object !== "Activity"}
     );
 
     const onPropsChange = useCallback(

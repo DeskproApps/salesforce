@@ -36,7 +36,6 @@ export const PropertyView = ({ name, object, internalUrl, externalUrl, isFirst }
     const meta = useQueryWithClient<ObjectMeta>(
         [QueryKey.ADMIN_OBJECT_META, object.attributes.type],
         (client) => getObjectMeta(client, object.attributes.type),
-        { enabled: object.attributes.type !== "Activity"}
     );
 
     if (!context?.settings) {

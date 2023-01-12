@@ -94,7 +94,7 @@ export const AccountScreen = ({ account }: AccountScreenProps) => {
     ],
     (client) =>
       getAllActivities(client, account.Id, "AccountId", activitiesMax),
-    { enabled: objects.includes("Activity") }
+    { enabled: objects.includes("Task") || objects.includes("Event") }
   );
 
   if (!meta.isSuccess) {
@@ -199,7 +199,7 @@ export const AccountScreen = ({ account }: AccountScreenProps) => {
                     )
                 )
                 .with(
-                  "Activity",
+                  "Task",
                   () =>
                     activities.data &&
                     activities.data.length > 0 && (

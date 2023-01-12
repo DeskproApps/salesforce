@@ -99,7 +99,7 @@ export const LeadScreen = ({ lead }: LeadScreenProps) => {
       activitiesMax,
     ],
     (client) => getAllActivities(client, lead.Id, "WhoId", activitiesMax),
-    { enabled: objects.includes("Activity") }
+    { enabled: objects.includes("Task") || objects.includes("Event") }
   );
 
   if (!meta.isSuccess) {
@@ -197,7 +197,7 @@ export const LeadScreen = ({ lead }: LeadScreenProps) => {
                     </Stack>
                   </Fragment>
                 ))
-                .with("Activity", () => (
+                .with("Task", () => (
                   <Fragment key={idx}>
                     <Stack
                       justify="space-between"
