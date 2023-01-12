@@ -97,9 +97,15 @@ export const CreateOpportunity = () => {
     );
   }, [opportunityMetadata.data]);
 
+  const opNamesMeta = opportunityMetadata.data?.fields.map((e) => e.name);
+
   const fields = opportunityJson.view.root
     .map((e) => e[0]?.property)
-    .filter((e) => !nonUsableFields.includes(e?.name as string));
+    .filter(
+      (e) =>
+        !nonUsableFields.includes(e?.name as string) &&
+        opNamesMeta?.includes(e?.name as string)
+    );
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const submit = async (data: any) => {
