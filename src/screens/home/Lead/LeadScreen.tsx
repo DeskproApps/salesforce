@@ -99,7 +99,7 @@ export const LeadScreen = ({ lead }: LeadScreenProps) => {
       activitiesMax,
     ],
     (client) => getAllActivities(client, lead.Id, "WhoId", activitiesMax),
-    { enabled: objects.includes("Task") || objects.includes("Event") }
+    { enabled: objects.includes("Activity") }
   );
 
   if (!meta.isSuccess) {

@@ -100,7 +100,7 @@ export const ContactScreen = ({ contact }: ContactScreenProps) => {
       activitiesMax,
     ],
     (client) => getAllActivities(client, contact.Id, "WhoId", activitiesMax),
-    { enabled: objects.includes("Task") || objects.includes("Event") }
+    { enabled: objects.includes("Activity") }
   );
 
   if (!meta.isSuccess) {

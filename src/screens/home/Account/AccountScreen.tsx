@@ -94,7 +94,7 @@ export const AccountScreen = ({ account }: AccountScreenProps) => {
     ],
     (client) =>
       getAllActivities(client, account.Id, "AccountId", activitiesMax),
-    { enabled: objects.includes("Task") || objects.includes("Event") }
+    { enabled: objects.includes("Activity") }
   );
 
   if (!meta.isSuccess) {
