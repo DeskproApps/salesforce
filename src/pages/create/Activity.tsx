@@ -8,7 +8,7 @@ import { getObjectMeta, postData } from "../../api/api";
 import { DropdownSelect } from "../../components/DropdownSelect/DropdownSelect";
 import { useQueryWithClient } from "../../hooks";
 import { QueryKey } from "../../query";
-import { z, ZodObject } from "zod";
+import { z, ZodObject, ZodRawShape } from "zod";
 import { getActivitySchema } from "../../schemas/activity";
 import { Field } from "../../api/types";
 import taskJson from "../../resources/default_layout/task.json";
@@ -71,7 +71,7 @@ export const CreateActivity = () => {
 
   const navigate = useNavigate();
 
-  const [schema, setSchema] = useState<ZodObject<any>>(z.object({}));
+  const [schema, setSchema] = useState<ZodObject<ZodRawShape>>(z.object({}));
 
   const {
     register,
@@ -164,8 +164,11 @@ export const CreateActivity = () => {
               <FieldMappingInput
                 field={field}
                 key={i}
-                type={type}
-                activityTypes={activityTypes}
+                usersEnabled={
+                  !!activityTypes
+                    .find((e) => e.value === type)
+                    ?.fields.findIndex((e) => e.name === "OwnerId")
+                }
                 register={register}
                 errors={errors}
                 setValue={setValue}

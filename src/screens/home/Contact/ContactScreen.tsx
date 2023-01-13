@@ -69,7 +69,7 @@ export const ContactScreen = ({ contact }: ContactScreenProps) => {
     [
       QueryKey.OBJECTS_BY_FK,
       "Opportunity",
-      "ContactID",
+      "ContactId",
       contact.Id,
       opportunitiesMax,
     ],
@@ -77,7 +77,7 @@ export const ContactScreen = ({ contact }: ContactScreenProps) => {
       getObjectsByFk(
         client,
         "Opportunity",
-        "ContactID",
+        "ContactId",
         contact.Id,
         opportunitiesMax
       ),
@@ -100,8 +100,7 @@ export const ContactScreen = ({ contact }: ContactScreenProps) => {
       activitiesMax,
     ],
     (client) => getAllActivities(client, contact.Id, "WhoId", activitiesMax),
-    { enabled: objects.includes("Activity") }
-  );
+    { enabled: objects.includes("Task") || objects.includes("Event") }  );
 
   if (!meta.isSuccess) {
     return null;
@@ -146,15 +145,33 @@ export const ContactScreen = ({ contact }: ContactScreenProps) => {
                     <Stack
                       justify="space-between"
                       align="center"
-                      style={{ width: "100%" }}
+                      gap={5}
+                      style={{
+                        verticalAlign: "baseline",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
                     >
-                      <H1 style={{ color: theme.colors.cyan100 }}>
-                        <Link
-                          to={`${basePath}/objects/Opportunity/ContactID/${contact.Id}/list`}
-                        >
+                      <Link
+                        to={`${basePath}/objects/Opportunity/ContactId/${contact.Id}/list`}
+                      >
+                        <H1 style={{ color: theme.colors.cyan100 }}>
                           Opportunities
-                        </Link>
-                      </H1>
+                        </H1>
+                      </Link>
+                      <Link to={`/add/opportunity/ContactId/${contact.Id}`}>
+                        <Stack style={{ color: theme.colors.grey500 }}>
+                          <FontAwesomeIcon
+                            icon={faPlus as IconProp}
+                            size="sm"
+                            style={{
+                              alignSelf: "center",
+                              cursor: "pointer",
+                              marginBottom: "2px",
+                            }}
+                          ></FontAwesomeIcon>
+                        </Stack>
+                      </Link>
                     </Stack>
                     <Stack gap={14} style={{ width: "100%" }} vertical>
                       {opportunities.data?.map((opportunity, idx) => (
@@ -182,7 +199,7 @@ export const ContactScreen = ({ contact }: ContactScreenProps) => {
                     </Stack>
                   </Fragment>
                 ))
-                .with("Activity", () => (
+                .with("Task", () => (
                   <Fragment key={idx}>
                     <Stack
                       justify="space-between"
