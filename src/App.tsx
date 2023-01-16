@@ -39,6 +39,7 @@ import {ScrollTop} from "./components/ScrollTop";
 import { CreateNote } from "./pages/create/Note";
 import { CreateActivity } from "./pages/create/Activity";
 import { CreateOpportunity } from "./pages/create/Opportunity";
+import { parseJsonErrorMessage } from "./utils";
 
 function App() {
     const { context } = useDeskproLatestAppContext();
@@ -70,9 +71,10 @@ function App() {
                 <Suspense fallback={<LoadingSpinner />}>
                     <QueryErrorResetBoundary>
                         {({ reset }) => (
-                            <ErrorBoundary onReset={reset} fallbackRender={({ resetErrorBoundary }) => (
+                            <ErrorBoundary onReset={reset} fallbackRender={({ resetErrorBoundary, error }) => (
                                 <Stack gap={6} style={{ padding: "8px" }} vertical>
-                                    There was an error!
+                                    There was an error!<br/><br/>
+                                    {parseJsonErrorMessage(error.message)}
                                     <Button text="Reload" onClick={() => resetErrorBoundary()} icon={faRefresh} intent="secondary" />
                                 </Stack>
                             )}>

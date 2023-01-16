@@ -1,6 +1,8 @@
 Salesforce App Setup
 ===
 
+This app does not support Salesforce demo accounts.
+
 To install the Salesforce app you must first add the app to Salesforce itself. Head over to Salesforce and sign in.
 
 Once you've signed in, navigate to the "Setup" section found at the top right of the screen.
