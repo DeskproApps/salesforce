@@ -147,7 +147,6 @@ export const mapErrorMessage = (error: Error): string | null => {
     fields: string[];
     message: string;
   }[];
-  console.log(parsedSalesforceErr);
   return parsedSalesforceErr.reduce((acc, curr) => {
     return (
       acc +
@@ -170,3 +169,20 @@ export const mapErrorMessage = (error: Error): string | null => {
     );
   }, "");
 };
+
+export const parseJsonErrorMessage = (error:string) => {
+    try {
+      const parsedError = JSON.parse(error);
+
+      try {
+        const parsedSalesforceError = JSON.parse(parsedError.message);
+
+        return parsedSalesforceError.reduce((acc :string, curr : {message:string}) => acc + curr.message,"");
+      } catch(e) {
+        return parsedError.message;
+      }
+
+    } catch (e) {
+      return error;
+    }
+}
