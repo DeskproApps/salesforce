@@ -202,7 +202,7 @@ const installedRequest = async (
     }
     
     if (isResponseError(response)) {
-        throw new Error(`Request failed: [${response.status}] ${await response.text()}`);
+        throw new Error(JSON.stringify({status:response.status,message:await response.text()}));
     }
 
     return response.json();
