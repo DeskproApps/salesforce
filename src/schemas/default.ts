@@ -15,14 +15,10 @@ export const getMetadataBasedSchema = (
     newObj[field.name] = z.string().optional();
   }
 
-  for (const key of Object.keys(customInputs)) {
-    newObj[key as keyof typeof newObj] =
-      customInputs[key as keyof typeof newObj];
-  }
-
   const schema = z
     .object({
       ...newObj,
+      ...customInputs,
     })
     .transform((obj) => {
       for (const key of Object.keys(obj)) {

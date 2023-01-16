@@ -50,7 +50,7 @@ export const FieldMappingInput = ({
         200
       ),
     {
-      enabled: !usersEnabled,
+      enabled: usersEnabled,
     }
   );
 
@@ -123,10 +123,11 @@ export const FieldMappingInput = ({
           key: string;
         }[];
       } else if (fieldMeta?.referenceTo.includes("User")) {
-        values = people.data?.map((e) => ({
-          key: e.Id,
-          value: e.Name,
-        })) as { value: string; key: string }[];
+        values =
+          people.data?.map((e) => ({
+            key: e.Id,
+            value: e.Name,
+          })) || ([] as { value: string; key: string }[]);
       }
       return (
         <DropdownSelect

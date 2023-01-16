@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Button, Stack, useDeskproAppClient } from "@deskpro/app-sdk";
+import { Button, H2, Stack, useDeskproAppClient } from "@deskpro/app-sdk";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -8,12 +8,13 @@ import { getObjectMeta, postData } from "../../api/api";
 import { DropdownSelect } from "../../components/DropdownSelect/DropdownSelect";
 import { useQueryWithClient } from "../../hooks";
 import { QueryKey } from "../../query";
-import { z, ZodObject, ZodRawShape } from "zod";
-import { getActivitySchema } from "../../schemas/activity";
+import { z, ZodObject, ZodTypeAny } from "zod";
 import { Field } from "../../api/types";
 import taskJson from "../../resources/default_layout/task.json";
 import eventJson from "../../resources/default_layout/event.json";
 import { FieldMappingInput } from "../../components/FieldMappingInput/FieldMappingInput";
+import { getMetadataBasedSchema } from "../../schemas/default";
+import { mapErrorMessage } from "../../utils";
 
 const activityTypes = [
   {
@@ -64,14 +65,14 @@ const activityTypes = [
 
 export const CreateActivity = () => {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [submissionError, setSubmissionError] = useState<string | null>(null);
+  const [schema, setSchema] = useState<ZodTypeAny>(z.object({}));
 
   const { client } = useDeskproAppClient();
 
   const { object, parentId } = useParams();
 
   const navigate = useNavigate();
-
-  const [schema, setSchema] = useState<ZodObject<ZodRawShape>>(z.object({}));
 
   const {
     register,
@@ -91,7 +92,7 @@ export const CreateActivity = () => {
     }
   }, [parentId, setValue, object]);
 
-  const ActivityMetadata = useQueryWithClient(
+  const activityMetadata = useQueryWithClient(
     [QueryKey.ACTIVITY_METADATA, type],
     (client) =>
       getObjectMeta(
@@ -104,19 +105,50 @@ export const CreateActivity = () => {
   );
 
   useEffect(() => {
-    if (!type || !ActivityMetadata.data) return;
+    if (!type || !activityMetadata.data) return;
 
-    const activityType = activityTypes.find((e) => e.label === type);
+    const customFields: { [key: string]: ZodTypeAny } = {};
+
+    for (const field of activityMetadata?.data.fields as Field[]) {
+      if (field.type === "reference") {
+        customFields[field.name] = z.string().min(1).optional();
+      }
+
+      if (
+        (field.type === "date" || field.type === "datetime") &&
+        !field.nillable &&
+        !field.defaultedOnCreate
+      ) {
+        customFields[field.name] = z
+          .string()
+          .min(1)
+          .optional()
+          .refine(
+            (val) => val && new Date(val).getTime() - new Date().getTime() > 0,
+            {
+              message: "Dates must be in the future",
+            }
+          );
+        continue;
+      }
+
+      if (!field.defaultedOnCreate && !field.nillable && field.createable) {
+        customFields[field.name] = z.string().min(1);
+      }
+    }
 
     setSchema(
-      getActivitySchema(
-        activityType?.fields as Field[],
-        activityType?.value as string
-      )
+      getMetadataBasedSchema(activityMetadata.data.fields, customFields)
     );
-    setValue(`${activityType?.value}Subtype`, activityType?.label);
+    setValue(`${type}Subtype`, type);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ActivityMetadata.data, watch, type]);
+  }, [activityMetadata.data, watch, type]);
+
+  const activityNamesMeta = activityMetadata.data?.fields.map((e) => e.name);
+
+  const fields = activityTypes
+    ?.find((e) => e.label === type)
+    ?.fields.filter((e) => activityNamesMeta?.includes(e?.name as string));
 
   const submit = async (data: any) => {
     if (!client) return;
@@ -138,9 +170,13 @@ export const CreateActivity = () => {
       client,
       activityTypes.find((e) => e.label === type)?.value as string,
       data
-    );
+    )
+      .then(() => navigate(-1))
+      .catch((e: Error) => {
+        setSubmissionError(mapErrorMessage(e));
 
-    navigate(-1);
+        setIsSubmitting(false);
+      });
   };
 
   return (
@@ -158,24 +194,31 @@ export const CreateActivity = () => {
       />
       {type && (
         <Stack vertical gap={12}>
-          {activityTypes
-            .find((e) => e.label === type)
-            ?.fields.map((field, i) => (
-              <FieldMappingInput
-                field={field}
-                key={i}
-                usersEnabled={
-                  !!activityTypes
-                    .find((e) => e.value === type)
-                    ?.fields.findIndex((e) => e.name === "OwnerId")
-                }
-                register={register}
-                errors={errors}
-                setValue={setValue}
-                watch={watch}
-                fieldsMeta={ActivityMetadata.data?.fields as Field[]}
-              />
-            ))}
+          {fields?.map((field, i) => {
+            return (
+              <Stack vertical style={{ width: "100%" }}>
+                <FieldMappingInput
+                  field={field}
+                  key={i}
+                  usersEnabled={
+                    !!activityTypes
+                      .find((e) => e.value === type)
+                      ?.fields.findIndex((e) => e.name === "OwnerId")
+                  }
+                  register={register}
+                  errors={errors}
+                  setValue={setValue}
+                  watch={watch}
+                  fieldsMeta={activityMetadata.data?.fields as Field[]}
+                />
+                {field && errors[field.name] && (
+                  <H2 style={{ color: "red" }}>
+                    {errors[field.name]?.message}
+                  </H2>
+                )}
+              </Stack>
+            );
+          })}
           <Stack
             style={{ justifyContent: "space-between", width: "100%" }}
             gap={5}
@@ -190,6 +233,11 @@ export const CreateActivity = () => {
               intent="secondary"
             ></Button>
           </Stack>
+          {submissionError && (
+            <H2 style={{ color: "red", whiteSpace: "pre-line" }}>
+              {submissionError}
+            </H2>
+          )}
         </Stack>
       )}
     </form>

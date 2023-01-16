@@ -71,9 +71,9 @@
       ],
       [
         {
-          "id": "ActivityDateTime",
+          "id": "StartDateTime",
           "property": {
-            "name": "ActivityDateTime",
+            "name": "StartDateTime",
             "label": "Start Date",
             "type": "date"
           }
