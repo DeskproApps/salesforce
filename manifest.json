@@ -7,6 +7,10 @@
   "scope": "agent",
   "isSingleInstall": true,
   "hasDevMode": true,
+  "repository": {
+    "type": "github",
+    "url": "https://github.com/DeskproApps/salesforce"
+  },
   "targets": [
     {
       "target": "user_sidebar",
