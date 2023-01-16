@@ -153,18 +153,18 @@ export const mapErrorMessage = (error: Error): string | null => {
       acc +
       match([curr.message])
         .with(["Event duration cannot be negative"], () => {
-          return "The dates are invalid, perhaps you have set the start date after the end date?\n";
+          return "The dates are invalid, perhaps you have set the start date after the end date?\n\n";
         })
         .otherwise(() => {
           return match([curr.errorCode, curr.fields])
             .with(["REQUIRED_FIELD_MISSING", ["ActivityDateTime"]], () => {
-              return `You have to set a start date for the event.\n`;
+              return `Please set a start date.\n\n`;
             })
             .with(["REQUIRED_FIELD_MISSING", ["DurationInMinutes"]], () => {
-              return `You have to set an end date for the event.\n`;
+              return `Please set an end date.\n\n`;
             })
             .otherwise(() => {
-              return `${curr.message}\n`;
+              return `${curr.message}\n\n`;
             });
         })
     );
