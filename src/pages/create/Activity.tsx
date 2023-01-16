@@ -181,11 +181,6 @@ export const CreateActivity = () => {
   console.log(errors);
   return (
     <form onSubmit={handleSubmit(submit)} style={{ margin: "5px" }}>
-      {submissionError && (
-        <H2 style={{ color: "red", whiteSpace: "pre-line" }}>
-          {submissionError}
-        </H2>
-      )}
       <DropdownSelect
         title="Type"
         value={type || ""}
@@ -238,6 +233,11 @@ export const CreateActivity = () => {
               intent="secondary"
             ></Button>
           </Stack>
+          {submissionError && (
+            <H2 style={{ color: "red", whiteSpace: "pre-line" }}>
+              {submissionError}
+            </H2>
+          )}
         </Stack>
       )}
     </form>
