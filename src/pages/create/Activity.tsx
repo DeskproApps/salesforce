@@ -178,7 +178,7 @@ export const CreateActivity = () => {
         setIsSubmitting(false);
       });
   };
-  console.log(errors);
+
   return (
     <form onSubmit={handleSubmit(submit)} style={{ margin: "5px" }}>
       <DropdownSelect
