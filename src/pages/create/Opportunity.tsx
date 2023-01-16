@@ -83,7 +83,7 @@ export const CreateOpportunity = () => {
           .string()
           .min(1)
           .refine((val) => new Date(val).getTime() - new Date().getTime() > 0, {
-            message: "Close date must be in the future",
+            message: "Dates must be in the future",
           });
         continue;
       }
