@@ -17,6 +17,7 @@
     "@hookform/resolvers": "^2.9.10",
     "@types/lodash": "^4.14.182",
     "lodash": "^4.17.21",
+    "pino": "^8.8.0",
     "polished": "^4.1.1",
     "react": "^17.0.2",
     "react-beautiful-dnd": "^13.1.0",

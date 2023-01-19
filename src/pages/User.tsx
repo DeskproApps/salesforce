@@ -30,6 +30,7 @@ export const User = () => {
     useDeskproElements(({ registerElement,deRegisterElement }) => {
         registerElement("refresh", { type: "refresh_button" });
         deRegisterElement("salesforcePlusButton");
+        deRegisterElement("salesforceEditButton");
     });
 
     const emails: string[] = context?.data?.user?.emails ?? [];

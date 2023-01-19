@@ -2,7 +2,7 @@ import {useQueryWithClient} from "../../hooks";
 import {QueryKey} from "../../query";
 import {getAllActivities} from "../../api/api";
 import {useDeskproLatestAppContext, Stack, useInitialisedDeskproAppClient, HorizontalDivider} from "@deskpro/app-sdk";
-import {getObjectPermalink, getScreenLayout} from "../../utils";
+import {getObjectPermalink, getScreenLayout, logger} from "../../utils";
 import {LayoutObject} from "../../components/types";
 import {PropertyLayout} from "../../components/PropertyLayout/PropertyLayout";
 import {Container} from "../../components/Container/Container";
@@ -45,7 +45,7 @@ export const ActivityListScreen = ({ id, field }: ListScreenProps) => {
     const layoutEvent = getScreenLayout(context.settings, "Event", "list");
 
     if (!layoutTask || !layoutEvent) {
-        console.error(`No layout found for "Activities":list`);
+        logger.error(`No layout found for "Activities":list`);
         return null;
     }
 

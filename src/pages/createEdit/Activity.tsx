@@ -1,10 +1,22 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Button, H2, Stack, useDeskproAppClient } from "@deskpro/app-sdk";
+import {
+  Button,
+  H2,
+  LoadingSpinner,
+  Stack,
+  useDeskproAppClient,
+  useInitialisedDeskproAppClient,
+} from "@deskpro/app-sdk";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useNavigate, useParams } from "react-router-dom";
-import { getObjectMeta, postData } from "../../api/api";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import {
+  editData,
+  getObjectById,
+  getObjectMeta,
+  postData,
+} from "../../api/api";
 import { DropdownSelect } from "../../components/DropdownSelect/DropdownSelect";
 import { useQueryWithClient } from "../../hooks";
 import { QueryKey } from "../../query";
@@ -14,7 +26,7 @@ import taskJson from "../../resources/default_layout/task.json";
 import eventJson from "../../resources/default_layout/event.json";
 import { FieldMappingInput } from "../../components/FieldMappingInput/FieldMappingInput";
 import { getMetadataBasedSchema } from "../../schemas/default";
-import { mapErrorMessage } from "../../utils";
+import { buttonLabels, capitalizeFirstLetter, mapErrorMessage } from "../../utils";
 
 const activityTypes = [
   {
@@ -68,9 +80,14 @@ export const CreateActivity = () => {
   const [submissionError, setSubmissionError] = useState<string | null>(null);
   const [schema, setSchema] = useState<ZodTypeAny>(z.object({}));
 
+  const search = useLocation().search;
+  const queryParams = new URLSearchParams(search);
+
+  const typeParam = queryParams.get("type");
+
   const { client } = useDeskproAppClient();
 
-  const { object, parentId } = useParams();
+  const { object, id } = useParams();
 
   const navigate = useNavigate();
 
@@ -80,17 +97,34 @@ export const CreateActivity = () => {
     handleSubmit,
     setValue,
     watch,
+    reset,
   } = useForm<any>({
     resolver: zodResolver(schema as ZodObject<any>),
   });
 
+  const submitType = object === "edit" ? "edit" : "default";
+
+  useInitialisedDeskproAppClient((client) => {
+    client.setTitle(`${capitalizeFirstLetter(submitType)} Activity`);
+    client.deregisterElement("salesforceEditButton");
+    client.deregisterElement("salesforcePlusButton");
+  }, []);
+
+  useEffect(() => {
+    if (typeParam) {
+      setValue("Type", typeParam);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [typeParam]);
+
   const type = watch("Type");
 
   useEffect(() => {
-    if (parentId) {
-      setValue(object as string, parentId);
+    if (id && object !== "edit") {
+      setValue(object as string, id);
     }
-  }, [parentId, setValue, object]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id, object]);
 
   const activityMetadata = useQueryWithClient(
     [QueryKey.ACTIVITY_METADATA, type],
@@ -103,6 +137,22 @@ export const CreateActivity = () => {
       enabled: !!type,
     }
   );
+
+  const activityById = useQueryWithClient(
+    [QueryKey.ACTIVITY_BY_ID, id],
+    (client) => getObjectById(client, typeParam as string, id as string),
+    {
+      enabled: object === "edit",
+    }
+  );
+
+  const activityNamesMeta = activityMetadata.data?.fields.map((e) => e.name);
+
+  const fields = activityTypes
+    ?.find((e) => e.label === type)
+    ?.fields.filter((e) => activityNamesMeta?.includes(e?.name as string));
+
+  const activity = activityById.data as any;
 
   useEffect(() => {
     if (!type || !activityMetadata.data) return;
@@ -142,13 +192,30 @@ export const CreateActivity = () => {
     );
     setValue(`${type}Subtype`, type);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activityMetadata.data, watch, type]);
+  }, [activityMetadata.data, type]);
 
-  const activityNamesMeta = activityMetadata.data?.fields.map((e) => e.name);
+  useEffect(() => {
+    if (
+      !activityById.isSuccess ||
+      !activityMetadata.isSuccess ||
+      !fields ||
+      fields?.length === 0
+    )
+      return;
 
-  const fields = activityTypes
-    ?.find((e) => e.label === type)
-    ?.fields.filter((e) => activityNamesMeta?.includes(e?.name as string));
+    const mappedFields = fields?.map((e) => e.name as string); 
+    
+    const newObj = Object.keys(activity)
+      .filter((e) => mappedFields?.includes(e) && activityMetadata.data.fields.find(findE => findE.name === e)?.updateable)
+      .reduce((accObj: any, key: string) => {
+        accObj[key] = activity[key];
+
+        return accObj;
+      }, {});
+
+    reset({ ...newObj, Type: type });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activity, activityById.isSuccess, activityMetadata.isSuccess]);
 
   const submit = async (data: any) => {
     if (!client) return;
@@ -165,19 +232,37 @@ export const CreateActivity = () => {
           60
       );
     }
+    if (object === "edit") {
+      await editData(
+        client,
+        activityTypes.find((e) => e.label === type)?.value as string,
+        id as string,
+        data
+      )
+        .then(() => navigate(-1))
+        .catch((e: Error) => {
+          setSubmissionError(mapErrorMessage(e));
 
-    await postData(
-      client,
-      activityTypes.find((e) => e.label === type)?.value as string,
-      data
-    )
-      .then(() => navigate(-1))
-      .catch((e: Error) => {
-        setSubmissionError(mapErrorMessage(e));
+          setIsSubmitting(false);
+        });
+    } else {
+      await postData(
+        client,
+        activityTypes.find((e) => e.label === type)?.value as string,
+        data
+      )
+        .then(() => navigate(-1))
+        .catch((e: Error) => {
+          setSubmissionError(mapErrorMessage(e));
 
-        setIsSubmitting(false);
-      });
+          setIsSubmitting(false);
+        });
+    }
   };
+
+  if (object === "edit" && activityById.isLoading) {
+    return <LoadingSpinner></LoadingSpinner>;
+  }
 
   return (
     <form onSubmit={handleSubmit(submit)} style={{ margin: "5px" }}>
@@ -185,7 +270,7 @@ export const CreateActivity = () => {
         title="Type"
         value={type || ""}
         onChange={(e) => {
-          setValue("Type", e);
+          if (e) setValue("Type", e);
         }}
         error={!!errors.Type}
         data={activityTypes}
@@ -196,7 +281,7 @@ export const CreateActivity = () => {
         <Stack vertical gap={12}>
           {fields?.map((field, i) => {
             return (
-              <Stack vertical style={{ width: "100%" }}>
+              <Stack vertical style={{ width: "100%" }} key={i}>
                 <FieldMappingInput
                   field={field}
                   key={i}
@@ -225,7 +310,11 @@ export const CreateActivity = () => {
           >
             <Button
               type="submit"
-              text={isSubmitting ? "Creating..." : "Create"}
+              text={
+                isSubmitting
+                  ? buttonLabels.find((e) => e.id === submitType)?.submitting
+                  : buttonLabels.find((e) => e.id === submitType)?.submit
+              }
             ></Button>
             <Button
               text="Cancel"
