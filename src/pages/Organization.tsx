@@ -22,7 +22,8 @@ export const Organization = () => {
 
     useDeskproElements(({ registerElement, deRegisterElement }) => {
         registerElement("refresh", { type: "refresh_button" });
-        deRegisterElement("salesforcePlusButton")
+        deRegisterElement("salesforcePlusButton");
+        deRegisterElement("salesforceEditButton");
     });
 
     const name = context?.data?.organisation?.name as string;

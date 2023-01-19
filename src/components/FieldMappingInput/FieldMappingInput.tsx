@@ -107,6 +107,7 @@ export const FieldMappingInput = ({
               borderBottomColor: "red",
             }
           }
+          value={new Date(watch(field.name) ?? new Date())}
           label={field.label}
           error={!!errors?.[field.name]}
           {...register(field.name)}

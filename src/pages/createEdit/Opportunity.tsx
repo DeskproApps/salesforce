@@ -13,13 +13,19 @@ import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import { z, ZodTypeAny } from "zod";
 
-import { getObjectMeta, postData } from "../../api/api";
+import {
+  editData,
+  getObjectById,
+  getObjectMeta,
+  postData,
+} from "../../api/api";
 import { useQueryWithClient } from "../../hooks";
 import { QueryKey } from "../../query";
 import { getMetadataBasedSchema } from "../../schemas/default";
 import opportunityJson from "../../resources/default_layout/opportunity.json";
 import { FieldMappingInput } from "../../components/FieldMappingInput/FieldMappingInput";
 import { Field } from "../../api/types";
+import { buttonLabels, capitalizeFirstLetter } from "../../utils";
 
 const nonUsableFields = ["AccountId", "CreatedDate", "CreatedById"];
 
@@ -28,33 +34,80 @@ export const CreateOpportunity = () => {
 
   const [submitting, setSubmitting] = useState(false);
   const [schema, setSchema] = useState<ZodTypeAny>(z.object({}));
-  const { object, parentId } = useParams();
+  const { object, id } = useParams();
 
   const { client } = useDeskproAppClient();
+
+  const submitType = object === "edit" ? "edit" : "create";
+
   const {
     register,
     formState: { errors },
     handleSubmit,
     setValue,
     watch,
+    reset,
   } = useForm<any>({
     resolver: zodResolver(schema),
   });
+
   useInitialisedDeskproAppClient((client) => {
     client.deregisterElement("salesforcePlusButton");
-    client.setTitle("Add Opportunity");
+    client.setTitle(`${capitalizeFirstLetter(submitType)} Note`);
+    client.deregisterElement("salesforceEditButton");
   });
 
   useEffect(() => {
-    if (parentId) {
-      setValue(object as string, parentId);
+    if (id && object !== "edit") {
+      setValue(object as string, id);
     }
-  }, [parentId, setValue, object]);
+  }, [id, setValue, object]);
 
   const opportunityMetadata = useQueryWithClient(
     [QueryKey.OPPORTUNITY_METADATA, "Opportunity"],
-    (client) => getObjectMeta(client, "opportunity")
+    (client) => getObjectMeta(client, "Opportunity")
   );
+
+  const opportunityById = useQueryWithClient(
+    [QueryKey.OPPORTUNITY_BY_ID, id],
+    (client) => getObjectById(client, "Opportunity", id as string),
+    {
+      enabled: object === "edit",
+    }
+  );
+
+  const opNamesMeta = opportunityMetadata.data?.fields.map((e) => e.name);
+
+  const fields = opportunityJson.view.root
+    .map((e) => e[0]?.property)
+    .filter(
+      (e) =>
+        !nonUsableFields.includes(e?.name as string) &&
+        opNamesMeta?.includes(e?.name as string)
+    );
+
+  const mappedFields = fields?.map((e) => e?.name as string);
+
+  useEffect(() => {
+    const opportunity = opportunityById.data as any;
+    if (opportunityById.isSuccess) {
+      const newObj = Object.keys(opportunity)
+        .filter(
+          (e) =>
+            mappedFields.includes(e) &&
+            opportunityMetadata.data?.fields.find((findE) => findE.name === e)
+              ?.createable
+        )
+        .reduce((accObj: any, key: string) => {
+          if (opportunity[key]) accObj[key] = opportunity[key];
+
+          return accObj;
+        }, {});
+
+      reset(newObj);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [opportunityById.isSuccess, opportunityMetadata.isSuccess]);
 
   useEffect(() => {
     if (!opportunityMetadata.data) return;
@@ -97,27 +150,24 @@ export const CreateOpportunity = () => {
     );
   }, [opportunityMetadata.data]);
 
-  const opNamesMeta = opportunityMetadata.data?.fields.map((e) => e.name);
-
-  const fields = opportunityJson.view.root
-    .map((e) => e[0]?.property)
-    .filter(
-      (e) =>
-        !nonUsableFields.includes(e?.name as string) &&
-        opNamesMeta?.includes(e?.name as string)
-    );
-
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const submit = async (data: any) => {
     if (!client) return;
 
     setSubmitting(true);
+    if (object === "edit") {
+      await editData(client, "Opportunity", id as string, data).then(() => {
+        navigate(-1);
 
-    await postData(client, "Opportunity", data).then(() => {
-      navigate(-1);
+        setSubmitting(false);
+      });
+    } else {
+      await postData(client, "Opportunity", data).then(() => {
+        navigate(-1);
 
-      setSubmitting(false);
-    });
+        setSubmitting(false);
+      });
+    }
   };
 
   return (
@@ -129,7 +179,7 @@ export const CreateOpportunity = () => {
               (e) => e.name === field?.name
             ) as Field;
             return (
-              <Stack vertical gap={8} style={{ width: "100%" }}>
+              <Stack vertical gap={8} style={{ width: "100%" }} key={i}>
                 {field && field.name === "DeliveryInstallationStatus__c" && (
                   <H0>Additional Fields</H0>
                 )}
@@ -170,7 +220,11 @@ export const CreateOpportunity = () => {
             loading={submitting}
             disabled={submitting}
             type="submit"
-            text={submitting ? "Creating..." : "Create"}
+            text={
+              submitting
+                ? buttonLabels.find((e) => e.id === submitType)?.submitting
+                : buttonLabels.find((e) => e.id === submitType)?.submit
+            }
           ></Button>
           <Button
             disabled={submitting}

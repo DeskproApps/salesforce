@@ -157,7 +157,7 @@ export const LeadScreen = ({ lead }: LeadScreenProps) => {
                           Opportunities
                         </H1>
                       </Link>
-                      <Link to={`/add/opportunity/LeadSource/${lead.Id}`}>
+                      <Link to={`/addoredit/opportunity/LeadSource/${lead.Id}`}>
                         <Stack style={{ color: theme.colors.grey500 }}>
                           <FontAwesomeIcon
                             icon={faPlus as IconProp}
@@ -217,7 +217,7 @@ export const LeadScreen = ({ lead }: LeadScreenProps) => {
                         >
                           <H1>Activity</H1>
                         </Link>
-                        <Link to={`/add/activity/WhoId/${lead.Id}`}>
+                        <Link to={`/addoredit/activity/WhoId/${lead.Id}`}>
                           <Stack style={{ color: theme.colors.grey500 }}>
                             <FontAwesomeIcon
                               icon={faPlus as IconProp}
@@ -286,7 +286,7 @@ export const LeadScreen = ({ lead }: LeadScreenProps) => {
                         >
                           <H1>Notes</H1>
                         </Link>
-                        <Link to={`/add/note/${lead.Id}`}>
+                        <Link to={`/addoredit/note/ParentId/${lead.Id}`}>
                           <Stack style={{ color: theme.colors.grey500 }}>
                             <FontAwesomeIcon
                               icon={faPlus as IconProp}
