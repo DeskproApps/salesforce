@@ -25,7 +25,7 @@ import { getMetadataBasedSchema } from "../../schemas/default";
 import opportunityJson from "../../resources/default_layout/opportunity.json";
 import { FieldMappingInput } from "../../components/FieldMappingInput/FieldMappingInput";
 import { Field } from "../../api/types";
-import { buttonLabels, capitalizeFirstLetter } from "../../utils";
+import { buttonLabels, capitalizeFirstLetter, mapErrorMessage } from "../../utils";
 
 const nonUsableFields = ["AccountId", "CreatedDate", "CreatedById"];
 
@@ -34,6 +34,7 @@ export const CreateOpportunity = () => {
 
   const [submitting, setSubmitting] = useState(false);
   const [schema, setSchema] = useState<ZodTypeAny>(z.object({}));
+  const [submissionError, setSubmissionError] = useState<string | null>(null);
   const { object, id } = useParams();
 
   const { client } = useDeskproAppClient();
@@ -156,14 +157,14 @@ export const CreateOpportunity = () => {
 
     setSubmitting(true);
     if (object === "edit") {
-      await editData(client, "Opportunity", id as string, data).then(() => {
-        navigate(-1);
+      await editData(client, "Opportunity", id as string, data).then(() => navigate(-1)).catch((e) => {
+        setSubmissionError(mapErrorMessage(e));
 
         setSubmitting(false);
       });
     } else {
-      await postData(client, "Opportunity", data).then(() => {
-        navigate(-1);
+      await postData(client, "Opportunity", data).then(() => navigate(-1)).catch((e) => {
+        setSubmissionError(mapErrorMessage(e));
 
         setSubmitting(false);
       });
@@ -233,9 +234,11 @@ export const CreateOpportunity = () => {
             intent="secondary"
           ></Button>
         </Stack>
-        <H2 style={{ color: "red" }}>
-          {errors.submit && errors.submit.message}
-        </H2>
+        {submissionError && (
+            <H2 style={{ color: "red", whiteSpace: "pre-line" }}>
+              {submissionError}
+            </H2>
+          )}
       </Stack>
     </form>
   );
