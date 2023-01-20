@@ -25,7 +25,11 @@ import { getMetadataBasedSchema } from "../../schemas/default";
 import opportunityJson from "../../resources/default_layout/opportunity.json";
 import { FieldMappingInput } from "../../components/FieldMappingInput/FieldMappingInput";
 import { Field } from "../../api/types";
-import { buttonLabels, capitalizeFirstLetter, mapErrorMessage } from "../../utils";
+import {
+  buttonLabels,
+  capitalizeFirstLetter,
+  mapErrorMessage,
+} from "../../utils";
 
 const nonUsableFields = ["AccountId", "CreatedDate", "CreatedById"];
 
@@ -54,7 +58,7 @@ export const CreateOpportunity = () => {
 
   useInitialisedDeskproAppClient((client) => {
     client.deregisterElement("salesforcePlusButton");
-    client.setTitle(`${capitalizeFirstLetter(submitType)} Note`);
+    client.setTitle(`${capitalizeFirstLetter(submitType)} Opportunity`);
     client.deregisterElement("salesforceEditButton");
   });
 
@@ -157,17 +161,21 @@ export const CreateOpportunity = () => {
 
     setSubmitting(true);
     if (object === "edit") {
-      await editData(client, "Opportunity", id as string, data).then(() => navigate(-1)).catch((e) => {
-        setSubmissionError(mapErrorMessage(e));
+      await editData(client, "Opportunity", id as string, data)
+        .then(() => navigate(-1))
+        .catch((e) => {
+          setSubmissionError(mapErrorMessage(e));
 
-        setSubmitting(false);
-      });
+          setSubmitting(false);
+        });
     } else {
-      await postData(client, "Opportunity", data).then(() => navigate(-1)).catch((e) => {
-        setSubmissionError(mapErrorMessage(e));
+      await postData(client, "Opportunity", data)
+        .then(() => navigate(-1))
+        .catch((e) => {
+          setSubmissionError(mapErrorMessage(e));
 
-        setSubmitting(false);
-      });
+          setSubmitting(false);
+        });
     }
   };
 
@@ -235,10 +243,10 @@ export const CreateOpportunity = () => {
           ></Button>
         </Stack>
         {submissionError && (
-            <H2 style={{ color: "red", whiteSpace: "pre-line" }}>
-              {submissionError}
-            </H2>
-          )}
+          <H2 style={{ color: "red", whiteSpace: "pre-line" }}>
+            {submissionError}
+          </H2>
+        )}
       </Stack>
     </form>
   );
