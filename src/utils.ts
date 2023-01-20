@@ -150,36 +150,41 @@ export function getScreenLayout(
     .otherwise(() => null);
 }
 export const mapErrorMessage = (error: Error): string | null => {
-  const parsedErr = JSON.parse(error.message) as {
-    status: number;
-    message: string;
-  };
-  const parsedSalesforceErr = JSON.parse(parsedErr.message) as {
-    errorCode: string;
-    fields: string[];
-    message: string;
-  }[];
-  return parsedSalesforceErr.reduce((acc, curr) => {
-    return (
-      acc +
-      match([curr.message])
-        .with(["Event duration cannot be negative"], () => {
-          return "The dates are invalid, perhaps you have set the start date after the end date?\n\n";
-        })
-        .otherwise(() => {
-          return match([curr.errorCode, curr.fields])
-            .with(["REQUIRED_FIELD_MISSING", ["ActivityDateTime"]], () => {
-              return `Please set a start date.\n\n`;
-            })
-            .with(["REQUIRED_FIELD_MISSING", ["DurationInMinutes"]], () => {
-              return `Please set an end date.\n\n`;
-            })
-            .otherwise(() => {
-              return `${curr.message}\n\n`;
-            });
-        })
-    );
-  }, "");
+  try {
+    const parsedErr = JSON.parse(error.message) as {
+      status: number;
+      message: string;
+    };
+    const parsedSalesforceErr = JSON.parse(parsedErr.message) as {
+      errorCode: string;
+      fields: string[];
+      message: string;
+    }[];
+    return parsedSalesforceErr.reduce((acc, curr) => {
+      return (
+        acc +
+        match([curr.message])
+          .with(["Event duration cannot be negative"], () => {
+            return "The dates are invalid, perhaps you have set the start date after the end date?\n\n";
+          })
+          .otherwise(() => {
+            return match([curr.errorCode, curr.fields])
+              .with(["REQUIRED_FIELD_MISSING", ["ActivityDateTime"]], () => {
+                return `Please set a start date.\n\n`;
+              })
+              .with(["REQUIRED_FIELD_MISSING", ["DurationInMinutes"]], () => {
+                return `Please set an end date.\n\n`;
+              })
+              .otherwise(() => {
+                return `${curr.message}\n\n`;
+              });
+          })
+      );
+    }, "");
+
+  } catch(e) {
+    return error.message;
+  }
 };
 
 export const parseJsonErrorMessage = (error: string) => {
