@@ -183,7 +183,7 @@ export const mapErrorMessage = (error: Error): string | null => {
     }, "");
 
   } catch(e) {
-    return error.message;
+    return `${error.message.substring(0, 100)}${error.message.length > 100 ? "..." : ""}`;
   }
 };
 

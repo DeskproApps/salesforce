@@ -165,12 +165,17 @@ const installedRequest = async (
 
     const options: RequestInit = {
         method,
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore types do not support X-Proxy-Redirect-As-Success
         headers: {
             "Content-Type": "application/json",
             "Accept": "application/json",
             "Authorization": `Bearer [[oauth/global/accesstoken]]`,
         }
     };
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore types do not support X-Proxy-Redirect-As-Success
+    if(url.startsWith("/services/data/v55.0/sobjects/") && method === "PATCH") options.headers["X-Proxy-Redirect-As-Success"] = 1
 
     if (data) {
         options.body = JSON.stringify(data);
