@@ -19,7 +19,7 @@ import {
   getObjectMeta,
   postData,
 } from "../../api/api";
-import { useQueryWithClient } from "../../hooks";
+import { useBasePath, useQueryWithClient } from "../../hooks";
 import { QueryKey } from "../../query";
 import { getMetadataBasedSchema } from "../../schemas/default";
 import opportunityJson from "../../resources/default_layout/opportunity.json";
@@ -35,6 +35,7 @@ const nonUsableFields = ["AccountId", "CreatedDate", "CreatedById"];
 
 export const CreateOpportunity = () => {
   const navigate = useNavigate();
+  const basePath = useBasePath();
 
   const [submitting, setSubmitting] = useState(false);
   const [schema, setSchema] = useState<ZodTypeAny>(z.object({}));
@@ -162,7 +163,7 @@ export const CreateOpportunity = () => {
     setSubmitting(true);
     if (object === "edit") {
       await editData(client, "Opportunity", id as string, data)
-        .then(() => navigate(-1))
+        .then(() => navigate(basePath))
         .catch((e) => {
           setSubmissionError(mapErrorMessage(e));
 
