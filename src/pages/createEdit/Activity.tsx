@@ -266,7 +266,7 @@ export const CreateActivity = () => {
 
   return (
     <form onSubmit={handleSubmit(submit)} style={{ margin: "5px" }}>
-      <DropdownSelect
+      {object !== "edit" && <DropdownSelect
         title="Type"
         value={type || ""}
         onChange={(e) => {
@@ -276,7 +276,7 @@ export const CreateActivity = () => {
         data={activityTypes}
         keyName={"label"}
         valueName={"label"}
-      />
+      />}
       {type && (
         <Stack vertical gap={12}>
           {fields?.map((field, i) => {
