@@ -165,10 +165,13 @@ const installedRequest = async (
 
     const options: RequestInit = {
         method,
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        //@ts-ignore doesnt support X-Proxy-Redirect-As-Success
         headers: {
             "Content-Type": "application/json",
             "Accept": "application/json",
             "Authorization": `Bearer [[oauth/global/accesstoken]]`,
+            "X-Proxy-Redirect-As-Success":1
         }
     };
 
