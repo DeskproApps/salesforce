@@ -120,6 +120,10 @@ export const CreateOpportunity = () => {
         customFields[field.name] = z.string().min(1).optional();
       }
 
+      if(field.type === "currency") {
+        customFields[field.name] = z.number().optional();
+      }
+
       if (field.type === "percent") {
         customFields[field.name] = z.preprocess(
           (val) => Number(val),
@@ -170,9 +174,13 @@ export const CreateOpportunity = () => {
       });
     }
   };
-
+  
   return (
-    <form style={{ margin: "5px" }} onSubmit={handleSubmit(submit)}>
+    <form style={{ margin: "5px" }} onKeyPress={(e) => {
+      if(e.key === "Enter") {
+        e.preventDefault();
+      }
+    }} onSubmit={handleSubmit(submit)}>
       <Stack vertical gap={12}>
         <Stack vertical gap={12} style={{ width: "100%" }}>
           {fields.map((field, i) => {

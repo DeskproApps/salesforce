@@ -64,7 +64,16 @@ export const FieldMappingInput = ({
     case "number":
       return (
         <InputWithTitle
-          register={register(field.name)}
+          register={register(field.name, {
+            setValueAs(value) {
+              if(field.type === "text") {
+                return !value ? "" : value;
+              }
+              if(field.type === "number") {
+                return !value ? 0 : Number(value);
+              }
+            }
+          })}
           title={field.label}
           error={!!errors[field.name]}
           type={field.type}

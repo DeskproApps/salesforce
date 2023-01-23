@@ -213,8 +213,8 @@ export const buttonLabels = [
     id: "create",
   },
   {
-    submitting: "Editing...",
-    submit: "Edit",
+    submitting: "Saving...",
+    submit: "Save",
     id: "edit",
   },
 ];
