@@ -53,7 +53,7 @@ export const PropertyView = ({ name, object, internalUrl, externalUrl, isFirst }
     // eslint-disable-next-line
     const value: any = object[name];
 
-    if (!value && !internalUrl && !externalUrl) {
+    if ((!value && !internalUrl && !externalUrl) || (fieldMeta?.type === "reference" && !value)) {
         return (
             <Property title={label}>
                 <PropertyEmpty />
