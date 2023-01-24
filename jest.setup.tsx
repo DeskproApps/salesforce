@@ -4,9 +4,6 @@ import "@testing-library/jest-dom/extend-expect";
 import { TextDecoder, TextEncoder } from "util";
 import * as React from "react";
 import { theme } from "./tests/mocks";
-import styled from "styled-components";
-
-jest
 
 global.TextEncoder = TextEncoder;
 //for some reason the types are wrong, but this works
@@ -71,6 +68,6 @@ jest.mock("./src/hooks.ts",() => ({
     useQueryWithClient: (queryKey:string, queryFn: () => any, options: any ) => {
         queryKey;
         options;
-        return queryFn;
+        return queryFn();
     }
 }))

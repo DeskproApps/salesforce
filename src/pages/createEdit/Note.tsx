@@ -1,12 +1,12 @@
 import {
   Button,
-  H2,
   LoadingSpinner,
   Stack,
   TextArea,
   useDeskproAppClient,
   useInitialisedDeskproAppClient,
 } from "@deskpro/app-sdk";
+import {TSpan} from "@deskpro/deskpro-ui"
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -59,7 +59,7 @@ export const CreateNote = () => {
       enabled: object === "edit",
     }
   );
-
+console.log(noteById);
   useEffect(() => {
     const note = noteById.data as {
       Title: string;
@@ -99,9 +99,9 @@ export const CreateNote = () => {
           error={!!errors.Title}
         ></InputWithTitle>
         {errors.Title && (
-          <H2 style={{ color: "red" }}>{errors.Title?.message}</H2>
+          <TSpan type="h2" style={{ color: "red" }}>{errors.Title?.message}</TSpan>
         )}
-        <H2 style={{ color: "grey" }}>Body</H2>
+        <TSpan type="h2" style={{ color: "grey" }}>Body</TSpan>
         <TextArea
           variant="inline"
           {...register("Body")}
@@ -117,7 +117,7 @@ export const CreateNote = () => {
           }}
         />
         {errors.Body && (
-          <H2 style={{ color: "red" }}>{errors.Body?.message}</H2>
+          <TSpan type="h2" style={{ color: "red" }}>{errors.Body?.message}</TSpan>
         )}
         <Stack
           style={{ justifyContent: "space-between", width: "100%" }}
