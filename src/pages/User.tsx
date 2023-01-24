@@ -4,6 +4,7 @@ import {
     Input,
     LoadingSpinner,
     useDeskproAppClient,
+    useDeskproAppEvents,
     useDeskproAppTheme,
     useDeskproElements,
     useDeskproLatestAppContext,
@@ -19,18 +20,32 @@ import {faCaretDown, faCheck, faExternalLinkAlt} from "@fortawesome/free-solid-s
 import {useState} from "react";
 import {Contact, Lead, ObjectType} from "../api/types";
 import {match} from "ts-pattern";
+import { useNavigate } from "react-router-dom";
 
 export const User = () => {
     const { client } = useDeskproAppClient();
     const { context } = useDeskproLatestAppContext();
     const { theme } = useDeskproAppTheme();
+    const navigate = useNavigate();
 
     const [selectedObjectId, setSelectedObjectId] = useState<string>("");
 
     useDeskproElements(({ registerElement,deRegisterElement }) => {
         registerElement("refresh", { type: "refresh_button" });
         deRegisterElement("salesforcePlusButton");
-        deRegisterElement("salesforceEditButton");
+        registerElement("salesforceEditButton", {
+            type: "edit_button",
+        });
+    });
+
+    useDeskproAppEvents({
+        onElementEvent(elementId) {
+          switch (elementId) {
+            case "salesforceEditButton":
+              navigate(`/addoredit/${selectedObject.attributes.type}/${selectedObject.Id}`);
+              break;
+          }
+        },
     });
 
     const emails: string[] = context?.data?.user?.emails ?? [];

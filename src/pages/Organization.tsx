@@ -1,7 +1,7 @@
 import {
     Dropdown,
     DropdownItemType, Input,
-    LoadingSpinner, useDeskproAppTheme,
+    LoadingSpinner, useDeskproAppEvents, useDeskproAppTheme,
     useDeskproElements,
     useDeskproLatestAppContext, useInitialisedDeskproAppClient
 } from "@deskpro/app-sdk";
@@ -13,17 +13,21 @@ import { Container } from "../components/Container/Container";
 import { useState } from "react";
 import { faCaretDown, faCheck, faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
 import {orderBy} from "lodash";
+import { useNavigate } from "react-router-dom";
 
 export const Organization = () => {
     const { context } = useDeskproLatestAppContext();
     const { theme } = useDeskproAppTheme();
+    const navigate = useNavigate()
 
     const [selectedObjectId, setSelectedObjectId] = useState<string>("");
 
     useDeskproElements(({ registerElement, deRegisterElement }) => {
         registerElement("refresh", { type: "refresh_button" });
         deRegisterElement("salesforcePlusButton");
-        deRegisterElement("salesforceEditButton");
+        registerElement("salesforceEditButton", {
+            type: "edit_button",
+        })
     });
 
     const name = context?.data?.organisation?.name as string;
@@ -38,6 +42,16 @@ export const Organization = () => {
         client.setBadgeCount((accounts?.data ?? []).length);
         client?.setTitle("Account");
     }, [accounts.data]);
+
+    useDeskproAppEvents({
+        onElementEvent(elementId) {
+          switch (elementId) {
+            case "salesforceEditButton":
+              navigate(`/addoredit/Account/${selectedObject.Id}`);
+              break;
+          }
+        },
+    });
 
     if (!name) {
         return null;
