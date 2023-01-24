@@ -71,6 +71,8 @@ function App() {
                 <Suspense fallback={<LoadingSpinner />}>
                     <QueryErrorResetBoundary>
                         {({ reset }) => (
+                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                            //@ts-ignore
                             <ErrorBoundary onReset={reset} fallbackRender={({ resetErrorBoundary, error }) => (
                                 <Stack gap={6} style={{ padding: "8px" }} vertical>
                                     There was an error!<br/><br/>
