@@ -1,7 +1,9 @@
 import {
   Button,
+  H2,
   LoadingSpinner,
   Stack,
+  TextArea,
   useDeskproAppClient,
   useInitialisedDeskproAppClient,
 } from "@deskpro/app-sdk";
@@ -96,11 +98,27 @@ export const CreateNote = () => {
           register={register("Title")}
           error={!!errors.Title}
         ></InputWithTitle>
-        <InputWithTitle
-          title="Body"
-          register={register("Body")}
+        {errors.Title && (
+          <H2 style={{ color: "red" }}>{errors.Title?.message}</H2>
+        )}
+        <H2 style={{ color: "grey" }}>Body</H2>
+        <TextArea
+          variant="inline"
+          {...register("Body")}
           error={!!errors.Body}
-        ></InputWithTitle>
+          placeholder="Enter text here..."
+          style={{
+            resize: "none",
+            minHeight: "5em",
+            maxHeight: "100%",
+            height: "auto",
+            width: "100%",
+            overflow: "hidden",
+          }}
+        />
+        {errors.Body && (
+          <H2 style={{ color: "red" }}>{errors.Body?.message}</H2>
+        )}
         <Stack
           style={{ justifyContent: "space-between", width: "100%" }}
           gap={5}
