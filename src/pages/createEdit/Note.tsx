@@ -97,6 +97,7 @@ export const CreateNote = () => {
           title="Title"
           register={register("Title")}
           error={!!errors.Title}
+          data-testid="title-input"
         ></InputWithTitle>
         {errors.Title && (
           <H2 style={{ color: "red" }}>{errors.Title?.message}</H2>
