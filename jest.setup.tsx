@@ -12,7 +12,7 @@ global.TextEncoder = TextEncoder;
 global.TextDecoder = TextDecoder;
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-ignore
-global.React = React
+global.React = React;
 
 // jest.mock("styled-components", () => ({default:() => () => ({
 //   h1: {attrs:() => {}},
@@ -23,11 +23,6 @@ global.React = React
 //   h6: {attrs:() => {}},
 //   p: {attrs:() => {}},
 // }), css: () => {}}));
-
-jest.mock("react-router-dom", () => ({
-  ...jest.requireActual("react-router-dom"),
-  useNavigate: () => jest.fn(),
-}));
 
 jest.mock("@deskpro/app-sdk", () => ({
   ...jest.requireActual("@deskpro/app-sdk"),
@@ -59,15 +54,15 @@ jest.mock("@deskpro/app-sdk", () => ({
       setTitle: () => {},
     });
   },
-  useDeskproAppTheme: () => ({theme}),
+  useDeskproAppTheme: () => ({ theme }),
   proxyFetch: async () => fetch,
 }));
 
-jest.mock("./src/hooks.ts",() => ({
-    ...jest.requireActual("./src/hooks.ts"),
-    useQueryWithClient: (queryKey:string, queryFn: () => any, options: any ) => {
-        queryKey;
-        options;
-        return queryFn();
-    }
-}))
+jest.mock("./src/hooks.ts", () => ({
+  ...jest.requireActual("./src/hooks.ts"),
+  useQueryWithClient: (queryKey: string, queryFn: () => any, options: any) => {
+    queryKey;
+    options;
+    return queryFn();
+  },
+}));
