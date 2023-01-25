@@ -6,7 +6,7 @@ import {
   useDeskproAppClient,
   useInitialisedDeskproAppClient,
 } from "@deskpro/app-sdk";
-import {TSpan} from "@deskpro/deskpro-ui"
+import { H2 } from "@deskpro/deskpro-ui";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -59,7 +59,7 @@ export const CreateNote = () => {
       enabled: object === "edit",
     }
   );
-console.log(noteById);
+
   useEffect(() => {
     const note = noteById.data as {
       Title: string;
@@ -99,14 +99,15 @@ console.log(noteById);
           error={!!errors.Title}
         ></InputWithTitle>
         {errors.Title && (
-          <TSpan type="h2" style={{ color: "red" }}>{errors.Title?.message}</TSpan>
+          <H2 style={{ color: "red" }}>{errors.Title?.message}</H2>
         )}
-        <TSpan type="h2" style={{ color: "grey" }}>Body</TSpan>
+        <H2 style={{ color: "grey" }}>Body</H2>
         <TextArea
           variant="inline"
           {...register("Body")}
           error={!!errors.Body}
           placeholder="Enter text here..."
+          data-testid="body-input"
           style={{
             resize: "none",
             minHeight: "5em",
@@ -117,13 +118,14 @@ console.log(noteById);
           }}
         />
         {errors.Body && (
-          <TSpan type="h2" style={{ color: "red" }}>{errors.Body?.message}</TSpan>
+          <H2 style={{ color: "red" }}>{errors.Body?.message}</H2>
         )}
         <Stack
           style={{ justifyContent: "space-between", width: "100%" }}
           gap={5}
         >
           <Button
+            data-testid="submit-input"
             type="submit"
             text={
               isSubmitting
