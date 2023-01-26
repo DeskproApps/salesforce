@@ -108,32 +108,50 @@ jest.mock("react-router-dom", () => ({
   }),
 }));
 
-test("Edit Activity", async () => {
-  const { findByTestId, unmount } = renderPage();
+describe("test", () => {
+  test("Editing an opportunity with correct data should pass", async () => {
+    const { findByTestId } = renderPage();
 
-  await waitFor(async () => {
+    await waitFor(async () => {
+      await act(async () => {
+        fireEvent.change(await findByTestId("input-Description"), {
+          target: { value: "Edited Description" },
+        });
+        fireEvent(await findByTestId("submit-button"), new MouseEvent("click"));
+      });
+
+      expect(APIFn.editData).toHaveBeenCalledWith(
+        expect.anything(),
+        "Opportunity",
+        "123",
+        {
+          Name: "David Pinto Exists",
+          Description: "Edited Description",
+          StageName: "Prospecting",
+          Amount: 30,
+          CloseDate: new Date(NEWDATE + 2 * 60 * 1000).toISOString(),
+          Probability: 1,
+        }
+      );
+    });
+  });
+
+  test("Edit an opportunity with out of bounds probability should fail", async () => {
+    const { findByTestId } = renderPage();
+
     await act(async () => {
-      fireEvent.change(await findByTestId("input-Description"), {
-        target: { value: "Edited Description" },
+      fireEvent.change(await findByTestId("input-Probability"), {
+        target: { value: 123 },
       });
       fireEvent(await findByTestId("submit-button"), new MouseEvent("click"));
     });
 
-    expect(APIFn.editData).toHaveBeenCalledWith(
-      expect.anything(),
-      "Opportunity",
-      "123",
-      {
-        Name: "David Pinto Exists",
-        Description: "Edited Description",
-        StageName: "Prospecting",
-        Amount: 30,
-        CloseDate: new Date(NEWDATE + 2 * 60 * 1000).toISOString(),
-        Probability: 1,
-      }
-    );
-    unmount();
+    expect(APIFn.editData).toHaveBeenCalledTimes(0);
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
+
+    cleanup();
   });
 });
-
-afterEach(cleanup);
