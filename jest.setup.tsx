@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import "regenerator-runtime/runtime";
 import "@testing-library/jest-dom/extend-expect";
+import fetch from "node-fetch";
 import { TextDecoder, TextEncoder } from "util";
 import * as React from "react";
 import { theme } from "./tests/mocks";
@@ -26,6 +27,7 @@ global.React = React;
 
 jest.mock("@deskpro/app-sdk", () => ({
   ...jest.requireActual("@deskpro/app-sdk"),
+  useDeskproAppClient: () => ({ client: {} }),
   useDeskproAppEvents: (
     hooks: { [key: string]: (param: Record<string, unknown>) => void },
     deps: [] = []
@@ -63,6 +65,17 @@ jest.mock("./src/hooks.ts", () => ({
   useQueryWithClient: (queryKey: string, queryFn: () => any, options: any) => {
     queryKey;
     options;
-    return queryFn();
+    if (!options || options?.enabled == null || options?.enabled == true) {
+      return {
+        isSuccess: true,
+        data: queryFn(),
+        isLoading: false,
+      };
+    }
+    return {
+      isSuccess: false,
+      data: null,
+      isLoading: false,
+    };
   },
 }));

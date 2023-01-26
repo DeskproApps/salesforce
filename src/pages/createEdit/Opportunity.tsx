@@ -66,7 +66,8 @@ export const CreateOpportunity = () => {
     if (id && object !== "edit") {
       setValue(object as string, id);
     }
-  }, [id, setValue, object]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id, object]);
 
   const opportunityMetadata = useQueryWithClient(
     [QueryKey.OPPORTUNITY_METADATA, "Opportunity"],
@@ -91,10 +92,11 @@ export const CreateOpportunity = () => {
         opNamesMeta?.includes(e?.name as string)
     );
 
-  const mappedFields = fields?.map((e) => e?.name as string);
-
   useEffect(() => {
+    const mappedFields = fields?.map((e) => e?.name as string);
+
     const opportunity = opportunityById.data as any;
+
     if (opportunityById.isSuccess) {
       const newObj = Object.keys(opportunity)
         .filter(
@@ -122,10 +124,11 @@ export const CreateOpportunity = () => {
     for (const field of opportunityMetadata.data.fields) {
       if (field.type === "reference") {
         customFields[field.name] = z.string().min(1).optional();
+        continue;
       }
-
       if (field.type === "currency") {
         customFields[field.name] = z.number().optional();
+        continue;
       }
 
       if (field.type === "percent") {
@@ -152,12 +155,14 @@ export const CreateOpportunity = () => {
 
       if (!field.defaultedOnCreate && !field.nillable && field.createable) {
         customFields[field.name] = z.string().min(1);
+        continue;
       }
     }
     setSchema(
       getMetadataBasedSchema(opportunityMetadata.data.fields, customFields)
     );
-  }, [opportunityMetadata.data]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [opportunityMetadata.isSuccess]);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const submit = async (data: any) => {
@@ -214,6 +219,7 @@ export const CreateOpportunity = () => {
                   errors={errors}
                   setValue={setValue}
                   watch={watch}
+                  data-testid={`input-${field?.name}`}
                   fieldsMeta={opportunityMetadata.data?.fields as Field[]}
                 />
                 {field && errors[field.name] && (
@@ -232,6 +238,7 @@ export const CreateOpportunity = () => {
           <Button
             loading={submitting}
             disabled={submitting}
+            data-testid="submit-button"
             type="submit"
             text={
               submitting

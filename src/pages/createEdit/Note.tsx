@@ -126,7 +126,7 @@ export const CreateNote = () => {
           gap={5}
         >
           <Button
-            data-testid="submit-input"
+            data-testid="submit-button"
             type="submit"
             text={
               isSubmitting
