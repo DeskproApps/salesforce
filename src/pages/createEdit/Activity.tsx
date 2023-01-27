@@ -7,26 +7,30 @@ import {
   useDeskproAppClient,
   useInitialisedDeskproAppClient,
 } from "@deskpro/app-sdk";
-import { useState, useEffect } from "react";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { z, ZodObject, ZodTypeAny } from "zod";
 import {
   editData,
   getObjectById,
   getObjectMeta,
   postData,
 } from "../../api/api";
+import { Field } from "../../api/types";
 import { DropdownSelect } from "../../components/DropdownSelect/DropdownSelect";
+import { FieldMappingInput } from "../../components/FieldMappingInput/FieldMappingInput";
 import { useQueryWithClient } from "../../hooks";
 import { QueryKey } from "../../query";
-import { z, ZodObject, ZodTypeAny } from "zod";
-import { Field } from "../../api/types";
-import taskJson from "../../resources/default_layout/task.json";
 import eventJson from "../../resources/default_layout/event.json";
-import { FieldMappingInput } from "../../components/FieldMappingInput/FieldMappingInput";
+import taskJson from "../../resources/default_layout/task.json";
 import { getMetadataBasedSchema } from "../../schemas/default";
-import { buttonLabels, capitalizeFirstLetter, mapErrorMessage } from "../../utils";
+import {
+  buttonLabels,
+  capitalizeFirstLetter,
+  mapErrorMessage,
+} from "../../utils";
 
 const activityTypes = [
   {
@@ -81,6 +85,7 @@ export const CreateActivity = () => {
   const [schema, setSchema] = useState<ZodTypeAny>(z.object({}));
 
   const search = useLocation().search;
+
   const queryParams = new URLSearchParams(search);
 
   const typeParam = queryParams.get("type");
@@ -102,7 +107,7 @@ export const CreateActivity = () => {
     resolver: zodResolver(schema as ZodObject<any>),
   });
 
-  const submitType = object === "edit" ? "edit" : "default";
+  const submitType = object === "edit" ? "edit" : "create";
 
   useInitialisedDeskproAppClient((client) => {
     client.setTitle(`${capitalizeFirstLetter(submitType)} Activity`);
@@ -192,21 +197,30 @@ export const CreateActivity = () => {
     );
     setValue(`${type}Subtype`, type);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activityMetadata.data, type]);
+  }, [activityMetadata.isSuccess, type]);
 
   useEffect(() => {
+    const fieldsEffect = activityTypes
+      ?.find((e) => e.label === type)
+      ?.fields.filter((e) => activityNamesMeta?.includes(e?.name as string));
+
     if (
       !activityById.isSuccess ||
       !activityMetadata.isSuccess ||
-      !fields ||
-      fields?.length === 0
+      !fieldsEffect ||
+      fieldsEffect?.length === 0
     )
       return;
 
-    const mappedFields = fields?.map((e) => e.name as string); 
-    
+    const mappedFields = fieldsEffect?.map((e) => e.name as string);
+
     const newObj = Object.keys(activity)
-      .filter((e) => mappedFields?.includes(e) && activityMetadata.data.fields.find(findE => findE.name === e)?.updateable)
+      .filter(
+        (e) =>
+          mappedFields?.includes(e) &&
+          activityMetadata.data.fields.find((findE) => findE.name === e)
+            ?.updateable
+      )
       .reduce((accObj: any, key: string) => {
         accObj[key] = activity[key];
 
@@ -214,8 +228,9 @@ export const CreateActivity = () => {
       }, {});
 
     reset({ ...newObj, Type: type });
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activity, activityById.isSuccess, activityMetadata.isSuccess]);
+  }, [activityById.isSuccess, activityMetadata.isSuccess, type]);
 
   const submit = async (data: any) => {
     if (!client) return;
@@ -266,17 +281,19 @@ export const CreateActivity = () => {
 
   return (
     <form onSubmit={handleSubmit(submit)} style={{ margin: "5px" }}>
-      {object !== "edit" && <DropdownSelect
-        title="Type"
-        value={type || ""}
-        onChange={(e) => {
-          if (e) setValue("Type", e);
-        }}
-        error={!!errors.Type}
-        data={activityTypes}
-        keyName={"label"}
-        valueName={"label"}
-      />}
+      {object !== "edit" && (
+        <DropdownSelect
+          title="Type"
+          value={type || ""}
+          onChange={(e) => {
+            if (e) setValue("Type", e);
+          }}
+          error={!!errors.Type}
+          data={activityTypes}
+          keyName={"label"}
+          valueName={"label"}
+        />
+      )}
       {type && (
         <Stack vertical gap={12}>
           {fields?.map((field, i) => {
@@ -295,6 +312,7 @@ export const CreateActivity = () => {
                   setValue={setValue}
                   watch={watch}
                   fieldsMeta={activityMetadata.data?.fields as Field[]}
+                  data-testid={`input-${field.name}`}
                 />
                 {field && errors[field.name] && (
                   <H2 style={{ color: "red" }}>
@@ -310,6 +328,7 @@ export const CreateActivity = () => {
           >
             <Button
               type="submit"
+              data-testid="submit-button"
               text={
                 isSubmitting
                   ? buttonLabels.find((e) => e.id === submitType)?.submitting

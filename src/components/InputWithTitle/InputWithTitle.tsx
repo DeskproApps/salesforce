@@ -15,6 +15,7 @@ export const InputWithTitle = ({
   required,
   register,
   type,
+  ...attributes
 }: Props) => {
   const { theme } = useDeskproAppTheme();
   return (
@@ -35,6 +36,7 @@ export const InputWithTitle = ({
         placeholder={`Enter ${type === "number" ? "number" : "value"}`}
         type={type ?? "title"}
         {...register}
+        {...attributes}
       />
     </Stack>
   );

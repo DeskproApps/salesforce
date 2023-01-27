@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { FC } from "react";
+import { FC, forwardRef } from "react";
 import styled from "styled-components";
 import { faCalendarDays } from "@fortawesome/free-solid-svg-icons";
 import {
@@ -31,68 +31,66 @@ const DateInput = styled(Input)`
   }
 `;
 
-export const DateField: FC<MappedFieldProps> = ({
-  id,
-  value,
-  label,
-  error,
-  onChange,
-  required,
-  ...props
-}: MappedFieldProps) => {
-  const { theme } = useDeskproAppTheme();
+export const DateField: FC<MappedFieldProps> = forwardRef(
+  (
+    { id, value, label, error, onChange, required, ...props }: MappedFieldProps,
+    ref
+  ) => {
+    const { theme } = useDeskproAppTheme();
 
-  return (
-    <DateTimePicker
-      options={{
-        altInput: true,
-        altFormat: "j F Y H:i",
-        position: "left",
-        dateFormat: "d/m/Y",
-        timeFormat: "H:i",
-      }}
-      value={value}
-      onChange={onChange}
-      {...props}
-      render={(_: any, ref: any) => (
-        <LabelDate htmlFor={id}>
-          <Stack align="center" style={{ color: theme.colors.grey80 }}>
-            <H1>{label}</H1>
-            {required && (
-              <Stack style={{ color: "red" }}>
-                <H1>⠀*</H1>
-              </Stack>
-            )}
-          </Stack>
-          <div
-            style={
-              error
-                ? {
-                    borderBottom: `1px solid ${theme.colors.red40}`,
-                  }
-                : {}
-            }
-          >
-            <DateInput
-              id={id}
-              ref={ref}
-              error={error}
-              variant="inline"
-              inputsize="small"
-              placeholder="DD/MM/YYYY"
-              style={{ backgroundColor: "transparent" }}
-              rightIcon={{
-                icon: faCalendarDays,
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                style: {
-                  color: theme.colors.grey40,
-                },
-              }}
-            />
-          </div>
-        </LabelDate>
-      )}
-    />
-  );
-};
+    return (
+      <DateTimePicker
+        options={{
+          altInput: true,
+          altFormat: "j F Y H:i",
+          position: "left",
+          dateFormat: "d/m/Y",
+          timeFormat: "H:i",
+        }}
+        value={value}
+        onChange={onChange}
+        {...props}
+        ref={ref}
+        render={(_: any, ref: any) => (
+          <LabelDate htmlFor={id}>
+            <Stack align="center" style={{ color: theme.colors.grey80 }}>
+              <H1>{label}</H1>
+              {required && (
+                <Stack style={{ color: "red" }}>
+                  <H1>⠀*</H1>
+                </Stack>
+              )}
+            </Stack>
+            <div
+              style={
+                error
+                  ? {
+                      borderBottom: `1px solid ${theme.colors.red40}`,
+                    }
+                  : {}
+              }
+            >
+              <DateInput
+                id={id}
+                ref={ref}
+                error={error}
+                variant="inline"
+                inputsize="small"
+                placeholder="DD/MM/YYYY"
+                style={{ backgroundColor: "transparent" }}
+                rightIcon={{
+                  icon: faCalendarDays,
+                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                  // @ts-ignore
+                  style: {
+                    color: theme.colors.grey40,
+                  },
+                }}
+              />
+            </div>
+          </LabelDate>
+        )}
+      />
+    );
+  }
+);

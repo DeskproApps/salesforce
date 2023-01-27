@@ -2,9 +2,11 @@ import {
   Button,
   LoadingSpinner,
   Stack,
+  TextArea,
   useDeskproAppClient,
   useInitialisedDeskproAppClient,
 } from "@deskpro/app-sdk";
+import { H2 } from "@deskpro/deskpro-ui";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -95,17 +97,36 @@ export const CreateNote = () => {
           title="Title"
           register={register("Title")}
           error={!!errors.Title}
+          data-testid="title-input"
         ></InputWithTitle>
-        <InputWithTitle
-          title="Body"
-          register={register("Body")}
+        {errors.Title && (
+          <H2 style={{ color: "red" }}>{errors.Title?.message}</H2>
+        )}
+        <H2 style={{ color: "grey" }}>Body</H2>
+        <TextArea
+          variant="inline"
+          {...register("Body")}
           error={!!errors.Body}
-        ></InputWithTitle>
+          placeholder="Enter text here..."
+          data-testid="body-input"
+          style={{
+            resize: "none",
+            minHeight: "5em",
+            maxHeight: "100%",
+            height: "auto",
+            width: "100%",
+            overflow: "hidden",
+          }}
+        />
+        {errors.Body && (
+          <H2 style={{ color: "red" }}>{errors.Body?.message}</H2>
+        )}
         <Stack
           style={{ justifyContent: "space-between", width: "100%" }}
           gap={5}
         >
           <Button
+            data-testid="submit-button"
             type="submit"
             text={
               isSubmitting
