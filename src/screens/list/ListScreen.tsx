@@ -2,7 +2,7 @@ import {useQueryWithClient} from "../../hooks";
 import {QueryKey} from "../../query";
 import {getObjectsByFk} from "../../api/api";
 import {useDeskproLatestAppContext, Stack, useInitialisedDeskproAppClient, HorizontalDivider, useDeskproAppEvents} from "@deskpro/app-sdk";
-import {getObjectPermalink, getScreenLayout} from "../../utils";
+import {getObjectPermalink, getScreenLayout, logger} from "../../utils";
 import {LayoutObject} from "../../components/types";
 import {PropertyLayout} from "../../components/PropertyLayout/PropertyLayout";
 import {Container} from "../../components/Container/Container";
@@ -32,7 +32,7 @@ export const ListScreen = ({ object, field, id }: ListScreenProps) => {
         onElementEvent(elementId) {
           switch (elementId) {
             case "salesforcePlusButton":
-              navigate(`/add/${object}/${id}`);
+              navigate(`/addoredit/${object}/${id}`);
               break;
           }
         },
@@ -61,7 +61,7 @@ export const ListScreen = ({ object, field, id }: ListScreenProps) => {
     const layout = getScreenLayout(context.settings, object, "list");
 
     if (!layout) {
-        console.error(`No layout found for ${object}:list`);
+        logger.error(`No layout found for ${object}:list`);
         return null;
     }
 

@@ -42,11 +42,12 @@ export const getObjectsByFk = async (client: IDeskproClient, object: string, fie
     return result.records;
 }
 
-export const postData = async (client: IDeskproClient, object: string, data: unknown): Promise<unknown> => {
-    const result = await installedRequest(client, `/services/data/v55.0/sobjects/${object}`, "POST", data);
+export const editData = (client: IDeskproClient, object: string, id:string, data: unknown): Promise<unknown> => 
+    installedRequest(client, `/services/data/v55.0/sobjects/${object}/Id/${id}`, "PATCH", data);
 
-    return result;
-}
+export const postData = (client: IDeskproClient, object: string, data: unknown): Promise<unknown> => 
+    installedRequest(client, `/services/data/v55.0/sobjects/${object}`, "POST", data);
+
 
 /**
  * Get an sObject by ID
@@ -164,12 +165,17 @@ const installedRequest = async (
 
     const options: RequestInit = {
         method,
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore types do not support X-Proxy-Redirect-As-Success
         headers: {
             "Content-Type": "application/json",
             "Accept": "application/json",
             "Authorization": `Bearer [[oauth/global/accesstoken]]`,
         }
     };
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore types do not support X-Proxy-Redirect-As-Success
+    if(url.startsWith("/services/data/v55.0/sobjects/") && method === "PATCH") options.headers["X-Proxy-Redirect-As-Success"] = 1
 
     if (data) {
         options.body = JSON.stringify(data);

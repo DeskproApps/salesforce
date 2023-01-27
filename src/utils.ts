@@ -22,6 +22,18 @@ import {
   ListLayout,
   ViewLayout,
 } from "./screens/admin/types";
+import pino from "pino";
+
+const levels = {
+  emerg: 80,
+  alert: 70,
+  crit: 60,
+  error: 50,
+  warn: 40,
+  notice: 30,
+  info: 20,
+  debug: 10,
+};
 
 export const getObjectPermalink = (
   settings: Settings | null | undefined,
@@ -138,51 +150,81 @@ export function getScreenLayout(
     .otherwise(() => null);
 }
 export const mapErrorMessage = (error: Error): string | null => {
-  const parsedErr = JSON.parse(error.message) as {
-    status: number;
-    message: string;
-  };
-  const parsedSalesforceErr = JSON.parse(parsedErr.message) as {
-    errorCode: string;
-    fields: string[];
-    message: string;
-  }[];
-  return parsedSalesforceErr.reduce((acc, curr) => {
-    return (
-      acc +
-      match([curr.message])
-        .with(["Event duration cannot be negative"], () => {
-          return "The dates are invalid, perhaps you have set the start date after the end date?\n\n";
-        })
-        .otherwise(() => {
-          return match([curr.errorCode, curr.fields])
-            .with(["REQUIRED_FIELD_MISSING", ["ActivityDateTime"]], () => {
-              return `Please set a start date.\n\n`;
-            })
-            .with(["REQUIRED_FIELD_MISSING", ["DurationInMinutes"]], () => {
-              return `Please set an end date.\n\n`;
-            })
-            .otherwise(() => {
-              return `${curr.message}\n\n`;
-            });
-        })
-    );
-  }, "");
+  try {
+    const parsedErr = JSON.parse(error.message) as {
+      status: number;
+      message: string;
+    };
+    const parsedSalesforceErr = JSON.parse(parsedErr.message) as {
+      errorCode: string;
+      fields: string[];
+      message: string;
+    }[];
+    return parsedSalesforceErr.reduce((acc, curr) => {
+      return (
+        acc +
+        match([curr.message])
+          .with(["Event duration cannot be negative"], () => {
+            return "The dates are invalid, perhaps you have set the start date after the end date?\n\n";
+          })
+          .otherwise(() => {
+            return match([curr.errorCode, curr.fields])
+              .with(["REQUIRED_FIELD_MISSING", ["ActivityDateTime"]], () => {
+                return `Please set a start date.\n\n`;
+              })
+              .with(["REQUIRED_FIELD_MISSING", ["DurationInMinutes"]], () => {
+                return `Please set an end date.\n\n`;
+              })
+              .otherwise(() => {
+                return `${curr.message}\n\n`;
+              });
+          })
+      );
+    }, "");
+
+  } catch(e) {
+    return `${error.message.substring(0, 100)}${error.message.length > 100 ? "..." : ""}`;
+  }
 };
 
-export const parseJsonErrorMessage = (error:string) => {
+export const parseJsonErrorMessage = (error: string) => {
+  try {
+    const parsedError = JSON.parse(error);
+
     try {
-      const parsedError = JSON.parse(error);
+      const parsedSalesforceError = JSON.parse(parsedError.message);
 
-      try {
-        const parsedSalesforceError = JSON.parse(parsedError.message);
-
-        return parsedSalesforceError.reduce((acc :string, curr : {message:string}) => acc + curr.message,"");
-      } catch(e) {
-        return parsedError.message;
-      }
-
+      return parsedSalesforceError.reduce(
+        (acc: string, curr: { message: string }) => acc + curr.message,
+        ""
+      );
     } catch (e) {
-      return error;
+      return parsedError.message;
     }
+  } catch (e) {
+    return error;
+  }
+};
+
+export const buttonLabels = [
+  {
+    submitting: "Creating...",
+    submit: "Create",
+    id: "create",
+  },
+  {
+    submitting: "Saving...",
+    submit: "Save",
+    id: "edit",
+  },
+];
+
+export const logger = pino({
+  level: "info",
+  customLevels: levels,
+  useOnlyCustomLevels: true,
+});
+
+export const capitalizeFirstLetter = (string:string) => {
+  return string.charAt(0).toUpperCase() + string.slice(1);
 }

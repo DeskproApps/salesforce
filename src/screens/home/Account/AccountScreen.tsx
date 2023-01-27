@@ -157,7 +157,7 @@ export const AccountScreen = ({ account }: AccountScreenProps) => {
                               Opportunities
                             </H1>
                           </Link>
-                          <Link to={`/add/opportunity/AccountID/${account.Id}`}>
+                          <Link to={`/addoredit/opportunity/AccountID/${account.Id}`}>
                             <Stack style={{ color: theme.colors.grey500 }}>
                               <FontAwesomeIcon
                                 icon={faPlus as IconProp}
@@ -222,7 +222,7 @@ export const AccountScreen = ({ account }: AccountScreenProps) => {
                             >
                               <H1>Activity</H1>
                             </Link>
-                            <Link to={`/add/activity/AccountId/${account.Id}`}>
+                            <Link to={`/addoredit/activity/AccountId/${account.Id}`}>
                               <Stack style={{ color: theme.colors.grey500 }}>
                                 <FontAwesomeIcon
                                   icon={faPlus as IconProp}
@@ -293,7 +293,7 @@ export const AccountScreen = ({ account }: AccountScreenProps) => {
                         >
                           <H1>Notes</H1>
                         </Link>
-                        <Link to={`/add/note/${account.Id}`}>
+                        <Link to={`/addoredit/note/ParentId/${account.Id}`}>
                           <Stack style={{ color: theme.colors.grey500 }}>
                             <FontAwesomeIcon
                               icon={faPlus as IconProp}

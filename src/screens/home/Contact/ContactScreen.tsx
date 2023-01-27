@@ -159,7 +159,7 @@ export const ContactScreen = ({ contact }: ContactScreenProps) => {
                           Opportunities
                         </H1>
                       </Link>
-                      <Link to={`/add/opportunity/ContactId/${contact.Id}`}>
+                      <Link to={`/addoredit/opportunity/ContactId/${contact.Id}`}>
                         <Stack style={{ color: theme.colors.grey500 }}>
                           <FontAwesomeIcon
                             icon={faPlus as IconProp}
@@ -221,7 +221,7 @@ export const ContactScreen = ({ contact }: ContactScreenProps) => {
                             Activities
                           </H1>
                         </Link>
-                        <Link to={`/add/activity/WhoId/${contact.Id}`}>
+                        <Link to={`/addoredit/activity/WhoId/${contact.Id}`}>
                           <Stack style={{ color: theme.colors.grey500 }}>
                             <FontAwesomeIcon
                               icon={faPlus as IconProp}
@@ -289,7 +289,7 @@ export const ContactScreen = ({ contact }: ContactScreenProps) => {
                         >
                           <H1>Notes</H1>
                         </Link>
-                        <Link to={`/add/note/${contact.Id}`}>
+                        <Link to={`/addoredit/note/ParentId/${contact.Id}`}>
                           <Stack style={{ color: theme.colors.grey500 }}>
                             <FontAwesomeIcon
                               icon={faPlus as IconProp}

@@ -36,9 +36,9 @@ import "simplebar/dist/simplebar.min.css";
 import "@deskpro/deskpro-ui/dist/deskpro-ui.css";
 import "@deskpro/deskpro-ui/dist/deskpro-custom-icons.css";
 import {ScrollTop} from "./components/ScrollTop";
-import { CreateNote } from "./pages/create/Note";
-import { CreateActivity } from "./pages/create/Activity";
-import { CreateOpportunity } from "./pages/create/Opportunity";
+import { CreateNote } from "./pages/createEdit/Note";
+import { CreateActivity } from "./pages/createEdit/Activity";
+import { CreateOpportunity } from "./pages/createEdit/Opportunity";
 import { parseJsonErrorMessage } from "./utils";
 
 function App() {
@@ -71,6 +71,8 @@ function App() {
                 <Suspense fallback={<LoadingSpinner />}>
                     <QueryErrorResetBoundary>
                         {({ reset }) => (
+                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                            //@ts-ignore
                             <ErrorBoundary onReset={reset} fallbackRender={({ resetErrorBoundary, error }) => (
                                 <Stack gap={6} style={{ padding: "8px" }} vertical>
                                     There was an error!<br/><br/>
@@ -87,10 +89,10 @@ function App() {
                                                 <Route path=":object/:id/view" element={<View />} />
                                             </Route>
                                         </Route>
-                                        <Route path="add">
-                                            <Route path="note/:parentId" element={<CreateNote />} />
-                                            <Route path="activity/:object/:parentId" element={<CreateActivity />} />
-                                            <Route path="opportunity/:object/:parentId" element={<CreateOpportunity />} />
+                                        <Route path="addoredit">
+                                            <Route path="note/:object/:id/" element={<CreateNote />} />
+                                            <Route path="activity/:object/:id/" element={<CreateActivity />} />
+                                            <Route path="opportunity/:object/:id/" element={<CreateOpportunity />} />
                                         </Route>
                                         <Route path="user">
                                             <Route index element={<User />} />
