@@ -13,7 +13,6 @@ import {
 import { useQueryWithClient } from "../../hooks";
 import { QueryKey } from "../../query";
 import { getObjectsByQuery } from "../../api/api";
-import { forwardRef } from "react";
 
 type Props = {
   fieldsMeta: Field[];
@@ -30,39 +29,34 @@ type Props = {
   usersEnabled?: boolean;
 };
 
-export const FieldMappingInput = forwardRef(
-  (
+export const FieldMappingInput = ({
+  fieldsMeta,
+  usersEnabled,
+  field,
+  required,
+  errors,
+  watch,
+  setValue,
+  register,
+}: Props) => {
+  const { theme } = useDeskproAppTheme();
+
+  const people = useQueryWithClient(
+    [QueryKey.ACCOUNT_BY_ID],
+    (client) =>
+      getObjectsByQuery(
+        client,
+        "SELECT Id, Name FROM User WHERE UserPermissionsSFContentUser=true",
+        200
+      ),
     {
-      fieldsMeta,
-      usersEnabled,
-      field,
-      required,
-      errors,
-      watch,
-      setValue,
-      register,
-      ...attributes
-    }: Props,
-    ref
-  ) => {
-    const { theme } = useDeskproAppTheme();
+      enabled: usersEnabled,
+    }
+  );
 
-    const people = useQueryWithClient(
-      [QueryKey.ACCOUNT_BY_ID],
-      (client) =>
-        getObjectsByQuery(
-          client,
-          "SELECT Id, Name FROM User WHERE UserPermissionsSFContentUser=true",
-          200
-        ),
-      {
-        enabled: !!usersEnabled,
-      }
-    );
+  let values: { value: string; key: string }[] = [];
 
-    let values: { value: string; key: string }[] = [];
-
-    const fieldMeta = fieldsMeta?.find((e) => e.name === field.name);
+  const fieldMeta = fieldsMeta?.find((e) => e.name === field.name);
 
   if (field.label === "Type") return null;
   switch (field.type) {
@@ -93,82 +87,18 @@ export const FieldMappingInput = forwardRef(
             variant="inline"
             value={watch(field.name)}
             error={!!errors[field.name]}
-            type={field.type}
-            required={required}
-            {...attributes}
-          ></InputWithTitle>
-        );
-      case "textarea":
-        return (
-          <Stack
-            vertical
-            gap={4}
-            style={{ width: "100%", color: theme.colors.grey80 }}
-          >
-            <H1>{field.label}</H1>
-            <TextArea
-              variant="inline"
-              value={watch(field.name)}
-              error={!!errors[field.name]}
-              onChange={(e) => setValue(field.name, e.target.value)}
-              placeholder="Enter text here..."
-              required={required}
-              title={field.label}
-              {...attributes}
-              style={{
-                resize: "none",
-                minHeight: "5em",
-                maxHeight: "100%",
-                height: "auto",
-                width: "100%",
-                overflow: "hidden",
-              }}
-            />
-          </Stack>
-        );
-      case "date":
-        return (
-          <DateField
-            required={required}
-            style={
-              !!errors?.[field.name] && {
-                borderBottomColor: "red",
-              }
-            }
-            ref={ref}
-            value={value ? new Date(value) : null}
-            label={field.label}
-            error={!!errors?.[field.name]}
-            {...attributes}
-            onChange={(e: [Date]) => setValue(field.name, e[0].toISOString())}
-          />
-        );
-      case "dropdown":
-        if (fieldMeta?.picklistValues && fieldMeta.picklistValues.length > 0) {
-          values = fieldsMeta
-            ?.find((e) => e.name === field.name)
-            ?.picklistValues.filter((e) => e.active)
-            .map((e) => ({ key: e.label, value: e.value })) as {
-            value: string;
-            key: string;
-          }[];
-        } else if (fieldMeta?.referenceTo.includes("User")) {
-          values =
-            people.data?.map((e) => ({
-              key: e.Id,
-              value: e.Name,
-            })) || ([] as { value: string; key: string }[]);
-        }
-        return (
-          <DropdownSelect
+            onChange={(e) => setValue(field.name, e.target.value)}
+            placeholder="Enter text here..."
             required={required}
             title={field.label}
-            value={(watch(field.name) as string) || ""}
-            error={!!errors[field.name]}
-            onChange={(e) => setValue(field.name, e)}
-            data={values}
-            keyName={"key"}
-            valueName={"value"}
+            style={{
+              resize: "none",
+              minHeight: "5em",
+              maxHeight: "100%",
+              height: "auto",
+              width: "100%",
+              overflow: "hidden",
+            }}
           />
         </Stack>
       );
@@ -219,4 +149,5 @@ export const FieldMappingInput = forwardRef(
         />
       );
   }
-);
+  return null;
+};
