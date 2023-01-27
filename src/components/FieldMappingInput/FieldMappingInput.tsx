@@ -64,6 +64,8 @@ export const FieldMappingInput = forwardRef(
 
     const fieldMeta = fieldsMeta?.find((e) => e.name === field.name);
 
+    const value = watch(field.name);
+
     if (field.label === "Type") return null;
     switch (field.type) {
       case "text":
@@ -125,7 +127,7 @@ export const FieldMappingInput = forwardRef(
               }
             }
             ref={ref}
-            value={new Date(watch(field.name) ?? new Date())}
+            value={value ? new Date(value) : null}
             label={field.label}
             error={!!errors?.[field.name]}
             {...attributes}

@@ -127,7 +127,10 @@ export const CreateOpportunity = () => {
         continue;
       }
       if (field.type === "currency") {
-        customFields[field.name] = z.number().optional();
+        customFields[field.name] = z.preprocess(
+          (val) => (isNaN(Number(val)) ? undefined : Number(val)),
+          z.number().optional()
+        );
         continue;
       }
 

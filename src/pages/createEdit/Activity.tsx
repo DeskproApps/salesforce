@@ -107,7 +107,7 @@ export const CreateActivity = () => {
     resolver: zodResolver(schema as ZodObject<any>),
   });
 
-  const submitType = object === "edit" ? "edit" : "default";
+  const submitType = object === "edit" ? "edit" : "create";
 
   useInitialisedDeskproAppClient((client) => {
     client.setTitle(`${capitalizeFirstLetter(submitType)} Activity`);
