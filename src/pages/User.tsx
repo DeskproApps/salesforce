@@ -3,49 +3,33 @@ import {
     DropdownItemType,
     Input,
     LoadingSpinner,
-    useDeskproAppClient,
-    useDeskproAppEvents,
-    useDeskproAppTheme,
+    useDeskproAppClient, useDeskproAppTheme,
     useDeskproElements,
     useDeskproLatestAppContext,
     useInitialisedDeskproAppClient
 } from "@deskpro/app-sdk";
-import {useQueryWithClient} from "../hooks";
-import {getContactsByEmails, getLeadsByEmails} from "../api/api";
-import {QueryKey} from "../query";
-import {ContactScreen} from "../screens/home/Contact/ContactScreen";
-import {LeadScreen} from "../screens/home/Lead/LeadScreen";
-import {Container} from "../components/Container/Container";
-import {faCaretDown, faCheck, faExternalLinkAlt} from "@fortawesome/free-solid-svg-icons";
-import {useState} from "react";
-import {Contact, Lead, ObjectType} from "../api/types";
-import {match} from "ts-pattern";
-import { useNavigate } from "react-router-dom";
+import { faCaretDown, faCheck, faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
+import { useState } from "react";
+import { match } from "ts-pattern";
+import { getContactsByEmails, getLeadsByEmails } from "../api/api";
+import { Contact, Lead, ObjectType } from "../api/types";
+import { Container } from "../components/Container/Container";
+import { useQueryWithClient } from "../hooks";
+import { QueryKey } from "../query";
+import { ContactScreen } from "../screens/home/Contact/ContactScreen";
+import { LeadScreen } from "../screens/home/Lead/LeadScreen";
 
 export const User = () => {
     const { client } = useDeskproAppClient();
     const { context } = useDeskproLatestAppContext();
     const { theme } = useDeskproAppTheme();
-    const navigate = useNavigate();
 
     const [selectedObjectId, setSelectedObjectId] = useState<string>("");
 
     useDeskproElements(({ registerElement,deRegisterElement }) => {
         registerElement("refresh", { type: "refresh_button" });
         deRegisterElement("salesforcePlusButton");
-        registerElement("salesforceEditButton", {
-            type: "edit_button",
-        });
-    });
-
-    useDeskproAppEvents({
-        onElementEvent(elementId) {
-          switch (elementId) {
-            case "salesforceEditButton":
-              navigate(`/addoredit/${selectedObject.attributes.type}/${selectedObject.Id}`);
-              break;
-          }
-        },
+        deRegisterElement("salesforceEditButton");
     });
 
     const emails: string[] = context?.data?.user?.emails ?? [];

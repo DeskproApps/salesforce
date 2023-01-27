@@ -3,26 +3,33 @@ import {
   Button,
   H2,
   Stack,
+  useDeskproAppClient,
   useDeskproLatestAppContext,
+  useInitialisedDeskproAppClient,
 } from "@deskpro/app-sdk";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { getObjectById, getObjectMeta } from "../../api/api";
+import { editData, getObjectById, getObjectMeta } from "../../api/api";
 import { Field } from "../../api/types";
 import { FieldMappingInput } from "../../components/FieldMappingInput/FieldMappingInput";
 import { useQueryWithClient } from "../../hooks";
 import { QueryKey } from "../../query";
-import { getScreenLayout } from "../../utils";
+import { getScreenLayout, mapErrorMessage } from "../../utils";
 import { z, ZodObject, ZodTypeAny } from "zod";
+import { getMetadataBasedSchema } from "../../schemas/default";
+
+const UNUSABLE_FIELDS = ["AccountId", "ReportsToId"];
 
 export const EditProfile = () => {
   const { object, id } = useParams();
   const navigate = useNavigate();
   const { context } = useDeskproLatestAppContext();
+  const { client } = useDeskproAppClient();
+
   const [schema, setSchema] = useState<ZodTypeAny>(z.object({}));
-  const [saving, setSaving] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [submissionError, setSubmissionError] = useState<string | null>(null);
 
   const {
@@ -34,6 +41,11 @@ export const EditProfile = () => {
     reset,
   } = useForm<any>({
     resolver: zodResolver(schema as ZodObject<any>),
+  });
+
+  useInitialisedDeskproAppClient((client) => {
+    client.setTitle(`Edit ${object}`);
+    client.deregisterElement("salesforceEditButton");
   });
 
   const profileMetadata = useQueryWithClient(
@@ -57,7 +69,54 @@ export const EditProfile = () => {
     }
   );
 
-  const layoutMap = layout.root.map((e) => e[0]?.id);
+  const layoutMap = layout.root.map((e) => e.map(eMap => eMap?.id)).flat().filter(e => e);
+
+  useEffect(() => {
+    if (!profileMetadata.data) return;
+
+    const customFields: { [key: string]: ZodTypeAny } = {};
+
+    for (const field of profileMetadata.data.fields) {
+      if (field.type === "reference") {
+        customFields[field.name] = z.string().min(1).optional();
+      }
+
+      if (field.type === "percent") {
+        customFields[field.name] = z.preprocess(
+          (val) => Number(val),
+          z.number().min(0).max(100)
+        );
+        continue;
+      }
+
+      if (field.type === "email") {
+        customFields[field.name] = z.string().email().optional();
+
+        continue;
+      }
+
+      if (
+        (field.type === "date" || field.type === "datetime") &&
+        !field.nillable &&
+        !field.defaultedOnCreate
+      ) {
+        customFields[field.name] = z
+          .string()
+          .min(1)
+          .refine((val) => new Date(val).getTime() - new Date().getTime() > 0, {
+            message: "Dates must be in the future",
+          });
+        continue;
+      }
+
+      if (!field.defaultedOnCreate && !field.nillable && field.createable) {
+        customFields[field.name] = z.string().min(1);
+      }
+    }
+    setSchema(
+      getMetadataBasedSchema(profileMetadata.data.fields, customFields)
+    );
+  }, [profileMetadata.data]);
 
   useEffect(() => {
     const profile = profileById.data as any;
@@ -65,13 +124,18 @@ export const EditProfile = () => {
     if (!profileById.isSuccess) return;
 
     const newObj = Object.keys(profile)
-      .filter(
-        (e) =>
-          layoutMap.includes(e) &&
-          profileMetadata.data?.fields.find((f) => f.name === e)?.updateable
-      )
+      .filter((e) => {
+        const field = profileMetadata.data?.fields.find((f) => f.name === e);
+        return (
+          ((layoutMap.includes(e) && field?.updateable) ||
+            (field?.updateable &&
+              !field.nillable &&
+              !field.defaultedOnCreate)) &&
+          !UNUSABLE_FIELDS.includes(e)
+        );
+      })
       .reduce((obj: any, key) => {
-        if (obj[key]) obj[key] = profile[key];
+        if (profile[key]) obj[key] = profile[key];
         return obj;
       }, {});
     reset(newObj);
@@ -80,12 +144,24 @@ export const EditProfile = () => {
 
   //only 2 are being detected lol
   const usableFields = profileMetadata.data?.fields.filter(
-    (e) => e.updateable && layoutMap.includes(e.name)
+    (e) =>
+      ((e.updateable && layoutMap.includes(e.name)) ||
+        (e.updateable && !e.nillable && !e.defaultedOnCreate)) &&
+      !UNUSABLE_FIELDS.includes(e.name)
   );
 
-  const submit = () => {
-    setSaving(true);
-    setSubmissionError(null);
+  const submit = async (data: any) => {
+    if (!client || !object) return;
+
+    setSubmitting(true);
+
+    await editData(client, object, id as string, data)
+      .then(() => navigate(-1))
+      .catch((e) => {
+        setSubmissionError(mapErrorMessage(e));
+
+        setSubmitting(false);
+      });
   };
 
   return (
@@ -129,13 +205,13 @@ export const EditProfile = () => {
           gap={5}
         >
           <Button
-            loading={saving}
-            disabled={saving}
+            loading={submitting}
+            disabled={submitting}
             type="submit"
-            text={saving ? "Saving..." : "Save"}
+            text={submitting ? "Saving..." : "Save"}
           ></Button>
           <Button
-            disabled={saving}
+            disabled={submitting}
             text="Cancel"
             onClick={() => navigate(-1)}
             intent="secondary"

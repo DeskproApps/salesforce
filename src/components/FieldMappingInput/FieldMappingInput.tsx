@@ -62,6 +62,10 @@ export const FieldMappingInput = ({
   switch (field.type) {
     case "text":
     case "number":
+    case "email":
+    case "phone":
+    case "string":
+    case "url":
       return (
         <InputWithTitle
           register={register(field.name)}
@@ -114,7 +118,9 @@ export const FieldMappingInput = ({
           onChange={(e: [Date]) => setValue(field.name, e[0].toISOString())}
         />
       );
+    case "reference":
     case "dropdown":
+    case "picklist":
       if (fieldMeta?.picklistValues && fieldMeta.picklistValues.length > 0) {
         values = fieldsMeta
           ?.find((e) => e.name === field.name)

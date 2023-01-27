@@ -1,18 +1,15 @@
-import { useNavigate } from "react-router-dom";
 import {
-  useDeskproLatestAppContext,
-  Stack,
-  useInitialisedDeskproAppClient,
-  useDeskproAppEvents,
+  Stack, useDeskproAppEvents, useDeskproLatestAppContext, useInitialisedDeskproAppClient
 } from "@deskpro/app-sdk";
+import { useNavigate } from "react-router-dom";
 
+import { getObjectById } from "../../api/api";
+import { Container } from "../../components/Container/Container";
+import { PropertyLayout } from "../../components/PropertyLayout/PropertyLayout";
+import { LayoutObject } from "../../components/types";
 import { useQueryWithClient } from "../../hooks";
 import { QueryKey } from "../../query";
-import { getObjectById } from "../../api/api";
 import { getObjectPermalink, getScreenLayout, logger } from "../../utils";
-import { LayoutObject } from "../../components/types";
-import { PropertyLayout } from "../../components/PropertyLayout/PropertyLayout";
-import { Container } from "../../components/Container/Container";
 
 type ViewScreenProps = {
   object: string;
@@ -41,12 +38,24 @@ export const ViewScreen = ({ object, id }: ViewScreenProps) => {
 
   useDeskproAppEvents({
     onElementEvent(elementId) {
+      let objectName;
       switch (elementId) {
         case "salesforceEditButton":
+          switch (object) {
+            case "Task":
+            case "Event":
+              objectName = "Activity";
+              break;
+            case "Account":
+            case "Contact":
+            case "Lead":
+              objectName = "Profile";
+              break;
+            default:
+              objectName = object;
+          }
           navigate(
-            `/addoredit/${
-              ["Task", "Event"].includes(object) ? "Activity" : object
-            }/edit/${id}${
+            `/addoredit/${objectName}/${object}/${id}${
               ["Task", "Event"].includes(object) ? `?type=${object}` : ""
             }`
           );

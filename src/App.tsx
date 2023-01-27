@@ -72,6 +72,8 @@ function App() {
                 <Suspense fallback={<LoadingSpinner />}>
                     <QueryErrorResetBoundary>
                         {({ reset }) => (
+                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                            //@ts-ignore
                             <ErrorBoundary onReset={reset} fallbackRender={({ resetErrorBoundary, error }) => (
                                 <Stack gap={6} style={{ padding: "8px" }} vertical>
                                     There was an error!<br/><br/>
@@ -92,7 +94,7 @@ function App() {
                                             <Route path="note/:object/:id/" element={<CreateNote />} />
                                             <Route path="activity/:object/:id/" element={<CreateActivity />} />
                                             <Route path="opportunity/:object/:id/" element={<CreateOpportunity />} />
-                                            <Route path=":object/:id/" element={<EditProfile />} />
+                                            <Route path="profile/:object/:id/" element={<EditProfile />} />
                                         </Route>
                                         <Route path="user">
                                             <Route index element={<User />} />
