@@ -190,6 +190,7 @@ export const EditProfile = () => {
                   setValue={setValue}
                   watch={watch}
                   fieldsMeta={profileMetadata.data?.fields as Field[]}
+                  data-testid={`input-${field.name}`}
                 />
                 {field && errors[field.name] && (
                   <H2 style={{ color: "red" }}>
@@ -209,6 +210,7 @@ export const EditProfile = () => {
             disabled={submitting}
             type="submit"
             text={submitting ? "Saving..." : "Save"}
+            data-testid="submit-button"
           ></Button>
           <Button
             disabled={submitting}

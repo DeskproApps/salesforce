@@ -13,6 +13,7 @@ import {
 import { useQueryWithClient } from "../../hooks";
 import { QueryKey } from "../../query";
 import { getObjectsByQuery } from "../../api/api";
+import { forwardRef } from "react";
 
 type Props = {
   fieldsMeta: Field[];
@@ -29,7 +30,7 @@ type Props = {
   usersEnabled?: boolean;
 };
 
-export const FieldMappingInput = ({
+export const FieldMappingInput = forwardRef(({
   fieldsMeta,
   usersEnabled,
   field,
@@ -38,7 +39,8 @@ export const FieldMappingInput = ({
   watch,
   setValue,
   register,
-}: Props) => {
+  ...attributes
+}: Props,ref) => {
   const { theme } = useDeskproAppTheme();
 
   const people = useQueryWithClient(
@@ -58,6 +60,8 @@ export const FieldMappingInput = ({
 
   const fieldMeta = fieldsMeta?.find((e) => e.name === field.name);
 
+  const value = watch(field.name);
+
   if (field.label === "Type") return null;
   switch (field.type) {
     case "text":
@@ -73,6 +77,7 @@ export const FieldMappingInput = ({
           error={!!errors[field.name]}
           type={field.type}
           required={required}
+          {...attributes}
         ></InputWithTitle>
       );
     case "textarea":
@@ -91,6 +96,7 @@ export const FieldMappingInput = ({
             placeholder="Enter text here..."
             required={required}
             title={field.label}
+            {...attributes}
             style={{
               resize: "none",
               minHeight: "5em",
@@ -105,17 +111,18 @@ export const FieldMappingInput = ({
     case "date":
       return (
         <DateField
-          required={required}
-          style={
-            !!errors?.[field.name] && {
-              borderBottomColor: "red",
-            }
+        required={required}
+        style={
+          !!errors?.[field.name] && {
+            borderBottomColor: "red",
           }
-          value={new Date(watch(field.name) ?? new Date())}
-          label={field.label}
-          error={!!errors?.[field.name]}
-          {...register(field.name)}
-          onChange={(e: [Date]) => setValue(field.name, e[0].toISOString())}
+        }
+        ref={ref}
+        value={value ? new Date(value) : null}
+        label={field.label}
+        error={!!errors?.[field.name]}
+        {...attributes}
+        onChange={(e: [Date]) => setValue(field.name, e[0].toISOString())}
         />
       );
     case "reference":
@@ -146,8 +153,9 @@ export const FieldMappingInput = ({
           data={values}
           keyName={"key"}
           valueName={"value"}
+          {...attributes}
         />
       );
   }
   return null;
-};
+});
