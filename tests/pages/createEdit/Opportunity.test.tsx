@@ -1,10 +1,9 @@
-import { fireEvent, render, act, cleanup } from "@testing-library/react";
-import * as React from "react";
-import { waitFor } from "@testing-library/react";
 import { lightTheme, ThemeProvider } from "@deskpro/deskpro-ui";
+import { act, cleanup, fireEvent, render, waitFor } from "@testing-library/react";
+import * as React from "react";
 
-import { CreateOpportunity } from "../../../src/pages/createEdit/Opportunity";
 import * as APIFn from "../../../src/api/api";
+import { CreateOpportunity } from "../../../src/pages/createEdit/Opportunity";
 
 const NEWDATE = new Date().getTime();
 
@@ -108,7 +107,7 @@ jest.mock("react-router-dom", () => ({
   }),
 }));
 
-describe("test", () => {
+describe("Edit Opportunity", () => {
   test("Editing an opportunity with correct data should pass", async () => {
     const { findByTestId } = renderPage();
 

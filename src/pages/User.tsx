@@ -3,22 +3,21 @@ import {
     DropdownItemType,
     Input,
     LoadingSpinner,
-    useDeskproAppClient,
-    useDeskproAppTheme,
+    useDeskproAppClient, useDeskproAppTheme,
     useDeskproElements,
     useDeskproLatestAppContext,
     useInitialisedDeskproAppClient
 } from "@deskpro/app-sdk";
-import {useQueryWithClient} from "../hooks";
-import {getContactsByEmails, getLeadsByEmails} from "../api/api";
-import {QueryKey} from "../query";
-import {ContactScreen} from "../screens/home/Contact/ContactScreen";
-import {LeadScreen} from "../screens/home/Lead/LeadScreen";
-import {Container} from "../components/Container/Container";
-import {faCaretDown, faCheck, faExternalLinkAlt} from "@fortawesome/free-solid-svg-icons";
-import {useState} from "react";
-import {Contact, Lead, ObjectType} from "../api/types";
-import {match} from "ts-pattern";
+import { faCaretDown, faCheck, faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
+import { useState } from "react";
+import { match } from "ts-pattern";
+import { getContactsByEmails, getLeadsByEmails } from "../api/api";
+import { Contact, Lead, ObjectType } from "../api/types";
+import { Container } from "../components/Container/Container";
+import { useQueryWithClient } from "../hooks";
+import { QueryKey } from "../query";
+import { ContactScreen } from "../screens/home/Contact/ContactScreen";
+import { LeadScreen } from "../screens/home/Lead/LeadScreen";
 
 export const User = () => {
     const { client } = useDeskproAppClient();

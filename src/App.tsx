@@ -40,6 +40,7 @@ import { CreateNote } from "./pages/createEdit/Note";
 import { CreateActivity } from "./pages/createEdit/Activity";
 import { CreateOpportunity } from "./pages/createEdit/Opportunity";
 import { parseJsonErrorMessage } from "./utils";
+import { EditProfile } from "./pages/createEdit/Profile";
 
 function App() {
     const { context } = useDeskproLatestAppContext();
@@ -93,6 +94,7 @@ function App() {
                                             <Route path="note/:object/:id/" element={<CreateNote />} />
                                             <Route path="activity/:object/:id/" element={<CreateActivity />} />
                                             <Route path="opportunity/:object/:id/" element={<CreateOpportunity />} />
+                                            <Route path="profile/:object/:id/" element={<EditProfile />} />
                                         </Route>
                                         <Route path="user">
                                             <Route index element={<User />} />

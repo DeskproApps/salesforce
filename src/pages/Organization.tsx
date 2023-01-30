@@ -5,14 +5,14 @@ import {
     useDeskproElements,
     useDeskproLatestAppContext, useInitialisedDeskproAppClient
 } from "@deskpro/app-sdk";
+import { faCaretDown, faCheck, faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
+import { orderBy } from "lodash";
+import { useState } from "react";
+import { getAccountsByName } from "../api/api";
+import { Container } from "../components/Container/Container";
 import { useQueryWithClient } from "../hooks";
 import { QueryKey } from "../query";
-import { getAccountsByName } from "../api/api";
 import { AccountScreen } from "../screens/home/Account/AccountScreen";
-import { Container } from "../components/Container/Container";
-import { useState } from "react";
-import { faCaretDown, faCheck, faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
-import {orderBy} from "lodash";
 
 export const Organization = () => {
     const { context } = useDeskproLatestAppContext();
