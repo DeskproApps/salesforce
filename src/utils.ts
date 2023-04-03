@@ -1,28 +1,29 @@
-import {
-  AccountLayout,
-  ContactLayout,
-  LeadLayout,
-  TaskLayout,
-  OpportunityLayout,
-  Settings,
-  NoteLayout,
-  EventLayout,
-} from "./types";
+import pino from "pino";
 import { match } from "ts-pattern";
+import { ObjectMeta } from "./api/types";
+import defaultAccountLayout from "./resources/default_layout/account.json";
 import defaultContactLayout from "./resources/default_layout/contact.json";
+import defaultEventLayout from "./resources/default_layout/event.json";
+import defaultLeadLayout from "./resources/default_layout/lead.json";
 import defaultNoteLayout from "./resources/default_layout/note.json";
 import defaultOpportunityLayout from "./resources/default_layout/opportunity.json";
-import defaultLeadLayout from "./resources/default_layout/lead.json";
 import defaultTaskLayout from "./resources/default_layout/task.json";
-import defaultEventLayout from "./resources/default_layout/event.json";
-import defaultAccountLayout from "./resources/default_layout/account.json";
 import {
   HomeLayout,
   LayoutType,
   ListLayout,
   ViewLayout,
 } from "./screens/admin/types";
-import pino from "pino";
+import {
+  AccountLayout,
+  ContactLayout,
+  EventLayout,
+  LeadLayout,
+  NoteLayout,
+  OpportunityLayout,
+  Settings,
+  TaskLayout,
+} from "./types";
 
 const levels = {
   emerg: 80,
@@ -181,9 +182,10 @@ export const mapErrorMessage = (error: Error): string | null => {
           })
       );
     }, "");
-
-  } catch(e) {
-    return `${error.message.substring(0, 100)}${error.message.length > 100 ? "..." : ""}`;
+  } catch (e) {
+    return `${error.message.substring(0, 100)}${
+      error.message.length > 100 ? "..." : ""
+    }`;
   }
 };
 
@@ -225,6 +227,39 @@ export const logger = pino({
   useOnlyCustomLevels: true,
 });
 
-export const capitalizeFirstLetter = (string:string) => {
+export const capitalizeFirstLetter = (string: string) => {
   return string.charAt(0).toUpperCase() + string.slice(1);
-}
+};
+
+export const getSobjectsFromMetadata = (meta: ObjectMeta) => {
+  return [
+    meta.fields
+      .filter((e) => e.relationshipName != null && e.referenceTo.length > 0)
+      .map((sobj) => ({
+        name: sobj.relationshipName,
+        label: sobj.relationshipName,
+        sobject: sobj.referenceTo[0],
+        field: sobj.name,
+        associationType: "Single",
+      })),
+    meta.childRelationships
+      .filter((e) => e.relationshipName != null)
+      .map((sobj) => ({
+        name: sobj.relationshipName,
+        label: `${sobj.relationshipName}`,
+        sobject: sobj.childSObject,
+        field: sobj.field,
+        associationType: "Multiple",
+      })),
+  ].flat();
+};
+
+export const sObjectsWithMappings = [
+  "Task",
+  "Event",
+  "Lead",
+  "Account",
+  "Contact",
+  "Opportunity",
+  "Note",
+];
