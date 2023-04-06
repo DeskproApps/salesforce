@@ -37,7 +37,6 @@ specifiers:
   polished: ^4.1.1
   react: ^18.2.0
   react-beautiful-dnd: ^13.1.0
-  react-copy-to-clipboard: ^5.1.0
   react-dnd: ^16.0.1
   react-dnd-html5-backend: ^16.0.1
   react-dom: ^18.2.0
@@ -70,7 +69,6 @@ dependencies:
   polished: 4.1.4
   react: 18.2.0
   react-beautiful-dnd: 13.1.1_react-dom@18.2.0+react@18.2.0
-  react-copy-to-clipboard: 5.1.0_react@18.2.0
   react-dnd: 16.0.1_29af9191bd5a53da2edba7bc162badee
   react-dnd-html5-backend: 16.0.1
   react-dom: 18.2.0_react@18.2.0
