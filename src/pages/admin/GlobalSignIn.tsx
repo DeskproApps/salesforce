@@ -4,13 +4,13 @@ import {
     P1,
     Spinner,
     Stack,
-    useDeskproAppTheme
+    useDeskproAppTheme,
+    CopyToClipboardInput,
 } from "@deskpro/app-sdk";
 import { faSignIn, faSignOut } from "@fortawesome/free-solid-svg-icons";
 import { AnchorButton } from "@deskpro/deskpro-ui";
 import { useGlobalSignIn } from "./useGlobalSignIn";
 import "./style.css";
-import { CopyToClipboardInput } from "../../components/CopyToClipboardInput/CopyToClipboardInput";
 
 export const GlobalSignIn = () => {
     const { theme } = useDeskproAppTheme();
