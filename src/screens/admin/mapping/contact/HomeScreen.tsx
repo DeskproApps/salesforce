@@ -104,7 +104,7 @@ export const HomeScreen = ({
         />
       </Stack>
       <Stack gap={6} style={{ width: "100%" }} vertical>
-        <H1>Linked Objects to Displayy</H1>
+        <H1>Linked Objects to Display</H1>
         <P1 style={{ color: theme.colors.grey80 }}>
           Chose the related objects you want to list on the Contact Home Screen.
           This is the screen agent will see first when loading app on user
