@@ -81,7 +81,9 @@
           "property": {
             "name": "Opportunity",
             "label": "Opportunities",
-            "object": "Opportunity"
+            "object": "Opportunity",
+            "field": "ContactId",
+            "associationType": "Singular"
           }
         }
       ],
@@ -91,7 +93,9 @@
           "property": {
             "name": "Note",
             "label": "Notes",
-            "object": "Note"
+            "object": "Note",
+            "field": "ParentId",
+            "associationType": "Singular"
           }
         }
       ],
@@ -101,7 +105,9 @@
           "property": {
             "name": "Task",
             "label": "Tasks",
-            "object": "Task"
+            "object": "Task",
+            "field": "WhoId",
+            "associationType": "Singular"
           }
         }
       ],
@@ -111,7 +117,9 @@
           "property": {
             "name": "Event",
             "label": "Events",
-            "object": "Event"
+            "object": "Event",
+            "field": "WhoId",
+            "associationType": "Singular"
           }
         }
       ]
