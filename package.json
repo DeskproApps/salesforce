@@ -10,7 +10,8 @@
     "serve": "vite preview",
     "lint": "eslint --max-warnings 0 --ext ts,tsx ./src",
     "test": "cross-env NODE_OPTIONS=--max-old-space-size=1024 jest --maxWorkers=75% --verbose false",
-    "test:coverage": "cross-env NODE_OPTIONS=--max-old-space-size=1024 jest --maxWorkers=75% --coverage"
+    "test:coverage": "cross-env NODE_OPTIONS=--max-old-space-size=1024 jest --maxWorkers=75% --coverage",
+    "bumpManifestVer": "node ./bin/bumpManifestVer.js"
   },
   "dependencies": {
     "@babel/plugin-transform-react-jsx": "^7.20.13",
@@ -43,6 +44,7 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^14.4.3",
+    "prettier": "^2.8.7",
     "@types/jest": "^27.4.0",
     "@types/react": "^17.0.33",
     "@types/react-copy-to-clipboard": "^5.0.4",
