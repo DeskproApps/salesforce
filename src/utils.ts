@@ -237,7 +237,9 @@ export const getSobjectsFromMetadata = (meta: ObjectMeta) => {
       .filter((e) => e.relationshipName != null && e.referenceTo.length > 0)
       .map((sobj) => ({
         name: sobj.relationshipName,
-        label: sobj.relationshipName,
+        label: sobj.name
+          ? sobj.relationshipName
+          : `${sobj.relationshipName} - field data is missing, do not select.`,
         sobject: sobj.referenceTo[0],
         field: sobj.name,
         associationType: "Single",
