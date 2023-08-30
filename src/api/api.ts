@@ -33,6 +33,12 @@ export const getAllChildrenFromSobject = async (
 
       if (isSingular && !parent[obj.field as keyof typeof parent]) return [];
 
+      if (!isSingular && !obj.field) {
+        throw new Error(
+          `Field ${obj.name} of object ${obj.object} is no longer valid. Please remove it from the fields mapping in the admin page and add it again to refresh the data.`
+        );
+      }
+
       const meta = await getObjectsByFk(
         client,
         obj.object,
@@ -337,7 +343,7 @@ const installedRequest = async (
   }
 
   let response = await fetch(
-    `__salesforce_instance_url__/${trimStart(url, "")}`,
+    `__salesforce_instance_url__${trimStart(url, "")}`,
     options
   );
 
