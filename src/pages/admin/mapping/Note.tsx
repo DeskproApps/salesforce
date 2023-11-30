@@ -1,27 +1,33 @@
-import { useState, Suspense, useCallback } from "react";
-import { TabBar, TabBarItemType } from "@deskpro/deskpro-ui";
-import { ViewScreen } from "../../../screens/admin/mapping/note/ViewScreen";
 import {
   LoadingSpinner,
-  useDeskproLatestAppContext,
+  useDeskproAppEvents,
   useInitialisedDeskproAppClient,
 } from "@deskpro/app-sdk";
+import { TabBar, TabBarItemType } from "@deskpro/deskpro-ui";
+import { Suspense, useCallback, useState } from "react";
 import { Reveal } from "../../../components/Reveal/Reveal";
-import { NoteLayout } from "../../../types";
-import { ListLayout, ViewLayout } from "../../../screens/admin/types";
 import defaultContactLayout from "../../../resources/default_layout/note.json";
 import { ListScreen } from "../../../screens/admin/mapping/note/ListScreen";
+import { ViewScreen } from "../../../screens/admin/mapping/note/ViewScreen";
+import { ListLayout, ViewLayout } from "../../../screens/admin/types";
+import { NoteLayout, Settings } from "../../../types";
 
 export const Note = () => {
-  const { context } = useDeskproLatestAppContext();
+  const [settings, setSettings] = useState<Settings>();
 
   const [activeTab, setActiveTab] = useState(0);
 
   const [layout, setLayout] = useState<NoteLayout>(
-    context?.settings.mapping_note
-      ? JSON.parse(context?.settings.mapping_note)
+    settings?.mapping_note
+      ? JSON.parse(settings.mapping_note)
       : defaultContactLayout
   );
+
+  useDeskproAppEvents({
+    onAdminSettingsChange: (settings) => {
+      setSettings(settings);
+    },
+  });
 
   useInitialisedDeskproAppClient(
     (client) => {
@@ -57,11 +63,11 @@ export const Note = () => {
     },
   ];
 
-  if (!context?.settings) {
+  if (!settings) {
     return null;
   }
 
-  if (!context?.settings?.global_access_token) {
+  if (!settings?.global_access_token) {
     return (
       <div style={{ padding: "12px" }}>
         Please sign-in as global Salesforce user before mapping fields

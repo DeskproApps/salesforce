@@ -1,27 +1,33 @@
-import { useState, Suspense, useCallback } from "react";
-import { TabBar, TabBarItemType } from "@deskpro/deskpro-ui";
 import {
   LoadingSpinner,
-  useDeskproLatestAppContext,
+  useDeskproAppEvents,
   useInitialisedDeskproAppClient,
 } from "@deskpro/app-sdk";
+import { TabBar, TabBarItemType } from "@deskpro/deskpro-ui";
+import { Suspense, useCallback, useState } from "react";
 import { Reveal } from "../../../components/Reveal/Reveal";
-import { EventLayout } from "../../../types";
-import { ListLayout, ViewLayout } from "../../../screens/admin/types";
 import defaultContactLayout from "../../../resources/default_layout/event.json";
 import { ListScreen } from "../../../screens/admin/mapping/event/ListScreen";
 import { ViewScreen } from "../../../screens/admin/mapping/event/ViewScreen";
+import { ListLayout, ViewLayout } from "../../../screens/admin/types";
+import { EventLayout, Settings } from "../../../types";
 
 export const Event = () => {
-  const { context } = useDeskproLatestAppContext();
+  const [settings, setSettings] = useState<Settings>();
 
   const [activeTab, setActiveTab] = useState(0);
 
   const [layout, setLayout] = useState<EventLayout>(
-    context?.settings.mapping_event
-      ? JSON.parse(context?.settings.mapping_event)
+    settings?.mapping_event
+      ? JSON.parse(settings.mapping_event)
       : defaultContactLayout
   );
+
+  useDeskproAppEvents({
+    onAdminSettingsChange: (settings) => {
+      setSettings(settings);
+    },
+  });
 
   useInitialisedDeskproAppClient(
     (client) => {
@@ -57,11 +63,11 @@ export const Event = () => {
     },
   ];
 
-  if (!context?.settings) {
+  if (!settings) {
     return null;
   }
 
-  if (!context?.settings?.global_access_token) {
+  if (!settings?.global_access_token) {
     return (
       <div style={{ padding: "12px" }}>
         Please sign-in as global Salesforce user before mapping fields
