@@ -11,7 +11,6 @@ import { Ticket } from "./pages/Ticket";
 import { User } from "./pages/User";
 import { Organization } from "./pages/Organization";
 import { QueryClientProvider, QueryErrorResetBoundary } from "react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 import { GlobalSignIn } from "./pages/admin/GlobalSignIn";
 import { query } from "./query";
@@ -73,7 +72,6 @@ function App() {
     <DndProvider backend={HTML5Backend}>
       <ScrollTop />
       <QueryClientProvider client={query}>
-        <ReactQueryDevtools initialIsOpen={true} />
         <Suspense fallback={<LoadingSpinner />}>
           <QueryErrorResetBoundary>
             {({ reset }) => (

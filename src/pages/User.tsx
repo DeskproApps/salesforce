@@ -69,15 +69,15 @@ export const User = () => {
   const emails: string[] = context?.data?.user?.emails ?? [];
 
   const contacts = useQueryWithClient<Contact>(
-    [QueryKey.USER_CONTACTS_BY_EMAIL, contactId, ...emails],
+    [QueryKey.USER_CONTACTS_BY_EMAIL, JSON.stringify(contactId), ...emails],
     (client) =>
       contactId === null
         ? getContactByEmail(client, emails[0])
         : getContactById(client, contactId as string),
     {
-      // onError: () => {
-      //   navigate("/findOrCreate");
-      // },
+      onError: () => {
+        navigate("/findOrCreate");
+      },
       enabled: contactId !== undefined,
       onSuccess(data) {
         if (!data) {
@@ -88,7 +88,7 @@ export const User = () => {
 
         linkContact(data.Id);
       },
-      // useErrorBoundary: false,
+      useErrorBoundary: false,
     }
   );
 
