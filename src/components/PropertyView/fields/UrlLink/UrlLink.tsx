@@ -1,7 +1,8 @@
-import { useDeskproAppEvents, useDeskproAppTheme } from "@deskpro/app-sdk";
+import {
+  useDeskproAppTheme,
+  useDeskproLatestAppContext,
+} from "@deskpro/app-sdk";
 import { getObjectPermalink } from "../../../../utils";
-import { useState } from "react";
-import { Settings } from "../../../../types";
 
 type UrlLinkProps = {
   value: string;
@@ -9,12 +10,9 @@ type UrlLinkProps = {
 
 export const UrlLink = ({ value }: UrlLinkProps) => {
   const { theme } = useDeskproAppTheme();
-  const [settings, setSettings] = useState<Settings>();
-  useDeskproAppEvents({
-    onAdminSettingsChange: setSettings,
-  });
+  const { context } = useDeskproLatestAppContext();
 
-  if (!settings) {
+  if (!context?.settings) {
     return <>value</>;
   }
 
@@ -34,7 +32,7 @@ export const UrlLink = ({ value }: UrlLinkProps) => {
   if (/^\//.test(value)) {
     return (
       <a
-        href={getObjectPermalink(settings, value)}
+        href={getObjectPermalink(context.settings, value)}
         target="_blank"
         style={style}
       >
