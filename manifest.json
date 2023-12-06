@@ -3,7 +3,7 @@
   "title": "Salesforce",
   "description": "View and manage associated Salesforce Contacts, Leads, Accounts and Opportunities",
   "appStoreUrl": "https://www.deskpro.com/product-embed/apps/salesforce",
-  "version": "1.0.23",
+  "version": "1.0.22",
   "scope": "agent",
   "isSingleInstall": true,
   "hasDevMode": true,
@@ -13,9 +13,22 @@
     "url": "https://github.com/DeskproApps/salesforce"
   },
   "targets": [
-    { "target": "user_sidebar", "entrypoint": "#/user" },
-    { "target": "organisation_sidebar", "entrypoint": "#/organization" }
+    {
+      "target": "user_sidebar",
+      "entrypoint": "#/user"
+    },
+    {
+      "target": "organisation_sidebar",
+      "entrypoint": "#/organization"
+    }
   ],
+  "entityAssociations": {
+    "salesforceContacts": {
+      "entity": "person",
+      "type": "external_id",
+      "title": "Linked Salesforce Contacts"
+    }
+  },
   "settings": {
     "client_key": {
       "title": "Client Key",
@@ -44,7 +57,9 @@
     "global_access_token": {
       "title": "",
       "type": "app_embedded",
-      "options": { "entrypoint": "#/admin/global-sign-in" },
+      "options": {
+        "entrypoint": "#/admin/global-sign-in"
+      },
       "isRequired": true,
       "isBackendOnly": true,
       "order": 40
@@ -138,7 +153,13 @@
     "whitelist": [
       {
         "url": "https://(.*).salesforce.com/services/.*",
-        "methods": ["GET", "POST", "PUT", "DELETE", "PATCH"],
+        "methods": [
+          "GET",
+          "POST",
+          "PUT",
+          "DELETE",
+          "PATCH"
+        ],
         "timeout": 30
       }
     ]

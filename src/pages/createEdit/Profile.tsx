@@ -22,7 +22,7 @@ import { getMetadataBasedSchema } from "../../schemas/default";
 
 const UNUSABLE_FIELDS = ["AccountId", "ReportsToId"];
 
-export const EditProfile = () => {
+export const MutateProfile = () => {
   const { object, id } = useParams();
   const navigate = useNavigate();
   const { context } = useDeskproLatestAppContext();
@@ -69,7 +69,10 @@ export const EditProfile = () => {
     }
   );
 
-  const layoutMap = layout.root.map((e) => e.map(eMap => eMap?.id)).flat().filter(e => e);
+  const layoutMap = layout.root
+    .map((e) => e.map((eMap) => eMap?.id))
+    .flat()
+    .filter((e) => e);
 
   useEffect(() => {
     if (!profileMetadata.data) return;

@@ -186,9 +186,19 @@ export const getContactsByEmails = async (
   );
 };
 
-/**
- * Get a list of Salesforce "Lead" sObjects by email
- */
+export const getContactByEmail = async (
+  client: IDeskproClient,
+  email: string
+): Promise<Contact> => {
+  const result: { searchRecords: { Id: string }[] } = await SOSLSearch(
+    client,
+    `FIND {"${escapeSOSLTerm(email)}"} RETURNING Contact`
+  );
+
+  return getObjectById<Contact>(client, "Contact", result.searchRecords[0]?.Id);
+};
+
+ 
 export const getLeadsByEmails = async (
   client: IDeskproClient,
   emails: string[]

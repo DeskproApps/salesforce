@@ -21,10 +21,10 @@ import { OnlyDate } from "./fields/Date/Date";
 import { LayoutObject } from "../types";
 import { Currency } from "./fields/Currency/Currency";
 import { ExternalLink } from "../ExternalLink/ExternalLink";
-import { Link } from "../Link/Link";
 import { Email } from "./fields/Email/Email";
 import { UrlLink } from "./fields/UrlLink/UrlLink";
 import { TextArea } from "./fields/TextArea/TextArea";
+import { Link } from "react-router-dom";
 
 type PropertyViewProps = {
   name: string;
