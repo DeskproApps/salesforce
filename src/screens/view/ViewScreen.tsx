@@ -1,6 +1,7 @@
 import {
   Stack,
   useDeskproAppEvents,
+  useDeskproLatestAppContext,
   useInitialisedDeskproAppClient,
 } from "@deskpro/app-sdk";
 import { useNavigate } from "react-router-dom";
@@ -12,8 +13,6 @@ import { LayoutObject } from "../../components/types";
 import { useQueryWithClient } from "../../hooks";
 import { QueryKey } from "../../query";
 import { getObjectPermalink, getScreenLayout, logger } from "../../utils";
-import { useState } from "react";
-import { Settings } from "../../types";
 
 type ViewScreenProps = {
   object: string;
@@ -22,7 +21,8 @@ type ViewScreenProps = {
 
 export const ViewScreen = ({ object, id }: ViewScreenProps) => {
   const navigate = useNavigate();
-  const [settings, setSettings] = useState<Settings>();
+  const { context } = useDeskproLatestAppContext();
+
   const { data, isSuccess } = useQueryWithClient(
     [QueryKey.OBJECT_BY_ID, object, id],
     (client) => getObjectById(client, object, id)
@@ -40,7 +40,6 @@ export const ViewScreen = ({ object, id }: ViewScreenProps) => {
   );
 
   useDeskproAppEvents({
-    onAdminSettingsChange: setSettings,
     onElementEvent(elementId) {
       let objectName;
       switch (elementId) {
@@ -72,11 +71,11 @@ export const ViewScreen = ({ object, id }: ViewScreenProps) => {
     return null;
   }
 
-  if (!settings) {
+  if (!context?.settings) {
     return null;
   }
 
-  const layout = getScreenLayout(settings, object, "view");
+  const layout = getScreenLayout(context.settings, object, "view");
 
   if (!layout) {
     logger.error(`No layout found for ${object}:view`);
@@ -90,7 +89,7 @@ export const ViewScreen = ({ object, id }: ViewScreenProps) => {
           properties={layout.root}
           object={data as unknown as LayoutObject}
           externalUrl={getObjectPermalink(
-            settings,
+            context.settings,
             `/lightning/r/${object}/${id}/view`
           )}
         />

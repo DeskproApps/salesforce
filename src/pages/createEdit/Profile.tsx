@@ -4,41 +4,33 @@ import {
   H2,
   Stack,
   useDeskproAppClient,
-  useDeskproAppEvents,
+  useDeskproLatestAppContext,
   useInitialisedDeskproAppClient,
 } from "@deskpro/app-sdk";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useMemo, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { useNavigate, useParams } from "react-router-dom";
+import { ZodObject, ZodTypeAny, z } from "zod";
 import { editData, getObjectById, getObjectMeta } from "../../api/api";
 import { Field } from "../../api/types";
 import { FieldMappingInput } from "../../components/FieldMappingInput/FieldMappingInput";
 import { useQueryWithClient } from "../../hooks";
 import { QueryKey } from "../../query";
-import { getScreenLayout, mapErrorMessage } from "../../utils";
-import { z, ZodObject, ZodTypeAny } from "zod";
 import { getMetadataBasedSchema } from "../../schemas/default";
-import { Settings } from "../../types";
+import { getScreenLayout, mapErrorMessage } from "../../utils";
 
 const UNUSABLE_FIELDS = ["AccountId", "ReportsToId"];
 
 export const EditProfile = () => {
   const { object, id } = useParams();
+  const { context } = useDeskproLatestAppContext();
   const navigate = useNavigate();
   const { client } = useDeskproAppClient();
 
   const [schema, setSchema] = useState<ZodTypeAny>(z.object({}));
   const [submitting, setSubmitting] = useState(false);
   const [submissionError, setSubmissionError] = useState<string | null>(null);
-  const [settings, setSettings] = useState<Settings>();
-
-  useDeskproAppEvents(
-    {
-      onAdminSettingsChange: setSettings,
-    },
-    []
-  );
 
   const {
     register,
@@ -65,8 +57,8 @@ export const EditProfile = () => {
   );
 
   const layout = useMemo(
-    () => getScreenLayout(settings, object as string, "view"),
-    [settings, object]
+    () => getScreenLayout(context?.settings, object as string, "view"),
+    [context?.settings, object]
   );
 
   const profileById = useQueryWithClient(

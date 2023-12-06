@@ -2,13 +2,13 @@ import {
   H1,
   HorizontalDivider,
   Stack,
-  useDeskproAppEvents,
   useDeskproAppTheme,
+  useDeskproLatestAppContext,
 } from "@deskpro/app-sdk";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Fragment, useMemo, useState } from "react";
+import { Fragment, useMemo } from "react";
 import { getAllChildrenFromSobject } from "../../../api/api";
 import { Contact } from "../../../api/types";
 import { Container } from "../../../components/Container/Container";
@@ -24,7 +24,6 @@ import {
   sObjectsWithMappings,
 } from "../../../utils";
 import { ObjectProperty } from "../../admin/types";
-import { Settings } from "../../../types";
 
 type ContactScreenProps = {
   contact: Contact;
@@ -32,13 +31,13 @@ type ContactScreenProps = {
 
 export const ContactScreen = ({ contact }: ContactScreenProps) => {
   const { theme } = useDeskproAppTheme();
-  const [settings, setSettings] = useState<Settings>();
+  const { context } = useDeskproLatestAppContext();
 
   const basePath = useBasePath();
 
   const layout = useMemo(
-    () => getScreenLayout(settings, "Contact", "home"),
-    [settings]
+    () => getScreenLayout(context?.settings, "Contact", "home"),
+    [context?.settings]
   );
 
   const objects = layout.objects_order.flat().map((e) => e?.property);
@@ -52,12 +51,6 @@ export const ContactScreen = ({ contact }: ContactScreenProps) => {
     }
   );
 
-  useDeskproAppEvents(
-    {
-      onAdminSettingsChange: setSettings,
-    },
-    []
-  );
   if (!objectsData.isSuccess) {
     return null;
   }
@@ -78,7 +71,7 @@ export const ContactScreen = ({ contact }: ContactScreenProps) => {
             </H1>
             <ExternalLink
               url={getObjectPermalink(
-                settings,
+                context?.settings,
                 `/lightning/r/Contact/${contact.Id}/view`
               )}
             />
@@ -161,7 +154,7 @@ export const ContactScreen = ({ contact }: ContactScreenProps) => {
                           externalUrl={
                             hasMapping
                               ? getObjectPermalink(
-                                  settings,
+                                  context?.settings,
                                   `/lightning/r/${object.name}/${
                                     (sobj as { Id: string }).Id
                                   }/view`

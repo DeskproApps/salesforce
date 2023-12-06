@@ -2,18 +2,17 @@ import {
   H1,
   HorizontalDivider,
   Stack,
-  useDeskproAppEvents,
   useDeskproAppTheme,
+  useDeskproLatestAppContext,
 } from "@deskpro/app-sdk";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Fragment, useMemo, useState } from "react";
+import { Fragment, useMemo } from "react";
 import { getAllChildrenFromSobject } from "../../../api/api";
 import { Lead } from "../../../api/types";
 import { Container } from "../../../components/Container/Container";
 import { ExternalLink } from "../../../components/ExternalLink/ExternalLink";
-import { Link } from "../../../components/Link/Link";
 import { PropertyLayout } from "../../../components/PropertyLayout/PropertyLayout";
 import { LayoutObject } from "../../../components/types";
 import { useBasePath, useQueryWithClient } from "../../../hooks";
@@ -24,7 +23,7 @@ import {
   sObjectsWithMappings,
 } from "../../../utils";
 import { ObjectProperty } from "../../admin/types";
-import { Settings } from "../../../types";
+import { Link } from "react-router-dom";
 
 type LeadScreenProps = {
   lead: Lead;
@@ -32,12 +31,13 @@ type LeadScreenProps = {
 
 export const LeadScreen = ({ lead }: LeadScreenProps) => {
   const { theme } = useDeskproAppTheme();
-  const [settings, setSettings] = useState<Settings>();
+  const { context } = useDeskproLatestAppContext();
+
   const basePath = useBasePath();
 
   const layout = useMemo(
-    () => getScreenLayout(settings, "Lead", "home"),
-    [settings]
+    () => getScreenLayout(context?.settings, "Lead", "home"),
+    [context?.settings]
   );
 
   const objects = layout.objects_order.flat().map((e) => e?.property);
@@ -49,13 +49,6 @@ export const LeadScreen = ({ lead }: LeadScreenProps) => {
     {
       enabled: !!objects.length && !!lead,
     }
-  );
-
-  useDeskproAppEvents(
-    {
-      onAdminSettingsChange: setSettings,
-    },
-    []
   );
 
   if (!objectsData.isSuccess) {
@@ -76,7 +69,7 @@ export const LeadScreen = ({ lead }: LeadScreenProps) => {
             </H1>
             <ExternalLink
               url={getObjectPermalink(
-                settings,
+                context?.settings,
                 `/lightning/r/Lead/${lead.Id}/view`
               )}
             />
@@ -157,7 +150,7 @@ export const LeadScreen = ({ lead }: LeadScreenProps) => {
                           externalUrl={
                             hasMapping
                               ? getObjectPermalink(
-                                  settings,
+                                  context?.settings,
                                   `/lightning/r/${object.name}/${
                                     (sobj as { Id: string }).Id
                                   }/view`
