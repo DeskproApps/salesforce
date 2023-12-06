@@ -1,15 +1,11 @@
-import {
-  Property,
-  Spinner,
-  useDeskproLatestAppContext,
-} from "@deskpro/app-sdk";
+import { Property, Spinner, useDeskproAppEvents } from "@deskpro/app-sdk";
 import { FieldType, ObjectMeta } from "../../api/types";
 import { useQueryWithClient } from "../../hooks";
 import { QueryKey } from "../../query";
 import { getObjectMeta } from "../../api/api";
 import { getFieldByName } from "../../screens/admin/utils";
 import { match, P } from "ts-pattern";
-import { Suspense } from "react";
+import { Suspense, useState } from "react";
 import { Address } from "./fields/Address/Address";
 import { User } from "./fields/User/User";
 import { Account } from "./fields/Account/Account";
@@ -41,14 +37,21 @@ export const PropertyView = ({
   externalUrl,
   isFirst,
 }: PropertyViewProps) => {
-  const { context } = useDeskproLatestAppContext();
+  const [settings, setSettings] = useState({});
 
   const meta = useQueryWithClient<ObjectMeta>(
     [QueryKey.ADMIN_OBJECT_META, object.attributes.type],
     (client) => getObjectMeta(client, object.attributes.type)
   );
 
-  if (!context?.settings) {
+  useDeskproAppEvents(
+    {
+      onAdminSettingsChange: setSettings,
+    },
+    []
+  );
+
+  if (settings) {
     return null;
   }
 
@@ -88,17 +91,17 @@ export const PropertyView = ({
     .with(["url", P._], () => <UrlLink value={value} />)
     .with(["reference", P.when((to) => to?.includes("User"))], () => (
       <Suspense fallback={<Spinner size="extra-small" />}>
-        <User id={value} settings={context.settings} />
+        <User id={value} settings={settings} />
       </Suspense>
     ))
     .with(["reference", P.when((to) => to?.includes("Account"))], () => (
       <Suspense fallback={<Spinner size="extra-small" />}>
-        <Account id={value} settings={context.settings} />
+        <Account id={value} settings={settings} />
       </Suspense>
     ))
     .with(["reference", P.when((to) => to?.includes("Contact"))], () => (
       <Suspense fallback={<Spinner size="extra-small" />}>
-        <Contact id={value} settings={context.settings} />
+        <Contact id={value} settings={settings} />
       </Suspense>
     ))
     .otherwise(() => <>{value ?? <PropertyEmpty />}</>);

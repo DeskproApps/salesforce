@@ -4,7 +4,7 @@ import {
   H2,
   Stack,
   useDeskproAppClient,
-  useDeskproLatestAppContext,
+  useDeskproAppEvents,
   useInitialisedDeskproAppClient,
 } from "@deskpro/app-sdk";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -19,18 +19,26 @@ import { QueryKey } from "../../query";
 import { getScreenLayout, mapErrorMessage } from "../../utils";
 import { z, ZodObject, ZodTypeAny } from "zod";
 import { getMetadataBasedSchema } from "../../schemas/default";
+import { Settings } from "../../types";
 
 const UNUSABLE_FIELDS = ["AccountId", "ReportsToId"];
 
 export const EditProfile = () => {
   const { object, id } = useParams();
   const navigate = useNavigate();
-  const { context } = useDeskproLatestAppContext();
   const { client } = useDeskproAppClient();
 
   const [schema, setSchema] = useState<ZodTypeAny>(z.object({}));
   const [submitting, setSubmitting] = useState(false);
   const [submissionError, setSubmissionError] = useState<string | null>(null);
+  const [settings, setSettings] = useState<Settings>();
+
+  useDeskproAppEvents(
+    {
+      onAdminSettingsChange: setSettings,
+    },
+    []
+  );
 
   const {
     register,
@@ -57,8 +65,8 @@ export const EditProfile = () => {
   );
 
   const layout = useMemo(
-    () => getScreenLayout(context?.settings, object as string, "view"),
-    [context?.settings, object]
+    () => getScreenLayout(settings, object as string, "view"),
+    [settings, object]
   );
 
   const profileById = useQueryWithClient(
@@ -69,7 +77,10 @@ export const EditProfile = () => {
     }
   );
 
-  const layoutMap = layout.root.map((e) => e.map(eMap => eMap?.id)).flat().filter(e => e);
+  const layoutMap = layout.root
+    .map((e) => e.map((eMap) => eMap?.id))
+    .flat()
+    .filter((e) => e);
 
   useEffect(() => {
     if (!profileMetadata.data) return;

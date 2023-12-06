@@ -2,13 +2,13 @@ import {
   H1,
   HorizontalDivider,
   Stack,
+  useDeskproAppEvents,
   useDeskproAppTheme,
-  useDeskproLatestAppContext,
 } from "@deskpro/app-sdk";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Fragment, useMemo } from "react";
+import { Fragment, useMemo, useState } from "react";
 import { getAllChildrenFromSobject } from "../../../api/api";
 import { Lead } from "../../../api/types";
 import { Container } from "../../../components/Container/Container";
@@ -24,6 +24,7 @@ import {
   sObjectsWithMappings,
 } from "../../../utils";
 import { ObjectProperty } from "../../admin/types";
+import { Settings } from "../../../types";
 
 type LeadScreenProps = {
   lead: Lead;
@@ -31,13 +32,12 @@ type LeadScreenProps = {
 
 export const LeadScreen = ({ lead }: LeadScreenProps) => {
   const { theme } = useDeskproAppTheme();
-  const { context } = useDeskproLatestAppContext();
-
+  const [settings, setSettings] = useState<Settings>();
   const basePath = useBasePath();
 
   const layout = useMemo(
-    () => getScreenLayout(context?.settings, "Lead", "home"),
-    [context?.settings]
+    () => getScreenLayout(settings, "Lead", "home"),
+    [settings]
   );
 
   const objects = layout.objects_order.flat().map((e) => e?.property);
@@ -49,6 +49,13 @@ export const LeadScreen = ({ lead }: LeadScreenProps) => {
     {
       enabled: !!objects.length && !!lead,
     }
+  );
+
+  useDeskproAppEvents(
+    {
+      onAdminSettingsChange: setSettings,
+    },
+    []
   );
 
   if (!objectsData.isSuccess) {
@@ -69,7 +76,7 @@ export const LeadScreen = ({ lead }: LeadScreenProps) => {
             </H1>
             <ExternalLink
               url={getObjectPermalink(
-                context?.settings,
+                settings,
                 `/lightning/r/Lead/${lead.Id}/view`
               )}
             />
@@ -150,7 +157,7 @@ export const LeadScreen = ({ lead }: LeadScreenProps) => {
                           externalUrl={
                             hasMapping
                               ? getObjectPermalink(
-                                  context?.settings,
+                                  settings,
                                   `/lightning/r/${object.name}/${
                                     (sobj as { Id: string }).Id
                                   }/view`

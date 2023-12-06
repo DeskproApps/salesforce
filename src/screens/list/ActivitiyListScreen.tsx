@@ -1,78 +1,97 @@
-import {useQueryWithClient} from "../../hooks";
-import {QueryKey} from "../../query";
-import {getAllActivities} from "../../api/api";
-import {useDeskproLatestAppContext, Stack, useInitialisedDeskproAppClient, HorizontalDivider} from "@deskpro/app-sdk";
-import {getObjectPermalink, getScreenLayout, logger} from "../../utils";
-import {LayoutObject} from "../../components/types";
-import {PropertyLayout} from "../../components/PropertyLayout/PropertyLayout";
-import {Container} from "../../components/Container/Container";
-import {useLocation} from "react-router-dom";
-import {useMemo} from "react";
+import { useQueryWithClient } from "../../hooks";
+import { QueryKey } from "../../query";
+import { getAllActivities } from "../../api/api";
+import {
+  Stack,
+  useInitialisedDeskproAppClient,
+  HorizontalDivider,
+  useDeskproAppEvents,
+} from "@deskpro/app-sdk";
+import { getObjectPermalink, getScreenLayout, logger } from "../../utils";
+import { LayoutObject } from "../../components/types";
+import { PropertyLayout } from "../../components/PropertyLayout/PropertyLayout";
+import { Container } from "../../components/Container/Container";
+import { useLocation } from "react-router-dom";
+import { useMemo, useState } from "react";
+import { Settings } from "../../types";
 
 type ListScreenProps = {
-    id: string;
-    field: string;
+  id: string;
+  field: string;
 };
 
 export const ActivityListScreen = ({ id, field }: ListScreenProps) => {
-    const { context } = useDeskproLatestAppContext();
-    const { pathname } = useLocation();
+  const [settings, setSettings] = useState<Settings>();
+  const { pathname } = useLocation();
 
-    useInitialisedDeskproAppClient((client) => client.setTitle(`Activities List`), []);
+  useInitialisedDeskproAppClient(
+    (client) => client.setTitle(`Activities List`),
+    []
+  );
 
-    const basePath = useMemo(
-        () => `/${pathname.split("/").filter((f) => f)[0]}`,
-        [pathname]
-    );
+  useDeskproAppEvents({
+    onAdminSettingsChange: setSettings,
+  });
 
-    const maxItems = 200;
+  const basePath = useMemo(
+    () => `/${pathname.split("/").filter((f) => f)[0]}`,
+    [pathname]
+  );
 
-    const { data, isSuccess } = useQueryWithClient<unknown[]>(
-        [QueryKey.OBJECTS_BY_FK, id, maxItems],
-        (client) => getAllActivities(client, id, field, maxItems),
-    );
+  const maxItems = 200;
 
-    if (!isSuccess) {
-        return null;
-    }
+  const { data, isSuccess } = useQueryWithClient<unknown[]>(
+    [QueryKey.OBJECTS_BY_FK, id, maxItems],
+    (client) => getAllActivities(client, id, field, maxItems)
+  );
 
-    if (!context?.settings) {
-        return null;
-    }
+  if (!isSuccess) {
+    return null;
+  }
 
-    const layoutTask = getScreenLayout(context.settings, "Task", "list");
+  if (!settings) {
+    return null;
+  }
 
-    const layoutEvent = getScreenLayout(context.settings, "Event", "list");
+  const layoutTask = getScreenLayout(settings, "Task", "list");
 
-    if (!layoutTask || !layoutEvent) {
-        logger.error(`No layout found for "Activities":list`);
-        return null;
-    }
+  const layoutEvent = getScreenLayout(settings, "Event", "list");
 
-    return (
-        <Container>
-            <Stack gap={14} vertical>
-                {data?.map((item) =>  {
-                    const typedItem = item as LayoutObject;
+  if (!layoutTask || !layoutEvent) {
+    logger.error(`No layout found for "Activities":list`);
+    return null;
+  }
 
-                    const layout = typedItem.EventSubtype ? layoutEvent : layoutTask;
+  return (
+    <Container>
+      <Stack gap={14} vertical>
+        {data?.map((item) => {
+          const typedItem = item as LayoutObject;
 
-                    const objectType = (typedItem as LayoutObject).EventSubtype ? "Event" : "Task";
+          const layout = typedItem.EventSubtype ? layoutEvent : layoutTask;
 
-                    return (
-                    <Stack gap={14} style={{ width: "100%" }} vertical>
-                        <PropertyLayout
-                            properties={layout.root}
-                            object={typedItem}
-                            externalUrl={getObjectPermalink(context?.settings, `/lightning/r/${objectType}/${typedItem.Id}/view`)}
-                            internalUrl={`${basePath}/objects/${objectType}/${typedItem.Id}/view`}
-                        />
-                        <div style={{ width: "100%" }}>
-                            <HorizontalDivider />
-                        </div>
-                    </Stack>
-                )})}
+          const objectType = (typedItem as LayoutObject).EventSubtype
+            ? "Event"
+            : "Task";
+
+          return (
+            <Stack gap={14} style={{ width: "100%" }} vertical>
+              <PropertyLayout
+                properties={layout.root}
+                object={typedItem}
+                externalUrl={getObjectPermalink(
+                  settings,
+                  `/lightning/r/${objectType}/${typedItem.Id}/view`
+                )}
+                internalUrl={`${basePath}/objects/${objectType}/${typedItem.Id}/view`}
+              />
+              <div style={{ width: "100%" }}>
+                <HorizontalDivider />
+              </div>
             </Stack>
-        </Container>
-    );
+          );
+        })}
+      </Stack>
+    </Container>
+  );
 };
