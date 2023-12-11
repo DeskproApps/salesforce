@@ -1,27 +1,33 @@
-import { useState, Suspense, useCallback } from "react";
-import { TabBar, TabBarItemType } from "@deskpro/deskpro-ui";
 import {
   LoadingSpinner,
-  useDeskproLatestAppContext,
+  useDeskproAppEvents,
   useInitialisedDeskproAppClient,
 } from "@deskpro/app-sdk";
+import { TabBar, TabBarItemType } from "@deskpro/deskpro-ui";
+import { Suspense, useCallback, useState } from "react";
 import { Reveal } from "../../../components/Reveal/Reveal";
-import { TaskLayout } from "../../../types";
-import { ListLayout, ViewLayout } from "../../../screens/admin/types";
 import defaultContactLayout from "../../../resources/default_layout/task.json";
 import { ListScreen } from "../../../screens/admin/mapping/task/ListScreen";
 import { ViewScreen } from "../../../screens/admin/mapping/task/ViewScreen";
+import { ListLayout, ViewLayout } from "../../../screens/admin/types";
+import { Settings, TaskLayout } from "../../../types";
 
 export const Task = () => {
-  const { context } = useDeskproLatestAppContext();
+  const [settings, setSettings] = useState<Settings>();
 
   const [activeTab, setActiveTab] = useState(0);
 
   const [layout, setLayout] = useState<TaskLayout>(
-    context?.settings.mapping_task
-      ? JSON.parse(context?.settings.mapping_task)
+    settings?.mapping_task
+      ? JSON.parse(settings.mapping_task)
       : defaultContactLayout
   );
+
+  useDeskproAppEvents({
+    onAdminSettingsChange: (settings) => {
+      setSettings(settings);
+    },
+  });
 
   useInitialisedDeskproAppClient(
     (client) => {
@@ -57,11 +63,11 @@ export const Task = () => {
     },
   ];
 
-  if (!context?.settings) {
+  if (!settings) {
     return null;
   }
 
-  if (!context?.settings?.global_access_token) {
+  if (!settings?.global_access_token) {
     return (
       <div style={{ padding: "12px" }}>
         Please sign-in as global Salesforce user before mapping fields

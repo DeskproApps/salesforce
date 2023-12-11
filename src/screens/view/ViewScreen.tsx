@@ -1,5 +1,8 @@
 import {
-  Stack, useDeskproAppEvents, useDeskproLatestAppContext, useInitialisedDeskproAppClient
+  Stack,
+  useDeskproAppEvents,
+  useDeskproLatestAppContext,
+  useInitialisedDeskproAppClient,
 } from "@deskpro/app-sdk";
 import { useNavigate } from "react-router-dom";
 

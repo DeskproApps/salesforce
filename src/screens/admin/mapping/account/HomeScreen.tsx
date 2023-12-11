@@ -33,8 +33,7 @@ export const HomeScreen = ({
 
   const meta = useAdminQuery(
     [QueryKey.OBJECT_META, "Account"],
-    (client, context) =>
-      getObjectMetaPreInstalled(client, context?.settings, "Account")
+    (client, settings) => getObjectMetaPreInstalled(client, settings, "Account")
   );
 
   const setRootLayout = useCallback(
@@ -67,10 +66,10 @@ export const HomeScreen = ({
 
   const queryableSobjects = useAdminQuery(
     [QueryKey.QUERYABLE_OBJECTS],
-    (client, context) =>
+    (client, settings) =>
       getQueryableObjectsPreInstalled(
         client,
-        context?.settings,
+        settings,
         mappedSobjects.map((e) => e.sobject)
       ),
     {

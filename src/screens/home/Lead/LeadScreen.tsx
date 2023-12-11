@@ -13,7 +13,6 @@ import { getAllChildrenFromSobject } from "../../../api/api";
 import { Lead } from "../../../api/types";
 import { Container } from "../../../components/Container/Container";
 import { ExternalLink } from "../../../components/ExternalLink/ExternalLink";
-import { Link } from "../../../components/Link/Link";
 import { PropertyLayout } from "../../../components/PropertyLayout/PropertyLayout";
 import { LayoutObject } from "../../../components/types";
 import { useBasePath, useQueryWithClient } from "../../../hooks";
@@ -24,6 +23,7 @@ import {
   sObjectsWithMappings,
 } from "../../../utils";
 import { ObjectProperty } from "../../admin/types";
+import { Link } from "react-router-dom";
 
 type LeadScreenProps = {
   lead: Lead;
