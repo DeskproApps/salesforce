@@ -57,7 +57,7 @@ export const LinkContact = () => {
   const contacts = contactsQuery.data;
 
   return (
-    <Stack gap={10} style={{ width: "100%" }} vertical>
+    <Stack gap={10} style={{ width: "100%", padding: "8px" }} vertical>
       <Stack vertical gap={6} style={{ width: "100%" }}>
         <Input
           onChange={(e) => setPrompt(e.target.value)}

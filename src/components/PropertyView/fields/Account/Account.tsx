@@ -6,7 +6,7 @@ import { Stack } from "@deskpro/app-sdk";
 import { Settings } from "../../../../types";
 import { Account as AccountType } from "../../../../api/types";
 import { ExternalLink } from "../../../ExternalLink/ExternalLink";
-import { Link } from "react-router-dom";
+import { Link } from "../../../Link/Link";
 
 type AccountProps = {
   id: string;

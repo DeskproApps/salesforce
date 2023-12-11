@@ -7,7 +7,7 @@ import { faExternalLink } from "@fortawesome/free-solid-svg-icons";
 import { Stack, useDeskproAppTheme } from "@deskpro/app-sdk";
 import { Settings } from "../../../../types";
 import { Contact as ContactType } from "../../../../api/types";
-import { Link } from "react-router-dom";
+import { Link } from "../../../Link/Link";
 
 type ContactProps = {
   id: string;

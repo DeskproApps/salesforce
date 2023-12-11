@@ -24,7 +24,7 @@ import { ExternalLink } from "../ExternalLink/ExternalLink";
 import { Email } from "./fields/Email/Email";
 import { UrlLink } from "./fields/UrlLink/UrlLink";
 import { TextArea } from "./fields/TextArea/TextArea";
-import { Link } from "react-router-dom";
+import { Link } from "../Link/Link";
 
 type PropertyViewProps = {
   name: string;

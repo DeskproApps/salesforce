@@ -7,10 +7,10 @@ import { MutateProfile } from "../createEdit/Profile";
 
 export const FindOrCreate = ({ pageParam }: { pageParam?: 0 | 1 }) => {
   const [page, setPage] = useState<0 | 1>(pageParam || 0);
-  console.log("eee");
+
   return (
-    <Stack vertical style={{ padding: "8px" }}>
-      <Stack style={{ alignSelf: "center" }}>
+    <Stack vertical>
+      <Stack style={{ alignSelf: "center", marginTop: "8px" }}>
         <TwoButtonGroup
           selected={
             {
@@ -30,7 +30,7 @@ export const FindOrCreate = ({ pageParam }: { pageParam?: 0 | 1 }) => {
       {
         {
           0: <LinkContact />,
-          1: <MutateProfile />,
+          1: <MutateProfile objectFuncParam="Contact" />,
         }[page]
       }
     </Stack>

@@ -4,6 +4,7 @@ import {
   Input,
   LoadingSpinner,
   useDeskproAppClient,
+  useDeskproAppEvents,
   useDeskproAppTheme,
   useDeskproElements,
   useDeskproLatestAppContext,
@@ -15,6 +16,7 @@ import {
   faExternalLinkAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { match } from "ts-pattern";
 import {
   getContactByEmail,
@@ -23,48 +25,51 @@ import {
 } from "../api/api";
 import { Contact, Lead, ObjectType } from "../api/types";
 import { Container } from "../components/Container/Container";
+import { useQueryWithClient } from "../hooks";
+import { useLinkContact } from "../hooks/link";
 import { QueryKey } from "../query";
 import { ContactScreen } from "../screens/home/Contact/ContactScreen";
 import { LeadScreen } from "../screens/home/Lead/LeadScreen";
-import { useNavigate } from "react-router-dom";
-import { useLinkContact } from "../hooks/link";
-import { useQueryWithClient } from "../hooks";
 
 export const User = () => {
   const { client } = useDeskproAppClient();
   const { context } = useDeskproLatestAppContext();
   const { theme } = useDeskproAppTheme();
+  const { unlinkContact, getLinkedContact } = useLinkContact();
   const navigate = useNavigate();
-  const { getLinkedContact, unlinkContact, linkContact } = useLinkContact();
+
+  const [selectedObjectId, setSelectedObjectId] = useState<string>("");
   const [contactId, setContactId] = useState<string | null | undefined>(
     undefined
   );
-
-  const [selectedObjectId, setSelectedObjectId] = useState<string>("");
 
   useDeskproElements(({ registerElement, deRegisterElement }) => {
     registerElement("refresh", { type: "refresh_button" });
     deRegisterElement("salesforcePlusButton");
     deRegisterElement("salesforceEditButton");
+
+    registerElement("menuButton", {
+      type: "menu",
+      items: [
+        {
+          title: "Unlink Contact",
+          payload: {
+            type: "changePage",
+            page: "/",
+          },
+        },
+      ],
+    });
   });
 
-  useEffect(
-    () => {
-      (async () => {
-        if (!context || !client) return;
-
-        const linkedContact = await getLinkedContact();
-
-        if (!linkedContact || linkedContact.length === 0) {
-          return setContactId(null);
-        }
-
-        setContactId(linkedContact[0]);
-      })();
+  useDeskproAppEvents({
+    async onElementEvent(id) {
+      switch (id) {
+        case "menuButton":
+          unlinkContact().then(() => navigate("/findOrCreate"));
+      }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [context]
-  );
+  });
 
   const emails: string[] = context?.data?.user?.emails ?? [];
 
@@ -85,11 +90,27 @@ export const User = () => {
 
           return;
         }
-
-        linkContact(data.Id);
       },
       useErrorBoundary: false,
     }
+  );
+
+  useEffect(
+    () => {
+      (async () => {
+        if (!context || !client) return;
+
+        const linkedContact = await getLinkedContact();
+
+        if (!linkedContact || linkedContact.length === 0) {
+          return setContactId(null);
+        }
+
+        setContactId(linkedContact[0]);
+      })();
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [context]
   );
 
   const leads = useQueryWithClient(
@@ -112,8 +133,6 @@ export const User = () => {
   if (!contacts.isSuccess || !leads.isSuccess) {
     return <LoadingSpinner />;
   }
-
-  if (!contacts.data) navigate("/findOrCreate");
 
   if (!leadsAndContacts.length) {
     return (

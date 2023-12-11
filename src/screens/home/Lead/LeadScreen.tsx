@@ -23,7 +23,7 @@ import {
   sObjectsWithMappings,
 } from "../../../utils";
 import { ObjectProperty } from "../../admin/types";
-import { Link } from "react-router-dom";
+import { Link } from "../../../components/Link/Link";
 
 type LeadScreenProps = {
   lead: Lead;

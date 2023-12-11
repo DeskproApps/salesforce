@@ -11,7 +11,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { editData, getObjectById, getObjectMeta } from "../../api/api";
+import {
+  createData,
+  editData,
+  getObjectById,
+  getObjectMeta,
+} from "../../api/api";
 import { Field } from "../../api/types";
 import { FieldMappingInput } from "../../components/FieldMappingInput/FieldMappingInput";
 import { useQueryWithClient } from "../../hooks";
@@ -19,18 +24,29 @@ import { QueryKey } from "../../query";
 import { getScreenLayout, mapErrorMessage } from "../../utils";
 import { z, ZodObject, ZodTypeAny } from "zod";
 import { getMetadataBasedSchema } from "../../schemas/default";
+import { useLinkContact } from "../../hooks/link";
 
 const UNUSABLE_FIELDS = ["AccountId", "ReportsToId"];
 
-export const MutateProfile = () => {
-  const { object, id } = useParams();
+interface Props {
+  objectFuncParam?: string;
+  idFuncParam?: string;
+}
+
+export const MutateProfile = ({ objectFuncParam, idFuncParam }: Props) => {
+  const { objectParam, idParam } = useParams();
   const navigate = useNavigate();
   const { context } = useDeskproLatestAppContext();
   const { client } = useDeskproAppClient();
+  const { linkContact } = useLinkContact();
 
   const [schema, setSchema] = useState<ZodTypeAny>(z.object({}));
   const [submitting, setSubmitting] = useState(false);
   const [submissionError, setSubmissionError] = useState<string | null>(null);
+
+  const object = objectFuncParam || objectParam;
+
+  const id = idFuncParam || idParam;
 
   const {
     register,
@@ -70,7 +86,7 @@ export const MutateProfile = () => {
   );
 
   const layoutMap = layout.root
-    .map((e) => e.map((eMap) => eMap?.id))
+    ?.map((e) => e.map((eMap) => eMap?.id))
     .flat()
     .filter((e) => e);
 
@@ -158,6 +174,23 @@ export const MutateProfile = () => {
 
     setSubmitting(true);
 
+    if (!id) {
+      const res = await createData(client, object, data);
+      if (object === "Contact") {
+        await linkContact((res as { id: string }).id)
+          .then(() => {
+            navigate("/user");
+          })
+          .catch((e) => {
+            setSubmissionError(mapErrorMessage(e));
+
+            setSubmitting(false);
+          });
+      }
+
+      return;
+    }
+
     await editData(client, object, id as string, data)
       .then(() => navigate(-1))
       .catch((e) => {
@@ -168,7 +201,10 @@ export const MutateProfile = () => {
   };
 
   return (
-    <form style={{ margin: "5px" }} onSubmit={handleSubmit(submit)}>
+    <form
+      style={{ padding: "8px", width: "92%" }}
+      onSubmit={handleSubmit(submit)}
+    >
       <Stack vertical gap={12}>
         <Stack vertical gap={12} style={{ width: "100%" }}>
           {usableFields?.map((field, i) => {

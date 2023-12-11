@@ -3,14 +3,12 @@ import {
   useDeskproLatestAppContext,
 } from "@deskpro/app-sdk";
 import { useCallback, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { query } from "../query";
 
 export const useLinkContact = () => {
   const { context } = useDeskproLatestAppContext();
   const { client } = useDeskproAppClient();
   const [isLinking, setIsLinking] = useState(false);
-  const navigate = useNavigate();
 
   const deskproUser = context?.data.user;
 
@@ -37,8 +35,6 @@ export const useLinkContact = () => {
         .set(contactId);
 
       query.clear();
-
-      navigate("/");
 
       setIsLinking(false);
     },

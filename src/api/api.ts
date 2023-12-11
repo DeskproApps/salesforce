@@ -139,6 +139,18 @@ export const editData = (
     data
   );
 
+export const createData = (
+  client: IDeskproClient,
+  object: string,
+  data: unknown
+): Promise<unknown> =>
+  installedRequest(
+    client,
+    `/services/data/v55.0/sobjects/${object}`,
+    "POST",
+    data
+  );
+
 export const postData = (
   client: IDeskproClient,
   object: string,
@@ -198,7 +210,6 @@ export const getContactByEmail = async (
   return getObjectById<Contact>(client, "Contact", result.searchRecords[0]?.Id);
 };
 
- 
 export const getLeadsByEmails = async (
   client: IDeskproClient,
   emails: string[]
