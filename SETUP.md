@@ -1,5 +1,4 @@
-Salesforce App Setup
-===
+# Salesforce App Setup
 
 This app does not support Salesforce demo accounts.
 
@@ -26,19 +25,23 @@ and copy the "Callback URL" to your clipboard.
 
 Ok, head back to Salesforce and enter the following details into the new app form:
 
-* **Connected App Name:** "Deskpro App"
-* **API Name:** This will be generated automatically
-* **Enable OAuth Settings:** Check
-* **Callback URL:** Enter the callback URl that you copied from Deskpro
-* **Selected OAuth Scopes:** Select "api" and "refresh_token, offline_access" scopes (see screenshot below)
-* **Require Secret for Web Server Flow:** Check
-* **Require Secret for Refresh Token Flow:** Check
-
-Then click "Save"
+- **Connected App Name:** "Deskpro App"
+- **API Name:** This will be generated automatically
+- **Enable OAuth Settings:** Check
+- **Callback URL:** Enter the callback URl that you copied from Deskpro
+- **Selected OAuth Scopes:** Select "api" and "refresh_token, offline_access" scopes (see screenshot below)
+- **Require Secret for Web Server Flow:** Check
+- **Require Secret for Refresh Token Flow:** Check
 
 [![](/docs/assets/setup/salesforce-setup-05.png)](/docs/assets/setup/salesforce-setup-05.png)
 
-Next, you should see a warning informing you that these updates could take up to 10 minutes. Click "Continue" and wait 
+Be sure to also disable "Require Proof Key for Code Exchange (PKCE) Extension for Supported Authorization Flows"
+
+[![](/docs/assets/setup/salesforce-setup-pkce-off.png)](/docs/assets/setup/salesforce-setup-pkce-off.png)
+
+Then click "Save"
+
+Next, you should see a warning informing you that these updates could take up to 10 minutes. Click "Continue" and wait
 for 10 minutes.
 
 [![](/docs/assets/setup/salesforce-setup-06.png)](/docs/assets/setup/salesforce-setup-06.png)
@@ -59,7 +62,7 @@ You'll also need to enter your Salesforce URL. This will look something like thi
 
 [![](/docs/assets/setup/salesforce-setup-09.png)](/docs/assets/setup/salesforce-setup-09.png)
 
-Next, click "Sign-in" under the "Global Salesforce User" section. Please note that this is the user that the Deskpro 
+Next, click "Sign-in" under the "Global Salesforce User" section. Please note that this is the user that the Deskpro
 Salesforce app will use to request details from Salesforce for any Deskpro agent.
 
 Navigate to the "Permissions" section and make sure that you have given permission to those users and/or groups that are
