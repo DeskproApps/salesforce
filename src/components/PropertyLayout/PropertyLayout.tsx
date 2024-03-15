@@ -1,4 +1,5 @@
-import {Stack, VerticalDivider} from "@deskpro/app-sdk";
+import { Stack } from "@deskpro/deskpro-ui";
+import { VerticalDivider } from "@deskpro/app-sdk";
 import {Fragment} from "react";
 import {PropertyView} from "../PropertyView/PropertyView";
 import {Properties} from "../Mapper/PropertyLayout";

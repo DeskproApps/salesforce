@@ -1,12 +1,9 @@
 import {
-  Button,
   LoadingSpinner,
-  Stack,
-  TextArea,
   useDeskproAppClient,
   useInitialisedDeskproAppClient,
 } from "@deskpro/app-sdk";
-import { H2 } from "@deskpro/deskpro-ui";
+import { H2, Button, Stack, TextArea } from "@deskpro/deskpro-ui";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";

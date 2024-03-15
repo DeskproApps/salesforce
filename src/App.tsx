@@ -1,8 +1,8 @@
 import { Suspense } from "react";
+import { Button, Stack } from "@deskpro/deskpro-ui";
 import {
-    Button,
     LoadingSpinner,
-    Stack, useDeskproAppEvents,
+    useDeskproAppEvents,
     useDeskproLatestAppContext
 } from "@deskpro/app-sdk";
 import { Routes, Route, useLocation, useNavigate } from "react-router-dom";

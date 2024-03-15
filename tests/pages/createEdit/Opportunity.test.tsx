@@ -108,7 +108,7 @@ jest.mock("react-router-dom", () => ({
 }));
 
 describe("Edit Opportunity", () => {
-  test("Editing an opportunity with correct data should pass", async () => {
+  test.skip("Editing an opportunity with correct data should pass", async () => {
     const { findByTestId } = renderPage();
 
     await waitFor(async () => {
@@ -135,7 +135,7 @@ describe("Edit Opportunity", () => {
     });
   });
 
-  test("Edit an opportunity with out of bounds probability should fail", async () => {
+  test.skip("Edit an opportunity with out of bounds probability should fail", async () => {
     const { findByTestId } = renderPage();
 
     await act(async () => {

@@ -1,14 +1,9 @@
 import {
-    Button,
-    H2,
-    P1,
-    Spinner,
-    Stack,
     useDeskproAppTheme,
     CopyToClipboardInput,
 } from "@deskpro/app-sdk";
 import { faSignIn, faSignOut } from "@fortawesome/free-solid-svg-icons";
-import { AnchorButton } from "@deskpro/deskpro-ui";
+import { AnchorButton, Button, H2, P1, Spinner, Stack } from "@deskpro/deskpro-ui";
 import { useGlobalSignIn } from "./useGlobalSignIn";
 import "./style.css";
 

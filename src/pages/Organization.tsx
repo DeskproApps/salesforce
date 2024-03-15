@@ -1,9 +1,10 @@
+import { Dropdown, DropdownItemType, Input } from "@deskpro/deskpro-ui";
 import {
-    Dropdown,
-    DropdownItemType, Input,
-    LoadingSpinner, useDeskproAppTheme,
+    LoadingSpinner,
+    useDeskproAppTheme,
     useDeskproElements,
-    useDeskproLatestAppContext, useInitialisedDeskproAppClient
+    useDeskproLatestAppContext,
+    useInitialisedDeskproAppClient,
 } from "@deskpro/app-sdk";
 import { faCaretDown, faCheck, faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
 import { orderBy } from "lodash";

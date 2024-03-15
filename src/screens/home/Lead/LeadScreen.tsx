@@ -1,7 +1,6 @@
+import { H1, Stack } from "@deskpro/deskpro-ui";
 import {
-  H1,
   HorizontalDivider,
-  Stack,
   useDeskproAppTheme,
   useDeskproLatestAppContext,
 } from "@deskpro/app-sdk";

@@ -1,4 +1,5 @@
-import { Stack, H1, P1, useDeskproAppTheme, Spinner } from "@deskpro/app-sdk";
+import { Stack, H1, P1, Spinner } from "@deskpro/deskpro-ui";
+import { useDeskproAppTheme } from "@deskpro/app-sdk";
 import { QueryKey } from "../../../../query";
 import {
   getObjectMetaPreInstalled,

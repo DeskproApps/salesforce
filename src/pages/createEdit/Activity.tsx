@@ -1,9 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { Button, H2, Stack } from "@deskpro/deskpro-ui";
 import {
-  Button,
-  H2,
   LoadingSpinner,
-  Stack,
   useDeskproAppClient,
   useInitialisedDeskproAppClient,
 } from "@deskpro/app-sdk";

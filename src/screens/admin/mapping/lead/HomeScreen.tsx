@@ -1,4 +1,5 @@
-import { H1, P1, Spinner, Stack, useDeskproAppTheme } from "@deskpro/app-sdk";
+import { H1, P1, Spinner, Stack } from "@deskpro/deskpro-ui";
+import { useDeskproAppTheme } from "@deskpro/app-sdk";
 import { Suspense, useCallback, useEffect, useState } from "react";
 import {
   getObjectMetaPreInstalled,

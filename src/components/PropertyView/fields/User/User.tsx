@@ -2,7 +2,7 @@ import {useQueryWithClient} from "../../../../hooks";
 import {QueryKey} from "../../../../query";
 import {getUserById} from "../../../../api/api";
 import {getObjectPermalink} from "../../../../utils";
-import {Stack} from "@deskpro/app-sdk";
+import {Stack} from "@deskpro/deskpro-ui";
 import {Settings} from "../../../../types";
 import {User as UserType} from "../../../../api/types";
 import {ExternalLink} from "../../../ExternalLink/ExternalLink";

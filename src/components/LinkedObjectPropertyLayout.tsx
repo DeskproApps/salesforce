@@ -1,4 +1,4 @@
-import { H1, P1, Stack } from "@deskpro/app-sdk";
+import { H1, P1, Stack } from "@deskpro/deskpro-ui";
 import { Properties, PropertyLayout } from "./Mapper/PropertyLayout";
 import { FieldProperty } from "../screens/admin/types";
 import { useAdminQuery } from "../screens/admin/hooks";

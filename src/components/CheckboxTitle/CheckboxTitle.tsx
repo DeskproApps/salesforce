@@ -1,4 +1,5 @@
-import { Checkbox, H1, Stack, useDeskproAppTheme } from "@deskpro/app-sdk"
+import { Checkbox, H1, Stack } from "@deskpro/deskpro-ui";
+import { useDeskproAppTheme } from "@deskpro/app-sdk"
 
 type Props = {
     title:string;

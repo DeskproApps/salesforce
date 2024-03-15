@@ -1,14 +1,12 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 import {
+  H1,
+  Label,
+  Stack,
   DivAsInput,
   Dropdown as DropdownComponent,
   DropdownTargetProps,
-  Label,
-  H1,
-  Stack,
-  useDeskproAppTheme,
-} from "@deskpro/app-sdk";
+} from "@deskpro/deskpro-ui";
+import { useDeskproAppTheme } from "@deskpro/app-sdk";
 import {
   faCheck,
   faExternalLinkAlt,
@@ -24,6 +22,7 @@ interface Status {
 }
 
 type Props = {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data?: any[];
   onChange: (key: string) => void;
   title: string;

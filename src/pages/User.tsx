@@ -1,7 +1,5 @@
+import { Dropdown, DropdownItemType, Input } from "@deskpro/deskpro-ui";
 import {
-  Dropdown,
-  DropdownItemType,
-  Input,
   LoadingSpinner,
   useDeskproAppClient,
   useDeskproAppTheme,

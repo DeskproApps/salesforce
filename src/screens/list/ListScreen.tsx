@@ -1,9 +1,9 @@
 import { useQueryWithClient } from "../../hooks";
 import { QueryKey } from "../../query";
 import { getObjectsByFk } from "../../api/api";
+import { Stack } from "@deskpro/deskpro-ui";
 import {
   useDeskproLatestAppContext,
-  Stack,
   useInitialisedDeskproAppClient,
   HorizontalDivider,
   useDeskproAppEvents,

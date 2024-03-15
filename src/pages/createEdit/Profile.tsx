@@ -1,8 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { Button, H2, Stack } from "@deskpro/deskpro-ui";
 import {
-  Button,
-  H2,
-  Stack,
   useDeskproAppClient,
   useDeskproLatestAppContext,
   useInitialisedDeskproAppClient,

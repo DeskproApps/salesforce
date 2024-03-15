@@ -1,8 +1,5 @@
-import {
-  Property,
-  Spinner,
-  useDeskproLatestAppContext,
-} from "@deskpro/app-sdk";
+import { Spinner } from "@deskpro/deskpro-ui";
+import { Property, useDeskproLatestAppContext } from "@deskpro/app-sdk";
 import { FieldType, ObjectMeta } from "../../api/types";
 import { useQueryWithClient } from "../../hooks";
 import { QueryKey } from "../../query";
@@ -68,9 +65,7 @@ export const PropertyView = ({
     (fieldMeta?.type === "reference" && !value)
   ) {
     return (
-      <Property title={label}>
-        <PropertyEmpty />
-      </Property>
+      <Property label={label} text={<PropertyEmpty />}/>
     );
   }
 
@@ -103,15 +98,19 @@ export const PropertyView = ({
     ))
     .otherwise(() => <>{value ?? <PropertyEmpty />}</>);
   return (
-    <Property title={label}>
-      {isFirst && internalUrl ? (
-        <Link to={internalUrl}>{property}</Link>
-      ) : (
-        property
+    <Property
+      label={label}
+      text={(
+        <>
+          {(isFirst && internalUrl)
+            ? (<Link to={internalUrl}>{property}</Link>)
+            : property
+          }
+          {(isFirst && externalUrl) && (
+            <ExternalLink url={externalUrl} style={{ marginLeft: "6px" }} />
+          )}
+        </>
       )}
-      {isFirst && externalUrl && (
-        <ExternalLink url={externalUrl} style={{ marginLeft: "6px" }} />
-      )}
-    </Property>
+    />
   );
 };

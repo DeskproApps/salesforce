@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { H1, Stack, TextArea, useDeskproAppTheme } from "@deskpro/app-sdk";
+import { H1, Stack, TextArea } from "@deskpro/deskpro-ui";
+import { DateInput, useDeskproAppTheme } from "@deskpro/app-sdk";
 import { FieldErrorsImpl } from "react-hook-form";
-import { DateField } from "../DateField/DateField";
 import { Field } from "../../api/types";
 import { DropdownSelect } from "../DropdownSelect/DropdownSelect";
 import { InputWithTitle } from "../InputWithTitle/InputWithTitle";
@@ -110,19 +110,19 @@ export const FieldMappingInput = forwardRef(({
       );
     case "date":
       return (
-        <DateField
-        required={required}
-        style={
-          !!errors?.[field.name] && {
-            borderBottomColor: "red",
+        <DateInput
+          required={required}
+          style={
+            !!errors?.[field.name] && {
+              borderBottomColor: "red",
+            }
           }
-        }
-        ref={ref}
-        value={value ? new Date(value) : null}
-        label={field.label}
-        error={!!errors?.[field.name]}
-        {...attributes}
-        onChange={(e: [Date]) => setValue(field.name, e[0].toISOString())}
+          ref={ref}
+          value={value ? new Date(value) : null}
+          label={field.label}
+          error={!!errors?.[field.name]}
+          {...attributes}
+          onChange={(e: [Date]) => setValue(field.name, e[0].toISOString())}
         />
       );
     case "reference":

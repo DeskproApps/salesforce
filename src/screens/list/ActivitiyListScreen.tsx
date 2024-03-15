@@ -1,9 +1,9 @@
 import { useQueryWithClient } from "../../hooks";
 import { QueryKey } from "../../query";
 import { getAllActivities } from "../../api/api";
+import { Stack } from "@deskpro/deskpro-ui";
 import {
   useDeskproLatestAppContext,
-  Stack,
   useInitialisedDeskproAppClient,
   HorizontalDivider,
 } from "@deskpro/app-sdk";

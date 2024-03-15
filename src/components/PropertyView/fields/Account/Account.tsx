@@ -2,7 +2,7 @@ import {useBasePath, useQueryWithClient} from "../../../../hooks";
 import {QueryKey} from "../../../../query";
 import {getAccountById} from "../../../../api/api";
 import {getObjectPermalink} from "../../../../utils";
-import {Stack} from "@deskpro/app-sdk";
+import {Stack} from "@deskpro/deskpro-ui";
 import {Settings} from "../../../../types";
 import {Account as AccountType} from "../../../../api/types";
 import {Link} from "../../../Link/Link";
