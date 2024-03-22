@@ -1,4 +1,4 @@
-import { Spinner } from "@deskpro/deskpro-ui";
+import { P5, Spinner } from "@deskpro/deskpro-ui";
 import { Property, useDeskproLatestAppContext } from "@deskpro/app-sdk";
 import { FieldType, ObjectMeta } from "../../api/types";
 import { useQueryWithClient } from "../../hooks";
@@ -65,7 +65,14 @@ export const PropertyView = ({
     (fieldMeta?.type === "reference" && !value)
   ) {
     return (
-      <Property label={label} text={<PropertyEmpty />}/>
+      <Property
+        label={label}
+        text={
+          <P5>
+            <PropertyEmpty />
+          </P5>
+        }
+      />
     );
   }
 
@@ -96,21 +103,32 @@ export const PropertyView = ({
         <Contact id={value} settings={context.settings} />
       </Suspense>
     ))
-    .otherwise(() => <>{value ?? <PropertyEmpty />}</>);
+    .otherwise(() => (
+      <>
+        {value ?? (
+          <P5>
+            <PropertyEmpty />
+          </P5>
+        )}
+      </>
+    ));
   return (
     <Property
       label={label}
-      text={(
+      text={
         <>
-          {(isFirst && internalUrl)
-            ? (<Link to={internalUrl}>{property}</Link>)
-            : property
-          }
-          {(isFirst && externalUrl) && (
-            <ExternalLink url={externalUrl} style={{ marginLeft: "6px" }} />
-          )}
+          <P5>
+            {isFirst && internalUrl ? (
+              <Link to={internalUrl}>{property}</Link>
+            ) : (
+              property
+            )}
+            {isFirst && externalUrl && (
+              <ExternalLink url={externalUrl} style={{ marginLeft: "6px" }} />
+            )}
+          </P5>
         </>
-      )}
+      }
     />
   );
 };

@@ -57,7 +57,7 @@ export const ContactScreen = ({ contact }: ContactScreenProps) => {
   return (
     <>
       <Container>
-        <Stack gap={14} vertical>
+        <Stack gap={5} vertical>
           <Stack
             justify="space-between"
             align="center"

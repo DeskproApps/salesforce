@@ -59,7 +59,7 @@ export const ActivityListScreen = ({ id, field }: ListScreenProps) => {
 
   return (
     <Container>
-      <Stack gap={14} vertical>
+      <Stack gap={5} vertical>
         {data?.map((item) => {
           const typedItem = item as LayoutObject;
 

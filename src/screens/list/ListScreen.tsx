@@ -76,9 +76,9 @@ export const ListScreen = ({ object, field, id }: ListScreenProps) => {
 
   return (
     <Container>
-      <Stack gap={14} vertical>
+      <Stack gap={5} vertical>
         {data?.map((item) => (
-          <Stack gap={14} style={{ width: "100%" }} vertical>
+          <Stack gap={5} style={{ width: "100%" }} vertical>
             <PropertyLayout
               properties={layout.root}
               object={item as unknown as LayoutObject}

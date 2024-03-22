@@ -84,7 +84,7 @@ export const ViewScreen = ({ object, id }: ViewScreenProps) => {
 
   return (
     <Container>
-      <Stack gap={14} vertical>
+      <Stack gap={5} vertical>
         <PropertyLayout
           properties={layout.root}
           object={data as unknown as LayoutObject}
