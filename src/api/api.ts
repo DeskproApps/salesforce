@@ -157,6 +157,43 @@ export const postData = (
     data
   );
 
+export const createAccountComment = (
+  client: IDeskproClient,
+  accountId: string,
+  commentData: unknown
+): Promise<unknown> =>
+  installedRequest(
+    client,
+    `/services/data/v55.0/sobjects/Account/${accountId}/comments`,
+    "POST",
+    commentData
+  );
+
+export const createUserComment = (
+  client: IDeskproClient,
+  userId: string,
+  commentData: unknown
+): Promise<unknown> =>
+  installedRequest(
+    client,
+    `/services/data/v55.0/sobjects/User/${userId}/comments`,
+    "POST",
+    commentData
+  );
+
+// Function to create comments for leads
+export const createLeadComment = (
+  client: IDeskproClient,
+  leadId: string,
+  commentData: unknown
+): Promise<unknown> =>
+  installedRequest(
+    client,
+    `/services/data/v55.0/sobjects/Lead/${leadId}/comments`,
+    "POST",
+    commentData
+  );
+
 /**
  * Get an sObject by ID
  */

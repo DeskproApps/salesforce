@@ -1,9 +1,10 @@
-import { Stack } from "@deskpro/deskpro-ui";
 import {
+  useDeskproAppClient,
   useDeskproAppEvents,
   useDeskproLatestAppContext,
   useInitialisedDeskproAppClient,
 } from "@deskpro/app-sdk";
+import { Stack } from "@deskpro/deskpro-ui";
 import { useNavigate } from "react-router-dom";
 
 import { getObjectById } from "../../api/api";
@@ -22,6 +23,7 @@ type ViewScreenProps = {
 export const ViewScreen = ({ object, id }: ViewScreenProps) => {
   const navigate = useNavigate();
   const { context } = useDeskproLatestAppContext();
+  const { client } = useDeskproAppClient();
 
   const { data, isSuccess } = useQueryWithClient(
     [QueryKey.OBJECT_BY_ID, object, id],

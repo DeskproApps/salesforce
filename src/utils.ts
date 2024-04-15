@@ -1,6 +1,6 @@
 import pino from "pino";
 import { match } from "ts-pattern";
-import { ObjectMeta } from "./api/types";
+import { Account, Contact, Lead, ObjectMeta } from "./api/types";
 import defaultAccountLayout from "./resources/default_layout/account.json";
 import defaultContactLayout from "./resources/default_layout/contact.json";
 import defaultEventLayout from "./resources/default_layout/event.json";
@@ -24,6 +24,7 @@ import {
   Settings,
   TaskLayout,
 } from "./types";
+import { IDeskproClient } from "@deskpro/app-sdk";
 
 const levels = {
   emerg: 80,
@@ -265,3 +266,61 @@ export const sObjectsWithMappings = [
   "Opportunity",
   "Note",
 ];
+
+export const ticketReplyNotesSelectionStateKey = (
+  usesrId: string,
+  id: string | number
+) => `tickets/${usesrId}/notes/selection/${id}`;
+export const ticketReplyEmailsSelectionStateKey = (
+  userId: string,
+  id: string | number
+) => `tickets/${userId}/emails/selection/${id}`;
+
+export const registerReplyBoxNotesAdditionsTargetAction = (
+  client: IDeskproClient,
+  userId: string,
+  linkedObjects: (Lead | Contact | Account)[]
+) => {
+  console.log(userId);
+  if (!userId) {
+    return;
+  }
+
+  client.registerTargetAction(
+    "sfReplyBoxNoteAdditions",
+    "reply_box_note_item_selection",
+    {
+      title: "Add to Salesforce",
+      payload: (linkedObjects ?? []).map((object, idx) => ({
+        id: object.Id,
+        title: object.Name,
+        selected: true,
+        type: object.attributes.type,
+      })),
+    }
+  );
+};
+
+export const registerReplyBoxEmailsAdditionsTargetAction = (
+  client: IDeskproClient,
+  userId: string,
+  linkedObjects: (Lead | Contact | Account)[]
+) => {
+  if (!userId) {
+    return;
+  }
+  console.log("cc");
+  client.registerTargetAction(
+    "sfReplyBoxEmailAdditions",
+    "reply_box_email_item_selection",
+    {
+      title: "Add to Salesforce",
+      payload: (linkedObjects ?? []).map((object) => ({
+        id: object.Id,
+        title: object.Name,
+        selected: true,
+        type: object.attributes.type,
+      })),
+    }
+  );
+};
