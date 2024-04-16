@@ -103,7 +103,11 @@ export const ContactScreen = ({ contact }: ContactScreenProps) => {
                     <Stack gap={5} align="center">
                       <H1>{object.name} (0)</H1>
                       <Link
-                        to={`/addoredit/${object.name}/ContactId/${contact.Id}`}
+                        to={`/addoredit/${
+                          ["Task", "Event"].includes(object.object)
+                            ? "Activity"
+                            : object.object
+                        }/ContactId/${contact.Id}`}
                       >
                         <FontAwesomeIcon
                           icon={faPlus as IconProp}
