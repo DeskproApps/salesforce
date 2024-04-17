@@ -17,7 +17,6 @@ import {
   postData,
 } from "../../api/api";
 import { Field } from "../../api/types";
-import { DropdownSelect } from "../../components/DropdownSelect/DropdownSelect";
 import { FieldMappingInput } from "../../components/FieldMappingInput/FieldMappingInput";
 import { useQueryWithClient } from "../../hooks";
 import { QueryKey } from "../../query";
@@ -82,7 +81,11 @@ export const CreateActivity = () => {
   const [submissionError, setSubmissionError] = useState<string | null>(null);
   const [schema, setSchema] = useState<ZodTypeAny>(z.object({}));
 
-  const search = useLocation().search;
+  const location = useLocation();
+
+  const search = location.search;
+
+  const type = location.pathname?.split("/")[2];
 
   const queryParams = new URLSearchParams(search);
 
@@ -108,7 +111,7 @@ export const CreateActivity = () => {
   const submitType = object === "edit" ? "edit" : "create";
 
   useInitialisedDeskproAppClient((client) => {
-    client.setTitle(`${capitalizeFirstLetter(submitType)} Activity`);
+    client.setTitle(`${capitalizeFirstLetter(submitType)} ${type}`);
     client.deregisterElement("salesforceEditButton");
     client.deregisterElement("salesforcePlusButton");
   }, []);
@@ -119,8 +122,6 @@ export const CreateActivity = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [typeParam]);
-
-  const type = watch("Type");
 
   useEffect(() => {
     if (id && object !== "edit") {
@@ -279,19 +280,6 @@ export const CreateActivity = () => {
 
   return (
     <form onSubmit={handleSubmit(submit)} style={{ margin: "5px" }}>
-      {object !== "edit" && (
-        <DropdownSelect
-          title="Type"
-          value={type || ""}
-          onChange={(e) => {
-            if (e) setValue("Type", e);
-          }}
-          error={!!errors.Type}
-          data={activityTypes}
-          keyName={"label"}
-          valueName={"label"}
-        />
-      )}
       {type && (
         <Stack vertical gap={12}>
           {fields?.map((field, i) => {

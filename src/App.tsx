@@ -107,11 +107,19 @@ function App() {
                         element={<CreateNote />}
                       />
                       <Route
-                        path="activity/:object/:id/"
+                        path="Task/:object/:id/"
                         element={<CreateActivity />}
                       />
                       <Route
-                        path="opportunity/:object/:id/"
+                        path="Event/:object/:id/"
+                        element={<CreateActivity />}
+                      />
+                      <Route
+                        path="Event/:object/:id/"
+                        element={<CreateActivity />}
+                      />
+                      <Route
+                        path="Call/:object/:id/"
                         element={<CreateOpportunity />}
                       />
                       <Route
