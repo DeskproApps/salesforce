@@ -41,7 +41,7 @@ export const ListScreen = ({ object, field, id }: ListScreenProps) => {
     onElementEvent(elementId) {
       switch (elementId) {
         case "salesforcePlusButton":
-          navigate(`/addoredit/${object}/${id}`);
+          navigate(`/addoredit/${object}/${field}/${id}`);
           break;
       }
     },

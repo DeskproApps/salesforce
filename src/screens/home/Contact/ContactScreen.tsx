@@ -57,7 +57,7 @@ export const ContactScreen = ({ contact }: ContactScreenProps) => {
   return (
     <>
       <Container>
-        <Stack gap={5} vertical>
+        <Stack gap={10} vertical>
           <Stack
             justify="space-between"
             align="center"
@@ -82,105 +82,134 @@ export const ContactScreen = ({ contact }: ContactScreenProps) => {
           <div style={{ width: "100%" }}>
             <HorizontalDivider />
           </div>
-          {objects.map((object, idx) => {
-            if (!object) return;
-            const data = objectsData.data.find(
-              (e) =>
-                (
-                  e as unknown as {
-                    attributes: { type: string };
-                  }[]
-                )[0]?.attributes.type === object?.name
-            ) as {
-              attributes: { type: string };
-              Id: string;
-            }[];
+          <Stack vertical gap={10} style={{ width: "100%" }}>
+            {objects.map((object, idx) => {
+              if (!object) return;
+              const data = objectsData.data.find(
+                (e) =>
+                  (
+                    e as unknown as {
+                      attributes: { type: string };
+                    }[]
+                  )[0]?.attributes.type === object?.name
+              ) as {
+                attributes: { type: string };
+                Id: string;
+              }[];
 
-            if (!data?.length) return;
-
-            const hasMapping = sObjectsWithMappings.includes(
-              data[0].attributes.type
-            );
-
-            return (
-              <Fragment key={idx}>
-                <Fragment key={idx}>
-                  <Stack
-                    justify="space-between"
-                    align="center"
-                    gap={5}
-                    style={{
-                      verticalAlign: "baseline",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    {hasMapping ? (
+              if (!data?.length) {
+                return (
+                  <Stack vertical style={{ width: "100%" }} gap={10}>
+                    <Stack gap={5} align="center">
+                      <H1>{object.name} (0)</H1>
                       <Link
-                        to={`${basePath}/objects/${object.name}/${object.field}/${contact.Id}/list`}
+                        to={`/addoredit/${object.object}/${object.field}/${contact.Id}`}
                       >
-                        <H1 style={{ color: theme.colors.cyan100 }}>
-                          {object.label}
-                        </H1>
+                        <FontAwesomeIcon
+                          icon={faPlus as IconProp}
+                          size="sm"
+                          style={{
+                            color: theme.colors.grey500,
+                            alignSelf: "center",
+                            cursor: "pointer",
+                            marginBottom: "2px",
+                          }}
+                        ></FontAwesomeIcon>
                       </Link>
-                    ) : (
-                      <H1>{object.label}</H1>
-                    )}
-                    {hasMapping && (
-                      <Link
-                        to={`/addoredit/${object.name}/ContactId/${contact.Id}`}
-                      >
-                        <Stack style={{ color: theme.colors.grey500 }}>
-                          <FontAwesomeIcon
-                            icon={faPlus as IconProp}
-                            size="sm"
-                            style={{
-                              alignSelf: "center",
-                              cursor: "pointer",
-                              marginBottom: "2px",
-                            }}
-                          ></FontAwesomeIcon>
-                        </Stack>
-                      </Link>
-                    )}
+                    </Stack>
+                    <div style={{ width: "100%" }}>
+                      <HorizontalDivider />
+                    </div>
                   </Stack>
-                  <Stack gap={14} style={{ width: "100%" }} vertical>
-                    {data?.map((sobj) => (
-                      <Fragment key={idx}>
-                        <PropertyLayout
-                          properties={layout.objects[object?.name as string]}
-                          object={sobj as unknown as LayoutObject}
-                          externalUrl={
-                            hasMapping
-                              ? getObjectPermalink(
-                                  context?.settings,
-                                  `/lightning/r/${object.name}/${
-                                    (sobj as { Id: string }).Id
-                                  }/view`
-                                )
-                              : undefined
-                          }
-                          internalUrl={
-                            hasMapping
-                              ? `${basePath}/objects/${object.name}/${sobj.Id}/view`
-                              : undefined
-                          }
-                        />
+                );
+              }
+
+              const hasMapping = sObjectsWithMappings.includes(
+                data[0].attributes.type
+              );
+
+              return (
+                <Fragment key={idx}>
+                  <Fragment key={idx}>
+                    <Stack
+                      justify="space-between"
+                      align="center"
+                      gap={5}
+                      style={{
+                        verticalAlign: "baseline",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      {hasMapping ? (
+                        <Link
+                          to={`${basePath}/objects/${object.name}/${object.field}/${contact.Id}/list`}
+                        >
+                          <H1 style={{ color: theme.colors.cyan100 }}>
+                            {object.label} ({data.length})
+                          </H1>
+                        </Link>
+                      ) : (
+                        <H1>
+                          {object.label} ({data.length})
+                        </H1>
+                      )}
+                      {hasMapping && (
+                        <Link
+                          to={`/addoredit/${object.name}/ContactId/${contact.Id}`}
+                        >
+                          <Stack style={{ color: theme.colors.grey500 }}>
+                            <FontAwesomeIcon
+                              icon={faPlus as IconProp}
+                              size="sm"
+                              style={{
+                                alignSelf: "center",
+                                cursor: "pointer",
+                                marginBottom: "2px",
+                              }}
+                            ></FontAwesomeIcon>
+                          </Stack>
+                        </Link>
+                      )}
+                    </Stack>
+                    <Stack gap={14} style={{ width: "100%" }} vertical>
+                      {data?.map((sobj) => (
+                        <Fragment key={idx}>
+                          <PropertyLayout
+                            properties={layout.objects[object?.name as string]}
+                            object={sobj as unknown as LayoutObject}
+                            externalUrl={
+                              hasMapping
+                                ? getObjectPermalink(
+                                    context?.settings,
+                                    `/lightning/r/${object.name}/${
+                                      (sobj as { Id: string }).Id
+                                    }/view`
+                                  )
+                                : undefined
+                            }
+                            internalUrl={
+                              hasMapping
+                                ? `${basePath}/objects/${object.name}/${sobj.Id}/view`
+                                : undefined
+                            }
+                          />
+                          <div style={{ width: "100%" }}>
+                            <HorizontalDivider />
+                          </div>
+                        </Fragment>
+                      ))}
+                      {(!data || data?.length === 0) && (
                         <div style={{ width: "100%" }}>
                           <HorizontalDivider />
                         </div>
-                      </Fragment>
-                    ))}
-                    {(!data || data?.length === 0) && (
-                      <div style={{ width: "100%" }}>
-                        <HorizontalDivider />
-                      </div>
-                    )}
-                  </Stack>
+                      )}
+                    </Stack>
+                  </Fragment>
                 </Fragment>
-              </Fragment>
-            );
-          })}
+              );
+            })}
+          </Stack>
         </Stack>
       </Container>
     </>

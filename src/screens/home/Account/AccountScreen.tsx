@@ -96,8 +96,32 @@ export const AccountScreen = ({ account }: AccountScreenProps) => {
               Id: string;
             }[];
 
-            if (!data?.length) return;
-
+            if (!data?.length) {
+              return (
+                <Stack vertical style={{ width: "100%" }} gap={10}>
+                  <Stack gap={5} align="center">
+                    <H1>{object.name} (0)</H1>
+                    <Link
+                      to={`/addoredit/${object.name}/AccountId/${account.Id}`}
+                    >
+                      <FontAwesomeIcon
+                        icon={faPlus as IconProp}
+                        size="sm"
+                        style={{
+                          color: theme.colors.grey500,
+                          alignSelf: "center",
+                          cursor: "pointer",
+                          marginBottom: "2px",
+                        }}
+                      ></FontAwesomeIcon>
+                    </Link>
+                  </Stack>
+                  <div style={{ width: "100%" }}>
+                    <HorizontalDivider />
+                  </div>
+                </Stack>
+              );
+            }
             const hasMapping = sObjectsWithMappings.includes(
               data[0].attributes.type
             );
@@ -120,11 +144,13 @@ export const AccountScreen = ({ account }: AccountScreenProps) => {
                         to={`${basePath}/objects/${object.name}/${object.field}/${account.Id}/list`}
                       >
                         <H1 style={{ color: theme.colors.cyan100 }}>
-                          {object.label}
+                          {object.label} ({data.length})
                         </H1>
                       </Link>
                     ) : (
-                      <H1>{object.label}</H1>
+                      <H1>
+                        {object.label} ({data.length})
+                      </H1>
                     )}
                     {hasMapping && (
                       <Link

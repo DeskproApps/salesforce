@@ -45,10 +45,6 @@ export const ViewScreen = ({ object, id }: ViewScreenProps) => {
       switch (elementId) {
         case "salesforceEditButton":
           switch (object) {
-            case "Task":
-            case "Event":
-              objectName = "Activity";
-              break;
             case "Account":
             case "Contact":
             case "Lead":
@@ -57,8 +53,11 @@ export const ViewScreen = ({ object, id }: ViewScreenProps) => {
             default:
               objectName = object;
           }
+
           navigate(
-            `/addoredit/${objectName}/${object}/${id}${
+            `/addoredit/${objectName}/${
+              ["Task", "Event"].includes(object) ? "edit" : objectName
+            }/${id}${
               ["Task", "Event"].includes(object) ? `?type=${object}` : ""
             }`
           );
