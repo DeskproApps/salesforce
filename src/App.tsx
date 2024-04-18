@@ -111,15 +111,15 @@ function App() {
                         element={<CreateActivity />}
                       />
                       <Route
-                        path="Event/:object/:id/"
-                        element={<CreateActivity />}
-                      />
-                      <Route
-                        path="Event/:object/:id/"
-                        element={<CreateActivity />}
-                      />
-                      <Route
                         path="Call/:object/:id/"
+                        element={<CreateActivity />}
+                      />
+                      <Route
+                        path="Event/:object/:id/"
+                        element={<CreateActivity />}
+                      />
+                      <Route
+                        path="Opportunity/:object/:id/"
                         element={<CreateOpportunity />}
                       />
                       <Route
