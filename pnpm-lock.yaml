@@ -29,6 +29,9 @@ dependencies:
   babel-plugin-styled-components:
     specifier: ^2.0.7
     version: 2.1.4(@babel/core@7.24.0)(styled-components@5.3.11)
+  iframe-resizer:
+    specifier: ^4.3.11
+    version: 4.3.11
   jest-styled-components:
     specifier: ^7.1.1
     version: 7.2.0(styled-components@5.3.11)
@@ -3494,6 +3497,11 @@ packages:
 
   /ieee754@1.2.1:
     resolution: {integrity: sha512-dcyqhDvX1C46lXZcVqCpK+FtMRQVdIMN6/Df5js2zouUsqG7I6sFxitIC+7KYK29KdXOLHdu9zL4sFnoVQnqaA==}
+    dev: false
+
+  /iframe-resizer@4.3.11:
+    resolution: {integrity: sha512-5QtnsmfH11GDsuC7Gxd/eNzojudX3346Gb0E+Ku8ln8AtfSq+cWCZtnhCrthrtE7f1CI2/kwHkZ9G4sFYzHP7A==}
+    engines: {node: '>=0.8.0'}
     dev: false
 
   /ignore@4.0.6:
