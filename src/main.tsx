@@ -4,6 +4,7 @@ import { HashRouter as Router } from "react-router-dom";
 import { DeskproAppProvider } from "@deskpro/app-sdk";
 import App from "./App";
 import "./index.css";
+import "iframe-resizer/js/iframeResizer.contentWindow.js";
 
 ReactDOM.render(
   <React.StrictMode>
