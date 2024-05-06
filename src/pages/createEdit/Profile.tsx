@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { get } from "lodash";
 import { Button, H2, Stack } from "@deskpro/deskpro-ui";
 import {
   useDeskproAppClient,
@@ -6,9 +7,9 @@ import {
   useInitialisedDeskproAppClient,
 } from "@deskpro/app-sdk";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useCallback } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { ZodObject, ZodTypeAny, z } from "zod";
 import { editData, getObjectById, getObjectMeta } from "../../api/api";
 import { Field } from "../../api/types";
@@ -22,9 +23,14 @@ const UNUSABLE_FIELDS = ["AccountId", "ReportsToId"];
 
 export const EditProfile = () => {
   const { object, id } = useParams();
+  const [searchParams] = useSearchParams();
+  const type = searchParams.get("type");
   const { context } = useDeskproLatestAppContext();
   const navigate = useNavigate();
   const { client } = useDeskproAppClient();
+  const isProfile = useMemo(() => {
+    return ["Account", "Contact", "Lead"].some((item) => item === type);
+  }, [type]);
 
   const [schema, setSchema] = useState<ZodTypeAny>(z.object({}));
   const [submitting, setSubmitting] = useState(false);
@@ -44,24 +50,22 @@ export const EditProfile = () => {
   useInitialisedDeskproAppClient((client) => {
     client.setTitle(`Edit ${object}`);
     client.deregisterElement("salesforceEditButton");
-  });
+  }, [object]);
 
   const profileMetadata = useQueryWithClient(
     [QueryKey.ACTIVITY_METADATA, object],
-    (client) => getObjectMeta(client, object as string),
-    {
-      enabled: !!object,
-    }
+    (client) => getObjectMeta(client, (isProfile ? type : object) as string),
+    { enabled: !!object }
   );
 
   const layout = useMemo(
-    () => getScreenLayout(context?.settings, object as string, "view"),
-    [context?.settings, object]
+    () => getScreenLayout(context?.settings, (isProfile ? type : object) as string, "view"),
+    [context?.settings, object, isProfile, type]
   );
 
   const profileById = useQueryWithClient(
     [QueryKey.ACTIVITY_BY_ID, id],
-    (client) => getObjectById(client, object as string, id as string),
+    (client) => getObjectById(client, (isProfile ? type : object) as string, id as string),
     {
       enabled: !!object && !!id,
     }
@@ -151,19 +155,18 @@ export const EditProfile = () => {
       !UNUSABLE_FIELDS.includes(e.name)
   );
 
-  const submit = async (data: any) => {
+  const submit = useCallback((data: any) => {
     if (!client || !object) return;
 
     setSubmitting(true);
 
-    await editData(client, object, id as string, data)
-      .then(() => navigate(-1))
+    return editData(client, (isProfile ? type : object) as string, id as string, data)
+      .then(() => navigate(-2))
       .catch((e) => {
         setSubmissionError(mapErrorMessage(e));
-
         setSubmitting(false);
       });
-  };
+  }, [client, object, isProfile, type, id, navigate]);
 
   return (
     <form style={{ margin: "5px" }} onSubmit={handleSubmit(submit)}>
@@ -195,7 +198,7 @@ export const EditProfile = () => {
                 />
                 {field && errors[field.name] && (
                   <H2 style={{ color: "red" }}>
-                    {errors[field.name]?.message}
+                    {get(errors, [field.name, "message"])}
                   </H2>
                 )}
               </Stack>
@@ -216,7 +219,7 @@ export const EditProfile = () => {
           <Button
             disabled={submitting}
             text="Cancel"
-            onClick={() => navigate(-1)}
+            onClick={() => navigate(-2)}
             intent="secondary"
           ></Button>
         </Stack>

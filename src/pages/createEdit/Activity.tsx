@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { get } from "lodash";
 import { Button, H2, Stack } from "@deskpro/deskpro-ui";
 import {
   LoadingSpinner,
@@ -302,7 +303,7 @@ export const CreateActivity = () => {
                 />
                 {field && errors[field.name] && (
                   <H2 style={{ color: "red" }}>
-                    {errors[field.name]?.message}
+                    {get(errors, [field.name, "message"])}
                   </H2>
                 )}
               </Stack>

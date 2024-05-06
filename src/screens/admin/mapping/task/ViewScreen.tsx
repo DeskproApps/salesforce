@@ -1,7 +1,7 @@
 import { Stack, H1, P1 } from "@deskpro/deskpro-ui";
 import { QueryKey } from "../../../../query";
 import { getObjectMetaPreInstalled } from "../../../../api/preInstallationApi";
-import { PropertyLayout } from "../../../../components/Mapper/PropertyLayout";
+import { PropertyLayout, Properties } from "../../../../components/Mapper/PropertyLayout";
 import { FieldProperty, ViewLayout } from "../../types";
 import { useAdminQuery } from "../../hooks";
 import { fieldToPropertyMapper } from "../../utils";
@@ -28,7 +28,7 @@ export const ViewScreen = ({
   }, [layout, onChange]);
 
   const setRootLayout = useCallback(
-    (properties) => setLayout((layout) => ({ ...layout, root: properties })),
+    (properties: Properties<FieldProperty>) => setLayout((layout) => ({ ...layout, root: properties })),
     []
   );
 

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { H1, P1, Spinner, Stack } from "@deskpro/deskpro-ui";
 import { useDeskproAppTheme } from "@deskpro/app-sdk";
 import { Suspense, useCallback, useEffect, useState } from "react";
@@ -39,12 +40,12 @@ export const HomeScreen = ({
   );
 
   const setRootLayout = useCallback(
-    (properties) => setLayout((layout) => ({ ...layout, root: properties })),
+    (properties: Properties<FieldProperty>) => setLayout((layout) => ({ ...layout, root: properties })),
     []
   );
 
-  const setObjectsOrderLayout = useCallback((properties) => {
-    setLayout((layout) => {
+  const setObjectsOrderLayout = useCallback((properties: Properties<FieldProperty>) => {
+    setLayout((layout: any) => {
       return { ...layout, objects_order: properties };
     });
   }, []);

@@ -54,13 +54,9 @@ export const ViewScreen = ({ object, id }: ViewScreenProps) => {
               objectName = object;
           }
 
-          navigate(
-            `/addoredit/${objectName}/${
-              ["Task", "Event"].includes(object) ? "edit" : objectName
-            }/${id}${
-              ["Task", "Event"].includes(object) ? `?type=${object}` : ""
-            }`
-          );
+          navigate(`/addoredit/${objectName}/${
+            ["Task", "Event"].includes(object) ? "edit" : objectName
+          }/${id}?type=${object}`);
           break;
       }
     },

@@ -1,3 +1,4 @@
+import { HashRouter } from "react-router-dom";
 import { lightTheme, ThemeProvider } from "@deskpro/deskpro-ui";
 import {
   act,
@@ -12,9 +13,11 @@ import * as APIFn from "../../../src/api/api";
 
 const renderPage = () => {
   return render(
-    <ThemeProvider theme={lightTheme}>
-      <EditProfile />
-    </ThemeProvider>
+    <HashRouter>
+      <ThemeProvider theme={lightTheme}>
+        <EditProfile />
+      </ThemeProvider>
+    </HashRouter>
   );
 };
 
@@ -110,10 +113,7 @@ jest.mock("react-router-dom", () => ({
   ...jest.requireActual("react-router-dom"),
   useNavigate: () => jest.fn(),
   useLocation: () => ({ search: "?type=Event" }),
-  useParams: () => ({
-    id: "123",
-    object: "Lead",
-  }),
+  useParams: () => ({ id: "123", object: "Lead" }),
 }));
 
 describe("Edit Activity", () => {
