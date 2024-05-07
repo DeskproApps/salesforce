@@ -3,7 +3,7 @@ import {
   useDeskproAppEvents,
   useDeskproLatestAppContext,
 } from "@deskpro/app-sdk";
-import { Button, Stack } from "@deskpro/deskpro-ui";
+import { Button, Stack, AnyIcon } from "@deskpro/deskpro-ui";
 import { faRefresh } from "@fortawesome/free-solid-svg-icons";
 import { Suspense } from "react";
 import { DndProvider } from "react-dnd";
@@ -83,7 +83,7 @@ function App() {
                     <Button
                       text="Reload"
                       onClick={() => resetErrorBoundary()}
-                      icon={faRefresh}
+                      icon={faRefresh as AnyIcon}
                       intent="secondary"
                     />
                   </Stack>
@@ -94,56 +94,29 @@ function App() {
                     <Route path="ticket">
                       <Route index element={<Ticket />} />
                       <Route path="objects">
-                        <Route
-                          path=":object/:field/:id/list"
-                          element={<List />}
-                        />
+                        <Route path=":object/:field/:id/list" element={<List />}/>
                         <Route path=":object/:id/view" element={<View />} />
                       </Route>
                     </Route>
                     <Route path="addoredit">
-                      <Route
-                        path="note/:object/:id/"
-                        element={<CreateNote />}
-                      />
-                      <Route
-                        path="Task/:object/:id/"
-                        element={<CreateActivity />}
-                      />
-                      <Route
-                        path="Call/:object/:id/"
-                        element={<CreateActivity />}
-                      />
-                      <Route
-                        path="Event/:object/:id/"
-                        element={<CreateActivity />}
-                      />
-                      <Route
-                        path="Opportunity/:object/:id/"
-                        element={<CreateOpportunity />}
-                      />
-                      <Route
-                        path="profile/:object/:id/"
-                        element={<EditProfile />}
-                      />
+                      <Route path="note/:object/:id/" element={<CreateNote />} />
+                      <Route path="Task/:object/:id/" element={<CreateActivity />}/>
+                      <Route path="Call/:object/:id/" element={<CreateActivity />}/>
+                      <Route path="Event/:object/:id/" element={<CreateActivity />}/>
+                      <Route path="Opportunity/:object/:id/" element={<CreateOpportunity />}/>
+                      <Route path="profile/:object/:id/" element={<EditProfile />}/>
                     </Route>
                     <Route path="user">
                       <Route index element={<User />} />
                       <Route path="objects">
-                        <Route
-                          path=":object/:field/:id/list"
-                          element={<List />}
-                        />
+                        <Route path=":object/:field/:id/list" element={<List />}/>
                         <Route path=":object/:id/view" element={<View />} />
                       </Route>
                     </Route>
                     <Route path="organization">
                       <Route index element={<Organization />} />
                       <Route path="objects">
-                        <Route
-                          path=":object/:field/:id/list"
-                          element={<List />}
-                        />
+                        <Route path=":object/:field/:id/list" element={<List />}/>
                         <Route path=":object/:id/view" element={<View />} />
                       </Route>
                     </Route>

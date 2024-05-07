@@ -313,7 +313,7 @@ export const getMe = (client: IDeskproClient) =>
 /**
  * Perform an authorized request after the app is installed
  */
-const installedRequest = async (
+export const installedRequest = async (
   client: IDeskproClient,
   url: string,
   method: RequestMethod,

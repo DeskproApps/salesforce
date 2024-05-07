@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Dropdown, DropdownItemType, Input } from "@deskpro/deskpro-ui";
 import {
   LoadingSpinner,
