@@ -3,15 +3,19 @@ import ReactDOM from "react-dom/client";
 import { HashRouter as Router } from "react-router-dom";
 import { DeskproAppProvider } from "@deskpro/app-sdk";
 import App from "./App";
-import "./index.css";
+import "./main.css";
+import "simplebar/dist/simplebar.min.css";
+import { Scrollbar } from "@deskpro/deskpro-ui";
 
 const root = ReactDOM.createRoot(document.getElementById('root') as Element);
 root.render((
   <React.StrictMode>
-    <DeskproAppProvider>
+    <Scrollbar style={{ height: "100%", width: "100%" }}>
+      <DeskproAppProvider>
         <Router>
-            <App />
+          <App />
         </Router>
-    </DeskproAppProvider>
+      </DeskproAppProvider>
+    </Scrollbar>
   </React.StrictMode>
 ));
