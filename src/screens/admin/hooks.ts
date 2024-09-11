@@ -1,7 +1,6 @@
-import { IDeskproClient, useDeskproAppEvents } from "@deskpro/app-sdk";
-import { useState } from "react";
+import { IDeskproClient } from "@deskpro/app-sdk";
 import { UseQueryOptions, UseQueryResult } from "react-query/types/react/types";
-import { useQueryWithClient } from "../../hooks";
+import { useQueryWithClient, useAppContext } from "../../hooks";
 import { Settings } from "../../types";
 
 /**
@@ -27,15 +26,8 @@ export function useAdminQuery<TQueryFnData = unknown>(
     "queryKey" | "queryFn"
   >
 ): UseQueryResult<TQueryFnData> {
-  const [settings, setSettings] = useState<Settings>();
-
+  const { settings } = useAppContext();
   const enabled = !!settings?.global_access_token;
-
-  useDeskproAppEvents({
-    onAdminSettingsChange: (settings) => {
-      setSettings(settings);
-    },
-  });
 
   return useQueryWithClient<TQueryFnData>(
     [...queryKey, enabled],

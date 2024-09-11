@@ -1,8 +1,4 @@
-import {
-  LoadingSpinner,
-  useDeskproAppEvents,
-  useInitialisedDeskproAppClient,
-} from "@deskpro/app-sdk";
+import { LoadingSpinner, useInitialisedDeskproAppClient } from "@deskpro/app-sdk";
 import { TabBar, TabBarItemType } from "@deskpro/deskpro-ui";
 import { Suspense, useCallback, useState } from "react";
 import { Reveal } from "../../../components/Reveal/Reveal";
@@ -10,24 +6,17 @@ import defaultContactLayout from "../../../resources/default_layout/opportunity.
 import { ListScreen } from "../../../screens/admin/mapping/opportunity/ListScreen";
 import { ViewScreen } from "../../../screens/admin/mapping/opportunity/ViewScreen";
 import { ListLayout, ViewLayout } from "../../../screens/admin/types";
-import { OpportunityLayout, Settings } from "../../../types";
+import { OpportunityLayout } from "../../../types";
+import { useAppContext } from "../../../hooks";
 
 export const Opportunity = () => {
-  const [settings, setSettings] = useState<Settings>();
-
+  const { settings } = useAppContext();
   const [activeTab, setActiveTab] = useState(0);
-
   const [layout, setLayout] = useState<OpportunityLayout>(
     settings?.mapping_opportunity
       ? JSON.parse(settings?.mapping_opportunity)
       : defaultContactLayout
   );
-
-  useDeskproAppEvents({
-    onAdminSettingsChange: (settings) => {
-      setSettings(settings);
-    },
-  });
 
   useInitialisedDeskproAppClient(
     (client) => {

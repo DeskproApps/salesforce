@@ -1,8 +1,4 @@
-import {
-  LoadingSpinner,
-  useDeskproAppEvents,
-  useInitialisedDeskproAppClient,
-} from "@deskpro/app-sdk";
+import { LoadingSpinner, useInitialisedDeskproAppClient } from "@deskpro/app-sdk";
 import { TabBar, TabBarItemType } from "@deskpro/deskpro-ui";
 import { Suspense, useCallback, useState } from "react";
 import { Reveal } from "../../../components/Reveal/Reveal";
@@ -10,24 +6,17 @@ import defaultContactLayout from "../../../resources/default_layout/task.json";
 import { ListScreen } from "../../../screens/admin/mapping/task/ListScreen";
 import { ViewScreen } from "../../../screens/admin/mapping/task/ViewScreen";
 import { ListLayout, ViewLayout } from "../../../screens/admin/types";
-import { Settings, TaskLayout } from "../../../types";
+import { TaskLayout } from "../../../types";
+import { useAppContext } from "../../../hooks";
 
 export const Task = () => {
-  const [settings, setSettings] = useState<Settings>();
-
+  const { settings } = useAppContext();
   const [activeTab, setActiveTab] = useState(0);
-
   const [layout, setLayout] = useState<TaskLayout>(
     settings?.mapping_task
       ? JSON.parse(settings.mapping_task)
       : defaultContactLayout
   );
-
-  useDeskproAppEvents({
-    onAdminSettingsChange: (settings) => {
-      setSettings(settings);
-    },
-  });
 
   useInitialisedDeskproAppClient(
     (client) => {
