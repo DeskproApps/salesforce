@@ -1,8 +1,4 @@
-import {
-  LoadingSpinner,
-  useDeskproAppEvents,
-  useInitialisedDeskproAppClient,
-} from "@deskpro/app-sdk";
+import { LoadingSpinner, useInitialisedDeskproAppClient } from "@deskpro/app-sdk";
 import { TabBar, TabBarItemType } from "@deskpro/deskpro-ui";
 import { Suspense, useCallback, useState } from "react";
 import { Reveal } from "../../../components/Reveal/Reveal";
@@ -10,22 +6,15 @@ import defaultLayout from "../../../resources/default_layout/lead.json";
 import { HomeScreen } from "../../../screens/admin/mapping/lead/HomeScreen";
 import { ViewScreen } from "../../../screens/admin/mapping/lead/ViewScreen";
 import { HomeLayout, ViewLayout } from "../../../screens/admin/types";
-import { LeadLayout, Settings } from "../../../types";
+import { LeadLayout } from "../../../types";
+import { useAppContext } from "../../../hooks";
 
 export const Lead = () => {
-  const [settings, setSettings] = useState<Settings>();
-
+  const { settings } = useAppContext();
   const [activeTab, setActiveTab] = useState(0);
-
   const [layout, setLayout] = useState<LeadLayout>(
     settings?.mapping_lead ? JSON.parse(settings.mapping_lead) : defaultLayout
   );
-
-  useDeskproAppEvents({
-    onAdminSettingsChange: (settings) => {
-      setSettings(settings);
-    },
-  });
 
   useInitialisedDeskproAppClient(
     (client) => {

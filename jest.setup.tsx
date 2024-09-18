@@ -60,8 +60,8 @@ jest.mock("@deskpro/app-sdk", () => ({
   proxyFetch: async () => fetch,
 }));
 
-jest.mock("./src/hooks.ts", () => ({
-  ...jest.requireActual("./src/hooks.ts"),
+jest.mock("./src/hooks/hooks.ts", () => ({
+  ...jest.requireActual("./src/hooks/hooks.ts"),
   useQueryWithClient: (queryKey: string, queryFn: () => any, options: any) => {
     queryKey;
     options;

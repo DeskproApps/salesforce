@@ -1,8 +1,4 @@
-import {
-  LoadingSpinner,
-  useDeskproAppEvents,
-  useInitialisedDeskproAppClient,
-} from "@deskpro/app-sdk";
+import { LoadingSpinner, useInitialisedDeskproAppClient } from "@deskpro/app-sdk";
 import { TabBar, TabBarItemType } from "@deskpro/deskpro-ui";
 import { Suspense, useCallback, useState } from "react";
 import { Reveal } from "../../../components/Reveal/Reveal";
@@ -10,24 +6,17 @@ import defaultContactLayout from "../../../resources/default_layout/event.json";
 import { ListScreen } from "../../../screens/admin/mapping/event/ListScreen";
 import { ViewScreen } from "../../../screens/admin/mapping/event/ViewScreen";
 import { ListLayout, ViewLayout } from "../../../screens/admin/types";
-import { EventLayout, Settings } from "../../../types";
+import { EventLayout } from "../../../types";
+import { useAppContext } from "../../../hooks";
 
 export const Event = () => {
-  const [settings, setSettings] = useState<Settings>();
-
+  const { settings } = useAppContext();
   const [activeTab, setActiveTab] = useState(0);
-
   const [layout, setLayout] = useState<EventLayout>(
     settings?.mapping_event
       ? JSON.parse(settings.mapping_event)
       : defaultContactLayout
   );
-
-  useDeskproAppEvents({
-    onAdminSettingsChange: (settings) => {
-      setSettings(settings);
-    },
-  });
 
   useInitialisedDeskproAppClient(
     (client) => {

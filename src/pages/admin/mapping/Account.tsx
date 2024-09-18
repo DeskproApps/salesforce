@@ -1,8 +1,4 @@
-import {
-  LoadingSpinner,
-  useDeskproAppEvents,
-  useInitialisedDeskproAppClient,
-} from "@deskpro/app-sdk";
+import { LoadingSpinner, useInitialisedDeskproAppClient } from "@deskpro/app-sdk";
 import { TabBar, TabBarItemType } from "@deskpro/deskpro-ui";
 import { Suspense, useCallback, useState } from "react";
 import { Reveal } from "../../../components/Reveal/Reveal";
@@ -10,24 +6,17 @@ import defaultLayout from "../../../resources/default_layout/account.json";
 import { HomeScreen } from "../../../screens/admin/mapping/account/HomeScreen";
 import { ViewScreen } from "../../../screens/admin/mapping/account/ViewScreen";
 import { HomeLayout, ViewLayout } from "../../../screens/admin/types";
-import { AccountLayout, Settings } from "../../../types";
+import { AccountLayout } from "../../../types";
+import { useAppContext } from "../../../hooks";
 
 export const Account = () => {
-  const [settings, setSettings] = useState<Settings>();
-
+  const { settings } = useAppContext();
   const [activeTab, setActiveTab] = useState(0);
-
   const [layout, setLayout] = useState<AccountLayout>(
     settings?.mapping_account
       ? JSON.parse(settings.mapping_account)
       : defaultLayout
   );
-
-  useDeskproAppEvents({
-    onAdminSettingsChange: (settings) => {
-      setSettings(settings);
-    },
-  });
 
   useInitialisedDeskproAppClient(
     (client) => {

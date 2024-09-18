@@ -1,8 +1,4 @@
-import {
-  LoadingSpinner,
-  useDeskproAppEvents,
-  useInitialisedDeskproAppClient,
-} from "@deskpro/app-sdk";
+import { LoadingSpinner, useInitialisedDeskproAppClient } from "@deskpro/app-sdk";
 import { TabBar, TabBarItemType } from "@deskpro/deskpro-ui";
 import { Suspense, useCallback, useState } from "react";
 import { Reveal } from "../../../components/Reveal/Reveal";
@@ -10,24 +6,17 @@ import defaultContactLayout from "../../../resources/default_layout/note.json";
 import { ListScreen } from "../../../screens/admin/mapping/note/ListScreen";
 import { ViewScreen } from "../../../screens/admin/mapping/note/ViewScreen";
 import { ListLayout, ViewLayout } from "../../../screens/admin/types";
-import { NoteLayout, Settings } from "../../../types";
+import { NoteLayout } from "../../../types";
+import { useAppContext } from "../../../hooks";
 
 export const Note = () => {
-  const [settings, setSettings] = useState<Settings>();
-
+  const { settings } = useAppContext();
   const [activeTab, setActiveTab] = useState(0);
-
   const [layout, setLayout] = useState<NoteLayout>(
     settings?.mapping_note
       ? JSON.parse(settings.mapping_note)
       : defaultContactLayout
   );
-
-  useDeskproAppEvents({
-    onAdminSettingsChange: (settings) => {
-      setSettings(settings);
-    },
-  });
 
   useInitialisedDeskproAppClient(
     (client) => {
