@@ -55,8 +55,7 @@
       "options": {
         "entrypoint": "#/admin/mapping/contact",
         "label": "Edit Mapping",
-        "icon": "edit",
-        "height": 500
+        "icon": "edit"
       },
       "isRequired": false,
       "isBackendOnly": false,

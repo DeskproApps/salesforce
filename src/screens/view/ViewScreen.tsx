@@ -77,6 +77,9 @@ export const ViewScreen = ({ object, id }: ViewScreenProps) => {
     return null;
   }
 
+  // eslint-disable-next-line no-console
+  console.log(">>> layout:", { object, id, layout, data });
+
   return (
     <Container>
       <Stack gap={5} vertical>

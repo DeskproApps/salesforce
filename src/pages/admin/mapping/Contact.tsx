@@ -44,12 +44,8 @@ export const Contact = () => {
   );
 
   const tabs: TabBarItemType[] = [
-    {
-      label: "Contact Home Screen",
-    },
-    {
-      label: "Contact View Screen",
-    },
+    { label: "Contact Home Screen" },
+    { label: "Contact View Screen" },
   ];
 
   if (!settings) {

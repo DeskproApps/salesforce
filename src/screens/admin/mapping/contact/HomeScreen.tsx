@@ -39,10 +39,9 @@ export const HomeScreen = ({
     (client, settings) => getObjectMetaPreInstalled(client, settings, "Contact")
   );
 
-  const setRootLayout = useCallback(
-    (properties: Properties<FieldProperty>) => setLayout((layout) => ({ ...layout, root: properties })),
-    []
-  );
+  const setRootLayout = useCallback((properties: Properties<FieldProperty>) => {
+    setLayout((layout) => ({ ...layout, root: properties }))
+  }, []);
 
   const setObjectsOrderLayout = useCallback((properties: any) => {
     setLayout((layout) => {
