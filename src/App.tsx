@@ -43,7 +43,10 @@ import { parseJsonErrorMessage } from "./utils";
 
 function App() {
   const { context } = useDeskproLatestAppContext();
-  const { pathname } = useLocation();
+  const location = useLocation();
+  // eslint-disable-next-line no-console
+  console.log(">>> App:", location);
+  const { pathname } = location;
 
   const navigate = useNavigate();
 
