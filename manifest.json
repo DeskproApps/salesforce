@@ -68,7 +68,8 @@
       "options": {
         "entrypoint": "#/admin/mapping/lead",
         "label": "Edit Mapping",
-        "icon": "edit"
+        "icon": "edit",
+        "height": 500
       },
       "isRequired": false,
       "isBackendOnly": false,
@@ -80,7 +81,8 @@
       "options": {
         "entrypoint": "#/admin/mapping/account",
         "label": "Edit Mapping",
-        "icon": "edit"
+        "icon": "edit",
+        "height": 500
       },
       "isRequired": false,
       "isBackendOnly": false,
@@ -92,7 +94,8 @@
       "options": {
         "entrypoint": "#/admin/mapping/note",
         "label": "Edit Mapping",
-        "icon": "edit"
+        "icon": "edit",
+        "height": 500
       },
       "isRequired": false,
       "isBackendOnly": false,
@@ -104,7 +107,8 @@
       "options": {
         "entrypoint": "#/admin/mapping/opportunity",
         "label": "Edit Mapping",
-        "icon": "edit"
+        "icon": "edit",
+        "height": 500
       },
       "isRequired": false,
       "isBackendOnly": false,
@@ -116,7 +120,8 @@
       "options": {
         "entrypoint": "#/admin/mapping/task",
         "label": "Edit Mapping",
-        "icon": "edit"
+        "icon": "edit",
+        "height": 500
       },
       "isRequired": false,
       "isBackendOnly": false,
@@ -128,7 +133,8 @@
       "options": {
         "entrypoint": "#/admin/mapping/event",
         "label": "Edit Mapping",
-        "icon": "edit"
+        "icon": "edit",
+        "height": 500
       },
       "isRequired": false,
       "isBackendOnly": false,
