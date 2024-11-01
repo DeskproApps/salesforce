@@ -14,7 +14,7 @@
     "bumpManifestVer": "node ./bin/bumpManifestVer.js"
   },
   "dependencies": {
-    "@adobe/css-tools": "4.3.2",
+    "@adobe/css-tools": "4.4.0",
     "@babel/plugin-transform-react-jsx": "^7.20.13",
     "@deskpro/app-sdk": "^2.1.14",
     "@deskpro/deskpro-ui": "^7.18.4",
