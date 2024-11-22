@@ -5,6 +5,8 @@ export interface Settings {
   client_secret?: string;
   salesforce_instance_url?: string;
   global_access_token?: string;
+  default_comment_on_ticket_reply?: boolean;
+  default_comment_on_ticket_note?: boolean;
   mapping_contact?: string;
   mapping_note?: string;
   mapping_opportunity?: string;
@@ -13,6 +15,10 @@ export interface Settings {
   mapping_event?: string;
   mapping_account?: string;
 }
+
+export type DPUser = {
+  //..
+};
 
 export interface ITaskMetadata {
   fields: {

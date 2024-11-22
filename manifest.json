@@ -41,13 +41,29 @@
       "isBackendOnly": false,
       "order": 30
     },
+    "default_comment_on_ticket_reply": {
+      "title": "Ticket reply as comment",
+      "description": "Enable option to add Deskpro replies as task comments when a Space issue is linked to a Deskpro ticket",
+      "type": "boolean",
+      "isRequired": false,
+      "isBackendOnly": false,
+      "order": 40
+    },
+    "default_comment_on_ticket_note": {
+      "title": "Ticket note as comment",
+      "description": "Enable option to add Deskpro notes as task comments when a Space issue is linked to a Deskpro ticket",
+      "type": "boolean",
+      "isRequired": false,
+      "isBackendOnly": false,
+      "order": 50
+    },
     "global_access_token": {
       "title": "",
       "type": "app_embedded",
       "options": { "entrypoint": "#/admin/global-sign-in" },
       "isRequired": true,
       "isBackendOnly": true,
-      "order": 40
+      "order": 60
     },
     "mapping_contact": {
       "title": "Contact Field Mapping",
@@ -60,7 +76,7 @@
       },
       "isRequired": false,
       "isBackendOnly": false,
-      "order": 50
+      "order": 70
     },
     "mapping_lead": {
       "title": "Lead Field Mapping",
@@ -73,7 +89,7 @@
       },
       "isRequired": false,
       "isBackendOnly": false,
-      "order": 60
+      "order": 80
     },
     "mapping_account": {
       "title": "Account Field Mapping",
@@ -86,7 +102,7 @@
       },
       "isRequired": false,
       "isBackendOnly": false,
-      "order": 70
+      "order": 90
     },
     "mapping_note": {
       "title": "Note Field Mapping",
@@ -99,7 +115,7 @@
       },
       "isRequired": false,
       "isBackendOnly": false,
-      "order": 80
+      "order": 100
     },
     "mapping_opportunity": {
       "title": "Opportunity Field Mapping",
@@ -112,7 +128,7 @@
       },
       "isRequired": false,
       "isBackendOnly": false,
-      "order": 90
+      "order": 110
     },
     "mapping_task": {
       "title": "Task Field Mapping",
@@ -125,7 +141,7 @@
       },
       "isRequired": false,
       "isBackendOnly": false,
-      "order": 100
+      "order": 120
     },
     "mapping_event": {
       "title": "Event Field Mapping",
@@ -138,7 +154,7 @@
       },
       "isRequired": false,
       "isBackendOnly": false,
-      "order": 110
+      "order": 130
     }
   },
   "proxy": {

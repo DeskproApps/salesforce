@@ -23,11 +23,7 @@ import { getMetadataBasedSchema } from "../../schemas/default";
 import opportunityJson from "../../resources/default_layout/opportunity.json";
 import { FieldMappingInput } from "../../components/FieldMappingInput/FieldMappingInput";
 import { Field } from "../../api/types";
-import {
-  buttonLabels,
-  capitalizeFirstLetter,
-  mapErrorMessage,
-} from "../../utils";
+import { buttonLabels, capitalize, mapErrorMessage } from "../../utils";
 
 const nonUsableFields = ["AccountId", "CreatedDate", "CreatedById"];
 
@@ -56,7 +52,7 @@ export const CreateOpportunity = () => {
 
   useInitialisedDeskproAppClient((client) => {
     client.deregisterElement("salesforcePlusButton");
-    client.setTitle(`${capitalizeFirstLetter(submitType)} Opportunity`);
+    client.setTitle(`${capitalize(submitType)} Opportunity`);
     client.deregisterElement("salesforceEditButton");
   });
 

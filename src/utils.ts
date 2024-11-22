@@ -227,7 +227,7 @@ export const logger = pino({
   useOnlyCustomLevels: true,
 });
 
-export const capitalizeFirstLetter = (string: string) => {
+export const capitalize = (string: string) => {
   return string.charAt(0).toUpperCase() + string.slice(1);
 };
 
