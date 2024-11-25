@@ -50,6 +50,9 @@ export const ContactScreen = ({ contact }: ContactScreenProps) => {
     }
   );
 
+  // eslint-disable-next-line no-console
+  console.log(">>> home:Contact", { layout, objects, objectsData, contact });
+
   if (!objectsData.isSuccess) {
     return null;
   }
