@@ -24,11 +24,7 @@ import { QueryKey } from "../../query";
 import eventJson from "../../resources/default_layout/event.json";
 import taskJson from "../../resources/default_layout/task.json";
 import { getMetadataBasedSchema } from "../../schemas/default";
-import {
-  buttonLabels,
-  capitalizeFirstLetter,
-  mapErrorMessage,
-} from "../../utils";
+import { buttonLabels, capitalize, mapErrorMessage } from "../../utils";
 
 const activityTypes = [
   {
@@ -112,7 +108,7 @@ export const CreateActivity = () => {
   const submitType = object === "edit" ? "edit" : "create";
 
   useInitialisedDeskproAppClient((client) => {
-    client.setTitle(`${capitalizeFirstLetter(submitType)} ${type}`);
+    client.setTitle(`${capitalize(submitType)} ${type}`);
     client.deregisterElement("salesforceEditButton");
     client.deregisterElement("salesforcePlusButton");
   }, []);
