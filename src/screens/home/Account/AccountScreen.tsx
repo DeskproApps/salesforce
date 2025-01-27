@@ -23,6 +23,7 @@ import {
   sObjectsWithMappings,
 } from "../../../utils";
 import { ObjectProperty } from "../../admin/types";
+import { Settings } from "../../../types";
 
 type AccountScreenProps = {
   account: Account;
@@ -30,7 +31,7 @@ type AccountScreenProps = {
 
 export const AccountScreen = ({ account }: AccountScreenProps) => {
   const { theme } = useDeskproAppTheme();
-  const { context } = useDeskproLatestAppContext();
+  const { context } = useDeskproLatestAppContext<{},Settings>();
 
   const basePath = useBasePath();
 

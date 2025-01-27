@@ -23,6 +23,7 @@ import {
 } from "../../../utils";
 import { ObjectProperty } from "../../admin/types";
 import { Link } from "react-router-dom";
+import { Settings } from "../../../types";
 
 type LeadScreenProps = {
   lead: Lead;
@@ -30,7 +31,7 @@ type LeadScreenProps = {
 
 export const LeadScreen = ({ lead }: LeadScreenProps) => {
   const { theme } = useDeskproAppTheme();
-  const { context } = useDeskproLatestAppContext();
+  const { context } = useDeskproLatestAppContext<{}, Settings>();
 
   const basePath = useBasePath();
 

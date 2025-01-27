@@ -14,9 +14,10 @@ import { Container } from "../components/Container/Container";
 import { useQueryWithClient } from "../hooks";
 import { QueryKey } from "../query";
 import { AccountScreen } from "../screens/home/Account/AccountScreen";
+import { Settings } from "../types";
 
 export const Organization = () => {
-    const { context } = useDeskproLatestAppContext();
+    const { context } = useDeskproLatestAppContext<{ user: { emails: string[] }, organisation?: { name: string } }, Settings>();
     const { theme } = useDeskproAppTheme();
 
     const [selectedObjectId, setSelectedObjectId] = useState<string>("");

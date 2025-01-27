@@ -23,6 +23,7 @@ import {
   sObjectsWithMappings,
 } from "../../../utils";
 import { ObjectProperty } from "../../admin/types";
+import { Settings } from "../../../types";
 
 type ContactScreenProps = {
   contact: Contact;
@@ -30,7 +31,7 @@ type ContactScreenProps = {
 
 export const ContactScreen = ({ contact }: ContactScreenProps) => {
   const { theme } = useDeskproAppTheme();
-  const { context } = useDeskproLatestAppContext();
+  const { context } = useDeskproLatestAppContext<{},Settings>();
 
   const basePath = useBasePath();
 

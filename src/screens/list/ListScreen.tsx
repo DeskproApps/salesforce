@@ -14,6 +14,7 @@ import { PropertyLayout } from "../../components/PropertyLayout/PropertyLayout";
 import { Container } from "../../components/Container/Container";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useMemo } from "react";
+import { Settings } from "../../types";
 
 type ListScreenProps = {
   object: string;
@@ -23,7 +24,7 @@ type ListScreenProps = {
 
 export const ListScreen = ({ object, field, id }: ListScreenProps) => {
   const navigate = useNavigate();
-  const { context } = useDeskproLatestAppContext();
+  const { context } = useDeskproLatestAppContext<{},Settings>();
   const { pathname } = useLocation();
 
   useInitialisedDeskproAppClient(

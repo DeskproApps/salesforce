@@ -13,6 +13,7 @@ import { PropertyLayout } from "../../components/PropertyLayout/PropertyLayout";
 import { Container } from "../../components/Container/Container";
 import { useLocation } from "react-router-dom";
 import { useMemo } from "react";
+import { Settings } from "../../types";
 
 type ListScreenProps = {
   id: string;
@@ -20,7 +21,7 @@ type ListScreenProps = {
 };
 
 export const ActivityListScreen = ({ id, field }: ListScreenProps) => {
-  const { context } = useDeskproLatestAppContext();
+  const { context } = useDeskproLatestAppContext<{},Settings>();
   const { pathname } = useLocation();
 
   useInitialisedDeskproAppClient(
