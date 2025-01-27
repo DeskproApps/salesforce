@@ -26,7 +26,7 @@ export const EditProfile = () => {
   const { object, id } = useParams();
   const [searchParams] = useSearchParams();
   const type = searchParams.get("type");
-  const { context } = useDeskproLatestAppContext<{},Settings>();
+  const { context } = useDeskproLatestAppContext<never, Settings>();
   const navigate = useNavigate();
   const { client } = useDeskproAppClient();
   const isProfile = useMemo(() => {

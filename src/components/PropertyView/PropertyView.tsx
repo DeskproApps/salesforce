@@ -39,7 +39,7 @@ export const PropertyView = ({
   externalUrl,
   isFirst,
 }: PropertyViewProps) => {
-  const { context } = useDeskproLatestAppContext<{}, Settings>();
+  const { context } = useDeskproLatestAppContext<never, Settings>();
 
   const meta = useQueryWithClient<ObjectMeta>(
     [QueryKey.ADMIN_OBJECT_META, object.attributes.type],

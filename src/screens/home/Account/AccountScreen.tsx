@@ -31,7 +31,7 @@ type AccountScreenProps = {
 
 export const AccountScreen = ({ account }: AccountScreenProps) => {
   const { theme } = useDeskproAppTheme();
-  const { context } = useDeskproLatestAppContext<{},Settings>();
+  const { context } = useDeskproLatestAppContext<never, Settings>();
 
   const basePath = useBasePath();
 
@@ -180,11 +180,10 @@ export const AccountScreen = ({ account }: AccountScreenProps) => {
                           externalUrl={
                             hasMapping
                               ? getObjectPermalink(
-                                  context?.settings,
-                                  `/lightning/r/${object.name}/${
-                                    (sobj as { Id: string }).Id
-                                  }/view`
-                                )
+                                context?.settings,
+                                `/lightning/r/${object.name}/${(sobj as { Id: string }).Id
+                                }/view`
+                              )
                               : undefined
                           }
                           internalUrl={

@@ -24,7 +24,7 @@ type ListScreenProps = {
 
 export const ListScreen = ({ object, field, id }: ListScreenProps) => {
   const navigate = useNavigate();
-  const { context } = useDeskproLatestAppContext<{},Settings>();
+  const { context } = useDeskproLatestAppContext<never, Settings>();
   const { pathname } = useLocation();
 
   useInitialisedDeskproAppClient(
@@ -87,9 +87,8 @@ export const ListScreen = ({ object, field, id }: ListScreenProps) => {
                 context?.settings,
                 `/lightning/r/${object}/${(item as LayoutObject).Id}/view`
               )}
-              internalUrl={`${basePath}/objects/${object}/${
-                (item as LayoutObject).Id
-              }/view`}
+              internalUrl={`${basePath}/objects/${object}/${(item as LayoutObject).Id
+                }/view`}
             />
             <div style={{ width: "100%" }}>
               <HorizontalDivider />

@@ -21,7 +21,7 @@ type ListScreenProps = {
 };
 
 export const ActivityListScreen = ({ id, field }: ListScreenProps) => {
-  const { context } = useDeskproLatestAppContext<{},Settings>();
+  const { context } = useDeskproLatestAppContext<never, Settings>();
   const { pathname } = useLocation();
 
   useInitialisedDeskproAppClient(
