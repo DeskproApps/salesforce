@@ -23,6 +23,7 @@ import {
 } from "../../../utils";
 import { ObjectProperty } from "../../admin/types";
 import { Link } from "react-router-dom";
+import { Settings } from "../../../types";
 
 type LeadScreenProps = {
   lead: Lead;
@@ -30,7 +31,7 @@ type LeadScreenProps = {
 
 export const LeadScreen = ({ lead }: LeadScreenProps) => {
   const { theme } = useDeskproAppTheme();
-  const { context } = useDeskproLatestAppContext();
+  const { context } = useDeskproLatestAppContext<never, Settings>();
 
   const basePath = useBasePath();
 
@@ -149,11 +150,10 @@ export const LeadScreen = ({ lead }: LeadScreenProps) => {
                           externalUrl={
                             hasMapping
                               ? getObjectPermalink(
-                                  context?.settings,
-                                  `/lightning/r/${object.name}/${
-                                    (sobj as { Id: string }).Id
-                                  }/view`
-                                )
+                                context?.settings,
+                                `/lightning/r/${object.name}/${(sobj as { Id: string }).Id
+                                }/view`
+                              )
                               : undefined
                           }
                           internalUrl={

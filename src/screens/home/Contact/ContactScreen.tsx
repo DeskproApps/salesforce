@@ -23,6 +23,7 @@ import {
   sObjectsWithMappings,
 } from "../../../utils";
 import { ObjectProperty } from "../../admin/types";
+import { Settings } from "../../../types";
 
 type ContactScreenProps = {
   contact: Contact;
@@ -30,7 +31,7 @@ type ContactScreenProps = {
 
 export const ContactScreen = ({ contact }: ContactScreenProps) => {
   const { theme } = useDeskproAppTheme();
-  const { context } = useDeskproLatestAppContext();
+  const { context } = useDeskproLatestAppContext<never, Settings>();
 
   const basePath = useBasePath();
 
@@ -181,11 +182,10 @@ export const ContactScreen = ({ contact }: ContactScreenProps) => {
                             externalUrl={
                               hasMapping
                                 ? getObjectPermalink(
-                                    context?.settings,
-                                    `/lightning/r/${object.name}/${
-                                      (sobj as { Id: string }).Id
-                                    }/view`
-                                  )
+                                  context?.settings,
+                                  `/lightning/r/${object.name}/${(sobj as { Id: string }).Id
+                                  }/view`
+                                )
                                 : undefined
                             }
                             internalUrl={

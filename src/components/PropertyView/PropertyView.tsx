@@ -22,6 +22,7 @@ import { Link } from "../Link/Link";
 import { Email } from "./fields/Email/Email";
 import { UrlLink } from "./fields/UrlLink/UrlLink";
 import { TextArea } from "./fields/TextArea/TextArea";
+import { Settings } from "../../types";
 
 type PropertyViewProps = {
   name: string;
@@ -38,7 +39,7 @@ export const PropertyView = ({
   externalUrl,
   isFirst,
 }: PropertyViewProps) => {
-  const { context } = useDeskproLatestAppContext();
+  const { context } = useDeskproLatestAppContext<never, Settings>();
 
   const meta = useQueryWithClient<ObjectMeta>(
     [QueryKey.ADMIN_OBJECT_META, object.attributes.type],

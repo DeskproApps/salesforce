@@ -23,6 +23,7 @@ import {
   sObjectsWithMappings,
 } from "../../../utils";
 import { ObjectProperty } from "../../admin/types";
+import { Settings } from "../../../types";
 
 type AccountScreenProps = {
   account: Account;
@@ -30,7 +31,7 @@ type AccountScreenProps = {
 
 export const AccountScreen = ({ account }: AccountScreenProps) => {
   const { theme } = useDeskproAppTheme();
-  const { context } = useDeskproLatestAppContext();
+  const { context } = useDeskproLatestAppContext<never, Settings>();
 
   const basePath = useBasePath();
 
@@ -179,11 +180,10 @@ export const AccountScreen = ({ account }: AccountScreenProps) => {
                           externalUrl={
                             hasMapping
                               ? getObjectPermalink(
-                                  context?.settings,
-                                  `/lightning/r/${object.name}/${
-                                    (sobj as { Id: string }).Id
-                                  }/view`
-                                )
+                                context?.settings,
+                                `/lightning/r/${object.name}/${(sobj as { Id: string }).Id
+                                }/view`
+                              )
                               : undefined
                           }
                           internalUrl={

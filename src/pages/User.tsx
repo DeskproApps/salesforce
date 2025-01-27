@@ -22,10 +22,11 @@ import { useQueryWithClient } from "../hooks";
 import { QueryKey } from "../query";
 import { ContactScreen } from "../screens/home/Contact/ContactScreen";
 import { LeadScreen } from "../screens/home/Lead/LeadScreen";
+import { Settings } from "../types";
 
 export const User = () => {
   const { client } = useDeskproAppClient();
-  const { context } = useDeskproLatestAppContext();
+  const { context } = useDeskproLatestAppContext<{ user: { emails: string[] }, organisation?: { name: string } }, Settings>();
   const { theme } = useDeskproAppTheme();
 
   const [selectedObjectId, setSelectedObjectId] = useState<string>("");
@@ -83,12 +84,12 @@ export const User = () => {
 
   const options: DropdownItemType<string>[] = leadsAndContacts.map(
     (object) =>
-      ({
-        key: object.Id,
-        label: `${object.FirstName} ${object.LastName} (${object.attributes.type})`,
-        type: "value" as const,
-        value: object.Id,
-      } as DropdownItemType<string>)
+    ({
+      key: object.Id,
+      label: `${object.FirstName} ${object.LastName} (${object.attributes.type})`,
+      type: "value" as const,
+      value: object.Id,
+    } as DropdownItemType<string>)
   );
 
   const selectedObject: Lead | Contact =
