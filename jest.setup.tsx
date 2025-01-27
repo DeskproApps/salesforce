@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import "regenerator-runtime/runtime";
 import "@testing-library/jest-dom/extend-expect";
-import fetch from "node-fetch";
 import { TextDecoder, TextEncoder } from "util";
 import * as React from "react";
 import { theme } from "./tests/mocks";
