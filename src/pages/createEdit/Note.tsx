@@ -14,7 +14,7 @@ import { NoteSubmit } from "../../types";
 import { noteSchema } from "../../schemas/note";
 import { useQueryWithClient } from "../../hooks";
 import { QueryKey } from "../../query";
-import { buttonLabels, capitalizeFirstLetter } from "../../utils";
+import { buttonLabels, capitalize } from "../../utils";
 
 export const CreateNote = () => {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -39,7 +39,7 @@ export const CreateNote = () => {
 
   useInitialisedDeskproAppClient((client) => {
     client.deregisterElement("salesforcePlusButton");
-    client.setTitle(`${capitalizeFirstLetter(submitType)} Note`);
+    client.setTitle(`${capitalize(submitType)} Note`);
     client.deregisterElement("salesforceEditButton");
   });
 
