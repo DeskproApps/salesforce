@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { DateInput, useDeskproAppTheme } from "@deskpro/app-sdk";
-import { H1, Stack, TextArea } from "@deskpro/deskpro-ui";
+import { useDeskproAppTheme } from "@deskpro/app-sdk";
+import { H1, Stack, TextArea, DatePickerInputWithDisplay } from "@deskpro/deskpro-ui";
 import { ChangeEvent, forwardRef } from "react";
 import { FieldErrorsImpl } from "react-hook-form";
 import {
@@ -119,7 +119,7 @@ export const FieldMappingInput = forwardRef(
         return (
           <Stack vertical style={{ width: "100%" }}>
             <H1 style={{ color: theme.colors.grey80 }}>{field.label}</H1>
-            <DateInput
+            <DatePickerInputWithDisplay
               required={required}
               style={
                 !!errors?.[field.name] && {
