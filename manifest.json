@@ -47,7 +47,8 @@
       "options": { "entrypoint": "#/admin/global-sign-in" },
       "isRequired": true,
       "isBackendOnly": true,
-      "order": 40
+      "order": 40,
+      "default": ""
     },
     "mapping_contact": {
       "title": "Contact Field Mapping",
