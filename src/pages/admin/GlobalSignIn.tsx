@@ -1,35 +1,21 @@
-import {
-    useDeskproAppTheme,
-    CopyToClipboardInput,
-} from "@deskpro/app-sdk";
-import { faSignIn, faSignOut } from "@fortawesome/free-solid-svg-icons";
-import { AnchorButton, Button, H2, P1, Spinner, Stack } from "@deskpro/deskpro-ui";
-import { useGlobalSignIn } from "./useGlobalSignIn";
 import "./style.css";
+import { AnchorButton, Button, H2, P1 } from "@deskpro/deskpro-ui";
+import { faSignIn, faSignOut } from "@fortawesome/free-solid-svg-icons";
+import { useDeskproAppTheme } from "@deskpro/app-sdk";
+import { useGlobalSignIn } from "./useGlobalSignIn";
 
 export const GlobalSignIn = () => {
     const { theme } = useDeskproAppTheme();
-
     const {
-        callbackUrl,
         user,
-        oAuthUrl,
+        authUrl,
         isLoading,
         isDisabled,
-        isBlocking,
         isInstanceUrlInvalid,
         cancelLoading,
         signIn,
         signOut,
     } = useGlobalSignIn();
-
-    if (isBlocking) {
-        return (
-            <Stack align="center" vertical>
-                <Spinner />
-            </Stack>
-        );
-    }
 
     return (
         <>
@@ -38,16 +24,6 @@ export const GlobalSignIn = () => {
                     Salesforce instance URL is invalid, please make sure that it's in the following format:
                     https://MyDomainName.my.salesforce.com
                 </div>
-            )}
-
-            {callbackUrl && (
-                <>
-                    <H2 style={{ marginBottom: "5px" }}>Callback URL</H2>
-                        <CopyToClipboardInput value={callbackUrl}/>
-                    <P1 style={{ marginBottom: "16px", marginTop: "8px", color: theme.colors.grey80 }}>
-                        The callback URL will be required during Salesforce app setup
-                    </P1>
-                </>
             )}
 
             <H2 style={{ marginBottom: "5px" }}>Global Salesforce User*</H2>
@@ -65,13 +41,13 @@ export const GlobalSignIn = () => {
                             This Salesforce user account will be used by all Deskpro agents
                         </P1>
                         <AnchorButton
-                            href={oAuthUrl ? oAuthUrl.toString() : ""}
+                            href={authUrl ?? "#"}
                             target="_blank"
                             text="Sign-In"
                             icon={faSignIn}
                             intent="secondary"
                             size="small"
-                            disabled={isDisabled || !oAuthUrl}
+                            disabled={isDisabled || isLoading}
                             loading={isLoading}
                             onClick={signIn}
                         />

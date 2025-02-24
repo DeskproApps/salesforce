@@ -1,8 +1,8 @@
 import { adminGenericProxyFetch, IDeskproClient } from "@deskpro/app-sdk";
-import { Settings } from "../types";
 import { AuthTokens, ObjectMeta, RequestMethod } from "./types";
 import { every, trimEnd } from "lodash";
 import { isResponseError } from "./api";
+import { Settings } from "../types";
 
 /**
  * Get current user details (whilst app is not installed)
@@ -96,14 +96,12 @@ const preInstalledRequest = async (
   );
 
   // If our access token has expired, attempt to get a new one using the refresh token
-  if ([400, 401].includes(response.status)) {
+  const mode = settings.use_deskpro_saas ? "global" : "local";
+
+  if ([400, 401].includes(response.status) && mode === "local") {
     const refreshRequestOptions: RequestInit = {
       method: "POST",
-      body: `grant_type=refresh_token&client_id=${
-        settings?.client_key as string
-      }&client_secret=${settings?.client_secret as string}&refresh_token=${
-        tokens.refreshToken as string
-      }`,
+      body: `grant_type=refresh_token&client_id=${settings?.client_key}&client_secret=${settings?.client_secret}&refresh_token=${tokens.refreshToken}`,
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },

@@ -1,173 +1,109 @@
-import {
-    adminGenericProxyFetch,
-    useDeskproAppClient,
-    useDeskproAppEvents,
-    useInitialisedDeskproAppClient
-} from "@deskpro/app-sdk";
-import { useEffect, useMemo, useState } from "react";
-import { Settings } from "../../types";
-import { v4 as uuidv4 } from "uuid";
-import { every, isEmpty } from "lodash";
-import { AuthTokens } from "../../api/types";
 import { getMePreInstalled } from "../../api/preInstallationApi";
+import { OAuth2Result, useDeskproAppClient, useDeskproLatestAppContext, useInitialisedDeskproAppClient } from "@deskpro/app-sdk";
+import { Settings } from "../../types";
+import { useCallback, useState } from "react";
+import getAccessAndRefreshTokens from "../../api/getAccessAndRefreshTokens";
 
+interface User {
+    name: string
+    email: string
+}
 export const useGlobalSignIn = () => {
     const { client } = useDeskproAppClient();
-    const [ settings, setSettings ] = useState<Settings|null>(null);
-    const [ callbackUrl, setCallbackUrl ] = useState<string|null>(null);
-    const [ poll, setPoll ] = useState<(() => Promise<{ token: string }>)|null>(null);
-    const [ isLoading, setIsLoading ] = useState<boolean>(false);
-    const [ isBlocking, setIsBlocking ] = useState<boolean>(true);
-    const [ accessCode, setAccessCode ] = useState<string|null>(null);
-    const [ user, setUser ] = useState<{ name: string; email: string; }|null>(null);
+    const [user, setUser] = useState<User | null>(null);
+    const [authUrl, setAuthUrl] = useState<string | null>(null);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [error, setError] = useState<string | null>(null);
+    const { context } = useDeskproLatestAppContext<unknown, Settings>();
 
-    const key = useMemo(() => uuidv4(), []);
+    const settings = context?.settings
 
-    useDeskproAppEvents({
-        onAdminSettingsChange: setSettings,
-    }, []);
-
-    // Initialise OAuth flow
-    useInitialisedDeskproAppClient((client) => {
-        (async () => {
-            const { callbackUrl, poll } = await client.oauth2().getAdminGenericCallbackUrl(
-                key,
-                /\?code=(?<token>.+?)&/,
-                /&state=(?<key>.+)/
-            );
-
-            setCallbackUrl(callbackUrl);
-            setPoll(() => poll);
-        })();
-    }, [key]);
-
-    // Build auth flow entrypoint URL
-    const oAuthUrl = useMemo(() => {
-        if (!every([settings?.salesforce_instance_url, settings?.client_key])) {
-            return null;
+    useInitialisedDeskproAppClient(async (client) => {
+        if (!settings || !settings.use_deskpro_saas) {
+            return
         }
 
-        const url = new URL(`${settings?.salesforce_instance_url}/services/oauth2/authorize`);
+        const clientId = settings.client_key;
+        const mode = settings.use_deskpro_saas ? "global" : "local";
 
-        url.search = new URLSearchParams({
-            response_type: "code",
-            client_id: settings?.client_key as string,
-            redirect_uri: callbackUrl as string,
-            state: key,
-            scope: "refresh_token api",
-        }).toString();
-
-        return url;
-    }, [
-        settings?.salesforce_instance_url,
-        settings?.client_key,
-        callbackUrl,
-        key
-    ]);
-
-    // Exchange auth code for auth/refresh tokens
-    useInitialisedDeskproAppClient((client) => {
-        const canRequestAccessToken = every([
-            accessCode,
-            callbackUrl,
-            settings?.salesforce_instance_url,
-            settings?.client_key,
-            settings?.client_secret,
-        ]);
-
-        if (!canRequestAccessToken) {
-            return;
+        // Ensure the is a client id if in local mode
+        if (mode === "local" && !clientId) {
+            // Reset the authURL because there might be an authURL from when
+            // the user was in global mode
+            setAuthUrl(null)
+            return
         }
 
-        const url = new URL(`${settings?.salesforce_instance_url}/services/oauth2/token`);
+        const oauth2 =
+            mode === "local"
+                // Local Version (custom/self-hosted app)
+                ? await client.startOauth2Local(
+                    ({ state, callbackUrl }) => {
+                        return `${settings?.salesforce_instance_url}/services/oauth2/authorize?response_type=code&client_id=${clientId}&redirect_uri=${callbackUrl}&state=${state}&scope=${"refresh_token api"}`;
+                    },
+                    /\?code=(?<code>.+?)&/,
+                    async (code: string): Promise<OAuth2Result> => {
 
-        const requestOptions: RequestInit = {
-            method: "POST",
-            body: new URLSearchParams({
-                grant_type: "authorization_code",
-                code: accessCode as string,
-                client_id: settings?.client_key as string,
-                client_secret: settings?.client_secret as string,
-                redirect_uri: callbackUrl as string,
-            }),
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded",
-            },
-        };
+                        const url = new URL(oauth2.authorizationUrl);
+                        const redirectUri = url.searchParams.get("redirect_uri");
+                        if (!redirectUri) throw new Error("Failed to get callback URL");
 
-        (async () => {
-            const fetch = await adminGenericProxyFetch(client);
-            const response = await fetch(url.toString(), requestOptions);
-            const data = await response.json();
+                        const data = await getAccessAndRefreshTokens({ settings, accessCode: code, callbackUrl: redirectUri, client })
+                        return { data };
+                    }
+                )
+                // Global Proxy Service
+                : await client.startOauth2Global("D48B4D38D21B429891AC05258AB37E1E");
 
-            const tokens: AuthTokens = {
-                accessToken: data.access_token,
-                refreshToken: data.refresh_token,
-            };
+        setAuthUrl(oauth2.authorizationUrl);
+        setIsLoading(false);
 
-            client.setAdminSetting(JSON.stringify(tokens));
+        try {
+            const result = await oauth2.poll()
 
-            setIsLoading(false);
-        })();
-    }, [
-        accessCode,
-        callbackUrl,
-        settings?.salesforce_instance_url,
-        settings?.client_key,
-        settings?.client_secret,
-    ]);
+            // Update the access/refresh tokens
+            const stringifiedTokens = JSON.stringify(result.data)
+            client.setAdminSetting(stringifiedTokens);
 
-    // Get current Salesforce user
-    useInitialisedDeskproAppClient((client) => {
-        (async () => {
-            if (!isEmpty(settings?.global_access_token) && settings?.salesforce_instance_url) {
-                setUser(await getMePreInstalled(client, settings));
+            let currentUser: User | null = null
+            try {
+                currentUser = await getMePreInstalled(client, settings)
+                if (!currentUser) {
+                    throw new Error()
+                }
+            } catch {
+                throw new Error("An error occurred while verifying the user")
             }
-        })();
-    }, [settings?.global_access_token, settings?.salesforce_instance_url]);
 
-    // Set blocking flag
-    useEffect(() => {
-        if (!(callbackUrl && client && poll)) {
-            setIsBlocking(true);
-        } else if (settings?.global_access_token && !user) {
-            setIsBlocking(true);
-        } else {
-            setIsBlocking(false);
+            setUser(currentUser)
+        } catch (err) {
+            setError(err instanceof Error ? err.message : 'Unknown error')
+            setIsLoading(false)
         }
-    }, [
-        callbackUrl,
-        client,
-        poll,
-        user,
-        settings?.global_access_token
-    ]);
+
+    }, [context, settings])
 
     const signOut = () => {
         client?.setAdminSetting("");
         setUser(null);
-        setAccessCode(null);
     };
 
-    const signIn = () => {
-        poll && (async () => {
-            setIsLoading(true);
-            setAccessCode((await poll()).token)
-        })();
-    };
+    const signIn = useCallback(() => {
+        setIsLoading(true);
+        window.open(authUrl ?? "", '_blank');
+    }, [setIsLoading, authUrl]);
 
     // Only enable the sign-in button once we have all necessary settings
-    let isDisabled = ! every([
-        settings?.client_key,
-        settings?.client_secret,
-        settings?.salesforce_instance_url,
-    ]);
+    let isDisabled = false
+
+    if (settings && settings.use_deskpro_saas === false && !settings.client_key || !settings?.client_secret || !settings.salesforce_instance_url) {
+        isDisabled = true
+    }
 
     const isInstanceUrlInvalid = settings?.salesforce_instance_url
         // eslint-disable-next-line no-useless-escape
         ? !/https:\/\/[a-zA-Z0-9\-]+\.(sandbox|develop\.)?my\.salesforce\.com$/.test(settings.salesforce_instance_url)
         : false
-    ;
 
     if (settings?.salesforce_instance_url && isInstanceUrlInvalid) {
         isDisabled = true;
@@ -176,11 +112,10 @@ export const useGlobalSignIn = () => {
     const cancelLoading = () => setIsLoading(false);
 
     return {
-        callbackUrl,
         user,
-        oAuthUrl,
         isLoading,
-        isBlocking,
+        error,
+        authUrl,
         isDisabled,
         isInstanceUrlInvalid,
         cancelLoading,
