@@ -3,6 +3,7 @@ import { HomeLayout, ListLayout, ViewLayout } from "./screens/admin/types";
 export interface Settings {
   client_key?: string;
   client_secret?: string;
+  use_deskpro_saas?: boolean,
   salesforce_instance_url?: string;
   global_access_token?: string;
   mapping_contact?: string;
