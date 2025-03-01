@@ -48,7 +48,7 @@
     "zod": "^3.24.1"
   },
   "devDependencies": {
-    "@babel/traverse": "7.23.2",
+    "@babel/traverse": "7.26.9",
     "@jest/globals": "^29.7.0",
     "@swc/jest": "^0.2.37",
     "@testing-library/jest-dom": "^5.17.0",
