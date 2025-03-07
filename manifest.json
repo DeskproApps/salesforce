@@ -67,6 +67,7 @@
       },
       "isRequired": false,
       "isBackendOnly": true,
+      "condition": "settings.use_deskpro_saas != true",
       "order": 40
     },
     "global_access_token": {
