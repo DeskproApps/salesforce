@@ -19,7 +19,8 @@ export const useGlobalSignIn = () => {
     const settings = context?.settings
 
     useInitialisedDeskproAppClient(async (client) => {
-        if (!settings || !settings.use_deskpro_saas) {
+        if (!settings || context?.settings.use_deskpro_saas === undefined) {
+            // Make sure settings have loaded.
             return
         }
 
