@@ -54,7 +54,7 @@ export const useGlobalSignIn = () => {
                     }
                 )
                 // Global Proxy Service
-                : await client.startOauth2Global("D48B4D38D21B429891AC05258AB37E1E");
+                : await client.startOauth2Global("3MVG9k02hQhyUgQBDJFGjHpunit6Qn7nRoDm5DY06FG..mnbGEq316N2sOU4I4qZVculsUMYaTad8cY7.0gfV");
 
         setAuthUrl(oauth2.authorizationUrl);
         setIsLoading(false);
