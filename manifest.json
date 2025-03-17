@@ -8,29 +8,46 @@
   "isSingleInstall": true,
   "hasDevMode": true,
   "serveUrl": "https://apps-cdn.deskpro-service.com/__name__/__version__",
+  "secrets": "NwvkQ+dBHVYVbJvqGxDmQ+EtdPKHnCNvVW1YTthncp2AdfXnZvCT4nU4V64BHK0Qr4tpZuktZksT1b0DzWycS6DfiuQXcXTXkcGr6zLLajBTUMd0jDExUXQ88kmlYnh20OzZFtSvf1KKIUTGZYo64E4YwKR/T1o4RwexzBkp0VcM8VCw/pNw0H/2bQgWyaruFZFmiKjz1Bc9zzRM21mbo5pR2s/hSr94070RYwUDHGSWDuCJi88weuM2b9T7X3kwWOS5gD/tdUK1IeZQ7OVoqpjmZsDnIJ3cp4enpF0gF19rs/eR15p1woNWStEqWZL9cxAM2QdigcFdtLvXqN15cnzG2Y4pkpbUJ+IUfBjlwaPh5ylzZGWoFpiIiRfd/MteGk6urcarSHK9U59XrJ/1aEY9643HaoQbWBJ12GeuUyRgnNAuPBsEs1iUDOAVgIlLHuG8FMmaZmSeY4SrHJEZN5BjAbbY3DjgyPFG2Zyvzp5cmo4F36dlZM6s/esKsiO0IdQdCt5rbXoKzOSwl134M1Aw8C3jC/rWuBhXMeMHgUWDbwuoV7Ut6ZJUg9GpoeZyq45VY98H4gjudK4ZvrVB4oB6DowHOTltEPKw8nK8hqVL5dBx3Dy1ptyzzWbeA44OBAeThsiHfsAtqKdZKefbMxYR80ZiqqlIECnqCvZEQdl8c9tPlpE9kEANjb9qhAYuJPX7vPNtDrX9pLWw0lSbEOQ2UE2EPfzzsX/4gwlmy0OhKSVntddHdtC0iHZAqe77BOs5fH+p9uJxJkz9NCLgUUhUv/OApLr5KY79blJN/sxUpj3rUbv+Xygghf0Lrm++WZL2kUVVobOWgE7eB9KTy0xHLQbgTVyreOGjn9OYaNonriwlwJ66Ylb8V9MdXlR41CbY04FpftymC5uNPkS1Oj7qw/oUEn5jsc8uNNXcs0mcDcnP2ch0sbz0c5NHlWQ8xMlT4JARL+6bh9R2JlCcnrFpuGpe9ym4ywbJakv9lGzMIJGDCt+5Nu1U9It+u6Idx4sO97NAM4Hov0MDgDBDtw+ZrM53onvwxPrIGwEDAlr17N+oIToyCIdRFMz40loLI++IgyA5qKgNxkBw29przslDGaVD9lxCO4IvG78DwW0Nk9F0mbrNS2fmNrHcOSf8JKpHS2jPyMscHtwq5ugUyk/C1TBvT4HI14KUt+tMhS8Fr9hWKujhPo+uovrE9b72ncG5Hn4vNSuwJVHbDly/Zz3i4XM0+JPqeuBlVDqubTk8DpEOC1wVp/M83kH9JR9H",
   "repository": {
     "type": "github",
     "url": "https://github.com/DeskproApps/salesforce"
   },
   "targets": [
-    { "target": "user_sidebar", "entrypoint": "#/user" },
-    { "target": "organisation_sidebar", "entrypoint": "#/organization" }
+    {
+      "target": "user_sidebar",
+      "entrypoint": "#/user"
+    },
+    {
+      "target": "organisation_sidebar",
+      "entrypoint": "#/organization"
+    }
   ],
   "settings": {
+    "use_deskpro_saas": {
+      "title": "One-Click Installation",
+      "type": "boolean",
+      "default": true,
+      "isRequired": false,
+      "isBackendOnly": false,
+      "order": 5
+    },
     "client_key": {
       "title": "Client Key",
       "description": "Client key can be obtained by following our setup guide",
       "type": "string",
-      "isRequired": true,
+      "isRequired": false,
       "isBackendOnly": false,
+      "condition": "settings.use_deskpro_saas != true",
       "order": 10
     },
     "client_secret": {
       "title": "Client Secret",
       "description": "Client secret can be obtained by following our setup guide",
       "type": "string",
-      "isRequired": true,
+      "isRequired": false,
       "isBackendOnly": true,
+      "condition": "settings.use_deskpro_saas != true",
       "order": 20
     },
     "salesforce_instance_url": {
@@ -41,13 +58,28 @@
       "isBackendOnly": false,
       "order": 30
     },
+    "callback_url": {
+      "title": "Callback URL",
+      "type": "app_embedded",
+      "options": {
+        "entrypoint": "#/admin/callback",
+        "height": "50px"
+      },
+      "isRequired": false,
+      "isBackendOnly": true,
+      "condition": "settings.use_deskpro_saas != true",
+      "order": 40
+    },
     "global_access_token": {
       "title": "",
       "type": "app_embedded",
-      "options": { "entrypoint": "#/admin/global-sign-in" },
+      "options": {
+        "entrypoint": "#/admin/global-sign-in",
+        "height": "120px"
+      },
       "isRequired": true,
       "isBackendOnly": true,
-      "order": 40
+      "order": 50
     },
     "mapping_contact": {
       "title": "Contact Field Mapping",
@@ -60,7 +92,7 @@
       },
       "isRequired": false,
       "isBackendOnly": false,
-      "order": 50
+      "order": 60
     },
     "mapping_lead": {
       "title": "Lead Field Mapping",
@@ -73,7 +105,7 @@
       },
       "isRequired": false,
       "isBackendOnly": false,
-      "order": 60
+      "order": 70
     },
     "mapping_account": {
       "title": "Account Field Mapping",
@@ -86,7 +118,7 @@
       },
       "isRequired": false,
       "isBackendOnly": false,
-      "order": 70
+      "order": 80
     },
     "mapping_note": {
       "title": "Note Field Mapping",
@@ -99,7 +131,7 @@
       },
       "isRequired": false,
       "isBackendOnly": false,
-      "order": 80
+      "order": 90
     },
     "mapping_opportunity": {
       "title": "Opportunity Field Mapping",
@@ -112,7 +144,7 @@
       },
       "isRequired": false,
       "isBackendOnly": false,
-      "order": 90
+      "order": 100
     },
     "mapping_task": {
       "title": "Task Field Mapping",
@@ -125,7 +157,7 @@
       },
       "isRequired": false,
       "isBackendOnly": false,
-      "order": 100
+      "order": 110
     },
     "mapping_event": {
       "title": "Event Field Mapping",
@@ -138,14 +170,20 @@
       },
       "isRequired": false,
       "isBackendOnly": false,
-      "order": 110
+      "order": 120
     }
   },
   "proxy": {
     "whitelist": [
       {
         "url": "https://(.*).salesforce.com/services/.*",
-        "methods": ["GET", "POST", "PUT", "DELETE", "PATCH"],
+        "methods": [
+          "GET",
+          "POST",
+          "PUT",
+          "DELETE",
+          "PATCH"
+        ],
         "timeout": 30
       }
     ]

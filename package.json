@@ -16,7 +16,7 @@
   "dependencies": {
     "@adobe/css-tools": "4.3.2",
     "@babel/plugin-transform-react-jsx": "^7.25.9",
-    "@deskpro/app-sdk": "^5.1.1",
+    "@deskpro/app-sdk": "^6.0.3",
     "@deskpro/deskpro-ui": "^8.2.1",
     "@hookform/resolvers": "^2.9.11",
     "@swc/core": "^1.10.12",
