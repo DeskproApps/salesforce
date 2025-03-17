@@ -1,5 +1,5 @@
 import { getMePreInstalled } from "../../api/preInstallationApi";
-import { OAuth2Result, useDeskproAppClient, useDeskproLatestAppContext, useInitialisedDeskproAppClient } from "@deskpro/app-sdk";
+import { IOAuth2, OAuth2Result, useDeskproAppClient, useDeskproLatestAppContext, useInitialisedDeskproAppClient } from "@deskpro/app-sdk";
 import { Settings } from "../../types";
 import { useCallback, useState } from "react";
 import getAccessAndRefreshTokens from "../../api/getAccessAndRefreshTokens";
@@ -13,6 +13,8 @@ export const useGlobalSignIn = () => {
     const [user, setUser] = useState<User | null>(null);
     const [authUrl, setAuthUrl] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [isPolling, setIsPolling] = useState(false)
+    const [oauth2Context, setOAuth2Context] = useState<IOAuth2 | null>(null)
     const [error, setError] = useState<string | null>(null);
     const { context } = useDeskproLatestAppContext<unknown, Settings>();
 
@@ -35,7 +37,7 @@ export const useGlobalSignIn = () => {
             return
         }
 
-        const oauth2 =
+        const oAuth2Response =
             mode === "local"
                 // Local Version (custom/self-hosted app)
                 ? await client.startOauth2Local(
@@ -44,8 +46,7 @@ export const useGlobalSignIn = () => {
                     },
                     /\?code=(?<code>.+?)&/,
                     async (code: string): Promise<OAuth2Result> => {
-
-                        const url = new URL(oauth2.authorizationUrl);
+                        const url = new URL(oAuth2Response.authorizationUrl);
                         const redirectUri = url.searchParams.get("redirect_uri");
                         if (!redirectUri) throw new Error("Failed to get callback URL");
 
@@ -56,33 +57,47 @@ export const useGlobalSignIn = () => {
                 // Global Proxy Service
                 : await client.startOauth2Global("3MVG9k02hQhyUgQBDJFGjHpunit6Qn7nRoDm5DY06FG..mnbGEq316N2sOU4I4qZVculsUMYaTad8cY7.0gfV");
 
-        setAuthUrl(oauth2.authorizationUrl);
-        setIsLoading(false);
+        setAuthUrl(oAuth2Response.authorizationUrl);
+        setOAuth2Context(oAuth2Response);
+    }, [context, settings])
 
-        try {
-            const result = await oauth2.poll()
-
-            // Update the access/refresh tokens
-            const stringifiedTokens = JSON.stringify(result.data)
-            client.setAdminSetting(stringifiedTokens);
-
-            let currentUser: User | null = null
-            try {
-                currentUser = await getMePreInstalled(client, settings)
-                if (!currentUser) {
-                    throw new Error()
-                }
-            } catch {
-                throw new Error("An error occurred while verifying the user")
-            }
-
-            setUser(currentUser)
-        } catch (err) {
-            setError(err instanceof Error ? err.message : 'Unknown error')
-            setIsLoading(false)
+    useInitialisedDeskproAppClient((client) => {
+        if (!oauth2Context || !settings) {
+            return
         }
 
-    }, [context, settings])
+        const startPolling = async () => {
+
+            try {
+                const result = await oauth2Context.poll()
+
+                // Update the access/refresh tokens
+                const stringifiedTokens = JSON.stringify(result.data)
+                client.setAdminSetting(stringifiedTokens);
+
+                let currentUser: User | null = null
+                try {
+                    currentUser = await getMePreInstalled(client, settings)
+                    if (!currentUser) {
+                        throw new Error()
+                    }
+                } catch {
+                    throw new Error("An error occurred while verifying the user")
+                }
+
+                setUser(currentUser)
+            } catch (err) {
+                setError(err instanceof Error ? err.message : 'Unknown error')
+            } finally {
+                setIsLoading(false)
+                setIsPolling(false)
+            }
+        }
+
+        if (isPolling) {
+            void startPolling()
+        }
+    }, [isPolling, oauth2Context, settings])
 
     const signOut = () => {
         client?.setAdminSetting("");
@@ -90,7 +105,8 @@ export const useGlobalSignIn = () => {
     };
 
     const signIn = useCallback(() => {
-        setIsLoading(true);
+        setIsLoading(true)
+        setIsPolling(true)
         window.open(authUrl ?? "", '_blank');
     }, [setIsLoading, authUrl]);
 
@@ -110,7 +126,10 @@ export const useGlobalSignIn = () => {
         isDisabled = true;
     }
 
-    const cancelLoading = () => setIsLoading(false);
+    const cancelLoading = () => {
+        setIsLoading(false)
+        setIsPolling(false)
+    };
 
     return {
         user,
