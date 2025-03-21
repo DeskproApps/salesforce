@@ -140,7 +140,7 @@ export const editData = (
 ): Promise<unknown> =>
   installedRequest(
     client,
-    `/services/data/v55.0/sobjects/${object}/Id/${id}`,
+    `/services/data/v55.0/sobjects/${object}/${id}`,
     "PATCH",
     data
   );
@@ -388,6 +388,10 @@ export const installedRequest = async (
         message: await response.text(),
       })
     );
+  }
+
+  if (response.status === 204) {
+    return
   }
 
   return response.json();
