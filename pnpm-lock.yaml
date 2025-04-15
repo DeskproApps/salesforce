@@ -48,8 +48,8 @@ importers:
         specifier: 1.2.6
         version: 1.2.6
       nanoid:
-        specifier: 3.3.8
-        version: 3.3.8
+        specifier: 5.1.5
+        version: 5.1.5
       pino:
         specifier: ^8.21.0
         version: 8.21.0
@@ -2639,6 +2639,11 @@ packages:
   nanoid@3.3.8:
     resolution: {integrity: sha512-WNLf5Sd8oZxOm+TzppcYk8gVOgP+l58xNy58D0nbUnOxOWRWvlcCV4kUF7ltmI6PsrLl/BgKEyS4mqsGChFN0w==}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
+    hasBin: true
+
+  nanoid@5.1.5:
+    resolution: {integrity: sha512-Ir/+ZpE9fDsNH0hQ3C68uyThDXzYcim2EqcZ8zn8Chtt1iylPT9xXJB0kPCnqzgcEGikO9RxSrh63MsmVCU7Fw==}
+    engines: {node: ^18 || >=20}
     hasBin: true
 
   natural-compare@1.4.0:
@@ -6450,6 +6455,8 @@ snapshots:
       big-integer: 1.6.52
 
   nanoid@3.3.8: {}
+
+  nanoid@5.1.5: {}
 
   natural-compare@1.4.0: {}
 
