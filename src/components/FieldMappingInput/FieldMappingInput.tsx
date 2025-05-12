@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useDeskproAppTheme } from "@deskpro/app-sdk";
-import { H1, Stack, TextArea, DatePickerInputWithDisplay } from "@deskpro/deskpro-ui";
+import { DateInput, useDeskproAppTheme } from "@deskpro/app-sdk";
+import { H1, Stack, TextArea } from "@deskpro/deskpro-ui";
 import { ChangeEvent, forwardRef } from "react";
 import { FieldErrorsImpl } from "react-hook-form";
 import {
@@ -118,14 +118,18 @@ export const FieldMappingInput = forwardRef(
       case "date":
         return (
           <Stack vertical style={{ width: "100%" }}>
-            <H1 style={{ color: theme.colors.grey80 }}>{field.label}</H1>
-            <DatePickerInputWithDisplay
+            <Stack>
+              <H1 style={{ color: theme.colors.grey80 }}>{field.label}</H1>
+
+              {required && (
+                <Stack style={{ color: "red" }}>
+                  <H1>⠀*</H1>
+                </Stack>
+              )}
+            </Stack>
+            <DateInput
               required={required}
-              style={
-                !!errors?.[field.name] && {
-                  borderBottomColor: "red",
-                }
-              }
+              style={errors?.[field.name] ? { borderBottomColor: "red" } : undefined}
               ref={ref}
               value={value ? new Date(value) : null}
               label={field.label}
@@ -143,9 +147,9 @@ export const FieldMappingInput = forwardRef(
             ?.find((e) => e.name === field.name)
             ?.picklistValues.filter((e) => e.active)
             .map((e) => ({ key: e.label, value: e.value })) as {
-            value: string;
-            key: string;
-          }[];
+              value: string;
+              key: string;
+            }[];
         } else if (fieldMeta?.referenceTo.includes("User")) {
           values =
             people.data?.map((e) => ({
