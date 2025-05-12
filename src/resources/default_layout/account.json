@@ -79,7 +79,7 @@
       ]
     ],
     "objects_order": [
-            [
+      [
         {
           "id": "Task",
           "property": {
@@ -110,6 +110,7 @@
             "name": "Note",
             "label": "Notes",
             "object": "Note",
+            "field": "ParentId",
             "associationType": "Singular"
           }
         }
@@ -121,6 +122,7 @@
             "name": "Opportunity",
             "label": "Opportunities",
             "object": "Opportunity",
+            "field": "ContactId",
             "associationType": "Singular"
           }
         }
