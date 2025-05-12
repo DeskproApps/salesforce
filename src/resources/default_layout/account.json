@@ -87,7 +87,7 @@
             "label": "Tasks",
             "object": "Task",
             "field": "WhatId",
-            "associationType": "Singular"
+            "associationType": "Multiple"
           }
         }
       ],
@@ -122,8 +122,8 @@
             "name": "Opportunity",
             "label": "Opportunities",
             "object": "Opportunity",
-            "field": "ContactId",
-            "associationType": "Singular"
+            "field": "AccountId",
+            "associationType": "Multiple"
           }
         }
       ]
