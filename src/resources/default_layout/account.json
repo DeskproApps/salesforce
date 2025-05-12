@@ -79,19 +79,7 @@
       ]
     ],
     "objects_order": [
-      [
-        {
-          "id": "OwnerID",
-          "property": {
-            "name": "OwnerID",
-            "label": "Owner",
-            "object": "User",
-            "field": "AccountId",
-            "associationType": "Multiple"
-          }
-        }
-      ],
-      [
+            [
         {
           "id": "Task",
           "property": {
