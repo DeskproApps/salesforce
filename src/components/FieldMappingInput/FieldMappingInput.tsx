@@ -121,7 +121,7 @@ export const FieldMappingInput = forwardRef(
             <Stack gap={4}>
               <H1 style={{ color: theme.colors.grey80 }}>{field.label}</H1>
 
-              {!required && (
+              {required && (
                 <span style={{ color: "red" }}>*</span>
               )}
             </Stack>
