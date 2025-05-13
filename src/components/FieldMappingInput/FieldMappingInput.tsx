@@ -118,13 +118,9 @@ export const FieldMappingInput = forwardRef(
       case "date":
         return (
           <Stack vertical style={{ width: "100%" }}>
-            <Stack gap={4}>
-              <H1 style={{ color: theme.colors.grey80 }}>{field.label}</H1>
-
-              {required && (
-                <span style={{ color: "red" }}>*</span>
-              )}
-            </Stack>
+            <H1 style={{ color: theme.colors.grey80 }}>{field.label} {required && (
+              <span style={{ color: "red" }}>*</span>
+            )}</H1>
             <DateInput
               required={required}
               style={errors?.[field.name] ? { borderBottomColor: "red" } : undefined}
