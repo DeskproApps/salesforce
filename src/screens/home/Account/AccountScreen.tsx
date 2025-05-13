@@ -56,7 +56,7 @@ export const AccountScreen = ({ account }: AccountScreenProps) => {
   }
 
   // These are object names we have a mutate page for
-  const validMutableObjectNames = ["note", "task", "call", "event", "opportunity", "profile"]
+  const validMutableObjectNames: string[] = ["note", "task", "call", "event", "opportunity", "profile"] as const
 
   return (
     <>
