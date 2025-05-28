@@ -8,7 +8,6 @@ import { faRefresh } from "@fortawesome/free-solid-svg-icons";
 import { Suspense } from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import { ErrorBoundary } from "react-error-boundary";
 import { QueryClientProvider, QueryErrorResetBoundary } from "react-query";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import { Organization } from "./pages/Organization";
@@ -40,6 +39,7 @@ import { CreateNote } from "./pages/createEdit/Note";
 import { CreateOpportunity } from "./pages/createEdit/Opportunity";
 import { EditProfile } from "./pages/createEdit/Profile";
 import { parseJsonErrorMessage } from "./utils";
+import { ErrorBoundary } from "@sentry/react";
 
 function App() {
   const { context } = useDeskproLatestAppContext();
@@ -70,19 +70,17 @@ function App() {
         <Suspense fallback={<LoadingSpinner />}>
           <QueryErrorResetBoundary>
             {({ reset }) => (
-              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-              //@ts-ignore
               <ErrorBoundary
                 onReset={reset}
-                fallbackRender={({ resetErrorBoundary, error }) => (
+                fallback={({ resetError, error }) => (
                   <Stack gap={6} style={{ padding: "8px" }} vertical>
                     There was an error!
                     <br />
                     <br />
-                    {parseJsonErrorMessage(error.message)}
+                    {parseJsonErrorMessage((error as Error).message)}
                     <Button
                       text="Reload"
-                      onClick={() => resetErrorBoundary()}
+                      onClick={() => resetError()}
                       icon={faRefresh as AnyIcon}
                       intent="secondary"
                     />
