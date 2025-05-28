@@ -81,25 +81,13 @@
     "objects_order": [
       [
         {
-          "id": "OwnerID",
-          "property": {
-            "name": "OwnerID",
-            "label": "Owner",
-            "object": "User",
-            "field": "AccountId",
-            "associationType": "Multiple"
-          }
-        }
-      ],
-      [
-        {
           "id": "Task",
           "property": {
             "name": "Task",
             "label": "Tasks",
             "object": "Task",
             "field": "WhatId",
-            "associationType": "Singular"
+            "associationType": "Multiple"
           }
         }
       ],
@@ -122,6 +110,7 @@
             "name": "Note",
             "label": "Notes",
             "object": "Note",
+            "field": "ParentId",
             "associationType": "Singular"
           }
         }
@@ -133,7 +122,8 @@
             "name": "Opportunity",
             "label": "Opportunities",
             "object": "Opportunity",
-            "associationType": "Singular"
+            "field": "AccountId",
+            "associationType": "Multiple"
           }
         }
       ]
