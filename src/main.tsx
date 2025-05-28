@@ -1,4 +1,3 @@
-import * as Sentry from '@sentry/react';
 import './instrument';
 import React from "react";
 import ReactDOM from "react-dom/client";
@@ -9,9 +8,10 @@ import "./main.css";
 import "simplebar/dist/simplebar.min.css";
 import { Scrollbar } from "@deskpro/deskpro-ui";
 import { AppProvider } from "./hooks";
+import { reactErrorHandler } from '@sentry/react';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as Element, {
-  onRecoverableError: Sentry.reactErrorHandler(),
+  onRecoverableError: reactErrorHandler(),
 });
 root.render((
   <React.StrictMode>
