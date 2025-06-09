@@ -169,7 +169,7 @@ export const getObjectById = <T = unknown>(
     client,
     `/services/data/v55.0/sobjects/${object}/${id}`,
     "GET"
-  );
+  )
 
 /**
  * Get a list of Salesforce "Contact" sObjects by email
@@ -211,7 +211,7 @@ export const getLeadsByEmails = async (
       getObjectById<Lead>(client, "Lead", Id)
     )
   );
-};
+}
 
 /**
  * Get a list of Salesforce "Account" sObjects by name
