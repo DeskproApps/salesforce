@@ -126,7 +126,11 @@ export const CreateActivity = () => {
 
   useEffect(() => {
     if (id && object !== "edit") {
-      setValue(object as string, id);
+      if (!object) {
+        return
+      }
+
+      setValue(object, id);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, object]);
@@ -239,12 +243,23 @@ export const CreateActivity = () => {
 
     delete data.Type;
 
+    // Manually specify the associated user/account.
+    // Without this activities will be created successfully but they won't linked to a 
+    // user/account so they won't be visible in the app.
+    if (object === "AccountId") {
+      delete data.AccountId
+      data.WhatId = id
+    } else if (object === "LeadId") {
+      delete data.LeadId
+      data.WhoId = id
+    }
+
     if (data.EventSubtype) {
       data.DurationInMinutes = Math.abs(
         (new Date(data.EndDateTime as string).getTime() -
           new Date(data.ActivityDateTime as string).getTime()) /
-          1000 /
-          60
+        1000 /
+        60
       );
     }
     if (object === "edit") {

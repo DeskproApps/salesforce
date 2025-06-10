@@ -55,6 +55,9 @@ export const AccountScreen = ({ account }: AccountScreenProps) => {
     return null;
   }
 
+  // These are object names we have a mutate page for
+  const validMutableObjectNames: string[] = ["note", "task", "call", "event", "opportunity", "profile"] as const
+
   return (
     <>
       <Container>
@@ -97,12 +100,17 @@ export const AccountScreen = ({ account }: AccountScreenProps) => {
               Id: string;
             }[];
 
+            // Flag to prevent navigating the user to a mutate page when we don't have one setup
+            // for the requested object
+            const isMutableObjectWithPage = validMutableObjectNames.includes(object.name.toLowerCase())
+
             if (!data?.length) {
               return (
                 <Stack vertical style={{ width: "100%" }} gap={10}>
                   <Stack gap={5} align="center">
                     <H1>{object.name} (0)</H1>
-                    <Link
+
+                    {isMutableObjectWithPage && (<Link
                       to={`/addoredit/${object.name}/AccountId/${account.Id}`}
                     >
                       <FontAwesomeIcon
@@ -115,7 +123,8 @@ export const AccountScreen = ({ account }: AccountScreenProps) => {
                           marginBottom: "2px",
                         }}
                       ></FontAwesomeIcon>
-                    </Link>
+                    </Link>)}
+
                   </Stack>
                   <div style={{ width: "100%" }}>
                     <HorizontalDivider />
@@ -123,6 +132,7 @@ export const AccountScreen = ({ account }: AccountScreenProps) => {
                 </Stack>
               );
             }
+
             const hasMapping = sObjectsWithMappings.includes(
               data[0].attributes.type
             );
@@ -140,7 +150,7 @@ export const AccountScreen = ({ account }: AccountScreenProps) => {
                       alignItems: "center",
                     }}
                   >
-                    {hasMapping ? (
+                    {(hasMapping && isMutableObjectWithPage) ? (
                       <Link
                         to={`${basePath}/objects/${object.name}/${object.field}/${account.Id}/list`}
                       >
@@ -153,7 +163,7 @@ export const AccountScreen = ({ account }: AccountScreenProps) => {
                         {object.label} ({data.length})
                       </H1>
                     )}
-                    {hasMapping && (
+                    {(hasMapping && isMutableObjectWithPage) && (
                       <Link
                         to={`/addoredit/${object.name}/AccountId/${account.Id}`}
                       >
@@ -178,7 +188,7 @@ export const AccountScreen = ({ account }: AccountScreenProps) => {
                           properties={layout.objects[object?.name as string]}
                           object={sobj as unknown as LayoutObject}
                           externalUrl={
-                            hasMapping
+                            (hasMapping && isMutableObjectWithPage)
                               ? getObjectPermalink(
                                 context?.settings,
                                 `/lightning/r/${object.name}/${(sobj as { Id: string }).Id
@@ -187,7 +197,7 @@ export const AccountScreen = ({ account }: AccountScreenProps) => {
                               : undefined
                           }
                           internalUrl={
-                            hasMapping
+                            (hasMapping && isMutableObjectWithPage)
                               ? `${basePath}/objects/${object.name}/${sobj.Id}/view`
                               : undefined
                           }
