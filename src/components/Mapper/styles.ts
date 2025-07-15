@@ -1,10 +1,11 @@
+import { DeskproAppTheme } from "@deskpro/app-sdk";
 import styled from "styled-components";
 
 export const Container = styled.div`
     width: 100%;  
 `;
 
-export const Layout = styled.div`
+export const Layout = styled.div<DeskproAppTheme>`
     border: 1px dashed ${({ theme }) => theme.colors.brandShade50};
     border-radius: 4px;
     width: 100%;
@@ -34,7 +35,7 @@ export const ItemOrderDropDummy = styled.div`
     background-color: none;
 `;
 
-export const ItemPlaceholder = styled.div<{ isOver: boolean; }>`
+export const ItemPlaceholder = styled.div<{ isOver: boolean, theme: DeskproAppTheme["theme"] }>`
     border-radius: 4px;
     border: 1px solid transparent;
     background-color: ${({ theme, isOver }) => isOver ? theme.colors.brandShade40 : theme.colors.brandShade10};
@@ -44,7 +45,7 @@ export const ItemPlaceholder = styled.div<{ isOver: boolean; }>`
     height: 29px;
 `;
 
-export const Item = styled.div<{ isDragging: boolean; }>`
+export const Item = styled.div<{ isDragging: boolean, theme: DeskproAppTheme["theme"] }>`
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -67,7 +68,7 @@ export const Item = styled.div<{ isDragging: boolean; }>`
     }
 `;
 
-export const EmptyMessage = styled.div`
+export const EmptyMessage = styled.div<DeskproAppTheme>`
     padding: 3px 8px;
     font-size: 13px;
     color: ${({ theme }) => theme.colors.grey40};
@@ -77,7 +78,7 @@ export const ItemWrapper = styled.div`
     width: 100%;
 `;
 
-export const ItemStart = styled.div`
+export const ItemStart = styled.div<DeskproAppTheme>`
     display: flex;
     align-items: center;
     gap: 7px;
