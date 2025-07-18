@@ -29,7 +29,7 @@
       "title": "Client Secret",
       "description": "Client secret can be obtained by following our setup guide",
       "type": "string",
-      "isRequired": true,
+      "isRequired": false,
       "isBackendOnly": true,
       "order": 20
     },
@@ -37,7 +37,7 @@
       "title": "Salesforce Instance URL",
       "description": "E.g. https://MyDomainName.my.salesforce.com",
       "type": "string",
-      "isRequired": true,
+      "isRequired": false,
       "isBackendOnly": false,
       "order": 30
     },
@@ -45,7 +45,7 @@
       "title": "",
       "type": "app_embedded",
       "options": { "entrypoint": "#/admin/global-sign-in" },
-      "isRequired": true,
+      "isRequired": false,
       "isBackendOnly": true,
       "order": 40,
       "default": ""
