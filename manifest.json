@@ -145,7 +145,7 @@
   "proxy": {
     "whitelist": [
       {
-        "url": "https://__salesforce_instance_url__.salesforce.com/services/.*",
+        "url": "__salesforce_instance_url__/services/.*",
         "methods": ["GET", "POST", "PUT", "DELETE", "PATCH"],
         "timeout": 30,
         "settingsInjection": {
