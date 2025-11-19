@@ -145,9 +145,20 @@
   "proxy": {
     "whitelist": [
       {
-        "url": "https://(.*).salesforce.com/services/.*",
+        "url": "__salesforce_instance_url__/services/.*",
         "methods": ["GET", "POST", "PUT", "DELETE", "PATCH"],
-        "timeout": 30
+        "timeout": 30,
+        "settingsInjection": {
+          "client_key": {
+            "body": ["client_id"]
+          },
+          "client_secret": {
+            "body": ["client_secret"]
+          },
+          "global_access_token": {
+            "body": ["refresh_token"]
+          }
+        }
       }
     ]
   }
